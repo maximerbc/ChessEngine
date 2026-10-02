@@ -1,0 +1,12 @@
+ChessEngine Lab
+Project code: GPL-3.0-or-later. See LICENSE.
+
+python-chess / chess: https://github.com/niklasf/python-chess (GPL-3.0-or-later).
+Stockfish: https://github.com/official-stockfish/Stockfish (GPLv3); used locally as a labeling/reference tool, not bundled in the application.
+Lichess database: https://database.lichess.org/ (CC0); game data and generated labels have recorded provenance.
+PyTorch: https://github.com/pytorch/pytorch (BSD-style).
+NumPy: https://numpy.org/ (BSD-3-Clause).
+FastAPI, React, Vite, chess.js, Lucide: see their respective package licenses.
+Fonts: DM Sans and Manrope via Google Fonts (SIL Open Font License).
+
+The web chess pieces use local Unicode glyphs, not scraped proprietary artwork.
