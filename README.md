@@ -11,7 +11,7 @@ A reproducible research project combining supervised value learning, Monte Carlo
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
+python -m pip install --upgrade pip setuptools wheel
 pip install -r requirements-train.txt
 pip install -e '.[dev]' --no-build-isolation
 python -m chessengine serve
