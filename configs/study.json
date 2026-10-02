@@ -1,0 +1,1 @@
+{"supervised":"configs/supervised.json","large":"configs/supervised-large.json","rl":"configs/rl.json","development":"configs/development.json","evaluation":"configs/evaluation.json","timed":"configs/timed.json","seeds":[42,43,44],"development_batches":[2,5,10],"openings":"configs/openings.json"}

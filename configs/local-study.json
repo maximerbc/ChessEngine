@@ -1,0 +1,1 @@
+{"rl":"configs/local-rl.json","development":"configs/local-development.json","evaluation":"configs/local-evaluation.json","development_batches":[1,3],"openings":"configs/openings.json","seeds":[42,43,44]}
