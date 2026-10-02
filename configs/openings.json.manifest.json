@@ -1,0 +1,6 @@
+{
+  "source": "data/lichess-2013-01.pgn.zst",
+  "source_sha256": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635",
+  "seed": 2026,
+  "note": "All source games excluded from supervised data; 12-ply starts."
+}
