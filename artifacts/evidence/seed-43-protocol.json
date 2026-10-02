@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "baseline_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1",
+    "openings_sha256": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+    "rl": {
+      "seed": 43,
+      "learning_rate": 0.0001,
+      "batch_size": 256,
+      "batches": 3,
+      "games_per_batch": 20,
+      "positions_per_game": 32,
+      "nodes": 48,
+      "qdepth": 2,
+      "max_plies": 256,
+      "epsilon": 0.1,
+      "exploration_plies": 20,
+      "device": "cpu",
+      "evidence": "bounded-local-study"
+    },
+    "development": {
+      "seed": 42,
+      "pairs": 8,
+      "nodes": 48,
+      "qdepth": 2,
+      "time_ms": null,
+      "max_plies": 256,
+      "evidence": "bounded-local-study"
+    },
+    "evaluation": {
+      "seed": 42,
+      "pairs": 200,
+      "nodes": 48,
+      "qdepth": 2,
+      "time_ms": null,
+      "max_plies": 256,
+      "evidence": "bounded-local-study"
+    },
+    "batches": [
+      1,
+      3
+    ]
+  },
+  "provenance": {
+    "commit": "e48ce831154ed4c08a855c25f7819f1b138706ae",
+    "dirty": true,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

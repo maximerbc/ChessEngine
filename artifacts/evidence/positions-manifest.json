@@ -1,0 +1,13 @@
+{
+  "source": "data/lichess-2013-01.pgn.zst",
+  "seed": 42,
+  "positions": 100000,
+  "games_scanned": 23167,
+  "counts": {
+    "train": 80299,
+    "validation": 9789,
+    "test": 9912
+  },
+  "sha256": "a37315873148c702787b0cb32e1ddbc159f1c0fef33530a4290485a089ae0ef6",
+  "reserved": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c"
+}

@@ -1,0 +1,19 @@
+{
+  "games": 400,
+  "pairs": 200,
+  "wins": 38,
+  "draws": 318,
+  "losses": 44,
+  "score": 0.4925,
+  "ci95": [
+    0.475,
+    0.51
+  ],
+  "capped_games": 0,
+  "uncapped_pairs": 200,
+  "uncapped_score": 0.4925,
+  "conclusion": "inconclusive",
+  "protocol_sha256": "6ae4896b54f70e97a24a34e2b9d1e2b3805a204bb577cc1d52dad199f93f3679",
+  "split": "test",
+  "evidence": "bounded-local-study"
+}

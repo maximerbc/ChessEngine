@@ -1,0 +1,21 @@
+{
+  "status": "Bounded local study - three seeds, shallow search",
+  "description": "100,000 teacher-labeled positions; 60 self-play games per seed; 400 final games per seed. The search budget is 48 nodes, so conclusions apply only to this constrained setup.",
+  "supervised_metrics": "runs/main-supervised/metrics.json",
+  "rl_metrics": "runs/local-study/seed-43/training/metrics.json",
+  "matches": "runs/local-study/seed-43/final/matches.json",
+  "summary": "runs/local-study/seed-43/final/summary.json",
+  "measurement": "runs/local-study/measurement.json",
+  "calibration": "runs/local-study/calibration.json",
+  "aggregate": "runs/local-study/aggregate.json",
+  "cost_cad": 0,
+  "limitations": [
+    "Only 60 self-play games per seed were used, versus the original 1,000-game target. Search was limited to 48 nodes per move.",
+    "The 400-game result highlighted on the site belongs to the representative checkpoint selected on development matches. All three final seed results are reported separately.",
+    "The historical source corpus and shallow search restrict generalization; results do not establish improvement at the demo search budget or against strong opponents.",
+    "Draw-heavy experience and exclusion of truncated games can bias outcome learning. Move-cap sensitivity is reported.",
+    "Supervised fitting preceded the first Git commit and records that fact. The RL and match protocols identify the committed implementation and immutable artifact hashes.",
+    "No Elo rating, AlphaZero-scale capability, or general reinforcement-learning improvement is claimed."
+  ],
+  "diagnostics": "runs/local-study/diagnostics.json"
+}

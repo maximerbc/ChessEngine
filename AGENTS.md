@@ -28,3 +28,7 @@
 - Test chess integration/search signs/budgets, history-sensitive draws, feature/target perspective, leakage, overfit/resume/export parity, RL actor freezing/outcomes/truncation, paired statistics, and browser flows.
 - Standard commands: `.venv/bin/python -m pytest`, `.venv/bin/python -m chessengine --help`, `npm --prefix web run build`, `npm --prefix web run test:e2e`. Full training is not CI.
 - Do not claim deployment, full experiments, or a verified PDF unless actually completed. Preserve all meaningful failures in the report and provide reproducible follow-up commands for work requiring external account access.
+
+## Executed study boundary
+- The original target configs remain in `configs/study.json`. The first executed local study uses `configs/local-study.json`, with its rationale frozen in `docs/local-study-preregistration.md` before RL/final matches. Always name the actual evidence level; do not conflate these studies.
+- Select the representative RL checkpoint and demo default using development results only. Publish all seed-level final scores, and keep seed variability separate from opening-pair uncertainty. The default stays supervised unless the selected RL model's development score exceeds 50%.

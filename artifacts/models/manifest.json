@@ -1,0 +1,25 @@
+{
+  "default": "rl",
+  "models": [
+    {
+      "id": "supervised",
+      "file": "supervised.npz",
+      "name": "Supervised model",
+      "sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+      "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1"
+    },
+    {
+      "id": "rl",
+      "file": "rl.npz",
+      "name": "Self-play model",
+      "sha256": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc",
+      "source_sha256": "f39102fbf6188f58fe4729b0f2508a300c8ecff43a887314fbf6a99e5759f8fe"
+    }
+  ],
+  "selection": {
+    "checkpoint": "runs/local-study/seed-43/training/batch-001.npz",
+    "sha256": "f39102fbf6188f58fe4729b0f2508a300c8ecff43a887314fbf6a99e5759f8fe",
+    "development_score": 0.5625,
+    "selection": "highest paired development score; input-order tie break"
+  }
+}

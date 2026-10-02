@@ -1,0 +1,31 @@
+{
+  "search": [
+    {
+      "nodes_budget": 48,
+      "seconds_per_move": 0.02030331245623529,
+      "nodes_per_second": 2364.1462497051243
+    },
+    {
+      "nodes_budget": 128,
+      "seconds_per_move": 0.04600343760102987,
+      "nodes_per_second": 2782.4007655709293
+    },
+    {
+      "nodes_budget": 1000,
+      "seconds_per_move": 0.38836041651666164,
+      "nodes_per_second": 2574.927715263426
+    }
+  ],
+  "training": [
+    {
+      "device": "cpu",
+      "batch_forward_backward_ms": 0.3404437331482768
+    }
+  ],
+  "provenance": {
+    "commit": "uncommitted",
+    "dirty": true,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

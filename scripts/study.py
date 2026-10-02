@@ -82,7 +82,7 @@ with threadpool_limits(limits=1):
                 {
                     "seed": seed,
                     "batch": batch,
-                    "games": metrics[-1]["games_total"],
+                    "selfplay_games": metrics[-1]["games_total"],
                     "compute_seconds": sum(x["generation_seconds"] + x["update_seconds"] for x in metrics),
                     **summary,
                 }
