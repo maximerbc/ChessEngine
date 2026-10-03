@@ -22,6 +22,14 @@ Validation: exact CPU training/resume equivalence, outcome-sign tests, actor fre
 
 Base: `feat/rl-study` (retarget to main after PR 2 merges) | Head: `feat/showcase`
 
-Packages measured research results and portable model checkpoints into a polished Play/Compare/Research experience. Adds all-seed reporting, recorded-game replay, public weight downloads, HTML/PDF reports, a private-repository Render deployment blueprint, paid-Colab notebook guidance, and end-to-end verification.
+Packages measured research results and portable model checkpoints into a polished Play/Compare/Research experience. Adds all-seed reporting, recorded-game replay, public weight downloads, HTML/PDF reports, a private-repository Railway deployment setup, paid-Colab notebook guidance, and end-to-end verification.
 
-Validation: the final validation summary is in `docs/validation.md`. Deployment requires the user's GitHub push and Render repository authorization; no public deployment is claimed from local checks alone. No paid compute has been used.
+Validation: the final validation summary is in `docs/validation.md`. Deployment requires the user's GitHub push and Railway repository authorization; no public deployment is claimed from local checks alone. No paid compute has been used.
+
+## 4. Deploy the chess demo and engine on Railway
+
+Replaces the Render blueprint with separate non-root production containers: an always-running Nginx website and a serverless FastAPI engine. The report and saved games remain accessible during engine wake-up. Production startup requires both checksum-validated neural models. Existing API contracts, model weights and research results are unchanged.
+
+Adds container CI covering published assets, legal engine responses, checkpoint hashes, failure on missing/corrupt models, and real browser gameplay across separate origins. Documents private-repository setup, spending boundaries, health checks and rollback. Screenshots are test artifacts rather than changes to the showcase image.
+
+Validation: see the Railway section in `docs/validation.md`. Container CI must pass before merge; local checks alone do not verify Docker images or a public deployment. Target main after the showcase PR. No remote push, account authorization, paid activation or deployment is included.

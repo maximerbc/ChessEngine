@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("live backend and released study render together", async ({ page }) => {
+test("live backend and released study render together", async ({ page }, testInfo) => {
   test.skip(
     !process.env.RUN_LIVE_TESTS,
     "Requires the local Python server and released research artifacts.",
@@ -21,7 +21,7 @@ test("live backend and released study render together", async ({ page }) => {
   });
   await expect(page.locator(".hash")).toContainText("Checkpoint");
   await page.screenshot({
-    path: "../artifacts/demo-preview.jpg",
+    path: testInfo.outputPath("demo-preview.jpg"),
     fullPage: true,
     type: "jpeg",
     quality: 85,

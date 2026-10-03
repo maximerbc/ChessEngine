@@ -564,8 +564,8 @@ export default function App() {
                   : "The live engine is unavailable"}
               </strong>
               <p>
-                The free service may take about a minute to wake. Research and
-                saved games remain available.
+                The engine may be starting or temporarily unavailable. Retry shortly.
+                Research and saved games remain available.
               </p>
             </div>
             <button

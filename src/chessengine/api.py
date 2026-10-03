@@ -33,6 +33,9 @@ def create_app(manifest_path=None):
         }
     }
     manifest_path = Path(manifest_path or os.getenv("MODEL_MANIFEST", "artifacts/models/manifest.json"))
+    require_models = os.getenv("REQUIRE_MODELS", "0") == "1"
+    if require_models and not manifest_path.is_file():
+        raise ValueError("Production model manifest is missing")
     default_model = "handcrafted"
     if manifest_path.exists():
         manifest = read_json(manifest_path)
@@ -50,6 +53,8 @@ def create_app(manifest_path=None):
         default_model = manifest.get("default", default_model)
         if default_model not in models:
             raise ValueError("Default model is missing")
+    if require_models and not {"supervised", "rl"}.issubset(models):
+        raise ValueError("Production requires supervised and RL models")
     lock = asyncio.Lock()
 
     @asynccontextmanager

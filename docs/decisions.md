@@ -10,7 +10,7 @@ Use Monte Carlo self-play value regression. No teacher labels enter RL. A frozen
 Automatically take claimable draws, including a claim possible on the next legal move. Search/API/self-play/matches share this convention. Preserve history, and key transpositions by full FEN and move history. This sacrifices transposition reuse for correctness; optimize only with proof/tests of equivalent draw semantics.
 
 ## 004 - Private source, public allowlisted demo
-The GitHub repository stays private. Render receives explicitly authorized repository access. Only the static build output is public; allowlisted NumPy model exports and research artifacts are copied by a dedicated command. Secrets and raw training data must never enter `web/public`.
+The GitHub repository stays private. Railway receives explicitly authorized repository access. Only the static build output is public; allowlisted NumPy model exports and research artifacts are copied by a dedicated command. Secrets and raw training data must never enter `web/public`.
 
 ## 005 - Evidence levels and compute gates
 Smoke tests prove plumbing, pilots estimate feasibility, and a frozen main study tests hypotheses. Never relabel a small pilot as the planned 400-game, multi-seed experiment. Hardware observations and benchmark-driven scope reductions must be recorded before final testing, not after inspecting results.
@@ -23,3 +23,7 @@ After measuring pilot throughput and before the main RL/matches, fix a bounded l
 
 ## 008 - Supervised architecture selection
 Both specified architectures were fitted on the complete 100,000-position corpus. The small model's validation MSE was 0.306609, the larger model's 0.310330. Select the smaller network before RL, consistent with the predeclared 2% error tolerance and inference-cost preference. Validation selection is distinct from final-test teacher agreement and match evaluation.
+
+## Railway deployment (2026-10-03)
+
+User selected Railway and two services: always-running Nginx for the public website, serverless FastAPI for the engine. This supersedes the Render blueprint. Keep Docker builds separate and non-root, require both neural models in production, and preserve API interfaces and research artifacts. Dockerfiles plus documented dashboard settings define deployment; no legacy Railway configuration file is added. Available free credits are the initial funding source; paid activation needs explicit user approval within the existing C$50 ceiling.

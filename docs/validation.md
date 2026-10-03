@@ -24,4 +24,14 @@
 
 This completed bounded local study is smaller than the original 1,000-self-play-game-per-seed target. It uses shallow search and does not establish RL improvement or transfer to stronger opponents. The larger target configurations and resumable runner remain available.
 
-Local builds and checks do not prove that GitHub Actions has run remotely or that Render has deployed. Those require the user's push and account authorization. No remote PR, push, public URL, or paid resource has been created by the assistant.
+Local builds and checks do not prove that GitHub Actions has run remotely or that Railway has deployed. Those require the user's push and account authorization. No remote PR, push, public URL, or paid resource has been created by the assistant.
+
+## Railway deployment PR (2026-10-03)
+
+- Python: 30 tests passed, including production manifest requirements, checksum rejection, released checkpoint identities and CORS preflight behavior. Ruff passed.
+- TypeScript/Vite production build passed; deployment workflow YAML parsed successfully.
+- Existing mocked browser suite: 6 passed. The separately gated live test and container tests are skipped in that default invocation.
+- New deployment browser scenarios: 2 passed against real local FastAPI and Vite servers on separate origins. Covered both neural models, legal replies, comparison, PGN export, mobile research during simulated API outage and reconnect. This exercises app behavior, not the Docker/Nginx layer.
+- Initial browser launch failed due to macOS sandbox restrictions; rerunning with browser access succeeded. The first mobile recovery assertion expected a desktop-only status badge to be visible; corrected it to check the ready state and disappearance of the outage notice.
+- Docker is unavailable locally. Image builds, Nginx serving/headers, container filesystem boundaries, arbitrary PORT binding and container smoke checks remain pending in the new Production containers CI job. Require that job to pass before merge.
+- No remote push, PR creation, Railway provisioning, paid activation or public deployment was performed. Model weights and research results are unchanged.
