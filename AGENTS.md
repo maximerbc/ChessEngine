@@ -4,7 +4,7 @@
 - Demonstrate supervised learning, self-play reinforcement learning, careful experiments, and a polished chess demo for master's applications. Playing strength and positive RL results are not promised.
 - The repository stays private. The user handles remote pushes; never push or change visibility. Prepare three substantial review batches: foundation/supervised, RL/evidence, showcase/release. Use focused local commits where Git permissions allow. Do not block independent local work on a push.
 - Implement autonomously, explain mathematics and evidence at milestones, and minimize questions. Ask only for consequential scope changes, identity/account access, or costs outside authorization.
-- Total paid spend ceiling is C$50 equivalent; reserve 20% contingency. Free hosting, local Apple Silicon/8 GB development, optional paid Colab. Never assume free Colab permits chess training. No paid resources are provisioned implicitly.
+- Total paid spend ceiling is C$50 equivalent; reserve 20% contingency. Prefer free Railway credits; paid hosting requires explicit approval. Local Apple Silicon/8 GB development, optional paid Colab. Never assume free Colab permits chess training. No paid resources are provisioned implicitly.
 
 ## Architecture
 - `src/chessengine`: Python engine, features, NumPy inference, data, PyTorch training, RL, evaluation, reports, FastAPI, CLI. `web`: React/TypeScript UI. `configs`: experimental settings. `tests`: correctness and research-integrity checks. `docs`: decisions, mathematics, operations, PR handoffs.
@@ -24,7 +24,7 @@
 - Stable decisions live here; tunable values live in JSON configs. Record changes to invariants in `docs/decisions.md` and update this file together.
 
 ## Delivery and verification
-- Host a static public demo/report and a bounded FastAPI engine on Render, with explicit wake-up/error states. Private source stays private. Only allowlisted assets enter static deployment.
+- Host a static public demo/report and a bounded FastAPI engine on two Railway services (always-running Nginx website, serverless FastAPI engine), with explicit wake-up/error states. Private source stays private. Only allowlisted assets enter static deployment.
 - Test chess integration/search signs/budgets, history-sensitive draws, feature/target perspective, leakage, overfit/resume/export parity, RL actor freezing/outcomes/truncation, paired statistics, and browser flows.
 - Standard commands: `.venv/bin/python -m pytest`, `.venv/bin/python -m chessengine --help`, `npm --prefix web run build`, `npm --prefix web run test:e2e`. Full training is not CI.
 - Do not claim deployment, full experiments, or a verified PDF unless actually completed. Preserve all meaningful failures in the report and provide reproducible follow-up commands for work requiring external account access.
@@ -32,3 +32,8 @@
 ## Executed study boundary
 - The original target configs remain in `configs/study.json`. The first executed local study uses `configs/local-study.json`, with its rationale frozen in `docs/local-study-preregistration.md` before RL/final matches. Always name the actual evidence level; do not conflate these studies.
 - Select the representative RL checkpoint and demo default using development results only. Publish all seed-level final scores, and keep seed variability separate from opening-pair uncertainty. The default stays supervised unless the selected RL model's development score exceeds 50%.
+
+## Railway deployment contract
+- A fourth deployment PR follows showcase. User-managed pushes and private visibility remain mandatory.
+- Production requires both released neural models and valid checksums; missing artifacts fail startup. One API replica, one Uvicorn worker, no persistent volume or training dependencies.
+- Dockerfiles and dashboard instructions define deployment. No paid activation or automatic PR environments. Track hosting costs within the C$50 ceiling.

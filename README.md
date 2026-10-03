@@ -35,7 +35,7 @@ Open **http://127.0.0.1:5173**. The backend listens on port 8000. Supplied relea
 - Frozen-actor self-play, completed-outcome returns, equal game weighting, resumable RL, and explicit truncation records.
 - Frozen match protocols, color-swapped openings, paired-bootstrap intervals, development-only checkpoint selection, and runtime/phase diagnostics.
 - React Play/Compare/Research views, PGN export/replay, accessible click/drag board, promotion, undo, wake-up and failure states.
-- HTML/PDF reporting, a Render blueprint, and Python/browser CI.
+- HTML/PDF reporting, production Railway containers, and Python/browser CI.
 
 ## Reproduce an experiment
 
@@ -78,7 +78,7 @@ Tests include tiny CPU training runs; they are not scientific experiment results
 - [Project contract](AGENTS.md): durable decisions and contributor instructions.
 - [Mathematical walkthrough](docs/mathematics.md): value functions, search, returns, training and uncertainty.
 - [Study protocol](docs/study.md): reproducibility, data, checkpoints, costs and limitations.
-- [Deployment](docs/deployment.md): private GitHub access and public Render services.
+- [Deployment](docs/deployment.md): private GitHub access and public Railway services.
 - [GitHub handoff](docs/github.md): three substantial review batches and push instructions.
 - [Demo walkthrough](docs/demo.md): a short project presentation.
 

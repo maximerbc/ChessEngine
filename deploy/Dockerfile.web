@@ -1,0 +1,16 @@
+FROM node:22-alpine AS build
+WORKDIR /web
+COPY web/package.json web/package-lock.json ./
+RUN npm ci
+COPY web/tsconfig*.json web/vite.config.ts web/index.html ./
+COPY web/src ./src
+COPY web/public/models ./public/models
+COPY web/public/research ./public/research
+ARG VITE_API_URL
+RUN test -n "$VITE_API_URL" && npm run build
+
+FROM nginxinc/nginx-unprivileged:stable-alpine
+ENV PORT=8080 NGINX_ENVSUBST_FILTER=PORT
+COPY deploy/nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY --from=build /web/dist /usr/share/nginx/html
+USER 101

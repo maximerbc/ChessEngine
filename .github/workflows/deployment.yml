@@ -1,0 +1,58 @@
+name: Production containers
+on: [push, pull_request]
+jobs:
+  containers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build production images
+        run: |
+          docker build -f deploy/Dockerfile.api -t chess-api .
+          docker build -f deploy/Dockerfile.web --build-arg VITE_API_URL=http://127.0.0.1:8000 -t chess-web .
+      - name: Verify container boundaries and fail-closed startup
+        run: |
+          docker run --rm --entrypoint sh chess-api -c 'test "$(id -u)" != 0 && test ! -d /app/runs && test ! -d /app/data && python -c "import importlib.util; assert importlib.util.find_spec(\"torch\") is None"'
+          docker run --rm --entrypoint sh chess-web -c 'test "$(id -u)" != 0 && test ! -d /usr/share/nginx/html/src && test ! -d /usr/share/nginx/html/node_modules'
+          if docker run --rm -e MODEL_MANIFEST=/missing.json --entrypoint python chess-api -c 'import chessengine.api'; then exit 1; fi
+          mkdir -p /tmp/bad-models
+          cp artifacts/models/* /tmp/bad-models/
+          python -c 'import json; p="/tmp/bad-models/manifest.json"; d=json.load(open(p)); d["models"][0]["sha256"]="0"*64; json.dump(d,open(p,"w"))'
+          if docker run --rm -v /tmp/bad-models:/bad:ro -e MODEL_MANIFEST=/bad/manifest.json --entrypoint python chess-api -c 'import chessengine.api'; then exit 1; fi
+      - name: Start services on non-default internal ports
+        run: |
+          docker run -d --name api -p 8000:8091 -e PORT=8091 -e ALLOWED_ORIGINS=http://127.0.0.1:8080 chess-api
+          docker run -d --name web -p 8080:8092 -e PORT=8092 chess-web
+          curl --retry 15 --retry-delay 2 --retry-all-errors --retry-max-time 60 --max-time 5 --fail http://127.0.0.1:8000/health
+          curl --retry 15 --retry-delay 2 --retry-all-errors --retry-max-time 60 --max-time 5 --fail http://127.0.0.1:8080/health
+      - name: HTTP smoke checks
+        run: |
+          pip install chess==1.11.2
+          python scripts/check_deployment.py
+      - name: Production browser checks
+        working-directory: web
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:8080
+          DEPLOYMENT_API_URL: http://127.0.0.1:8000
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test tests/deployment.spec.ts
+      - name: Container logs
+        if: always()
+        run: |
+          docker logs api || true
+          docker logs web || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: production-browser-results
+          path: web/test-results/
