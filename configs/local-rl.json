@@ -1,0 +1,1 @@
+{"seed":42,"learning_rate":0.0001,"batch_size":256,"batches":3,"games_per_batch":20,"positions_per_game":32,"nodes":48,"qdepth":2,"max_plies":256,"epsilon":0.1,"exploration_plies":20,"device":"cpu","evidence":"bounded-local-study"}

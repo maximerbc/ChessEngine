@@ -1,0 +1,18 @@
+{
+  "status":"Pilot study - preliminary evidence",
+  "description":"A real 10,000-position supervised run, eight self-play games, and eight development evaluation games validate the pipeline. This is not the planned multi-seed final study.",
+  "supervised_metrics":"runs/pilot-supervised/metrics.json",
+  "rl_metrics":"runs/pilot-rl/metrics.json",
+  "matches":"runs/pilot-development/matches.json",
+  "summary":"runs/pilot-development/summary.json",
+  "measurement":"runs/pilot-measurement.json",
+  "calibration":"runs/pilot-calibration.json",
+  "cost_cad":0,
+  "limitations":[
+    "One training seed and four development opening pairs cannot establish general RL improvement.",
+    "The source is a small historical game archive, not a representative sample of strong modern play.",
+    "Search budgets are shallow; draw-heavy self-play and truncated-game exclusion can bias learning.",
+    "These are development matches, not untouched final-test results. No Elo rating is claimed.",
+    "Pilot runs were executed before the initial Git commit and record that provenance explicitly."
+  ]
+}
