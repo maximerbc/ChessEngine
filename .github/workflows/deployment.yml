@@ -31,8 +31,8 @@ jobs:
         run: |
           docker run -d --name api -p 8000:8091 -e PORT=8091 -e ALLOWED_ORIGINS=http://127.0.0.1:8080 chess-api
           docker run -d --name web -p 8080:8092 -e PORT=8092 chess-web
-          curl --retry 15 --retry-delay 2 --retry-connrefused --fail http://127.0.0.1:8000/health
-          curl --retry 15 --retry-delay 2 --retry-connrefused --fail http://127.0.0.1:8080/health
+          curl --retry 15 --retry-delay 2 --retry-all-errors --retry-max-time 60 --max-time 5 --fail http://127.0.0.1:8000/health
+          curl --retry 15 --retry-delay 2 --retry-all-errors --retry-max-time 60 --max-time 5 --fail http://127.0.0.1:8080/health
       - name: HTTP smoke checks
         run: |
           pip install chess==1.11.2
