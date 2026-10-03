@@ -99,3 +99,81 @@ test("busy response is visible and retry remains possible", async ({
   await page.getByRole("button", { name: "e4", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("engine is busy");
 });
+
+test("reconnect recovers after an unavailable engine", async ({ page }) => {
+  let available = false;
+  await page.route("**/api/models", async (route) => {
+    if (!available) return route.abort();
+    return route.fulfill({
+      json: {
+        default: "handcrafted",
+        models: [
+          {
+            id: "handcrafted",
+            name: "Classical baseline",
+            kind: "handcrafted",
+            evidence: "baseline",
+            checkpoint_id: "handcrafted-v1",
+          },
+        ],
+      },
+    });
+  });
+  await page.goto("/");
+  await expect(page.getByText("The live engine is unavailable")).toBeVisible();
+  available = true;
+  await page.getByRole("button", { name: "Reconnect", exact: true }).click();
+  await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
+});
+
+test("model choice, drag move, and restart are coherent", async ({ page }) => {
+  await mock(page);
+  await page.goto("/");
+  await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: /Self-play model Learned from self-play/ })
+    .click();
+  await expect(page.locator(".player-strip").first()).toContainText(
+    "Self-play model",
+  );
+  await page
+    .getByRole("button", { name: "e2 white pawn", exact: true })
+    .dragTo(page.getByRole("button", { name: "e4", exact: true }));
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "New game", exact: true }).click();
+  await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "e2 white pawn", exact: true }),
+  ).toBeVisible();
+});
+
+test("saved-game replay works without the API", async ({ page }) => {
+  await page.route("**/api/models", (route) => route.abort());
+  await page.route("**/research/results.json", (route) =>
+    route.fulfill({
+      json: {
+        status: "Test fixture",
+        games: [
+          {
+            opening_id: "test",
+            candidate_color: "white",
+            score: 1,
+            capped: false,
+            pgn: '[Result "1-0"]\n\n1. e4 e5 2. Nf3 1-0',
+          },
+        ],
+        limitations: ["Test fixture only"],
+      },
+    }),
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "e4 white pawn", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "e2 white pawn", exact: true }),
+  ).toBeVisible();
+});

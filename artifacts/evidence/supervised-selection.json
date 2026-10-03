@@ -1,0 +1,7 @@
+{
+  "checkpoint": "runs/main-supervised/best.npz",
+  "sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1",
+  "small_validation_mse": 0.3066090601239997,
+  "large_validation_mse": 0.31033031026388364,
+  "rule": "Small model within 2% of larger validation MSE, and faster inference."
+}

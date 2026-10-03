@@ -39,3 +39,18 @@ Use local CPU first. Small networks may not benefit from a GPU; game generation 
 Publish both teacher MSE and playing strength. Include bootstrap intervals, truncation counts, uncapped-pair sensitivity, seed variation, exact search budgets and run length. Calibration is expected-score calibration `(v+1)/2`, not a separately modeled win probability. Positions from the same game are correlated. No Elo claim is warranted from the project's narrow opponent pool.
 
 The optional continued-supervised control matches network-update time and reports the RL generation overhead separately. It is not an equal-total-compute treatment.
+
+## Executed local-study entry point
+
+The benchmark-based local protocol is documented in `docs/local-study-preregistration.md`. After fitting the two main architectures and choosing the baseline, reproduce each seed with:
+
+```bash
+python scripts/run_seed.py runs/main-supervised/best.npz runs/local-study/seed-42 --config configs/local-study.json --seed 42
+python scripts/run_seed.py runs/main-supervised/best.npz runs/local-study/seed-43 --config configs/local-study.json --seed 43
+python scripts/run_seed.py runs/main-supervised/best.npz runs/local-study/seed-44 --config configs/local-study.json --seed 44
+python scripts/finalize_study.py --stockfish /absolute/path/to/stockfish
+```
+
+The three seed commands are independent and may run concurrently. Never finalize until all three `result.json` files exist. `finalize_study.py` chooses the representative using development scores, runs secondary comparisons, and publishes all seed results. It does not choose the best final-test seed. The default demo remains supervised unless the representative RL checkpoint scores above 50% on development matches.
+
+For the original larger target protocol, use `python scripts/study.py data/main-labeled.jsonl runs/full-study --config configs/study.json --stockfish /absolute/path/to/stockfish`. That is a distinct, more expensive study; do not overwrite or merge its evidence with the bounded run.

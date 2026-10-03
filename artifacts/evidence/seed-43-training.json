@@ -1,0 +1,58 @@
+{
+  "config": {
+    "seed": 43,
+    "learning_rate": 0.0001,
+    "batch_size": 256,
+    "batches": 3,
+    "games_per_batch": 20,
+    "positions_per_game": 32,
+    "nodes": 48,
+    "qdepth": 2,
+    "max_plies": 256,
+    "epsilon": 0.1,
+    "exploration_plies": 20,
+    "device": "cpu",
+    "evidence": "bounded-local-study"
+  },
+  "device": "cpu",
+  "history": [
+    {
+      "batch": 1,
+      "games_total": 20,
+      "completed": 20,
+      "truncated": 0,
+      "loss": 0.6238276958465576,
+      "generation_seconds": 22.306484499014914,
+      "update_seconds": 0.02196891698986292,
+      "actor_sha256": "407a4ce30cbacebf2a5eb53e24c05f990d5f94c704174a88ab8daca271cb937e"
+    },
+    {
+      "batch": 2,
+      "games_total": 40,
+      "completed": 20,
+      "truncated": 0,
+      "loss": 0.8874448418617249,
+      "generation_seconds": 22.759518996346742,
+      "update_seconds": 0.012043750379234552,
+      "actor_sha256": "15d21342e9b3ee918cbcd926c44af7ab9a29a27c8e1929e7adf8580a84149d38"
+    },
+    {
+      "batch": 3,
+      "games_total": 60,
+      "completed": 20,
+      "truncated": 0,
+      "loss": 0.6760193347930908,
+      "generation_seconds": 23.870490041095763,
+      "update_seconds": 0.013592459261417389,
+      "actor_sha256": "b4cc4f595e702733803728a16f88e53ecfc5264411fd3eba5b9feb49cd7f5620"
+    }
+  ],
+  "initial_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1",
+  "openings_sha256": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+  "provenance": {
+    "commit": "e48ce831154ed4c08a855c25f7819f1b138706ae",
+    "dirty": true,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

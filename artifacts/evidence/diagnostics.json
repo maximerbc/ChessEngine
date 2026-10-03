@@ -1,0 +1,14 @@
+{
+  "tactical": {
+    "positions": 50,
+    "supervised_correct": 46,
+    "rl_correct": 45,
+    "dataset_sha256": "c63b06b9797db92e7e1a28c7459cd687827db7abdfc9a61252598ca1e72e38d4"
+  },
+  "depth": {
+    "sample_positions": 133,
+    "zero_completed_depth": 38,
+    "mean_completed_depth": 0.9097744360902256,
+    "note": "Post-study runtime diagnostic from every tenth ply after opening in first 20 representative-seed final games; not a selection criterion."
+  }
+}

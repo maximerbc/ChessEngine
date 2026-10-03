@@ -17,3 +17,9 @@ Smoke tests prove plumbing, pilots estimate feasibility, and a frozen main study
 
 ## 006 - Budgets are study inputs
 Store experimental values in `configs`, not in this log or AGENTS. Use single-threaded NumPy BLAS because threaded tiny matrix multiplies hurt search throughput. Paid compute stays at zero until there is evidence it is useful. The budget ceiling remains C$50 including contingency.
+
+## 007 - First completed study uses a declared local budget
+After measuring pilot throughput and before the main RL/matches, fix a bounded local study: three seeds, 60 self-play games each, 48 search nodes/move, and 200 final opening pairs per seed. Retain the original target configs separately. See the preregistration for exact settings and rationale. Do not describe this as completion of the larger target training schedule.
+
+## 008 - Supervised architecture selection
+Both specified architectures were fitted on the complete 100,000-position corpus. The small model's validation MSE was 0.306609, the larger model's 0.310330. Select the smaller network before RL, consistent with the predeclared 2% error tolerance and inference-cost preference. Validation selection is distinct from final-test teacher agreement and match evaluation.

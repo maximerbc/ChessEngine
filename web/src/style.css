@@ -1012,3 +1012,32 @@ select {
     bottom: 2px;
   }
 }
+.seed-results {
+  margin-bottom: 25px;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+.seed-results table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.seed-results th,
+.seed-results td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.seed-results th {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+.strength-chart {
+  display: block;
+  max-width: 100%;
+  width: 760px;
+  margin: 24px auto 0;
+  border-radius: 5px;
+}

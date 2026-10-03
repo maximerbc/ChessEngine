@@ -22,6 +22,8 @@ def generate(manifest_path, output):
     summary = read_json(spec["summary"]) if spec.get("summary") else None
     measure = read_json(spec["measurement"]) if spec.get("measurement") else None
     calibration = read_json(spec["calibration"]) if spec.get("calibration") else None
+    aggregate = read_json(spec["aggregate"]) if spec.get("aggregate") else None
+    diagnostics = read_json(spec["diagnostics"]) if spec.get("diagnostics") else None
     limitations = spec.get("limitations", [])
     data = {
         "status": spec["status"],
@@ -33,6 +35,8 @@ def generate(manifest_path, output):
         "measurement": measure,
         "calibration": calibration,
         "cost_cad": spec.get("cost_cad", 0),
+        "aggregate": aggregate,
+        "diagnostics": diagnostics,
     }
     write_json(output / "results.json", data)
     charts = []
@@ -108,6 +112,26 @@ def generate(manifest_path, output):
                 "Positions within games are correlated; this diagnostic does not provide independent position-level confidence intervals.",
             )
         )
+    if aggregate:
+        fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.3), constrained_layout=True)
+        for row in aggregate["runs"]:
+            curve = row["curve"]
+            axes[0].plot(
+                [x["selfplay_games"] for x in curve],
+                [x["score"] for x in curve],
+                marker="o",
+                label=f"Seed {row['seed']}",
+            )
+            axes[1].plot([x["compute_seconds"] / 60 for x in curve], [x["score"] for x in curve], marker="o")
+        for ax in axes:
+            ax.axhline(0.5, linestyle="--", color="#999999")
+            ax.set_ylim(0, 1)
+            ax.set_ylabel("Development match score")
+        axes[0].set_xlabel("Self-play games")
+        axes[1].set_xlabel("Generation + update minutes")
+        axes[0].legend(frameon=False, fontsize=8)
+        fig.savefig(output / "strength.png", dpi=180)
+        plt.close(fig)
     sections = [
         (
             "Research question",
@@ -164,6 +188,42 @@ def generate(manifest_path, output):
                 f"{summary['games']} games ({summary['pairs']} opening pairs): {summary['wins']} wins, {summary['draws']} draws, {summary['losses']} losses. Candidate score {summary['score']:.1%}; paired 95% interval [{summary['ci95'][0]:.1%}, {summary['ci95'][1]:.1%}]. Result: {summary['conclusion']}. {summary['capped_games']} capped games. Uncapped-pair score: {summary['uncapped_score']}; uncapped pairs: {summary['uncapped_pairs']}.",
             )
         )
+    if aggregate:
+        per_seed = " ".join(
+            f"Seed {row['seed']}: score {row['summary']['score']:.1%}, interval [{row['summary']['ci95'][0]:.1%}, {row['summary']['ci95'][1]:.1%}], {row['summary']['games']} games."
+            for row in aggregate["runs"]
+        )
+        sections.append(
+            (
+                "Variation across training seeds",
+                per_seed
+                + f" Mean score: {aggregate['mean_score']:.1%}. Across-seed standard deviation: {aggregate['seed_score_std']:.4f}. This is separate from within-run match uncertainty.",
+            )
+        )
+        sections.append(
+            (
+                "Secondary comparisons",
+                " ".join(
+                    f"{key}: {value['score']:.1%} across {value['games']} games; interval [{value['ci95'][0]:.1%}, {value['ci95'][1]:.1%}]."
+                    for key, value in aggregate.get("secondary", {}).items()
+                ),
+            )
+        )
+    if diagnostics:
+        tactical = diagnostics["tactical"]
+        depth = diagnostics["depth"]
+        sections.append(
+            (
+                "Tactical and search-depth diagnostics",
+                f"On {tactical['positions']} held-out puzzles rated at most 1600, the supervised evaluator solved {tactical['supervised_correct']} and the selected RL evaluator solved {tactical['rl_correct']} at 1,000 nodes per move. This small diagnostic does not establish a tactical gain. In a post-study sample of {depth['sample_positions']} positions, {depth['zero_completed_depth']} searches completed no full depth-one iteration at the 48-node budget. Mean completed depth was {depth['mean_completed_depth']:.2f}. Frequent fallback moves materially limit sensitivity to evaluator improvements.",
+            )
+        )
+        sections.append(
+            (
+                "Observed failure modes",
+                "The pilot showed pronounced overfitting: training loss fell while validation error rose. More supervised data reduced validation error, but shallow self-play generated mostly draws. RL's three final match scores remained near 50 percent. The fixed Stockfish reference won every secondary game; its zero-width empirical bootstrap interval is a resampling artifact, not certainty about future games. The optional continued-supervised control was not used: network updates were tiny compared with game generation, and the present study is limited to the declared primary treatment.",
+            )
+        )
     sections.append(("Limitations", " ".join(limitations)))
     sections.append(
         (
@@ -183,9 +243,13 @@ def generate(manifest_path, output):
         body += f"<h2>{html.escape(title)}</h2><p>{html.escape(content)}</p>"
         if title == "Supervised results":
             body += '<figure><img src="supervised.png" alt="Training and validation curves"/><figcaption>Measured loss against teacher labels.</figcaption></figure>'
+        if title == "Variation across training seeds":
+            body += (
+                '<figure><img src="strength.png" alt="Development score versus games and compute"/></figure>'
+            )
         if title == "RL run":
             body += '<figure><img src="rl.png" alt="RL training curve"/></figure>'
-    if calibration:
+    if calibration and calibration["bins"]:
         body += '<h2>Calibration diagnostic</h2><img src="calibration.png" alt="Outcome calibration"/>'
     (output / "report.html").write_text(
         '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ChessEngine research report</title><style>'
@@ -231,7 +295,12 @@ def generate(manifest_path, output):
         chart = "supervised.png" if title == "Supervised results" else "rl.png" if title == "RL run" else None
         if chart:
             story += [Image(str(output / chart), width=460, height=211), Spacer(1, 10)]
-    if calibration:
+    if aggregate:
+        story += [
+            Paragraph("Development performance versus compute", styles["HeadLab"]),
+            Image(str(output / "strength.png"), width=460, height=211),
+        ]
+    if calibration and calibration["bins"]:
         story += [
             Paragraph("Calibration diagnostic", styles["HeadLab"]),
             Image(str(output / "calibration.png"), width=460, height=211),

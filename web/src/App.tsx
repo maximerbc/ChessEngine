@@ -58,6 +58,12 @@ type Research = {
     capped: boolean;
   }[];
   limitations?: string[];
+  aggregate?: {
+    representative: number;
+    mean_score: number;
+    seed_score_std: number;
+    runs: { seed: number; summary: Summary }[];
+  };
 };
 const PIECES: Record<string, string> = {
   wk: "♚",
@@ -286,6 +292,7 @@ export default function App() {
     to: Square;
   } | null>(null);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [analysisHistory, setAnalysisHistory] = useState<string[]>([]);
   const [terminal, setTerminal] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -373,6 +380,7 @@ export default function App() {
       });
       if (token !== generation.current) return;
       setAnalysis(result);
+      setAnalysisHistory(history);
       setTerminal(result.terminal);
       if (result.best_move) setHistory((h) => [...h, result.best_move!]);
     } catch (e) {
@@ -735,7 +743,7 @@ export default function App() {
                 <p className="pv">
                   {analysis
                     ? sanLine(
-                        boardFrom(DEFAULT_POSITION, history.slice(0, -1)),
+                        boardFrom(DEFAULT_POSITION, analysisHistory),
                         analysis.pv,
                       ) || "No continuation"
                     : "Make a move to begin the analysis."}
@@ -854,8 +862,9 @@ export default function App() {
                   {research?.status || "The study is being prepared"}
                 </strong>
                 <p>
-                  Pilot evidence tests the pipeline. It does not establish that
-                  reinforcement learning improves chess strength.
+                  {research?.aggregate
+                    ? "All three training seeds are reported. Conclusions apply to the stated data and shallow search budget."
+                    : "Pilot evidence tests the pipeline. It does not establish that reinforcement learning improves chess strength."}
                 </p>
               </div>
               <a href="/research/report.html" target="_blank" rel="noreferrer">
@@ -910,6 +919,60 @@ export default function App() {
                 </p>
               </section>
             </div>
+            {research?.aggregate && (
+              <section className="card seed-results">
+                <span className="tiny-label">
+                  ROBUSTNESS / ALL TRAINING SEEDS
+                </span>
+                <h2>One result is not the whole experiment.</h2>
+                <p className="muted">
+                  The headline above is seed {research.aggregate.representative}
+                  , selected using development matches. Each row below uses 400
+                  held-out games. Training-seed variation is separate from match
+                  uncertainty.
+                </p>
+                <div className="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Seed</th>
+                        <th>Score</th>
+                        <th>95% paired interval</th>
+                        <th>Conclusion</th>
+                        <th>Records</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {research.aggregate.runs.map((r) => (
+                        <tr key={r.seed}>
+                          <td>{r.seed}</td>
+                          <td>{(r.summary.score * 100).toFixed(1)}%</td>
+                          <td>
+                            {r.summary.ci95
+                              .map((x) => (x * 100).toFixed(1) + "%")
+                              .join(" – ")}
+                          </td>
+                          <td>{r.summary.conclusion}</td>
+                          <td>
+                            <a
+                              href={`/research/games-seed-${r.seed}.json`}
+                              download
+                            >
+                              Download games
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <img
+                  className="strength-chart"
+                  src="/research/strength.png"
+                  alt="Development playing performance by training games and compute for each seed"
+                />
+              </section>
+            )}
             <div className="workspace replay">
               <section className="board-panel">
                 <div className="player-strip">
