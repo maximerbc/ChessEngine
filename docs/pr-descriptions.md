@@ -51,3 +51,19 @@ Completed all 21 local CPU runs at C$0. Mean validation MSE was 0.60172, 0.34322
 42 Python tests passed, including the tiny complete study, whole-game nesting, metric/bootstrap calculations, dropout/export parity, exact CPU resume and mismatch rejection. Ruff and whitespace checks passed. The generated report and figures were visually inspected and compact results were checked against saved raw predictions. GitHub CI remains pending the user push.
 
 Released checkpoints, training labels, deployment settings and public website assets are unchanged. No paid resources or final-test selection were used. Full reproduction instructions are in `docs/supervised-diagnostics.md`.
+
+## 6. Expand supervised training to 200k positions
+
+Base: `main` after diagnostics merges | Head: `feat/supervised-200k`
+
+### Change
+
+Extends the corpus with new training-only source games while preserving every original record. Adds pinned Stockfish labeling in resumable, checksum-verified chunks, a fixed three-seed MLP experiment, and a comparison report with paired game-bootstrap intervals and compute accounting. Validation and test records remain unchanged; no released model or deployment settings change.
+
+### Validation
+
+The local Python suite passes 46 tests, including leakage exclusions, original-record preservation, teacher identity checks, corrupted chunk rejection, label reuse on resume and report metric verification. Full experiment findings are recorded in `docs/expansion-200k.md` when execution completes. GitHub CI requires the user push.
+
+### Interpretation
+
+More data also produces more updates per epoch. This comparison cannot isolate data quantity from compute, and lower teacher-target error does not establish stronger chess play. The source remains the same historical Lichess archive. Paid compute is C$0; source data and trial checkpoints are ignored.

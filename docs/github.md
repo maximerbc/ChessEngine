@@ -42,3 +42,13 @@ git push -u origin feat/supervised-diagnostics
 ```
 
 Open a PR targeting `main`, titled **Diagnose supervised generalization with controlled experiments**, using the corresponding draft in `docs/pr-descriptions.md`. Wait for GitHub checks before merging. No training run is needed in CI beyond the tiny smoke study. This PR preserves released models and website assets; its diagnostic report is separate from the public deployment.
+
+## Follow-up: 200k training-data extension
+
+`feat/supervised-200k` builds on `feat/supervised-diagnostics`. The diagnostics branch remains ready for its original push. Merge that PR first; then push the extension when its result handoff is ready:
+
+```bash
+git push -u origin feat/supervised-200k
+```
+
+Target `main` after diagnostics merges (or temporarily target `feat/supervised-diagnostics`). Preserve merge-commit ancestry to avoid repeating the diagnostics diff. Title: **Expand supervised training to 200k positions**. Full datasets and trial checkpoints stay local; the private repository receives code, configs and compact evidence only.
