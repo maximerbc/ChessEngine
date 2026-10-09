@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "source": "data/lichess-2013-01.pgn.zst",
+  "base": "data/main-labeled.jsonl",
+  "teacher_manifest": "data/main-labeled.jsonl.manifest.json",
+  "binary": "tools/stockfish/stockfish-macos-universal",
+  "reserved": "configs/openings.json",
+  "target_total": 200000,
+  "sampling_seed": 2026,
+  "workers": 2,
+  "chunk_size": 1000,
+  "output": "runs/expansion-200k",
+  "combined": "data/expanded-200k-labeled.jsonl"
+}
