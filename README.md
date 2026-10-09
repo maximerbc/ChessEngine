@@ -78,6 +78,7 @@ Tests include tiny CPU training runs; they are not scientific experiment results
 - [Project contract](AGENTS.md): durable decisions and contributor instructions.
 - [Mathematical walkthrough](docs/mathematics.md): value functions, search, returns, training and uncertainty.
 - [Study protocol](docs/study.md): reproducibility, data, checkpoints, costs and limitations.
+- [Supervised diagnostics](docs/experiments/supervised-diagnostics/index.html): frozen-model audit and 21 completed development runs; [reproduction guide](docs/supervised-diagnostics.md).
 - [Deployment](docs/deployment.md): private GitHub access and public Railway services.
 - [GitHub handoff](docs/github.md): three substantial review batches and push instructions.
 - [Demo walkthrough](docs/demo.md): a short project presentation.

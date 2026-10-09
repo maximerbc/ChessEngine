@@ -116,6 +116,18 @@ def test_tiny_full_study_resume_and_identity(tmp_path):
     result = run_study(cfg)
     assert len(result["runs"]) == 21
     assert result["screening"]["triggered"]
+    from chessengine.diagnostics_report import generate
+    report = generate(cfg["output"], tmp_path / "report")
+    assert report.exists()
+    assert "not proof of overfitting" in report.read_text()
+    raw = np.load(Path(cfg["output"]) / "predictions.npz")
+    audit = read_json(Path(cfg["output"]) / "audit.json")
+    assert audit["validation"]["supervised"]["mse"] == pytest.approx(
+        np.mean((raw["supervised"] - raw["targets"]) ** 2))
+    assert len({r["game_id"] for r in audit["worst_positions"]}) == len(audit["worst_positions"])
+    histogram = read_json(tmp_path / "report/evidence/target-histograms.json")
+    assert sum(histogram["train_counts"]) == 6
+    assert sum(histogram["validation_counts"]) == 2
     resumed = run_study(cfg, resume=True)
     assert result["runs"] == resumed["runs"]
     for path in Path(cfg["output"]).glob("subset-*.jsonl"):

@@ -32,3 +32,13 @@ git push -u origin feat/railway-deployment
 ```
 
 Use the fourth PR description in `docs/pr-descriptions.md`. Railway account authorization and production setup are grouped in `docs/deployment.md` and happen after merge.
+
+## Supervised diagnostics PR
+
+The completed study is on `feat/supervised-diagnostics`, following the merged Railway deployment PR. Push this branch once:
+
+```bash
+git push -u origin feat/supervised-diagnostics
+```
+
+Open a PR targeting `main`, titled **Diagnose supervised generalization with controlled experiments**, using the corresponding draft in `docs/pr-descriptions.md`. Wait for GitHub checks before merging. No training run is needed in CI beyond the tiny smoke study. This PR preserves released models and website assets; its diagnostic report is separate from the public deployment.

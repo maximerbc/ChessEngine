@@ -41,3 +41,12 @@ Local builds and checks do not prove that GitHub Actions has run remotely or tha
 PR #4 run `37101886836`, job `111142883904`, built both images and passed container boundary/model-failure checks, then failed immediately on the first API health probe with `curl: (52) Empty reply from server`. Docker's published port could accept and close a connection before Uvicorn became ready. The previous curl flags retried refused connections but not empty replies.
 
 Both health probes now retry all curl errors, with a 5-second per-attempt timeout and a 60-second retry window. A regression test executes the actual workflow probe commands against a local server that closes the first connection without replying and then returns HTTP 200. The previous flags reproduce exit 52; the corrected API and website probes pass. Full remote container/browser execution still requires pushing this fix and a successful CI rerun.
+
+## Supervised diagnostics (2026-10-09)
+
+- Full local Python suite: 42 passed. Ruff and whitespace checks passed. CI uses the tiny study through the existing Python test workflow; remote execution awaits the user push.
+- Completed nine data-size fits plus twelve conditional regularization fits, using existing training/validation records only. Protocol committed at `5bb9a05` before execution. All three full-data seeds exceeded the screening threshold; no treatment met the promising-candidate rule.
+- Study used 51.7 seconds of training/validation epoch work and 165.5 seconds invocation wall time, excluding report generation. Actual paid compute: C$0. Per-run times and hashes are in the report evidence.
+- Verified complete-game nesting, exclusion of test records, bootstrap reproducibility, boundary calculations, training/evaluation dropout behavior, exact CPU resume and NumPy inference parity. The smoke study also verifies report generation and evidence counts.
+- Inspected the HTML report and all three figures. Cross-checked full-study raw validation predictions, subset counts, per-seed aggregates, 20 distinct-game failure examples and released-model hash. No model or public asset replacement.
+- Evidence is development-only: repeated validation selection, three seeds, a single nested subset ordering and extra updates with larger data limit causal interpretation. No new final-test evaluation or playing-strength experiment was performed.
