@@ -43,13 +43,17 @@ class NumpyEvaluator:
         return float(self.batch(encode(board)))
 
 
-def build_model(hidden=(128, 64)):
+def build_model(hidden=(128, 64), dropout=0.0):
     import torch.nn as nn
 
+    if not 0 <= dropout < 1:
+        raise ValueError("Dropout must be in [0, 1)")
     widths = [FEATURE_SIZE, *hidden, 1]
     layers = []
     for i, (a, b) in enumerate(zip(widths, widths[1:])):
         layers += [nn.Linear(a, b), nn.ReLU() if i < len(widths) - 2 else nn.Tanh()]
+        if dropout and i < len(widths) - 2:
+            layers.append(nn.Dropout(dropout))
     return nn.Sequential(*layers)
 
 
@@ -70,9 +74,9 @@ def load_export(path):
     import torch
 
     evaluator = NumpyEvaluator(path)
-    model = build_model(evaluator.metadata["hidden"])
+    model = build_model(evaluator.metadata["hidden"], evaluator.metadata.get("config", {}).get("dropout", 0))
     with torch.no_grad():
-        for layer, (w, b) in zip(model[::2], evaluator.layers):
+        for layer, (w, b) in zip((m for m in model if isinstance(m, torch.nn.Linear)), evaluator.layers):
             layer.weight.copy_(torch.from_numpy(w))
             layer.bias.copy_(torch.from_numpy(b))
     return model, evaluator.metadata

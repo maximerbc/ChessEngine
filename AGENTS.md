@@ -37,3 +37,8 @@
 - A fourth deployment PR follows showcase. User-managed pushes and private visibility remain mandatory.
 - Production requires both released neural models and valid checksums; missing artifacts fail startup. One API replica, one Uvicorn worker, no persistent volume or training dependencies.
 - Dockerfiles and dashboard instructions define deployment. No paid activation or automatic PR environments. Track hosting costs within the C$50 ceiling.
+
+## Supervised diagnostics
+- Diagnostics use training/validation records only; old test results cannot select candidates. Keep released checkpoints and public website assets unchanged.
+- Freeze the diagnostic configuration before running experiments. Conditional regularization follows its predefined gap rule; do not expand the search after viewing outcomes.
+- Report frozen-checkpoint training error separately from online training loss. Preserve per-seed evidence and whole-game bootstrap uncertainty; development improvements do not establish stronger play.
