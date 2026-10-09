@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 import random
 
 import chess
@@ -46,7 +47,6 @@ def test_extension_excludes_existing_and_reserved_games(tmp_path):
     config = inputs(tmp_path)
     result = prepare_extension(config)
     assert 15 <= result['total_positions'] <= 20
-    from pathlib import Path
     path = Path(config['output']) / 'positions.jsonl'
     rows = list(records(path))
     base = list(records(config['base']))
@@ -86,7 +86,6 @@ def test_resumable_labels_preserve_base_and_reject_corruption(tmp_path, monkeypa
     monkeypatch.setattr(chess.engine.SimpleEngine, 'popen_uci', lambda _: Teacher())
     result = expand(config)
     assert len(calls) == result['additional_positions']
-    from pathlib import Path
     assert Path(config['combined']).read_bytes().startswith(Path(config['base']).read_bytes())
     assert all(r['target'] == .5 for r in list(records(config['combined']))[3:])
     expand(config)
@@ -99,7 +98,55 @@ def test_resumable_labels_preserve_base_and_reject_corruption(tmp_path, monkeypa
 
 def test_teacher_binary_mismatch_rejected(tmp_path):
     config = inputs(tmp_path)
-    from pathlib import Path
     Path(config['binary']).write_text('different binary')
     with pytest.raises(ValueError, match='teacher binary'):
         expand(config)
+
+
+def test_expansion_comparison_report(tmp_path, monkeypatch):
+    import numpy as np
+    from chessengine.diagnostics import run_study
+    from chessengine.expansion_report import generate
+    from chessengine.model import build_model, export
+
+    config = inputs(tmp_path)
+
+    class Teacher:
+        id = {'name': 'fake'}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+        def configure(self, settings):
+            pass
+
+        def analyse(self, board, limit, game):
+            return {'wdl': chess.engine.PovWdl(chess.engine.Wdl(400, 300, 300), board.turn)}
+
+    monkeypatch.setattr(chess.engine.SimpleEngine, 'popen_uci', lambda _: Teacher())
+    expand(config)
+    checkpoint = tmp_path / 'frozen.npz'
+    export(build_model([16, 8]), checkpoint, {'hidden': [16, 8]})
+    study = read_json('configs/supervised-200k.json')
+    study.update(checkpoint=str(checkpoint), bootstrap_resamples=20)
+    study['training'].update(hidden=[16, 8], epochs=2)
+    previous, expanded = tmp_path / 'previous', tmp_path / 'expanded'
+    for source, output in [(config['base'], previous), (config['combined'], expanded)]:
+        run_study({**study, 'source': source, 'output': str(output)})
+    report = tmp_path / 'report'
+    result = generate(previous, expanded, report, config)
+    assert result['validation_positions'] == 1
+    assert result['new_positions'] > result['old_positions']
+    assert (report / 'index.html').exists() and (report / 'data-size.png').exists()
+    raw = np.load(expanded / 'comparison-predictions.npz')
+    for row in result['seed_comparisons']:
+        error = raw[f"new_{row['seed']}"] - raw['targets']
+        assert np.mean(error**2) == pytest.approx(row['new']['mse'])
+    combined = list(records(config['combined']))
+    combined[1]['target'] = .99
+    Path(config['combined']).write_text(''.join(json.dumps(r) + '\n' for r in combined))
+    with pytest.raises(ValueError, match='Validation set changed'):
+        generate(previous, expanded, report, config)

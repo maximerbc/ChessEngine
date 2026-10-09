@@ -20,3 +20,11 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m chessengine.diagnos
 ```
 
 The first command automatically resumes verified chunks. Append `--resume` to the second command to resume training. Source data, labels and experimental checkpoints remain ignored. The previous diagnostics branch is unchanged; this extension is a separate local PR batch based on it.
+
+After both studies finish, generate the separate comparison report:
+
+```bash
+MPLCONFIGDIR=/private/tmp/chess-expansion-mpl .venv/bin/python -m chessengine.expansion_report runs/supervised-diagnostics runs/supervised-200k docs/experiments/supervised-200k
+```
+
+The report verifies identical validation records, checks all six checkpoint hashes and recomputes their predictions. It reports paired source-game bootstrap intervals for each seed's expanded-minus-original MSE, separately from training-seed standard deviation. Curves against optimizer steps expose unequal training budgets without claiming to control for them. Raw comparison predictions remain under `runs/supervised-200k`; compact evidence and figures are committed.
