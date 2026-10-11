@@ -5,9 +5,17 @@ import numpy as np
 
 FEATURE_VERSION = 1
 FEATURE_SIZE = 841  # 12*64 + turn + 4 rights + 65 EP + clock + 2 repetition
+FEATURE_SIZES = {1: 841, 2: 841, 3: 853}
 
 
-def encode(board: chess.Board) -> np.ndarray:
+def feature_size(version):
+    if type(version) is not int or version not in FEATURE_SIZES:
+        raise ValueError('Unsupported feature schema')
+    return FEATURE_SIZES[version]
+
+
+def encode(board: chess.Board, version=1) -> np.ndarray:
+    feature_size(version)
     x = np.zeros(FEATURE_SIZE, dtype=np.float32)
     for square, piece in board.piece_map().items():
         plane = (0 if piece.color == chess.WHITE else 6) + piece.piece_type - 1
@@ -23,7 +31,32 @@ def encode(board: chess.Board) -> np.ndarray:
     x[838] = min(board.halfmove_clock / 150, 1)
     x[839] = board.is_repetition(2)
     x[840] = board.is_repetition(3)
-    return x
+    return transform_features(x, version)
+
+
+def transform_features(original, version):
+    """Convert v1 arrays without changing boards, histories or target signs."""
+    feature_size(version)
+    if version == 1:
+        return original
+    scalar = original.ndim == 1
+    source = original[None, :] if scalar else original
+    if source.shape[1] != FEATURE_SIZE:
+        raise ValueError('Expected version-1 features')
+    x = source.copy()
+    black = source[:, 768] == 0
+    planes = source[black, :768].reshape(-1, 2, 6, 8, 8)
+    x[black, :768] = planes[:, ::-1, :, ::-1, :].reshape(-1, 768)
+    x[black, 769:773] = source[black][:, [771, 772, 769, 770]]
+    x[black, 773:837] = source[black, 773:837].reshape(-1, 8, 8)[:, ::-1, :].reshape(-1, 64)
+    x[:, 768] = 1
+    if version == 3:
+        counts = x[:, :768].reshape(-1, 2, 6, 64).sum(axis=-1)[:, :, :5]
+        normalized = counts / np.array([8, 2, 2, 2, 1], dtype=np.float32)
+        phase = (counts * np.array([0, 1, 1, 2, 4], dtype=np.float32)).sum(axis=(1, 2)) / 24
+        balance = ((counts[:, 0] - counts[:, 1]) * np.array([1, 3.2, 3.3, 5, 9], dtype=np.float32)).sum(axis=1) / 40
+        x = np.concatenate([x, normalized.reshape(-1, 10), phase[:, None], balance[:, None]], axis=1)
+    return x[0] if scalar else x
 
 
 def position_key(board: chess.Board) -> str:

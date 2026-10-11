@@ -35,3 +35,7 @@ The next batch diagnoses the released supervised model on the existing developme
 ## Training coverage extension (2026-10-09)
 
 After the negative regularization study, the user approved 200k total labelled positions. Keep the old corpus and held-out splits unchanged, adding training samples from new source games with the pinned teacher. Freeze this separate experiment in `docs/expansion-200k.md`; do not alter the completed diagnostic protocol or released model. This changes experimental scope, not project invariants.
+
+## Fixed-data optimization and representation (2026-10-11)
+
+The approved next study holds all expanded training/validation examples and labels fixed. Add explicit feature schemas: v1 remains unchanged, v2 rank-reflects Black-to-move inputs and swaps color roles, and v3 appends material counts, phase and balance. Preserve history features and target signs. Legacy defaults remain v1; experimental schemas are rejected by RL entry points. Compare two learning-rate treatments and two representation treatments with a reproduced reference before one conditional combination; no additional search or released-model replacement.

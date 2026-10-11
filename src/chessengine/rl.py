@@ -19,6 +19,8 @@ def outcome_value(winner, turn):
 
 
 def play_game(evaluator, opening, config, rng):
+    if getattr(evaluator, 'feature_version', 1) != 1:
+        raise ValueError('RL currently supports feature version 1 only')
     board = restore(opening)
     root = board.copy(stack=True)
     samples, played = [], []
@@ -57,6 +59,8 @@ def play_game(evaluator, opening, config, rng):
 
 
 def selfplay(checkpoint, openings_path, output, config, resume=False):
+    if NumpyEvaluator(checkpoint).feature_version != 1:
+        raise ValueError('RL currently supports feature version 1 only')
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     seed_all(config["seed"])

@@ -52,6 +52,7 @@ def fit(source, output, config, resume=False, prepared=None):
     output.mkdir(parents=True, exist_ok=True)
     seed_all(config["seed"])
     source_sha = digest(source)
+    version = config.get('feature_version', FEATURE_VERSION)
     if prepared is None:
         rows = list(records(source))
         validate_splits(rows)
@@ -61,20 +62,24 @@ def fit(source, output, config, resume=False, prepared=None):
             if not selected:
                 raise ValueError(f"Missing {split} data")
             subsets[split] = (
-                torch.from_numpy(np.stack([encode(restore(r)) for r in selected])),
+                torch.from_numpy(np.stack([encode(restore(r), version) for r in selected])),
                 torch.tensor([r["target"] for r in selected], dtype=torch.float32),
             )
     else:
         if prepared["source_sha256"] != source_sha:
             raise ValueError("Prepared data source mismatch")
+        if prepared.get('feature_version', 1) != version:
+            raise ValueError('Prepared feature schema mismatch')
         subsets = prepared["subsets"]
     device = device_for(config.get("device", "cpu"))
-    model = build_model(config["hidden"], config.get("dropout", 0)).to(device)
+    model = build_model(config["hidden"], config.get("dropout", 0), version).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"]
     )
+    scheduler = (torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, **config['scheduler'])
+                 if config.get('scheduler') else None)
     identity = {k: v for k, v in config.items() if k != "epochs"}
-    signature = json_hash({"data": source_sha, "config": identity, "features": FEATURE_VERSION})
+    signature = json_hash({"data": source_sha, "config": identity, "features": version})
     history, start_epoch, best, stale, elapsed = [], 0, float("inf"), 0, 0.0
     state_path = output / "resume.pt"
     if resume:
@@ -83,6 +88,8 @@ def fit(source, output, config, resume=False, prepared=None):
             raise ValueError("Resume data/config mismatch")
         model.load_state_dict(state["model"])
         optimizer.load_state_dict(state["optimizer"])
+        if scheduler:
+            scheduler.load_state_dict(state['scheduler'])
         history, start_epoch, best, stale, elapsed = (
             state[k] for k in ["history", "epoch", "best", "stale", "elapsed"]
         )
@@ -96,6 +103,7 @@ def fit(source, output, config, resume=False, prepared=None):
             break
         started = time.perf_counter()
         model.train()
+        learning_rate = optimizer.param_groups[0]['lr']
         total = 0
         order = torch.randperm(len(x))
         for ids in order.split(config["batch_size"]):
@@ -114,9 +122,13 @@ def fit(source, output, config, resume=False, prepared=None):
                 )
             val_loss = validation_total / len(xv)
         elapsed += time.perf_counter() - started
+        if scheduler:
+            scheduler.step(val_loss)
         history.append(
             {
                 "epoch": epoch + 1,
+                "learning_rate": learning_rate,
+                "next_learning_rate": optimizer.param_groups[0]['lr'],
                 "train_loss": total / len(x),
                 "validation_loss": val_loss,
                 "update_seconds": elapsed,
@@ -144,6 +156,7 @@ def fit(source, output, config, resume=False, prepared=None):
                 "signature": signature,
                 "model": model.state_dict(),
                 "optimizer": optimizer.state_dict(),
+                "scheduler": scheduler.state_dict() if scheduler else None,
                 "rng": rng_state(),
                 "epoch": epoch + 1,
                 "best": best,
