@@ -62,7 +62,11 @@ Extends the corpus with new training-only source games while preserving every or
 
 ### Validation
 
-The local Python suite passes 46 tests, including leakage exclusions, original-record preservation, teacher identity checks, corrupted chunk rejection, label reuse on resume and report metric verification. Full experiment findings are recorded in `docs/expansion-200k.md` when execution completes. GitHub CI requires the user push.
+The local Python suite passes 46 tests, including leakage exclusions, original-record preservation, teacher identity checks, corrupted chunk rejection, label reuse on resume and report metric verification. Ruff and whitespace checks pass. Full experiment findings are recorded in `docs/expansion-200k.md`; report figures and browser layout were visually inspected. GitHub CI requires the user push.
+
+### Results
+
+Completed 100,003 new labels from 22,192 new games, bringing training to 180,302 positions and the total corpus to 200,003. All three expanded fits improved: mean validation MSE fell from 0.30132 to 0.27350 (9.23%). Each paired source-game bootstrap interval favours the expanded model, conditional on these selected checkpoints. Original records and all chunk checksums were independently verified. Labeling used 13.7 minutes elapsed; all work used local CPU with C$0 paid compute.
 
 ### Interpretation
 

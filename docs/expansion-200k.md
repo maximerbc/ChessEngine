@@ -28,3 +28,19 @@ MPLCONFIGDIR=/private/tmp/chess-expansion-mpl .venv/bin/python -m chessengine.ex
 ```
 
 The report verifies identical validation records, checks all six checkpoint hashes and recomputes their predictions. It reports paired source-game bootstrap intervals for each seed's expanded-minus-original MSE, separately from training-seed standard deviation. Curves against optimizer steps expose unequal training budgets without claiming to control for them. Raw comparison predictions remain under `runs/supervised-200k`; compact evidence and figures are committed.
+
+## Completed results (2026-10-11)
+
+Labeling completed on October 9; training and report verification completed on October 11. The corpus has 200,003 records: 180,302 training, 9,789 validation and 9,912 unused test positions. The extension contributes 100,003 positions from 22,192 new games. Original records are preserved byte-for-byte, all labeling chunk checksums pass, and an independent audit found no duplicate new position keys or overlap with existing/reserved games and positions.
+
+| Seed | Original validation MSE | Expanded validation MSE | Difference, expanded − original | 95% paired game-bootstrap interval |
+|---:|---:|---:|---:|---:|
+| 42 | 0.30243 | 0.27411 | −0.02832 | [−0.03750, −0.01888] |
+| 43 | 0.29859 | 0.27601 | −0.02258 | [−0.03092, −0.01389] |
+| 44 | 0.30293 | 0.27037 | −0.03257 | [−0.04085, −0.02445] |
+
+Mean MSE fell from **0.30132 to 0.27350**, a **9.23% reduction**, and all three seeds improved. Seed standard deviation changed from 0.00237 to 0.00287. Each conditional paired interval excludes zero, but the intervals do not capture repeated validation selection or retraining uncertainty. They support improved teacher agreement on this development set, not stronger chess play or an isolated causal effect of data quantity.
+
+Preparation took 103.4 seconds; labeling took 822.2 seconds elapsed (1,642.7 summed worker seconds). The expanded diagnostic/training invocation took 216.6 seconds, including 19.6 seconds of training/validation epoch work. Paid compute: **C$0**. No additional regularization runs were launched; the shared runner's gap screen is recorded for transparency, while this protocol's treatment list is empty.
+
+See the [complete report](experiments/supervised-200k/index.html) and [independent dataset audit](experiments/supervised-200k/evidence/integrity.json). The next experiment should compare matched update budgets, followed by controlled playing-strength evaluation before considering a release replacement. The current public models are unchanged.

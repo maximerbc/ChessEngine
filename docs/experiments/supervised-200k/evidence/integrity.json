@@ -1,0 +1,24 @@
+{
+  "base_split_counts": {
+    "train": 80299,
+    "test": 9912,
+    "validation": 9789
+  },
+  "new_positions": 100003,
+  "new_games": 22192,
+  "new_phase_counts": {
+    "opening": 43259,
+    "middlegame": 39536,
+    "endgame": 17208
+  },
+  "base_training_phase_counts": {
+    "opening": 35103,
+    "middlegame": 31578,
+    "endgame": 13618
+  },
+  "overlapping_source_games": 0,
+  "overlapping_position_keys": 0,
+  "duplicate_new_position_keys": 0,
+  "base_sha256": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+  "new_positions_sha256": "58369535563c8f63c2456f92d076113569be895a7cf7a9f7b2c00807e8d69fe7"
+}

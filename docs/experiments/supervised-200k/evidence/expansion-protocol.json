@@ -1,0 +1,28 @@
+{
+  "identity": {
+    "config": {
+      "version": 1,
+      "source": "data/lichess-2013-01.pgn.zst",
+      "base": "data/main-labeled.jsonl",
+      "teacher_manifest": "data/main-labeled.jsonl.manifest.json",
+      "binary": "tools/stockfish/stockfish-macos-universal",
+      "reserved": "configs/openings.json",
+      "target_total": 200000,
+      "sampling_seed": 2026,
+      "workers": 2,
+      "chunk_size": 1000,
+      "output": "runs/expansion-200k",
+      "combined": "data/expanded-200k-labeled.jsonl"
+    },
+    "base_sha256": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+    "source_sha256": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635",
+    "reserved_sha256": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+    "code_sha256": "fb52e8c3e0c566d1bf3ece41c20e0fe1e422654b28b111a22fb23274194c1f3e"
+  },
+  "provenance": {
+    "commit": "3a18b45303125f8d5069a1b83a993642f71991ff",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

@@ -50,3 +50,12 @@ Both health probes now retry all curl errors, with a 5-second per-attempt timeou
 - Verified complete-game nesting, exclusion of test records, bootstrap reproducibility, boundary calculations, training/evaluation dropout behavior, exact CPU resume and NumPy inference parity. The smoke study also verifies report generation and evidence counts.
 - Inspected the HTML report and all three figures. Cross-checked full-study raw validation predictions, subset counts, per-seed aggregates, 20 distinct-game failure examples and released-model hash. No model or public asset replacement.
 - Evidence is development-only: repeated validation selection, three seeds, a single nested subset ordering and extra updates with larger data limit causal interpretation. No new final-test evaluation or playing-strength experiment was performed.
+
+## 200k training-data extension (2026-10-11)
+
+- Full local suite: 46 tests passed, including a tiny extension, resumable labeling, teacher mismatch/corruption rejection, original-record preservation, validation-set equality and comparison-report prediction checks. Ruff and whitespace checks pass; remote CI awaits the user push.
+- Completed 100,003 new training labels from 22,192 unused source games; original corpus verified byte-for-byte as the combined file prefix. Every completed chunk checksum and combined checksum matched. An independent full-candidate audit found zero overlaps with existing/reserved source games or positions and zero duplicate candidate position keys.
+- Completed all three expanded baseline fits. Mean validation MSE 0.273497, versus 0.301320 at the old training size; all three seeds improved. Report generation reloaded all six checkpoint exports, checked their hashes, verified identical validation records, recomputed metrics and bootstrapped paired source games 2,000 times per seed.
+- Visually inspected both generated figures and the HTML report. The original diagnostics report, public website assets and released checkpoint files remain unchanged.
+- Expanded corpus: 180,302 train, 9,789 validation, 9,912 unused test. Labeling wall time 822.2 seconds; expanded training/diagnostics wall time 216.6 seconds. C$0 paid compute.
+- Limitations: same historical source, repeated development validation use, three training seeds and unequal optimizer-update budgets. No claim of stronger chess or deployment readiness for a new checkpoint; controlled matches and fresh confirmatory data remain future work.

@@ -79,6 +79,7 @@ Tests include tiny CPU training runs; they are not scientific experiment results
 - [Mathematical walkthrough](docs/mathematics.md): value functions, search, returns, training and uncertainty.
 - [Study protocol](docs/study.md): reproducibility, data, checkpoints, costs and limitations.
 - [Supervised diagnostics](docs/experiments/supervised-diagnostics/index.html): frozen-model audit and 21 completed development runs; [reproduction guide](docs/supervised-diagnostics.md).
+- [200k data extension](docs/experiments/supervised-200k/index.html): three expanded-data fits reduced mean validation MSE by 9.2%; [protocol and reproduction](docs/expansion-200k.md).
 - [Deployment](docs/deployment.md): private GitHub access and public Railway services.
 - [GitHub handoff](docs/github.md): three substantial review batches and push instructions.
 - [Demo walkthrough](docs/demo.md): a short project presentation.

@@ -1,0 +1,27 @@
+{
+  "sha256": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+  "base_sha256": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+  "additional_positions": 100003,
+  "teacher": {
+    "source_sha256": "a37315873148c702787b0cb32e1ddbc159f1c0fef33530a4290485a089ae0ef6",
+    "sha256": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+    "teacher": {
+      "name": "Stockfish 19",
+      "author": "the Stockfish developers (see AUTHORS file)"
+    },
+    "binary_sha256": "8eed61129d1493c5d1f2fd9323f0c54c47ac49319911fbde18c6b9c87e8b13c5",
+    "nodes": 10000,
+    "threads": 1,
+    "hash_mb": 32
+  },
+  "label_worker_seconds": 1642.7351073767059,
+  "label_invocation_wall_seconds": 822.2201819592156,
+  "timing_note": "Worker times sum completed chunks; wall time is this invocation only.",
+  "paid_cost_cad": 0,
+  "provenance": {
+    "commit": "b11b60aa2795761d9e1f6e6f9721cb932bf0c2cf",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

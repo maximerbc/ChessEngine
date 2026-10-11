@@ -1,0 +1,1138 @@
+{
+  "version": 1,
+  "protocol": {
+    "identity": {
+      "version": 1,
+      "config": {
+        "version": 1,
+        "source": "data/main-labeled.jsonl",
+        "checkpoint": "artifacts/models/supervised.npz",
+        "output": "runs/supervised-diagnostics",
+        "subset_sizes": [
+          10000,
+          40000,
+          "all"
+        ],
+        "sampling_seed": 2026,
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "bootstrap_resamples": 2000,
+        "bootstrap_seed": 2026,
+        "sparse_threshold": 100,
+        "gap_ratio": 1.1,
+        "gap_seeds_required": 2,
+        "promising_relative_improvement": 0.02,
+        "promising_seeds_required": 2,
+        "training": {
+          "hidden": [
+            128,
+            64
+          ],
+          "learning_rate": 0.001,
+          "weight_decay": 0.0001,
+          "dropout": 0,
+          "batch_size": 256,
+          "epochs": 40,
+          "patience": 6,
+          "device": "cpu",
+          "evidence": "supervised-development-diagnostics"
+        },
+        "regularization": [
+          {
+            "name": "weaker-decay",
+            "weight_decay": 1e-05,
+            "dropout": 0
+          },
+          {
+            "name": "stronger-decay",
+            "weight_decay": 0.001,
+            "dropout": 0
+          },
+          {
+            "name": "dropout-01",
+            "weight_decay": 0.0001,
+            "dropout": 0.1
+          },
+          {
+            "name": "dropout-02",
+            "weight_decay": 0.0001,
+            "dropout": 0.2
+          }
+        ]
+      },
+      "source_sha256": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+      "checkpoint_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+      "feature_version": 1,
+      "code_sha256": {
+        "diagnostics": "28323081e93f1c92e0d865e3bb2e5ef55747f6e3b1b5fa5990341507bed39588",
+        "train": "6ba982a769fdec89201dfedf764b3fbc27d8041b0ff3a008dd3075ee641ad253",
+        "model": "c2db11621e0b285405cc419dd4fb6f8eecf1d6ba22f500b5248e4af3c11a3358",
+        "features": "8165c0de63d7722c52da91204493771f3cc867ea9301f90bc9959f697413ee00",
+        "data": "8577aee898a8a56844d7170f7f3626fa5c6b9652a00f52ecff222e69e8870c5f",
+        "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a"
+      }
+    },
+    "provenance": {
+      "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+      "dirty": false,
+      "python": "3.10.6",
+      "platform": "macOS-15.6.1-arm64-arm-64bit"
+    }
+  },
+  "runs": [
+    {
+      "experiment": "baseline",
+      "size": "10000",
+      "positions": 10005,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.24983575355190554,
+        "mae": 0.40177755191713793,
+        "signed_error": 0.06036414899767308
+      },
+      "validation": {
+        "mse": 0.6016731635696214,
+        "mae": 0.6290207784203669,
+        "signed_error": 0.06692621777097037
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 440,
+      "training_seconds": 0.6186084570363164,
+      "run_wall_seconds": 2.605768417008221,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "c22db2cec711b7dae8c8d1d920e2bc8f354d418d9ceac08b607f12e1b53b4981",
+      "checkpoint_sha256": "810fe9812ccea7f87b984a0274eada75a839c5b5247ec84dbaa0d1b2826d802e",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "10000",
+      "positions": 10005,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.3709268819707153,
+        "mae": 0.5129148153177522,
+        "signed_error": 0.005926775138642847
+      },
+      "validation": {
+        "mse": 0.6007715552240861,
+        "mae": 0.6528643855375008,
+        "signed_error": 0.013734886332394398
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 400,
+      "training_seconds": 0.4409434162080288,
+      "run_wall_seconds": 1.2859630417078733,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "c22db2cec711b7dae8c8d1d920e2bc8f354d418d9ceac08b607f12e1b53b4981",
+      "checkpoint_sha256": "1809faf61773687d2d3c54800bdb95d7dc55a6f8438c8d23803ac4ac3b19cd6d",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "10000",
+      "positions": 10005,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.25422353726829033,
+        "mae": 0.40669067574573375,
+        "signed_error": 0.02706889397445959
+      },
+      "validation": {
+        "mse": 0.6027068942631271,
+        "mae": 0.6332437714495978,
+        "signed_error": 0.02477328028122958
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 440,
+      "training_seconds": 0.4691340853460133,
+      "run_wall_seconds": 1.3858222500421107,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "c22db2cec711b7dae8c8d1d920e2bc8f354d418d9ceac08b607f12e1b53b4981",
+      "checkpoint_sha256": "66b9a01ed6fcd2d29c55b2a2c5665218c90f51528bda068501cb6ec6f5e043ef",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "40000",
+      "positions": 40000,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.1634263031621756,
+        "mae": 0.29416368812067667,
+        "signed_error": -0.03742343734718597
+      },
+      "validation": {
+        "mse": 0.33920103721638034,
+        "mae": 0.42053843721448086,
+        "signed_error": -0.039827146397835585
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 1727,
+      "training_seconds": 1.5296838311478496,
+      "run_wall_seconds": 2.538057875353843,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "18b03b4d8e75d1553a26eb99cbc9f51282305ddc84123bf45963e28b19e76702",
+      "checkpoint_sha256": "45635d7d974583b8866e5c8d7e7e68aa4b143ff15394f407d9a2bf112bbde1e9",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "40000",
+      "positions": 40000,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.13256530434724087,
+        "mae": 0.25859428099752985,
+        "signed_error": 0.0005643501753103919
+      },
+      "validation": {
+        "mse": 0.34743699883160234,
+        "mae": 0.41355922668658174,
+        "signed_error": 0.0006733772444415281
+      },
+      "selected_epoch": 6,
+      "epochs": 12,
+      "optimizer_steps": 1884,
+      "training_seconds": 1.638375916518271,
+      "run_wall_seconds": 2.758203874807805,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "18b03b4d8e75d1553a26eb99cbc9f51282305ddc84123bf45963e28b19e76702",
+      "checkpoint_sha256": "801f3d5978cc8e2fa6cb632e3abaedad8ad2a577eae413bd3cc6b0b112294afb",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "40000",
+      "positions": 40000,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.13060852645723248,
+        "mae": 0.25881674115748976,
+        "signed_error": 0.0010985174966794149
+      },
+      "validation": {
+        "mse": 0.34302616774809264,
+        "mae": 0.4154572067563194,
+        "signed_error": 0.00035217891481722325
+      },
+      "selected_epoch": 6,
+      "epochs": 12,
+      "optimizer_steps": 1884,
+      "training_seconds": 1.6349710845388472,
+      "run_wall_seconds": 2.7650611246936023,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "18b03b4d8e75d1553a26eb99cbc9f51282305ddc84123bf45963e28b19e76702",
+      "checkpoint_sha256": "3c94eba00dd5997b6e2c8ad25531fee56c5ba5ee4019e96bab55898bdbd9e786",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "all",
+      "positions": 80299,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.1918618543600818,
+        "mae": 0.3100296836429344,
+        "signed_error": -0.03407653717273097
+      },
+      "validation": {
+        "mse": 0.30243021313950635,
+        "mae": 0.3861533403734501,
+        "signed_error": -0.03487512381630854
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.8218183731660247,
+      "run_wall_seconds": 3.969244749750942,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "745998807bb28b540a187cbde02c3097072648cd08667692756cf3b0a33d810e",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "all",
+      "positions": 80299,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1853729975777315,
+        "mae": 0.3062102402260777,
+        "signed_error": 0.022161831007661913
+      },
+      "validation": {
+        "mse": 0.2985947281656916,
+        "mae": 0.3839956355451896,
+        "signed_error": 0.02503756072012225
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.6673054983839393,
+      "run_wall_seconds": 3.779707666952163,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "d1fdfb3672a55b0da02869fb8338e49a589e98ca9016686abbc95c2dec6cccd1",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": false,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "baseline",
+      "size": "all",
+      "positions": 80299,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.186554912415364,
+        "mae": 0.30618366891872323,
+        "signed_error": -0.045540146821124936
+      },
+      "validation": {
+        "mse": 0.30293440345900907,
+        "mae": 0.3854388336659489,
+        "signed_error": -0.0461659799975727
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.8350138748064637,
+      "run_wall_seconds": 4.024680916685611,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "f93aec54090e074661f66558e30a5001b23247e8efdda3482621bbeabeee673c",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "weaker-decay",
+      "size": "all",
+      "positions": 80299,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.16526330101388662,
+        "mae": 0.2818581000531106,
+        "signed_error": -0.0034393635143735485
+      },
+      "validation": {
+        "mse": 0.30246397193093294,
+        "mae": 0.3763515031695727,
+        "signed_error": -0.0005196242937146959
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 3454,
+      "training_seconds": 2.9127404587343335,
+      "run_wall_seconds": 4.153846292290837,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "f51647b10223177cb4ce973183efe6a9949f4ce37e1be408dca610111180529d",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "weaker-decay",
+      "size": "all",
+      "positions": 80299,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1859269484766237,
+        "mae": 0.3061131098629011,
+        "signed_error": 0.008519859538354895
+      },
+      "validation": {
+        "mse": 0.2986604409026856,
+        "mae": 0.3826701311849762,
+        "signed_error": 0.00922836595317024
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.696010917890817,
+      "run_wall_seconds": 3.790697167161852,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "85593c6d28de67cf1702e20a2c916000fdca2be9f286c9a665fdea45f61f46ce",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "weaker-decay",
+      "size": "all",
+      "positions": 80299,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 1e-05,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.18476552652047004,
+        "mae": 0.30470100078186535,
+        "signed_error": -0.03851078604018101
+      },
+      "validation": {
+        "mse": 0.3049569097381638,
+        "mae": 0.3871014255859623,
+        "signed_error": -0.039717007567772473
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.6300775394774973,
+      "run_wall_seconds": 3.740424958989024,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "4810e093fcc3cff168deca15a4150408908ef10c4b6af682d3bb1e3e28f1a64b",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "stronger-decay",
+      "size": "all",
+      "positions": 80299,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.1896112366094462,
+        "mae": 0.3080455457180605,
+        "signed_error": -0.029547630331733226
+      },
+      "validation": {
+        "mse": 0.3017486804215518,
+        "mae": 0.3854920646218561,
+        "signed_error": -0.030660919843489814
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 3.096713164355606,
+      "run_wall_seconds": 4.337017792277038,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "d94356a71b07ff3f8ba1f20301a02986626d4688298e8bad1143995844a6f27a",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "stronger-decay",
+      "size": "all",
+      "positions": 80299,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1816270538486184,
+        "mae": 0.3030034793646713,
+        "signed_error": 0.016529787843348378
+      },
+      "validation": {
+        "mse": 0.3018461599784822,
+        "mae": 0.3852237873263601,
+        "signed_error": 0.0182220531209819
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.5982912094332278,
+      "run_wall_seconds": 3.678664042148739,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "8999f1ccee7da2d15c7cd6bc5209d551d245f874103e6c1421413d8e3fd6f55d",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "stronger-decay",
+      "size": "all",
+      "positions": 80299,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.18594211952786752,
+        "mae": 0.30566353665484336,
+        "signed_error": -0.04154257314279796
+      },
+      "validation": {
+        "mse": 0.302228663612172,
+        "mae": 0.38645935267659387,
+        "signed_error": -0.042354309493680464
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 2.6506929569877684,
+      "run_wall_seconds": 3.7557810419239104,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "bdda3ca073eabeea005b4cbacc4defcf609a2778beeed0b66f7b22664c1f88f5",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "dropout-01",
+      "size": "all",
+      "positions": 80299,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0.1,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.1988541095955159,
+        "mae": 0.3236551536896926,
+        "signed_error": -0.00582901445079431
+      },
+      "validation": {
+        "mse": 0.31016796423788456,
+        "mae": 0.3985346334698787,
+        "signed_error": -0.004697439080880548
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 3.325974751729518,
+      "run_wall_seconds": 4.484819125384092,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "8ab1d21886edfcff92138476f5be5030c101d6b1c8a9d5c8ef2cbde0ceac7271",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "dropout-01",
+      "size": "all",
+      "positions": 80299,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0.1,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.19561629903934397,
+        "mae": 0.31683883161770976,
+        "signed_error": -0.021853540483097202
+      },
+      "validation": {
+        "mse": 0.3125937935611852,
+        "mae": 0.39792383220768274,
+        "signed_error": -0.017696444696909883
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 3.26030662516132,
+      "run_wall_seconds": 4.424902792088687,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "4fe1098ddadea0a0e6f8bc632afdb94f2e9e7fdb9362d7822b9692a1426e2611",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "dropout-01",
+      "size": "all",
+      "positions": 80299,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0.1,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.19300304541474728,
+        "mae": 0.316346104086758,
+        "signed_error": -0.03651591910391957
+      },
+      "validation": {
+        "mse": 0.316280138881383,
+        "mae": 0.40009075287133544,
+        "signed_error": -0.038296275415416116
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 3.272314208559692,
+      "run_wall_seconds": 4.400832583196461,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "988df81e09b3f35da9c38b9003eaa289cd6fc799f3ae21e01e84447a8228ffa0",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "dropout-02",
+      "size": "all",
+      "positions": 80299,
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0.2,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.20843692944885395,
+        "mae": 0.3363205573081347,
+        "signed_error": 0.0006107510336646787
+      },
+      "validation": {
+        "mse": 0.31235409715090146,
+        "mae": 0.40675192277766425,
+        "signed_error": 0.0022257520100556595
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 3140,
+      "training_seconds": 3.2778182085603476,
+      "run_wall_seconds": 4.426548083778471,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "995a55bd40b5f848224f77ccd3a59ab9be3211269f07469add7a0680164b5d8f",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "dropout-02",
+      "size": "all",
+      "positions": 80299,
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0.2,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.161170990122118,
+        "mae": 0.28190261003698797,
+        "signed_error": 0.011140620965711775
+      },
+      "validation": {
+        "mse": 0.3135618684028177,
+        "mae": 0.3871447817924466,
+        "signed_error": 0.009879482137044775
+      },
+      "selected_epoch": 6,
+      "epochs": 12,
+      "optimizer_steps": 3768,
+      "training_seconds": 3.8557870010845363,
+      "run_wall_seconds": 5.171885416377336,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "b6c6083994754fe567f894b83fc6aa757053edf29b73ee77e6ba0cc00c80635d",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "experiment": "dropout-02",
+      "size": "all",
+      "positions": 80299,
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0.2,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.18364182235515192,
+        "mae": 0.3080272775852721,
+        "signed_error": 0.008576407341896599
+      },
+      "validation": {
+        "mse": 0.31163265019721575,
+        "mae": 0.39641409986638104,
+        "signed_error": 0.007115366286000549
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 3454,
+      "training_seconds": 3.4528294182382524,
+      "run_wall_seconds": 4.642096332740039,
+      "wall_time_note": "completed invocation; interrupted attempts excluded",
+      "data_sha256": "e3a80ea0d0e5e37b2c0e4ca773d350b83032547d45ab5636bd90ea2a0c2f56f8",
+      "checkpoint_sha256": "88ae06830566f484d05bbb66e920c61b3798efb83bc2dfe3625c1bd361217e88",
+      "provenance": {
+        "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "experiment": "baseline",
+      "size": "all",
+      "positions": 80299,
+      "mean_mse": 0.30131978158806905,
+      "std_mse": 0.0023733918946685093,
+      "relative_improvement_vs_full_baseline": 0.0,
+      "improved_seeds": 0,
+      "promising": false
+    },
+    {
+      "experiment": "stronger-decay",
+      "size": "all",
+      "positions": 80299,
+      "mean_mse": 0.30194116800406867,
+      "std_mse": 0.00025370427571065217,
+      "relative_improvement_vs_full_baseline": -0.0020622158051644135,
+      "improved_seeds": 2,
+      "promising": false
+    },
+    {
+      "experiment": "weaker-decay",
+      "size": "all",
+      "positions": 80299,
+      "mean_mse": 0.3020271075239275,
+      "std_mse": 0.0031708859695072917,
+      "relative_improvement_vs_full_baseline": -0.0023474261534723873,
+      "improved_seeds": 0,
+      "promising": false
+    },
+    {
+      "experiment": "dropout-02",
+      "size": "all",
+      "positions": 80299,
+      "mean_mse": 0.31251620525031165,
+      "std_mse": 0.0009747717671984926,
+      "relative_improvement_vs_full_baseline": -0.03715794430499453,
+      "improved_seeds": 0,
+      "promising": false
+    },
+    {
+      "experiment": "dropout-01",
+      "size": "all",
+      "positions": 80299,
+      "mean_mse": 0.31301396556015093,
+      "std_mse": 0.003077674137996496,
+      "relative_improvement_vs_full_baseline": -0.03880987803206648,
+      "improved_seeds": 0,
+      "promising": false
+    },
+    {
+      "experiment": "baseline",
+      "size": "40000",
+      "positions": 40000,
+      "mean_mse": 0.34322140126535844,
+      "std_mse": 0.004121450354735639,
+      "relative_improvement_vs_full_baseline": -0.1390603015057692,
+      "improved_seeds": 0,
+      "promising": false
+    },
+    {
+      "experiment": "baseline",
+      "size": "10000",
+      "positions": 10005,
+      "mean_mse": 0.6017172043522782,
+      "std_mse": 0.0009684208754006572,
+      "relative_improvement_vs_full_baseline": -0.9969389370356012,
+      "improved_seeds": 0,
+      "promising": false
+    }
+  ],
+  "screening": {
+    "triggered": true,
+    "ratio": 1.1,
+    "required_seeds": 2,
+    "per_seed": [
+      {
+        "seed": 42,
+        "train_mse": 0.1918618543600818,
+        "validation_mse": 0.30243021313950635,
+        "exceeds": true
+      },
+      {
+        "seed": 43,
+        "train_mse": 0.1853729975777315,
+        "validation_mse": 0.2985947281656916,
+        "exceeds": true
+      },
+      {
+        "seed": 44,
+        "train_mse": 0.186554912415364,
+        "validation_mse": 0.30293440345900907,
+        "exceeds": true
+      }
+    ]
+  },
+  "invocation_wall_seconds": 165.52861954225227,
+  "training_seconds": 51.68541099736467,
+  "paid_cost_cad": 0,
+  "provenance": {
+    "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+    "dirty": true,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}
