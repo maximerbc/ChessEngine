@@ -47,28 +47,34 @@ def trusted_load(path):
     return torch.load(path, map_location="cpu", weights_only=False)
 
 
-def fit(source, output, config, resume=False):
+def fit(source, output, config, resume=False, prepared=None):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     seed_all(config["seed"])
-    rows = list(records(source))
-    validate_splits(rows)
-    subsets = {}
-    for split in ("train", "validation"):
-        selected = [r for r in rows if r["split"] == split]
-        if not selected:
-            raise ValueError(f"Missing {split} data")
-        subsets[split] = (
-            torch.from_numpy(np.stack([encode(restore(r)) for r in selected])),
-            torch.tensor([r["target"] for r in selected], dtype=torch.float32),
-        )
+    source_sha = digest(source)
+    if prepared is None:
+        rows = list(records(source))
+        validate_splits(rows)
+        subsets = {}
+        for split in ("train", "validation"):
+            selected = [r for r in rows if r["split"] == split]
+            if not selected:
+                raise ValueError(f"Missing {split} data")
+            subsets[split] = (
+                torch.from_numpy(np.stack([encode(restore(r)) for r in selected])),
+                torch.tensor([r["target"] for r in selected], dtype=torch.float32),
+            )
+    else:
+        if prepared["source_sha256"] != source_sha:
+            raise ValueError("Prepared data source mismatch")
+        subsets = prepared["subsets"]
     device = device_for(config.get("device", "cpu"))
-    model = build_model(config["hidden"]).to(device)
+    model = build_model(config["hidden"], config.get("dropout", 0)).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"]
     )
     identity = {k: v for k, v in config.items() if k != "epochs"}
-    signature = json_hash({"data": digest(source), "config": identity, "features": FEATURE_VERSION})
+    signature = json_hash({"data": source_sha, "config": identity, "features": FEATURE_VERSION})
     history, start_epoch, best, stale, elapsed = [], 0, float("inf"), 0, 0.0
     state_path = output / "resume.pt"
     if resume:
@@ -114,13 +120,14 @@ def fit(source, output, config, resume=False):
                 "train_loss": total / len(x),
                 "validation_loss": val_loss,
                 "update_seconds": elapsed,
+                "optimizer_steps": (epoch + 1) * ((len(x) + config["batch_size"] - 1) // config["batch_size"]),
             }
         )
         metadata = {
             "hidden": config["hidden"],
             "kind": "supervised",
             "config": config,
-            "data_sha256": digest(source),
+            "data_sha256": source_sha,
             "provenance": provenance(),
             "epoch": epoch + 1,
             "evidence": config.get("evidence", "pilot"),
@@ -152,7 +159,7 @@ def fit(source, output, config, resume=False):
                 "device": device,
                 "history": history,
                 "best_validation_mse": best,
-                "data_sha256": digest(source),
+                "data_sha256": source_sha,
                 "provenance": provenance(),
             },
         )

@@ -1,0 +1,25 @@
+{
+  "triggered": true,
+  "ratio": 1.1,
+  "required_seeds": 2,
+  "per_seed": [
+    {
+      "seed": 42,
+      "train_mse": 0.1918618543600818,
+      "validation_mse": 0.30243021313950635,
+      "exceeds": true
+    },
+    {
+      "seed": 43,
+      "train_mse": 0.1853729975777315,
+      "validation_mse": 0.2985947281656916,
+      "exceeds": true
+    },
+    {
+      "seed": 44,
+      "train_mse": 0.186554912415364,
+      "validation_mse": 0.30293440345900907,
+      "exceeds": true
+    }
+  ]
+}

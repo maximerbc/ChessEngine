@@ -1,0 +1,15 @@
+{
+  "positions": 100003,
+  "games": 22192,
+  "source_games_scanned": 51392,
+  "base_positions": 100000,
+  "total_positions": 200003,
+  "sha256": "58369535563c8f63c2456f92d076113569be895a7cf7a9f7b2c00807e8d69fe7",
+  "wall_seconds": 103.36348470905796,
+  "provenance": {
+    "commit": "3a18b45303125f8d5069a1b83a993642f71991ff",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

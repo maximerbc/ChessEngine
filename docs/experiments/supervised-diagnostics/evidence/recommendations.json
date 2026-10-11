@@ -1,0 +1,5 @@
+[
+  "Test broader training coverage next: the largest training subset has lower mean validation MSE than the smallest. More data also received more optimizer updates, so this is evidence for the combined training procedure rather than a fixed-compute causal effect.",
+  "Do not increase regularization based on these results alone. Audit teacher-label stability and position coverage before changing capacity or launching a larger search.",
+  "Audit deeper Stockfish labels on a fixed development sample before mass relabelling. Large residuals alone cannot distinguish a noisy teacher, insufficient representation, optimization failure, or an unfamiliar position."
+]

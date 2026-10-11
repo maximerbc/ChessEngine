@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "source": "data/expanded-200k-labeled.jsonl",
+  "checkpoint": "artifacts/models/supervised.npz",
+  "output": "runs/supervised-200k",
+  "subset_sizes": [
+    "all"
+  ],
+  "sampling_seed": 2026,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 2026,
+  "sparse_threshold": 100,
+  "gap_ratio": 1.1,
+  "gap_seeds_required": 2,
+  "promising_relative_improvement": 0.02,
+  "promising_seeds_required": 2,
+  "training": {
+    "hidden": [
+      128,
+      64
+    ],
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "dropout": 0,
+    "batch_size": 256,
+    "epochs": 40,
+    "patience": 6,
+    "device": "cpu",
+    "evidence": "supervised-200k-development"
+  },
+  "regularization": []
+}

@@ -27,3 +27,11 @@ Both specified architectures were fitted on the complete 100,000-position corpus
 ## Railway deployment (2026-10-03)
 
 User selected Railway and two services: always-running Nginx for the public website, serverless FastAPI for the engine. This supersedes the Render blueprint. Keep Docker builds separate and non-root, require both neural models in production, and preserve API interfaces and research artifacts. Dockerfiles plus documented dashboard settings define deployment; no legacy Railway configuration file is added. Available free credits are the initial funding source; paid activation needs explicit user approval within the existing C$50 ceiling.
+
+## Supervised generalization diagnosis (2026-10-09)
+
+The next batch diagnoses the released supervised model on the existing development split. Nine fixed-architecture data-size/seed runs precede a predefined optional twelve-run weight-decay/dropout comparison. `configs/supervised-diagnostics.json` freezes all thresholds. Whole-game nested subsets and bootstrap resampling respect within-game dependence. Dropout is training-only; exported inference remains the same feature-v1 dense/ReLU/tanh computation. No released models, final-test data, or hosted artifacts are changed. Fresh final data will be reserved for a later confirmatory study.
+
+## Training coverage extension (2026-10-09)
+
+After the negative regularization study, the user approved 200k total labelled positions. Keep the old corpus and held-out splits unchanged, adding training samples from new source games with the pinned teacher. Freeze this separate experiment in `docs/expansion-200k.md`; do not alter the completed diagnostic protocol or released model. This changes experimental scope, not project invariants.

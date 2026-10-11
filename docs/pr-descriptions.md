@@ -1,6 +1,6 @@
 # Prepared pull request descriptions
 
-These are local handoff drafts. No remote PR has been created and nothing has been pushed.
+These are local handoff drafts, not evidence of remote PR creation. Earlier batches may already have been pushed and merged by the user.
 
 ## PR 1: Build the shared chess engine and supervised learning foundation
 
@@ -33,3 +33,41 @@ Replaces the Render blueprint with separate non-root production containers: an a
 Adds container CI covering published assets, legal engine responses, checkpoint hashes, failure on missing/corrupt models, and real browser gameplay across separate origins. Documents private-repository setup, spending boundaries, health checks and rollback. Screenshots are test artifacts rather than changes to the showcase image.
 
 Validation: see the Railway section in `docs/validation.md`. Container CI must pass before merge; local checks alone do not verify Docker images or a public deployment. Target main after the showcase PR. No remote push, account authorization, paid activation or deployment is included.
+
+## 5. Diagnose supervised generalization with controlled experiments
+
+Base: `main` | Head: `feat/supervised-diagnostics`
+
+### Change
+
+Adds a frozen-model audit, deterministic whole-game learning curves, and a preregistered conditional regularization comparison. Includes resumable sequential training, inference-compatible dropout, game-bootstrap intervals, subgroup errors, failure examples, and a separate reproducible HTML report with compact evidence. Raw predictions, data and experimental checkpoints remain ignored.
+
+### Evidence
+
+Completed all 21 local CPU runs at C$0. Mean validation MSE was 0.60172, 0.34322 and 0.30132 at 10,005, 40,000 and 80,299 training positions. The screening rule triggered for all three full-data seeds. Neither weight-decay treatment nor either dropout treatment met the predefined improvement criterion. Larger datasets also receive more optimizer updates; these results do not isolate the effect of data quantity or establish stronger chess play.
+
+### Validation and boundaries
+
+42 Python tests passed, including the tiny complete study, whole-game nesting, metric/bootstrap calculations, dropout/export parity, exact CPU resume and mismatch rejection. Ruff and whitespace checks passed. The generated report and figures were visually inspected and compact results were checked against saved raw predictions. GitHub CI remains pending the user push.
+
+Released checkpoints, training labels, deployment settings and public website assets are unchanged. No paid resources or final-test selection were used. Full reproduction instructions are in `docs/supervised-diagnostics.md`.
+
+## 6. Expand supervised training to 200k positions
+
+Base: `main` after diagnostics merges | Head: `feat/supervised-200k`
+
+### Change
+
+Extends the corpus with new training-only source games while preserving every original record. Adds pinned Stockfish labeling in resumable, checksum-verified chunks, a fixed three-seed MLP experiment, and a comparison report with paired game-bootstrap intervals and compute accounting. Validation and test records remain unchanged; no released model or deployment settings change.
+
+### Validation
+
+The local Python suite passes 46 tests, including leakage exclusions, original-record preservation, teacher identity checks, corrupted chunk rejection, label reuse on resume and report metric verification. Ruff and whitespace checks pass. Full experiment findings are recorded in `docs/expansion-200k.md`; report figures and browser layout were visually inspected. GitHub CI requires the user push.
+
+### Results
+
+Completed 100,003 new labels from 22,192 new games, bringing training to 180,302 positions and the total corpus to 200,003. All three expanded fits improved: mean validation MSE fell from 0.30132 to 0.27350 (9.23%). Each paired source-game bootstrap interval favours the expanded model, conditional on these selected checkpoints. Original records and all chunk checksums were independently verified. Labeling used 13.7 minutes elapsed; all work used local CPU with C$0 paid compute.
+
+### Interpretation
+
+More data also produces more updates per epoch. This comparison cannot isolate data quantity from compute, and lower teacher-target error does not establish stronger chess play. The source remains the same historical Lichess archive. Paid compute is C$0; source data and trial checkpoints are ignored.

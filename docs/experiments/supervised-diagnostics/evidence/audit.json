@@ -1,0 +1,824 @@
+{
+  "train": {
+    "mse": 0.22742706920878036,
+    "mae": 0.3472372920655074,
+    "signed_error": -0.0319641414289721
+  },
+  "validation": {
+    "supervised": {
+      "mse": 0.3066090531714493,
+      "mae": 0.401255309893681,
+      "signed_error": -0.032325487340178274,
+      "relative_mse_reduction_vs_training_mean": 0.5396853507986894
+    },
+    "zero": {
+      "mse": 0.6694065961017739,
+      "mae": 0.7076120137031915,
+      "signed_error": -0.057683726731434806,
+      "relative_mse_reduction_vs_training_mean": -0.004985532130805659
+    },
+    "training_mean": {
+      "mse": 0.6660858039244351,
+      "mae": 0.7096922062145331,
+      "signed_error": -0.0025729656601159597,
+      "relative_mse_reduction_vs_training_mean": 0.0
+    },
+    "handcrafted": {
+      "mse": 0.3787371226139075,
+      "mae": 0.47937412596766643,
+      "signed_error": -0.111241477938252,
+      "relative_mse_reduction_vs_training_mean": 0.43139889728550074
+    }
+  },
+  "training_mean": 0.05511076107131889,
+  "training_positions": 80299,
+  "validation_positions": 9789,
+  "validation_games": 2194,
+  "bootstrap": {
+    "intervals": {
+      "supervised": {
+        "mse": [
+          0.29426998913181873,
+          0.3194579921735801
+        ],
+        "mae": [
+          0.39241946603582084,
+          0.41010516118866497
+        ],
+        "signed_error": [
+          -0.043034089026206854,
+          -0.02160637783944019
+        ]
+      },
+      "zero": {
+        "mse": [
+          0.6590200967597997,
+          0.6801145789031487
+        ],
+        "mae": [
+          0.6978847462619397,
+          0.7181044111393097
+        ],
+        "signed_error": [
+          -0.07334839594610072,
+          -0.04207020017880991
+        ]
+      },
+      "training_mean": {
+        "mse": [
+          0.6555481822932321,
+          0.6766748171680909
+        ],
+        "mae": [
+          0.7000652187472766,
+          0.7196578807213825
+        ],
+        "signed_error": [
+          -0.018237634874781875,
+          0.013040560892508936
+        ]
+      },
+      "handcrafted": {
+        "mse": [
+          0.3675178057061262,
+          0.38998050652886
+        ],
+        "mae": [
+          0.4700939995684112,
+          0.4884556234014474
+        ],
+        "signed_error": [
+          -0.12299890740583311,
+          -0.09965791492473933
+        ]
+      }
+    },
+    "paired_supervised_minus_baseline": {
+      "zero": {
+        "mse": [
+          -0.378251687715048,
+          -0.34697039986029377
+        ],
+        "mae": [
+          -0.3194207306701632,
+          -0.292886156842746
+        ],
+        "signed_error": [
+          0.013423074391597277,
+          0.03650601406227582
+        ]
+      },
+      "training_mean": {
+        "mse": [
+          -0.37519009449264157,
+          -0.3435520432297181
+        ],
+        "mae": [
+          -0.32152074738441444,
+          -0.2951967896405941
+        ],
+        "signed_error": [
+          -0.04168768667972157,
+          -0.01860474700904302
+        ]
+      },
+      "handcrafted": {
+        "mse": [
+          -0.08335617733920447,
+          -0.06046703361421267
+        ],
+        "mae": [
+          -0.08628748250191237,
+          -0.06961404378262943
+        ],
+        "signed_error": [
+          0.07188379802634201,
+          0.08584717063070066
+        ]
+      }
+    },
+    "resamples": 2000,
+    "seed": 2026,
+    "unit": "source game",
+    "estimand": "position-weighted metrics; games sampled with replacement"
+  },
+  "breakdown": {
+    "side": {
+      "black": {
+        "positions": 5001,
+        "games": 2063,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.31729019766001676,
+            "mae": 0.4068397777202064,
+            "signed_error": -0.06981641440037295
+          },
+          "zero": {
+            "mse": 0.664435267223118,
+            "mae": 0.7032345532672154,
+            "signed_error": -0.016910218058362188
+          },
+          "training_mean": {
+            "mse": 0.6656085932348214,
+            "mae": 0.7093349214083144,
+            "signed_error": 0.03820054301295666
+          },
+          "handcrafted": {
+            "mse": 0.373533808049209,
+            "mae": 0.4750589729694363,
+            "signed_error": -0.06929012146101213
+          }
+        }
+      },
+      "white": {
+        "positions": 4788,
+        "games": 2056,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.29545274498696206,
+            "mae": 0.3954224102277551,
+            "signed_error": 0.006833269181967421
+          },
+          "zero": {
+            "mse": 0.6745990805884402,
+            "mae": 0.7121842107876352,
+            "signed_error": -0.10027109449961279
+          },
+          "training_mean": {
+            "mse": 0.6665842439116446,
+            "mae": 0.7100653852696501,
+            "signed_error": -0.04516033342829394
+          },
+          "handcrafted": {
+            "mse": 0.38417191295184766,
+            "mae": 0.48388124379225894,
+            "signed_error": -0.15505909150188532
+          }
+        }
+      }
+    },
+    "move_count_phase": {
+      "endgame": {
+        "positions": 1571,
+        "games": 819,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.28481398499863925,
+            "mae": 0.336441442978205,
+            "signed_error": -0.014665576199396856
+          },
+          "zero": {
+            "mse": 0.8594058129707471,
+            "mae": 0.867476766508053,
+            "signed_error": -0.013684277684679154
+          },
+          "training_mean": {
+            "mse": 0.8609347070407792,
+            "mae": 0.8716928730521514,
+            "signed_error": 0.04142648338663969
+          },
+          "handcrafted": {
+            "mse": 0.27767669268066403,
+            "mae": 0.3915575796121439,
+            "signed_error": -0.05707414074838464
+          }
+        }
+      },
+      "middlegame": {
+        "positions": 3891,
+        "games": 1970,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.36567503945393753,
+            "mae": 0.4362975450995967,
+            "signed_error": -0.0379802868503827
+          },
+          "zero": {
+            "mse": 0.8087683013309804,
+            "mae": 0.8301063994676283,
+            "signed_error": -0.055798509376813125
+          },
+          "training_mean": {
+            "mse": 0.8056553006800377,
+            "mae": 0.830600346121966,
+            "signed_error": -0.0006877483054942758
+          },
+          "handcrafted": {
+            "mse": 0.42661542376223177,
+            "mae": 0.5285568624890049,
+            "signed_error": -0.11587608765530248
+          }
+        }
+      },
+      "opening": {
+        "positions": 4327,
+        "games": 2193,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.26140782818284836,
+            "mae": 0.39327593567089275,
+            "signed_error": -0.03365224849293127
+          },
+          "zero": {
+            "mse": 0.475104501175035,
+            "mae": 0.539418535157811,
+            "signed_error": -0.07535382499334516
+          },
+          "training_mean": {
+            "mse": 0.46983608387085846,
+            "mae": 0.5421496547974499,
+            "signed_error": -0.020243063922026315
+          },
+          "handcrafted": {
+            "mse": 0.3723750855575164,
+            "mae": 0.46703064700302527,
+            "signed_error": -0.12674035020916438
+          }
+        }
+      }
+    },
+    "target_magnitude": {
+      "[.25,.5)": {
+        "positions": 392,
+        "games": 360,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.14436298632415223,
+            "mae": 0.2879502062830713,
+            "signed_error": 0.015434676459372729
+          },
+          "zero": {
+            "mse": 0.14288192093372232,
+            "mae": 0.37101275519448884,
+            "signed_error": -0.029599490670525298
+          },
+          "training_mean": {
+            "mse": 0.14265661600323018,
+            "mae": 0.36623274020360913,
+            "signed_error": 0.025511270400793585
+          },
+          "handcrafted": {
+            "mse": 0.13907022673869077,
+            "mae": 0.342657511420388,
+            "signed_error": -0.06387047508574033
+          }
+        }
+      },
+      "[.5,.75)": {
+        "positions": 411,
+        "games": 379,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.2774394219628631,
+            "mae": 0.4152126374598955,
+            "signed_error": -0.011678080887413627
+          },
+          "zero": {
+            "mse": 0.3941328074942357,
+            "mae": 0.6236812668125125,
+            "signed_error": -0.01563260416044806
+          },
+          "training_mean": {
+            "mse": 0.39544695405447783,
+            "mae": 0.6224744618255493,
+            "signed_error": 0.03947815691087079
+          },
+          "handcrafted": {
+            "mse": 0.3642976737831517,
+            "mae": 0.5727979130143991,
+            "signed_error": -0.07646086016767423
+          }
+        }
+      },
+      "[.75,1]": {
+        "positions": 6447,
+        "games": 2072,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.3872798181119075,
+            "mae": 0.4498323925971174,
+            "signed_error": -0.05451742534153297
+          },
+          "zero": {
+            "mse": 0.9797758891441546,
+            "mae": 0.9891427022016231,
+            "signed_error": -0.08315387002549395
+          },
+          "training_mean": {
+            "mse": 0.9736477390037535,
+            "mae": 0.9844496964891748,
+            "signed_error": -0.028043108954175094
+          },
+          "handcrafted": {
+            "mse": 0.5283542670273189,
+            "mae": 0.6218721199900668,
+            "signed_error": -0.13898300602153815
+          }
+        }
+      },
+      "[0,.25)": {
+        "positions": 2539,
+        "games": 1371,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.1315420012060048,
+            "mae": 0.29314293761979004,
+            "signed_error": 0.01330797309039418
+          },
+          "zero": {
+            "mse": 0.007171215061736985,
+            "mae": 0.05830681384422799,
+            "signed_error": -0.004153210030274056
+          },
+          "training_mean": {
+            "mse": 0.009750637916282105,
+            "mae": 0.07917667404420622,
+            "signed_error": 0.05095755104104484
+          },
+          "handcrafted": {
+            "mse": 0.038170878667181385,
+            "mae": 0.12352976557535085,
+            "signed_error": -0.053744288284430015
+          }
+        }
+      }
+    },
+    "nonpawn_material": {
+      "0-8": {
+        "positions": 1768,
+        "games": 761,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.26603860927423706,
+            "mae": 0.3360645619053092,
+            "signed_error": -0.0254254219418965
+          },
+          "zero": {
+            "mse": 0.826075988334976,
+            "mae": 0.836698529563438,
+            "signed_error": -0.03252658377249032
+          },
+          "training_mean": {
+            "mse": 0.8255280547473318,
+            "mae": 0.8407183547269895,
+            "signed_error": 0.02258417729882853
+          },
+          "handcrafted": {
+            "mse": 0.26933140497505925,
+            "mae": 0.39476663251747857,
+            "signed_error": -0.06251733191575896
+          }
+        }
+      },
+      "17+": {
+        "positions": 5831,
+        "games": 2099,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.3065106837007897,
+            "mae": 0.4208328569278236,
+            "signed_error": -0.037501283891483786
+          },
+          "zero": {
+            "mse": 0.5632547491799568,
+            "mae": 0.6177940322775404,
+            "signed_error": -0.08405539365597912
+          },
+          "training_mean": {
+            "mse": 0.5570272317327561,
+            "mae": 0.6187052582030204,
+            "signed_error": -0.028944632584660276
+          },
+          "handcrafted": {
+            "mse": 0.4249876814344386,
+            "mae": 0.5162084447900579,
+            "signed_error": -0.13735255617725473
+          }
+        }
+      },
+      "9-16": {
+        "positions": 2190,
+        "games": 1186,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.33962372768911514,
+            "mae": 0.40175785130343283,
+            "signed_error": -0.02411509735547495
+          },
+          "zero": {
+            "mse": 0.8255618170756618,
+            "mae": 0.8425452053251349,
+            "signed_error": -0.007777169158099619
+          },
+          "training_mean": {
+            "mse": 0.8277418016389552,
+            "mae": 0.8461719611392404,
+            "signed_error": 0.04733359191321923
+          },
+          "handcrafted": {
+            "mse": 0.34391625517234,
+            "mae": 0.4496047813861904,
+            "signed_error": -0.08105453408260929
+          }
+        }
+      }
+    },
+    "material_imbalance": {
+      "1-3": {
+        "positions": 1710,
+        "games": 969,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.4982216593176526,
+            "mae": 0.567203661046016,
+            "signed_error": -0.013768534155474698
+          },
+          "zero": {
+            "mse": 0.8636495860582369,
+            "mae": 0.8823824561749753,
+            "signed_error": -0.07060233926310677
+          },
+          "training_mean": {
+            "mse": 0.8589048847436861,
+            "mae": 0.8806730401963851,
+            "signed_error": -0.01549157819178793
+          },
+          "handcrafted": {
+            "mse": 0.5528110332949777,
+            "mae": 0.6917043921783835,
+            "signed_error": -0.10485113992720567
+          }
+        }
+      },
+      "<=1": {
+        "positions": 5079,
+        "games": 1973,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.3029366302634537,
+            "mae": 0.4266527451909425,
+            "signed_error": -0.0337472246802866
+          },
+          "zero": {
+            "mse": 0.4487381380030403,
+            "mae": 0.5118424890695008,
+            "signed_error": -0.12677613719331468
+          },
+          "training_mean": {
+            "mse": 0.43780187517608926,
+            "mae": 0.513225307173105,
+            "signed_error": -0.07166537612199583
+          },
+          "handcrafted": {
+            "mse": 0.41275772994206866,
+            "mae": 0.49584135605195867,
+            "signed_error": -0.13720159309518895
+          }
+        }
+      },
+      ">3": {
+        "positions": 3000,
+        "games": 1384,
+        "sparse": false,
+        "metrics": {
+          "supervised": {
+            "mse": 0.20360727965135023,
+            "mae": 0.26366689177858643,
+            "signed_error": -0.04049594933865592
+          },
+          "zero": {
+            "mse": 0.932279791387746,
+            "mae": 0.939430666699113,
+            "signed_error": 0.06665333332358084
+          },
+          "training_mean": {
+            "mse": 0.9426636192284115,
+            "mae": 0.9448515909220156,
+            "signed_error": 0.12176409439489969
+          },
+          "handcrafted": {
+            "mse": 0.2219181053191207,
+            "mae": 0.3304668536948508,
+            "signed_error": -0.07093349564385408
+          }
+        }
+      }
+    }
+  },
+  "worst_positions": [
+    {
+      "game_id": "8560d5652e060b86bfb0e32d7c1ed46c924bcd58b2147c52830fceffa588bd9a",
+      "fen": "r4k1N/pbK2Bpp/1p6/4p3/q7/8/PPPP2PP/RNBQ1R2 b - - 0 19",
+      "target": 1.0,
+      "prediction": -0.9973742961883545,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "17+",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "f5a8f314ac661d8c4267efef4dc53ce0fc21d273e8aed0bf2b0c3a6e270dc054",
+      "fen": "BQ5r/3bpk1p/5p1b/6p1/6n1/6Pq/PPP1NP1P/R1B2RK1 w - - 3 17",
+      "target": -1.0,
+      "prediction": 0.9828016757965088,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "17+",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "514194545e265b4f8ce9fb5653f7add2dc2ec40accf596b36781dc8aff39ac71",
+      "fen": "6r1/1p5p/k5pP/2Rp4/p5P1/1pQ3K1/8/5q2 w - - 13 41",
+      "target": 1.0,
+      "prediction": -0.9689011573791504,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "39e55c4511ed26c38cc0ad38002f49b4549ed0e9ecf488f5b0c19c374168e8fa",
+      "fen": "8/3R4/6pk/P1N5/1r6/8/5PPP/6K1 b - - 0 37",
+      "target": 1.0,
+      "prediction": -0.9673230648040771,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "d70eac45e2fe9fee59c26f8ca4fccff7da962c07ec280fdc3bb29566ecf13553",
+      "fen": "r4rk1/ppp2pbp/3p3p/7q/4N3/3QP3/PP6/2K3R1 w - - 0 20",
+      "target": 1.0,
+      "prediction": -0.9664532542228699,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "9db8dbdbae85808dc705c8b2c73878dc98adacefa25192d0449d205b641fc5ae",
+      "fen": "4R3/6pk/N6p/8/6P1/2PP4/PPr1r1PP/5RK1 b - - 4 36",
+      "target": 1.0,
+      "prediction": -0.9570868015289307,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "138fc6e44f475978a768763d7ce036e2b381536f38322b643c0ee8fbba4cdfe9",
+      "fen": "3q1k2/3r2pp/4Bb2/ppp5/5R2/2P4P/PP3PP1/R2Q2K1 b - - 0 26",
+      "target": 1.0,
+      "prediction": -0.9444140195846558,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "b5d7a567facb1398a8147321acad18c6e4acdfc0052be03b67285ee28d8bb890",
+      "fen": "r1bB3r/pppp1kpp/8/8/1Q6/5N2/P3nPPP/b4R1K b - - 2 15",
+      "target": -1.0,
+      "prediction": 0.9415329098701477,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "opening",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": "1-3"
+      }
+    },
+    {
+      "game_id": "8b4d6d10cc4648c7688d21a2d50cbc998197ef86a2daac3cbad244a382de4d34",
+      "fen": "7k/5Ppp/p7/1p2K3/1P6/q7/6PP/3q4 w - - 0 45",
+      "target": 1.0,
+      "prediction": -0.9353690147399902,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "83c138e19f02ca53a63973efba93d1314e38960497f103f8d3cada3e025ac359",
+      "fen": "2k5/pp3p1p/2p3p1/P7/8/3r4/PBKN1nPP/R3r3 w - - 0 25",
+      "target": 1.0,
+      "prediction": -0.9340847730636597,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "b839b6f039f0f46b3f06ecc720dc9ac968ad8030ac22413d4935976d717e639a",
+      "fen": "6Rk/5p1p/pp1p4/2pPp3/P1P5/1P3r1P/3R1P1K/8 b - - 0 32",
+      "target": 1.0,
+      "prediction": -0.9279431104660034,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "305a292d283e0530c6dd1b441e782e22bdcf54114a2db88551b78516e40d87a3",
+      "fen": "k1r5/pp2bp2/3p1p2/8/3pPB2/3P2Pr/PP5P/2R3K1 w - - 0 25",
+      "target": 1.0,
+      "prediction": -0.9144607782363892,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "564ed5f994811ee8bbe9fc8e3600e5e50200bcb0d61df2358a163a787b5189d4",
+      "fen": "r5k1/2R5/np1Np1p1/7p/3P4/P3P3/3K1PPP/8 b - - 1 26",
+      "target": 1.0,
+      "prediction": -0.9119126796722412,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": "1-3"
+      }
+    },
+    {
+      "game_id": "8ea8e17274382d561b22071bd47f5ab3784f6e7d4cd72df96bfe9e3a79d9727b",
+      "fen": "1Q5k/pp4bp/6p1/2pr1b2/8/7P/1P4PK/8 b - - 3 27",
+      "target": -1.0,
+      "prediction": 0.9117917418479919,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "534b2ef32b4ce2dab89879d9d5fb5921956e8c235a524a68934abe8b5d183c57",
+      "fen": "2r2k2/pp3p1R/1n6/6Q1/4P1P1/P2P1K2/4B1P1/2q5 b - - 3 36",
+      "target": 1.0,
+      "prediction": -0.9059799909591675,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": "1-3"
+      }
+    },
+    {
+      "game_id": "4a349964c35d6fd19ee931d43c099a293360b59767856e34f8d3a5ace9ef710d",
+      "fen": "7K/5k1P/2p5/1p1p4/pP1P4/P1P5/8/8 w - - 1 53",
+      "target": -1.0,
+      "prediction": 0.9058710932731628,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": "<=1"
+      }
+    },
+    {
+      "game_id": "3cc7afc67d21527534dbaeb8da402c8067f5c35a9982e226ac1b2af7163f3657",
+      "fen": "3k2r1/ppp4r/5p2/2P2Qb1/4P3/6P1/Pn2N1K1/8 w - - 0 41",
+      "target": 1.0,
+      "prediction": -0.904748260974884,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "00682e33e14dedcf7628a04f2a4bdef4988faf980d070fb181f31ba016146720",
+      "fen": "8/5p1k/8/4pN1p/1q2P1p1/4R3/3K4/3B4 w - - 8 57",
+      "target": -1.0,
+      "prediction": 0.8972290754318237,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "0-8",
+        "material_imbalance": "<=1"
+      }
+    },
+    {
+      "game_id": "aff3061c30589771bf0833ce240ab9f89d1021ed74a36519da8b0d5d361ed625",
+      "fen": "1rQ4r/p3p1k1/n2p1p2/1ppP4/4PPNP/P1N3p1/1PP5/2KR4 b - - 0 28",
+      "target": 0.9980000257492065,
+      "prediction": -0.8991310596466064,
+      "strata": {
+        "side": "black",
+        "move_count_phase": "middlegame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": ">3"
+      }
+    },
+    {
+      "game_id": "284b91146b02299a18cd1956150b41a3dff1f1ec8e1253a2360ea917f743b820",
+      "fen": "1r3r2/1PR5/b5pk/4R2p/P3p3/6P1/5PPK/8 w - - 2 42",
+      "target": -0.9480000138282776,
+      "prediction": 0.9407253265380859,
+      "strata": {
+        "side": "white",
+        "move_count_phase": "endgame",
+        "target_magnitude": "[.75,1]",
+        "nonpawn_material": "9-16",
+        "material_imbalance": "1-3"
+      }
+    }
+  ]
+}

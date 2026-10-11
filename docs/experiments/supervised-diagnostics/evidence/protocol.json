@@ -1,0 +1,82 @@
+{
+  "identity": {
+    "version": 1,
+    "config": {
+      "version": 1,
+      "source": "data/main-labeled.jsonl",
+      "checkpoint": "artifacts/models/supervised.npz",
+      "output": "runs/supervised-diagnostics",
+      "subset_sizes": [
+        10000,
+        40000,
+        "all"
+      ],
+      "sampling_seed": 2026,
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "bootstrap_resamples": 2000,
+      "bootstrap_seed": 2026,
+      "sparse_threshold": 100,
+      "gap_ratio": 1.1,
+      "gap_seeds_required": 2,
+      "promising_relative_improvement": 0.02,
+      "promising_seeds_required": 2,
+      "training": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "supervised-development-diagnostics"
+      },
+      "regularization": [
+        {
+          "name": "weaker-decay",
+          "weight_decay": 1e-05,
+          "dropout": 0
+        },
+        {
+          "name": "stronger-decay",
+          "weight_decay": 0.001,
+          "dropout": 0
+        },
+        {
+          "name": "dropout-01",
+          "weight_decay": 0.0001,
+          "dropout": 0.1
+        },
+        {
+          "name": "dropout-02",
+          "weight_decay": 0.0001,
+          "dropout": 0.2
+        }
+      ]
+    },
+    "source_sha256": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+    "checkpoint_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+    "feature_version": 1,
+    "code_sha256": {
+      "diagnostics": "28323081e93f1c92e0d865e3bb2e5ef55747f6e3b1b5fa5990341507bed39588",
+      "train": "6ba982a769fdec89201dfedf764b3fbc27d8041b0ff3a008dd3075ee641ad253",
+      "model": "c2db11621e0b285405cc419dd4fb6f8eecf1d6ba22f500b5248e4af3c11a3358",
+      "features": "8165c0de63d7722c52da91204493771f3cc867ea9301f90bc9959f697413ee00",
+      "data": "8577aee898a8a56844d7170f7f3626fa5c6b9652a00f52ecff222e69e8870c5f",
+      "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a"
+    }
+  },
+  "provenance": {
+    "commit": "5bb9a05d83be9ef33834d621f455f4c36a9a7482",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

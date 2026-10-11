@@ -1,0 +1,17 @@
+{
+  "10000": {
+    "positions": 10005,
+    "games": 2219,
+    "membership_sha256": "9469c19efb6134264a1696242901bfb1236c966c2d0e7829ecc18ee8a26d43c8"
+  },
+  "40000": {
+    "positions": 40000,
+    "games": 8862,
+    "membership_sha256": "c6b025dba2bfc1a7787e4da9b4e7bdaf24657a7fbe9f4b2b6eabdb32ee97e938"
+  },
+  "all": {
+    "positions": 80299,
+    "games": 17780,
+    "membership_sha256": "dad95004cb024570938e842b9cc6a037ee774d595c3be68bbcd44fbe32afbce6"
+  }
+}
