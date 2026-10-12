@@ -71,3 +71,23 @@ Completed 100,003 new labels from 22,192 new games, bringing training to 180,302
 ### Interpretation
 
 More data also produces more updates per epoch. This comparison cannot isolate data quantity from compute, and lower teacher-target error does not establish stronger chess play. The source remains the same historical Lichess archive. Paid compute is C$0; source data and trial checkpoints are ignored.
+
+## 7. Improve supervised fitting with fixed training data
+
+Base: `main` after the 200k PR merges | Head: `feat/fixed-data-improvements`
+
+### Change
+
+Adds a frozen, resumable optimization/representation study using the same 180,302 training and 9,789 validation examples. Introduces player-relative and material feature versions with checkpoint dispatch, preserves legacy inference, saves adaptive scheduler state, and rejects experimental features in RL. Includes a baseline-reproduction gate, canonical leakage audit, source-game bootstrap comparisons, subgroup analysis and a separate report.
+
+### Results
+
+Completed the 15 predefined fits plus three conditionally authorized combination fits. The reference reproduced historical weights exactly. Relative/material inputs with constant LR 0.0003 reduced mean validation MSE from 0.27350 to 0.24076 (11.97%); all three seeds improved. The adaptive schedule failed the development criterion. Single-position inference rose from approximately 43 to 64 microseconds including encoding. Local paid compute: C$0.
+
+### Validation
+
+52 local Python tests passed, covering exact CPU/scheduler resume, schema compatibility and export parity, orientation/history/castling/en-passant/material handling, target preservation, leakage rejection and tiny complete-study execution. Ruff and whitespace checks pass. Saved prediction metrics, hashes, subgroup totals and rankings were independently checked; report figures and browser content were inspected. Remote CI runs the tiny study only and remains pending push.
+
+### Boundaries
+
+No new labels, augmentation, final-test evaluation, RL training or deployment change. Released checkpoints and public website assets are untouched. Repeated validation selection and unequal compute remain limitations; lower teacher-target MSE does not establish stronger chess. Fresh confirmatory data and controlled matches are proposed separately. Full evidence and reproduction instructions: `docs/fixed-data-improvements.md`.

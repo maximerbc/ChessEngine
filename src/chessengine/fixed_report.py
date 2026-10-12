@@ -3,6 +3,7 @@ from pathlib import Path
 import argparse
 from html import escape
 import shutil
+import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -62,6 +63,10 @@ def generate(source, output):
              'with a 128/64 ReLU MLP and tanh output. Learning-rate treatments change the size of updates. '
              'Relative inputs orient pieces to the player to move; material summaries make counts, balance '
              'and game phase explicit. Targets keep their original sign. No augmentation or new labels.</p>'
+             '<p>The 12 material inputs are linear summaries of the existing piece indicators: if m = Ax, '
+             'the first layer Wₓx + Wₘm equals (Wₓ + WₘA)x. They add no information and do not enlarge '
+             'the unconstrained function class relative to v2. They change the parameterization, '
+             'initialization and effect of weight decay, which can make useful relationships easier to learn.</p>'
              '<p>Three reference runs must reproduce historical weights and validation MSE within 10⁻⁶ before '
              'treatments proceed. The canonical-position audit rejects cross-split overlaps. A promising '
              'treatment must reduce mean MSE by at least 2% and improve at least two seeds. Only the best '
@@ -70,17 +75,38 @@ def generate(source, output):
     html += table(['Treatment', 'Mean MSE', 'Seed SD', 'Reduction', 'Improved seeds', 'Promising', 'Inference µs'],
                   [[r['name'], f"{r['mean_mse']:.5f}",f"{r['seed_sd']:.5f}",f"{r['relative_reduction']:.1%}",
                     r['improving_seeds'], r['promising'], f"{r['latency_us']:.1f}"] for r in summary])
-    html += '<p>Combination: ' + escape(str(result['combination'])) + '.</p>'
+    html += ('<p>Conditional combination: ' + escape(' + '.join(result['combination']['parents'])) +
+             ' qualified independently and were combined for three additional runs.</p>'
+             if result['combination'] else '<p>No combination qualified; the study stopped after 15 runs.</p>')
+    html += '<h2>Findings and recommended follow-up</h2>'
+    if best['promising']:
+        html += (f"<p>Prioritize <b>{escape(best['name'])}</b> for a separately frozen confirmatory evaluation: "
+                 f"it improves {best['improving_seeds']} seeds and meets the development criterion. "
+                 'Keep all three seed checkpoints for that evaluation; do not pick a lucky seed or replace the demo yet.</p>')
+    else:
+        html += '<p>No configuration meets the development criterion. Retain the reference and diagnose remaining errors before proposing another experiment.</p>'
+    rejected = [r['name'] for r in summary if r['name'] != 'reference' and not r['promising']]
+    html += '<p>Configurations not meeting the criterion: ' + escape(', '.join(rejected) or 'none') + '.</p>'
+    best_runs = [r for r in result['runs'] if r['name'] == best['name']]
+    ref_runs = [r for r in result['runs'] if r['name'] == 'reference']
+    html += ('<p>The following exploratory subgroup comparison averages the three seeds; it is not a '
+             'separate hypothesis test. Near-equal overall performance can hide subgroup regressions.</p>')
+    html += table(['Dimension', 'Group', 'Reference MSE', 'Best treatment MSE', 'Difference'], [
+        [dimension, label,
+         f"{np.mean([r['breakdown'][dimension][label]['mse'] for r in ref_runs]):.5f}",
+         f"{np.mean([r['breakdown'][dimension][label]['mse'] for r in best_runs]):.5f}",
+         f"{np.mean([r['breakdown'][dimension][label]['mse'] for r in best_runs]) - np.mean([r['breakdown'][dimension][label]['mse'] for r in ref_runs]):+.5f}"]
+        for dimension, groups in ref_runs[0]['breakdown'].items() for label in groups])
     html += '<h2>Every seed and paired uncertainty</h2>'
     rows = []
     for r in result['runs']:
         ci = r.get('bootstrap', {}).get('paired_supervised_minus_baseline', {}).get('reference', {}).get('mse')
         rows.append([r['name'],r['seed'],f"{r['train']['mse']:.5f}",f"{r['validation']['mse']:.5f}",
                      'reference' if ci is None else '[' + ', '.join(f'{x:.5f}' for x in ci) + ']',
-                     f"{r['selected_epoch']}/{r['epochs']}",r['optimizer_steps'],f"{r['training_seconds']:.2f}"])
+                     f"{r['selected_epoch']}/{r['epochs']}",r['optimizer_steps'],f"{r['training_seconds']:.2f}",f"{r['wall_seconds']:.2f}"])
     html += table(['Treatment','Seed','Frozen train MSE','Validation MSE','95% CI: treatment − reference MSE',
-                   'Best/total epochs','Updates','Epoch work (s)'],rows)
-    html += ('<p>Intervals use 2,000 paired source-game resamples per seed, conditional on the selected '
+                   'Best/total epochs','Updates','Epoch work (s)','Fit + diagnostics (s)'],rows)
+    html += (f'<p>Intervals use {config["bootstrap_resamples"]:,} paired source-game resamples per seed, conditional on the selected '
              'models. They are separate from seed standard deviation and do not correct for repeated '
              'validation selection or multiple comparisons.</p><img src="curves.png" alt="Validation and learning-rate curves">')
     html += '<h2>Subgroup errors</h2><p>Groups below 100 positions are sparse. These are exploratory, overlapping groups.</p>'

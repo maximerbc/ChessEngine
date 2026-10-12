@@ -91,3 +91,5 @@ The project is provided under GPL-3.0-or-later, consistent with the chosen chess
 The release includes a **bounded local study**: 100,000 teacher-labeled positions, three RL seeds with 60 self-play games each, and 400 final games per seed. Final RL scores were 50.00%, 49.25%, and 50.25%; all paired confidence intervals include 50%. This is **inconclusive evidence of improvement**. Shallow 48-node search limits the finding; it is not the larger target training schedule.
 
 The Research tab contains all seeds, downloadable game records, and an HTML/PDF report. See [validation and limitations](docs/validation.md), [the preregistered local protocol](docs/local-study-preregistration.md), and [the prepared PR descriptions](docs/pr-descriptions.md). Actual paid compute cost: **C$0**.
+
+The [fixed-data study protocol](docs/fixed-data-improvements.md) compares optimization and player-relative representations on the same 180,302 training positions. Its [separate comparison report](docs/experiments/fixed-data-improvements/index.html) records development evidence; these experimental models do not replace the demo checkpoints.

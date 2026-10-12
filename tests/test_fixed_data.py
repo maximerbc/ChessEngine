@@ -44,6 +44,11 @@ def test_relative_geometry_history_and_material():
     for fen in [chess.STARTING_FEN, 'r3k2r/8/8/3pP3/8/8/8/R3K2R w KQkq d6 0 20']:
         board = chess.Board(fen)
         np.testing.assert_array_equal(encode(board, 2), encode(board.mirror(), 2))
+    board = chess.Board('r3k2r/8/8/8/3Pp3/8/8/R3K2R b Kq d3 0 20')
+    x = encode(board, 2)
+    np.testing.assert_array_equal(x[769:773], [0, 1, 1, 0])
+    assert x[773 + chess.D6] == 1 and x[773 + chess.D3] == 0
+    assert x[chess.E5] == 1  # Black pawn becomes the own pawn on e5.
     board = chess.Board()
     for move in ['g1f3','g8f6','f3g1','f6g8'] * 2:
         board.push_uci(move)
@@ -97,6 +102,10 @@ def test_fixed_study_smoke(tmp_path):
     assert (report.parent / 'curves.png').stat().st_size > 1000
     assert run(cfg, resume=True)['summary'] == result['summary']
     assert read_json(tmp_path / 'study/reproduction-42.json')['passed']
+    original_targets = np.load(tmp_path / 'study/reference-42/predictions.npz')['targets']
+    for row in result['runs']:
+        stored = np.load(tmp_path / 'study' / f"{row['name']}-{row['seed']}" / 'predictions.npz')
+        np.testing.assert_array_equal(stored['targets'], original_targets)
     with pytest.raises(ValueError, match='mismatch'):
         run({**cfg,'minimum_reduction':.1}, resume=True)
     failed = [dict(r, promising=False) for r in result['summary']]

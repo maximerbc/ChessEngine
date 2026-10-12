@@ -1,0 +1,99 @@
+{
+  "identity": {
+    "config": {
+      "version": 1,
+      "source": "runs/supervised-200k/subset-all.jsonl",
+      "historical": "runs/supervised-200k",
+      "output": "runs/fixed-data-improvements",
+      "expected_counts": [
+        180302,
+        9789
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "reproduction_tolerance": 1e-06,
+      "minimum_reduction": 0.02,
+      "minimum_seeds": 2,
+      "bootstrap_resamples": 2000,
+      "bootstrap_seed": 2026,
+      "training": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development"
+      },
+      "treatments": [
+        {
+          "name": "reference",
+          "category": "reference",
+          "settings": {}
+        },
+        {
+          "name": "smaller-lr",
+          "category": "optimization",
+          "settings": {
+            "learning_rate": 0.0003
+          }
+        },
+        {
+          "name": "adaptive-lr",
+          "category": "optimization",
+          "settings": {
+            "scheduler": {
+              "mode": "min",
+              "factor": 0.5,
+              "patience": 1,
+              "threshold": 0.0001,
+              "threshold_mode": "abs",
+              "min_lr": 1e-05,
+              "cooldown": 0
+            }
+          }
+        },
+        {
+          "name": "relative",
+          "category": "representation",
+          "settings": {
+            "feature_version": 2
+          }
+        },
+        {
+          "name": "relative-material",
+          "category": "representation",
+          "settings": {
+            "feature_version": 3
+          }
+        }
+      ]
+    },
+    "source_sha256": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+    "historical_results_sha256": "7ad7ce34d6f86e2c67d36ec8bd7e981bd07a62e6fccfd439feaf01e4274d476a",
+    "code": {
+      "fixed_data": "86ec2238284c6e26794928adbc976c00fe086fda4b2106d4aef78fca2928348e",
+      "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+      "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+      "train": "4a260bb7de997201bd17d5edd2706029337bd932f3500b36dc8bac39ff74e479",
+      "diagnostics": "28323081e93f1c92e0d865e3bb2e5ef55747f6e3b1b5fa5990341507bed39588",
+      "data": "8577aee898a8a56844d7170f7f3626fa5c6b9652a00f52ecff222e69e8870c5f",
+      "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a",
+      "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a"
+    }
+  },
+  "provenance": {
+    "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

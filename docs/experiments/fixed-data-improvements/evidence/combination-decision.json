@@ -1,0 +1,66 @@
+{
+  "treatment": {
+    "name": "combined",
+    "category": "combination",
+    "settings": {
+      "learning_rate": 0.0003,
+      "feature_version": 3
+    },
+    "parents": [
+      "smaller-lr",
+      "relative-material"
+    ]
+  },
+  "initial_summary": [
+    {
+      "name": "relative-material",
+      "category": "representation",
+      "mean_mse": 0.2441721193570842,
+      "seed_sd": 0.0028702895427271504,
+      "relative_reduction": 0.10722244936642522,
+      "improving_seeds": 3,
+      "latency_us": 64.035,
+      "promising": true
+    },
+    {
+      "name": "smaller-lr",
+      "category": "optimization",
+      "mean_mse": 0.26325946211368184,
+      "seed_sd": 0.0004672980772004385,
+      "relative_reduction": 0.03743253576282546,
+      "improving_seeds": 3,
+      "latency_us": 42.763666666666666,
+      "promising": true
+    },
+    {
+      "name": "relative",
+      "category": "representation",
+      "mean_mse": 0.266619864057412,
+      "seed_sd": 0.0018050118845154511,
+      "relative_reduction": 0.0251457463277045,
+      "improving_seeds": 3,
+      "latency_us": 54.007000000000005,
+      "promising": true
+    },
+    {
+      "name": "adaptive-lr",
+      "category": "optimization",
+      "mean_mse": 0.27246918331330766,
+      "seed_sd": 0.003086451405312605,
+      "relative_reduction": 0.0037586160857159268,
+      "improving_seeds": 1,
+      "latency_us": 43.861,
+      "promising": false
+    },
+    {
+      "name": "reference",
+      "category": "reference",
+      "mean_mse": 0.2734971541161662,
+      "seed_sd": 0.0028730594316677014,
+      "relative_reduction": 0.0,
+      "improving_seeds": 0,
+      "latency_us": 43.32633333333333,
+      "promising": false
+    }
+  ]
+}
