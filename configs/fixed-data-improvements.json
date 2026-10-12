@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "source": "runs/supervised-200k/subset-all.jsonl",
+  "historical": "runs/supervised-200k",
+  "output": "runs/fixed-data-improvements",
+  "expected_counts": [
+    180302,
+    9789
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "reproduction_tolerance": 1e-06,
+  "minimum_reduction": 0.02,
+  "minimum_seeds": 2,
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 2026,
+  "training": {
+    "hidden": [
+      128,
+      64
+    ],
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "dropout": 0,
+    "batch_size": 256,
+    "epochs": 40,
+    "patience": 6,
+    "device": "cpu",
+    "evidence": "fixed-data-development"
+  },
+  "treatments": [
+    {
+      "name": "reference",
+      "category": "reference",
+      "settings": {}
+    },
+    {
+      "name": "smaller-lr",
+      "category": "optimization",
+      "settings": {
+        "learning_rate": 0.0003
+      }
+    },
+    {
+      "name": "adaptive-lr",
+      "category": "optimization",
+      "settings": {
+        "scheduler": {
+          "mode": "min",
+          "factor": 0.5,
+          "patience": 1,
+          "threshold": 0.0001,
+          "threshold_mode": "abs",
+          "min_lr": 1e-05,
+          "cooldown": 0
+        }
+      }
+    },
+    {
+      "name": "relative",
+      "category": "representation",
+      "settings": {
+        "feature_version": 2
+      }
+    },
+    {
+      "name": "relative-material",
+      "category": "representation",
+      "settings": {
+        "feature_version": 3
+      }
+    }
+  ]
+}

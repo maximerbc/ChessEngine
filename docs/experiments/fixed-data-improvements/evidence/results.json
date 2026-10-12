@@ -1,0 +1,4164 @@
+{
+  "protocol": {
+    "identity": {
+      "config": {
+        "version": 1,
+        "source": "runs/supervised-200k/subset-all.jsonl",
+        "historical": "runs/supervised-200k",
+        "output": "runs/fixed-data-improvements",
+        "expected_counts": [
+          180302,
+          9789
+        ],
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "reproduction_tolerance": 1e-06,
+        "minimum_reduction": 0.02,
+        "minimum_seeds": 2,
+        "bootstrap_resamples": 2000,
+        "bootstrap_seed": 2026,
+        "training": {
+          "hidden": [
+            128,
+            64
+          ],
+          "learning_rate": 0.001,
+          "weight_decay": 0.0001,
+          "dropout": 0,
+          "batch_size": 256,
+          "epochs": 40,
+          "patience": 6,
+          "device": "cpu",
+          "evidence": "fixed-data-development"
+        },
+        "treatments": [
+          {
+            "name": "reference",
+            "category": "reference",
+            "settings": {}
+          },
+          {
+            "name": "smaller-lr",
+            "category": "optimization",
+            "settings": {
+              "learning_rate": 0.0003
+            }
+          },
+          {
+            "name": "adaptive-lr",
+            "category": "optimization",
+            "settings": {
+              "scheduler": {
+                "mode": "min",
+                "factor": 0.5,
+                "patience": 1,
+                "threshold": 0.0001,
+                "threshold_mode": "abs",
+                "min_lr": 1e-05,
+                "cooldown": 0
+              }
+            }
+          },
+          {
+            "name": "relative",
+            "category": "representation",
+            "settings": {
+              "feature_version": 2
+            }
+          },
+          {
+            "name": "relative-material",
+            "category": "representation",
+            "settings": {
+              "feature_version": 3
+            }
+          }
+        ]
+      },
+      "source_sha256": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+      "historical_results_sha256": "7ad7ce34d6f86e2c67d36ec8bd7e981bd07a62e6fccfd439feaf01e4274d476a",
+      "code": {
+        "fixed_data": "86ec2238284c6e26794928adbc976c00fe086fda4b2106d4aef78fca2928348e",
+        "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+        "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+        "train": "4a260bb7de997201bd17d5edd2706029337bd932f3500b36dc8bac39ff74e479",
+        "diagnostics": "28323081e93f1c92e0d865e3bb2e5ef55747f6e3b1b5fa5990341507bed39588",
+        "data": "8577aee898a8a56844d7170f7f3626fa5c6b9652a00f52ecff222e69e8870c5f",
+        "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a",
+        "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a"
+      }
+    },
+    "provenance": {
+      "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+      "dirty": false,
+      "python": "3.10.6",
+      "platform": "macOS-15.6.1-arm64-arm-64bit"
+    }
+  },
+  "runs": [
+    {
+      "name": "reference",
+      "category": "reference",
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.1894506017555898,
+        "mae": 0.29916849877984597,
+        "signed_error": -0.005918234637727222
+      },
+      "validation": {
+        "mse": 0.27411275530180584,
+        "mae": 0.3556298257059357,
+        "signed_error": -0.01053497995425543
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.2880451079993523,
+            "mae": 0.3616024390891466,
+            "signed_error": -0.035688486554800926
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.2595606049591932,
+            "mae": 0.34939151335642915,
+            "signed_error": 0.01573751096247974
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2429134084557001,
+            "mae": 0.2666679683948685,
+            "signed_error": -0.006080788956735138
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.329875264267175,
+            "mae": 0.38192624020208094,
+            "signed_error": -0.021611967049374233
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.23529654349477588,
+            "mae": 0.36428240925832434,
+            "signed_error": -0.0021913185884123777
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.13976836669524828,
+            "mae": 0.2883742495261166,
+            "signed_error": 0.028468620357262827
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.250924329418975,
+            "mae": 0.3811154853503861,
+            "signed_error": 0.026385017862733808
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.33273056029760706,
+            "mae": 0.37586400705874046,
+            "signed_error": -0.0336022525671127
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1497663411874631,
+            "mae": 0.3105096258505154,
+            "signed_error": 0.03603893737941652
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.22760200117332888,
+            "mae": 0.2717585402594329,
+            "signed_error": -0.018926484009611305
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.28710678815656726,
+            "mae": 0.39227001808391454,
+            "signed_error": -0.010513146465795455
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2770638090566159,
+            "mae": 0.32578300877142546,
+            "signed_error": -0.0038186018270138463
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.42683483025912194,
+            "mae": 0.47695640449531984,
+            "signed_error": 0.007565916884194907
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2794189086319698,
+            "mae": 0.4053543409499142,
+            "signed_error": -0.007608665968056522
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.17807785498816828,
+            "mae": 0.2022900714879312,
+            "signed_error": -0.025806740730806875
+          }
+        }
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 7050,
+      "training_seconds": 5.9286656267941,
+      "wall_seconds": 8.399055750109255,
+      "latency_us": 41.729,
+      "checkpoint_sha256": "58d6deb794fd096c37fbf735d3be7dcb94863829ca4973989cba2098157b4b71",
+      "predictions_sha256": "efe328001a56cf7d47c018a375e12c651de9e286384cf390291bff8137c20a9d",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "name": "reference",
+      "category": "reference",
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1852708843917812,
+        "mae": 0.29415550233508436,
+        "signed_error": -0.03287728238005874
+      },
+      "validation": {
+        "mse": 0.27601251609094224,
+        "mae": 0.3542501747769613,
+        "signed_error": -0.03358991162613889
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.28385054161299067,
+            "mae": 0.36498856144137426,
+            "signed_error": -0.03923904368921083
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.26782580647612086,
+            "mae": 0.3430340779288558,
+            "signed_error": -0.02768947105650172
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.23655664840578747,
+            "mae": 0.2629155739642972,
+            "signed_error": -0.023464657971639165
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.3418446550443346,
+            "mae": 0.3881322638380695,
+            "signed_error": -0.034809100637290785
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2311390045276717,
+            "mae": 0.356942906309183,
+            "signed_error": -0.03616973807606425
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14943385590150404,
+            "mae": 0.293884354743234,
+            "signed_error": -0.0005032180959794775
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.25481202927083163,
+            "mae": 0.3828296568958483,
+            "signed_error": -0.013362940735072623
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.33434121163766484,
+            "mae": 0.374980476699427,
+            "signed_error": -0.053016982069617684
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1508794458615623,
+            "mae": 0.30630569971127486,
+            "signed_error": 0.007356545344738245
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.23450018475284612,
+            "mae": 0.2748301470359308,
+            "signed_error": -0.032649899112238846
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2817755287864196,
+            "mae": 0.3860786930674784,
+            "signed_error": -0.03771437949743572
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.29418131735962955,
+            "mae": 0.33362118797063123,
+            "signed_error": -0.023367158186432722
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.43365445103105127,
+            "mae": 0.48394712254169125,
+            "signed_error": -0.020078784185825923
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2822930372983016,
+            "mae": 0.4020115595498385,
+            "signed_error": -0.0329545851595723
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.17552369077102076,
+            "mae": 0.19946289013058413,
+            "signed_error": -0.04236686197501452
+          }
+        }
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 7050,
+      "training_seconds": 6.48114800080657,
+      "wall_seconds": 7.6651665843091905,
+      "latency_us": 45.833,
+      "checkpoint_sha256": "27c64b0ec7d3d93788f485bccf1fc3ccc54129e87d0c93e55f5b95456c332e6b",
+      "predictions_sha256": "77d8036727af073ea694b24c22ed743577f26565487835c966b76d011011668c",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "name": "reference",
+      "category": "reference",
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.16840087330595507,
+        "mae": 0.27621559293651643,
+        "signed_error": -0.011868177338635452
+      },
+      "validation": {
+        "mse": 0.27036619095575065,
+        "mae": 0.3434844327259527,
+        "signed_error": -0.013115235476240186
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.28802082734221657,
+            "mae": 0.3548213925788448,
+            "signed_error": -0.024789534405820022
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.25192616660973627,
+            "mae": 0.3316431344334896,
+            "signed_error": -0.0009215911682141278
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2514719828063739,
+            "mae": 0.25908781597762764,
+            "signed_error": -0.00378966264293027
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.32757677882415737,
+            "mae": 0.37113230872257197,
+            "signed_error": -0.007164484687020334
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.22578019687363837,
+            "mae": 0.3492642338372938,
+            "signed_error": -0.021852200172793067
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.15198921283568922,
+            "mae": 0.2907144249579038,
+            "signed_error": 0.023106879139216902
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2691736436032589,
+            "mae": 0.3896387258262448,
+            "signed_error": 0.025112894861653013
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.3230783705382153,
+            "mae": 0.35665041616607,
+            "signed_error": -0.03400561881887845
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1549894641407793,
+            "mae": 0.31072954235274236,
+            "signed_error": 0.028148833413817177
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.2323258349202831,
+            "mae": 0.2644432668004062,
+            "signed_error": -0.006404609013466287
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2728220638942429,
+            "mae": 0.37435419300952993,
+            "signed_error": -0.02124108098840292
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.29453749431938436,
+            "mae": 0.3251023364441387,
+            "signed_error": 0.0031027634256943575
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.435147362302898,
+            "mae": 0.469808165872812,
+            "signed_error": 0.005038380896252559
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2777011971855358,
+            "mae": 0.3938551486926814,
+            "signed_error": -0.009793634200559197
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.1640227577408501,
+            "mae": 0.18620228270057124,
+            "signed_error": -0.029086267768288963
+          }
+        }
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 7755,
+      "training_seconds": 8.11436283448711,
+      "wall_seconds": 9.424304666928947,
+      "latency_us": 42.417,
+      "checkpoint_sha256": "5126e2cf6bb304cf5ad044f2ccf145e4a5c31f5620e3302ccab40d035f6baecf",
+      "predictions_sha256": "2a670039d649fb12ca705cbbaec32478ea73b99794a3c6fa361bb39d135e86d8",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      }
+    },
+    {
+      "name": "smaller-lr",
+      "category": "optimization",
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.20159145917766788,
+        "mae": 0.30935401499863074,
+        "signed_error": -0.020638442667040853
+      },
+      "validation": {
+        "mse": 0.26351216360669366,
+        "mae": 0.3500958899647614,
+        "signed_error": -0.02005506720039465
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.27165477987649134,
+            "mae": 0.3578054586589036,
+            "signed_error": -0.028666554419365935
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.25500731315446745,
+            "mae": 0.34204335173598,
+            "signed_error": -0.01106048750489018
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.22755342514238264,
+            "mae": 0.26995357516418667,
+            "signed_error": -0.003092525898617349
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.3175568099254651,
+            "mae": 0.3785227441080946,
+            "signed_error": -0.019696961707984625
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2279687060844132,
+            "mae": 0.35363059925063917,
+            "signed_error": -0.026535663654302565
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.12255885588779816,
+            "mae": 0.2598792200457252,
+            "signed_error": 0.03145325379309539
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.25780989979767954,
+            "mae": 0.38226250768752446,
+            "signed_error": -0.01229503254718861
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.3212485776871513,
+            "mae": 0.3729555107396249,
+            "signed_error": -0.04023781016219938
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.13959356001260181,
+            "mae": 0.30077272320172926,
+            "signed_error": 0.021984124529750796
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.21314395529619246,
+            "mae": 0.27586665282917355,
+            "signed_error": -0.011899438235394886
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.27493888502418323,
+            "mae": 0.38166598285621123,
+            "signed_error": -0.023927382058278518
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2737504191809328,
+            "mae": 0.32596441946506977,
+            "signed_error": -0.016328895544594997
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.4082519306825235,
+            "mae": 0.47715259508183155,
+            "signed_error": 0.0007116213305587798
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2713279961641155,
+            "mae": 0.40016831158633354,
+            "signed_error": -0.016170079685942633
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16777829185375517,
+            "mae": 0.19290095824270975,
+            "signed_error": -0.038469363525005365
+          }
+        }
+      },
+      "selected_epoch": 7,
+      "epochs": 13,
+      "optimizer_steps": 9165,
+      "training_seconds": 9.056453542783856,
+      "wall_seconds": 10.535155000165105,
+      "latency_us": 42.854,
+      "checkpoint_sha256": "d479594fd5601fb623e831f348cabab0d3638a9443916adf51349e527264f942",
+      "predictions_sha256": "fb4a3f11de0a4dac5fcc7738695af54df47bd742bb7e348f69940f071576c402",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.25097542286406804,
+              0.27647720575328555
+            ],
+            "mae": [
+              0.34140854632161816,
+              0.35927118433969274
+            ],
+            "signed_error": [
+              -0.030220474249017235,
+              -0.010442244462365994
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26104201468143334,
+              0.2877650369976787
+            ],
+            "mae": [
+              0.34651903824520547,
+              0.36432804022639925
+            ],
+            "signed_error": [
+              -0.02088158099152707,
+              -0.0001814101056474519
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.017923436014418995,
+              -0.00404323397054689
+            ],
+            "mae": [
+              -0.010584995187549667,
+              -0.0004784111917174032
+            ],
+            "signed_error": [
+              -0.014410273135757639,
+              -0.004764169694422482
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "smaller-lr",
+      "category": "optimization",
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1725029609868632,
+        "mae": 0.2848728745948839,
+        "signed_error": 0.015095469878424365
+      },
+      "validation": {
+        "mse": 0.2627202264443131,
+        "mae": 0.34576131550707,
+        "signed_error": 0.013047921699757905
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.2733419996357551,
+            "mae": 0.35594606791564903,
+            "signed_error": 0.005321346084679039
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.2516259307612718,
+            "mae": 0.33512348200763314,
+            "signed_error": 0.02111822342302637
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.22672365648650344,
+            "mae": 0.25864919868155895,
+            "signed_error": 0.006905153614349123
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.3184569130515446,
+            "mae": 0.37086946142711175,
+            "signed_error": 0.005068257970954618
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.22566895854853794,
+            "mae": 0.35481085092606596,
+            "signed_error": 0.02245378262671672
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.13596909218877756,
+            "mae": 0.2844087268900434,
+            "signed_error": 0.05289581591390817
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.26471900142430643,
+            "mae": 0.38932065938179067,
+            "signed_error": 0.04960166160136217
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.3155814066913882,
+            "mae": 0.361212907844104,
+            "signed_error": -0.013296815893131106
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1477414627808627,
+            "mae": 0.3089479671843076,
+            "signed_error": 0.06787287704826094
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.20585814035731115,
+            "mae": 0.2590558429353688,
+            "signed_error": 0.00813404958989438
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2722018176627068,
+            "mae": 0.38039642552358693,
+            "signed_error": 0.014816510307061655
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2833800482741603,
+            "mae": 0.3235412008954067,
+            "signed_error": 0.012305951709370022
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.40047394502274736,
+            "mae": 0.4573651354995315,
+            "signed_error": 0.023576457082850135
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.27358475458838677,
+            "mae": 0.40046524036927295,
+            "signed_error": 0.02805325318456946
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16580696070668877,
+            "mae": 0.18953339331965738,
+            "signed_error": -0.01835736967239063
+          }
+        }
+      },
+      "selected_epoch": 9,
+      "epochs": 15,
+      "optimizer_steps": 10575,
+      "training_seconds": 9.644252417609096,
+      "wall_seconds": 11.20615008380264,
+      "latency_us": 42.4165,
+      "checkpoint_sha256": "de4cd1da594611ec23e5a2d5a6cbddeb57914f2a83104a440697efcaea07e271",
+      "predictions_sha256": "3ba5e912b4eedda664f50c6461d3e77f044f0150ecaceaf1162a867b3c09aeb7",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.25063435851110816,
+              0.2750818451551999
+            ],
+            "mae": [
+              0.33690629906500075,
+              0.3542719557027581
+            ],
+            "signed_error": [
+              0.0025758510208178896,
+              0.023408171918959282
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26343264032251223,
+              0.2893470718646362
+            ],
+            "mae": [
+              0.3449975693253601,
+              0.3636321866116272
+            ],
+            "signed_error": [
+              -0.043765304841945955,
+              -0.023561055633303806
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.020585031244585456,
+              -0.005977966879689908
+            ],
+            "mae": [
+              -0.01342439896539182,
+              -0.0034011064123770037
+            ],
+            "signed_error": [
+              0.041719721330880366,
+              0.05182554947893936
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "smaller-lr",
+      "category": "optimization",
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.20072273640633773,
+        "mae": 0.30776446391727064,
+        "signed_error": -0.025386215835392422
+      },
+      "validation": {
+        "mse": 0.26354599629003866,
+        "mae": 0.34943402228684267,
+        "signed_error": -0.026707403740001447
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.2738439252439519,
+            "mae": 0.35728047755332243,
+            "signed_error": -0.018102912623391962
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.25278995144907795,
+            "mae": 0.34123850792016236,
+            "signed_error": -0.03569467610302651
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2271882893676001,
+            "mae": 0.26886231456065157,
+            "signed_error": -0.015065418105343634
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.3110627366346391,
+            "mae": 0.3708301347521624,
+            "signed_error": -0.025109063472042715
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2340175287361471,
+            "mae": 0.3594469363694142,
+            "signed_error": -0.032371536260148166
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.1324297788841324,
+            "mae": 0.2747320634317679,
+            "signed_error": 0.008337267220723537
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2658735534020613,
+            "mae": 0.39021622142675183,
+            "signed_error": -0.013468760558587574
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.3200998271507974,
+            "mae": 0.37056363784777313,
+            "signed_error": -0.04672646099326005
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.13981160625095357,
+            "mae": 0.3007136806182203,
+            "signed_error": 0.016571158192882716
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.20469921613330797,
+            "mae": 0.26698116012701417,
+            "signed_error": -0.018900125583779168
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2776574725657888,
+            "mae": 0.3847467949197571,
+            "signed_error": -0.03361906699262044
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.27348074019561003,
+            "mae": 0.3219764346503371,
+            "signed_error": -0.014607567828667954
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.4035995593606864,
+            "mae": 0.47565968431701217,
+            "signed_error": -0.0004930715591303612
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2717079154282355,
+            "mae": 0.4015566492012849,
+            "signed_error": -0.02265189929987492
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16989733623880235,
+            "mae": 0.18924178756349527,
+            "signed_error": -0.04851554210023217
+          }
+        }
+      },
+      "selected_epoch": 7,
+      "epochs": 13,
+      "optimizer_steps": 9165,
+      "training_seconds": 7.700322540476918,
+      "wall_seconds": 9.081744957715273,
+      "latency_us": 43.0205,
+      "checkpoint_sha256": "d7574bf9e610f9b51ee5b8055720b092401fef0f47393d9a220a6087508db148",
+      "predictions_sha256": "bca6342396d4368ab2b8d90a5753d605cd0a2ec788dc087575f26f432972fb32",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.25136622210367154,
+              0.2763538080414809
+            ],
+            "mae": [
+              0.34070383517854314,
+              0.3585245972101148
+            ],
+            "signed_error": [
+              -0.03683835735483096,
+              -0.01641954241811595
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.2573971559038727,
+              0.2840807582637107
+            ],
+            "mae": [
+              0.33410183853984865,
+              0.3530088950513709
+            ],
+            "signed_error": [
+              -0.023485037556040436,
+              -0.002625294258467718
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.013783486204915206,
+              0.00035370271252412234
+            ],
+            "mae": [
+              0.0011295474560013093,
+              0.010919170764607224
+            ],
+            "signed_error": [
+              -0.018763961661849418,
+              -0.008215548208325426
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "adaptive-lr",
+      "category": "optimization",
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "scheduler": {
+          "mode": "min",
+          "factor": 0.5,
+          "patience": 1,
+          "threshold": 0.0001,
+          "threshold_mode": "abs",
+          "min_lr": 1e-05,
+          "cooldown": 0
+        },
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.13127167162707934,
+        "mae": 0.23639744950249555,
+        "signed_error": -0.009380134033217568
+      },
+      "validation": {
+        "mse": 0.27102884289323,
+        "mae": 0.33519912588372963,
+        "signed_error": -0.013262936183353502
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.28393233802312934,
+            "mae": 0.3466839892028925,
+            "signed_error": -0.02152222229938311
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.2575513200977774,
+            "mae": 0.3232033444595163,
+            "signed_error": -0.0046362256849691915
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2509248585658597,
+            "mae": 0.2500352386275827,
+            "signed_error": -0.013565153004020633
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.33365747688946384,
+            "mae": 0.36175218657739444,
+            "signed_error": -0.021708014633800222
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.22200997173514186,
+            "mae": 0.3422419980169298,
+            "signed_error": -0.005559080653897468
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.15619029688840713,
+            "mae": 0.302390762779396,
+            "signed_error": 0.0376167400794731
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2612286175633547,
+            "mae": 0.37384771761527497,
+            "signed_error": 0.012385696411776354
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.31741677237846466,
+            "mae": 0.3367109766374996,
+            "signed_error": -0.031747403724325246
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1725576421264562,
+            "mae": 0.33016935247911305,
+            "signed_error": 0.021665358871793577
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.23764270606710555,
+            "mae": 0.2567135906191985,
+            "signed_error": -0.026885885202717796
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.27438023794648614,
+            "mae": 0.36814110161925534,
+            "signed_error": -0.010785491931690571
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2890583887165411,
+            "mae": 0.3108510737530632,
+            "signed_error": -0.008861385299887968
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.4238339585671883,
+            "mae": 0.4420599484148337,
+            "signed_error": 0.012509123831156816
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2758089383473857,
+            "mae": 0.39055198435014143,
+            "signed_error": -0.013264925524923699
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.17583722535518806,
+            "mae": 0.18057606765736514,
+            "signed_error": -0.02794964243634604
+          }
+        }
+      },
+      "selected_epoch": 7,
+      "epochs": 13,
+      "optimizer_steps": 9165,
+      "training_seconds": 11.20145683735609,
+      "wall_seconds": 12.963144625071436,
+      "latency_us": 43.3955,
+      "checkpoint_sha256": "6a668d8e5662ae79438cd2d006d82248f3b46716690123d7e1fb5f3705f995de",
+      "predictions_sha256": "4366956720f2cb0b3805526169281d6301401321c0e414debb12ec19474104d3",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.25769572426424575,
+              0.2851070402859323
+            ],
+            "mae": [
+              0.3259430970957647,
+              0.34417039235616337
+            ],
+            "signed_error": [
+              -0.02330135634027752,
+              -0.003215365329861932
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26104201468143334,
+              0.2877650369976787
+            ],
+            "mae": [
+              0.34651903824520547,
+              0.36432804022639925
+            ],
+            "signed_error": [
+              -0.02088158099152707,
+              -0.0001814101056474519
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.009531997350740432,
+              0.003464895404434946
+            ],
+            "mae": [
+              -0.024655173821905494,
+              -0.016149076600649532
+            ],
+            "signed_error": [
+              -0.007100891314226009,
+              0.0016049430177243584
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "adaptive-lr",
+      "category": "optimization",
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "scheduler": {
+          "mode": "min",
+          "factor": 0.5,
+          "patience": 1,
+          "threshold": 0.0001,
+          "threshold_mode": "abs",
+          "min_lr": 1e-05,
+          "cooldown": 0
+        },
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1852708843917812,
+        "mae": 0.29415550233508436,
+        "signed_error": -0.03287728238005874
+      },
+      "validation": {
+        "mse": 0.27601251609094224,
+        "mae": 0.3542501747769613,
+        "signed_error": -0.03358991162613889
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.28385054161299067,
+            "mae": 0.36498856144137426,
+            "signed_error": -0.03923904368921083
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.26782580647612086,
+            "mae": 0.3430340779288558,
+            "signed_error": -0.02768947105650172
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.23655664840578747,
+            "mae": 0.2629155739642972,
+            "signed_error": -0.023464657971639165
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.3418446550443346,
+            "mae": 0.3881322638380695,
+            "signed_error": -0.034809100637290785
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2311390045276717,
+            "mae": 0.356942906309183,
+            "signed_error": -0.03616973807606425
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14943385590150404,
+            "mae": 0.293884354743234,
+            "signed_error": -0.0005032180959794775
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.25481202927083163,
+            "mae": 0.3828296568958483,
+            "signed_error": -0.013362940735072623
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.33434121163766484,
+            "mae": 0.374980476699427,
+            "signed_error": -0.053016982069617684
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1508794458615623,
+            "mae": 0.30630569971127486,
+            "signed_error": 0.007356545344738245
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.23450018475284612,
+            "mae": 0.2748301470359308,
+            "signed_error": -0.032649899112238846
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2817755287864196,
+            "mae": 0.3860786930674784,
+            "signed_error": -0.03771437949743572
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.29418131735962955,
+            "mae": 0.33362118797063123,
+            "signed_error": -0.023367158186432722
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.43365445103105127,
+            "mae": 0.48394712254169125,
+            "signed_error": -0.020078784185825923
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2822930372983016,
+            "mae": 0.4020115595498385,
+            "signed_error": -0.0329545851595723
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.17552369077102076,
+            "mae": 0.19946289013058413,
+            "signed_error": -0.04236686197501452
+          }
+        }
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 7050,
+      "training_seconds": 6.6283737500198185,
+      "wall_seconds": 7.865081457886845,
+      "latency_us": 44.896,
+      "checkpoint_sha256": "d01f2fd92513abd445ecde0eff61e152ca0fb175422eed1829da8feb08a9b413",
+      "predictions_sha256": "77d8036727af073ea694b24c22ed743577f26565487835c966b76d011011668c",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.26343264032251223,
+              0.2893470718646362
+            ],
+            "mae": [
+              0.3449975693253601,
+              0.3636321866116272
+            ],
+            "signed_error": [
+              -0.043765304841945955,
+              -0.023561055633303806
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26343264032251223,
+              0.2893470718646362
+            ],
+            "mae": [
+              0.3449975693253601,
+              0.3636321866116272
+            ],
+            "signed_error": [
+              -0.043765304841945955,
+              -0.023561055633303806
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              0.0,
+              0.0
+            ],
+            "mae": [
+              0.0,
+              0.0
+            ],
+            "signed_error": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "adaptive-lr",
+      "category": "optimization",
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "scheduler": {
+          "mode": "min",
+          "factor": 0.5,
+          "patience": 1,
+          "threshold": 0.0001,
+          "threshold_mode": "abs",
+          "min_lr": 1e-05,
+          "cooldown": 0
+        },
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.16840087330595507,
+        "mae": 0.27621559293651643,
+        "signed_error": -0.011868177338635452
+      },
+      "validation": {
+        "mse": 0.27036619095575065,
+        "mae": 0.3434844327259527,
+        "signed_error": -0.013115235476240186
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.28802082734221657,
+            "mae": 0.3548213925788448,
+            "signed_error": -0.024789534405820022
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.25192616660973627,
+            "mae": 0.3316431344334896,
+            "signed_error": -0.0009215911682141278
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2514719828063739,
+            "mae": 0.25908781597762764,
+            "signed_error": -0.00378966264293027
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.32757677882415737,
+            "mae": 0.37113230872257197,
+            "signed_error": -0.007164484687020334
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.22578019687363837,
+            "mae": 0.3492642338372938,
+            "signed_error": -0.021852200172793067
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.15198921283568922,
+            "mae": 0.2907144249579038,
+            "signed_error": 0.023106879139216902
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2691736436032589,
+            "mae": 0.3896387258262448,
+            "signed_error": 0.025112894861653013
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.3230783705382153,
+            "mae": 0.35665041616607,
+            "signed_error": -0.03400561881887845
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1549894641407793,
+            "mae": 0.31072954235274236,
+            "signed_error": 0.028148833413817177
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.2323258349202831,
+            "mae": 0.2644432668004062,
+            "signed_error": -0.006404609013466287
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2728220638942429,
+            "mae": 0.37435419300952993,
+            "signed_error": -0.02124108098840292
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.29453749431938436,
+            "mae": 0.3251023364441387,
+            "signed_error": 0.0031027634256943575
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.435147362302898,
+            "mae": 0.469808165872812,
+            "signed_error": 0.005038380896252559
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2777011971855358,
+            "mae": 0.3938551486926814,
+            "signed_error": -0.009793634200559197
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.1640227577408501,
+            "mae": 0.18620228270057124,
+            "signed_error": -0.029086267768288963
+          }
+        }
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 7755,
+      "training_seconds": 8.282934956252575,
+      "wall_seconds": 9.582499041687697,
+      "latency_us": 43.2915,
+      "checkpoint_sha256": "dcea356c31e4d3fb2e0d984ac4fe4c59a23fcc131ed6bec1d07d357539a7fef5",
+      "predictions_sha256": "2a670039d649fb12ca705cbbaec32478ea73b99794a3c6fa361bb39d135e86d8",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.2573971559038727,
+              0.2840807582637107
+            ],
+            "mae": [
+              0.33410183853984865,
+              0.3530088950513709
+            ],
+            "signed_error": [
+              -0.023485037556040436,
+              -0.002625294258467718
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.2573971559038727,
+              0.2840807582637107
+            ],
+            "mae": [
+              0.33410183853984865,
+              0.3530088950513709
+            ],
+            "signed_error": [
+              -0.023485037556040436,
+              -0.002625294258467718
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              0.0,
+              0.0
+            ],
+            "mae": [
+              0.0,
+              0.0
+            ],
+            "signed_error": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "relative",
+      "category": "representation",
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 2,
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.16862591690889875,
+        "mae": 0.27501471958940993,
+        "signed_error": 0.01888836106728484
+      },
+      "validation": {
+        "mse": 0.2670686965222802,
+        "mae": 0.34216770896210885,
+        "signed_error": 0.01752063966570187
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.2795091219234159,
+            "mae": 0.35085048020337667,
+            "signed_error": 0.006067113648077957
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.25407484367535466,
+            "mae": 0.3330986740879275,
+            "signed_error": 0.029483689710425594
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.23869029111014778,
+            "mae": 0.256718242653147,
+            "signed_error": 0.0032912149329098884
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.32082258526501745,
+            "mae": 0.3644058240310371,
+            "signed_error": 0.003931080945088298
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2290345143647738,
+            "mae": 0.3531944262808468,
+            "signed_error": 0.03490714284044733
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14537464040865047,
+            "mae": 0.29143289218737495,
+            "signed_error": 0.07433391326910113
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.26444358043355426,
+            "mae": 0.39551540157234255,
+            "signed_error": 0.05523446052382788
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.31963381915934047,
+            "mae": 0.3550377177441458,
+            "signed_error": -0.010300033790885618
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.15280940036941756,
+            "mae": 0.30868570813308066,
+            "signed_error": 0.0732861765500647
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.21508021965855534,
+            "mae": 0.25657778420568256,
+            "signed_error": -0.003691901720699968
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.27411937419631105,
+            "mae": 0.37601097836958763,
+            "signed_error": 0.02809844183125382
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2902664707587147,
+            "mae": 0.3211553267951466,
+            "signed_error": 0.0064816482245260805
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.4205246925764044,
+            "mae": 0.46213915425435126,
+            "signed_error": 0.036938458207445984
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.27493280089744254,
+            "mae": 0.3967195287017856,
+            "signed_error": 0.028506137533663004
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16628485006427965,
+            "mae": 0.18142775432625785,
+            "signed_error": -0.012145964793550472
+          }
+        }
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 7755,
+      "training_seconds": 6.0146269565448165,
+      "wall_seconds": 7.207502375356853,
+      "latency_us": 53.9375,
+      "checkpoint_sha256": "2dd803a6c08b0a4d81878d82fae083a8739e92f29b12195830e4d47fd0ae5ab5",
+      "predictions_sha256": "a0701a6675ca1cc8cfbb3d924b4a6bdb214dce049698aba0bf554e92e000d0bc",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.254679321135169,
+              0.2805806862621774
+            ],
+            "mae": [
+              0.3332705272595661,
+              0.35143545717414326
+            ],
+            "signed_error": [
+              0.006986469719230077,
+              0.027640727921225426
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26104201468143334,
+              0.2877650369976787
+            ],
+            "mae": [
+              0.34651903824520547,
+              0.36432804022639925
+            ],
+            "signed_error": [
+              -0.02088158099152707,
+              -0.0001814101056474519
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.015056836126150542,
+              0.0007665315015514023
+            ],
+            "mae": [
+              -0.01886195049697692,
+              -0.00794608798162134
+            ],
+            "signed_error": [
+              0.021980446691878507,
+              0.03425184118074262
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "relative",
+      "category": "representation",
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 2,
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.17584014315920768,
+        "mae": 0.28090275741243365,
+        "signed_error": -0.013289463785812498
+      },
+      "validation": {
+        "mse": 0.26463278507586724,
+        "mae": 0.34198155143292597,
+        "signed_error": -0.014686755828053922
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.2704224397077568,
+            "mae": 0.34642025923489894,
+            "signed_error": -0.027881027661602224
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.258585570620128,
+            "mae": 0.33734538231896044,
+            "signed_error": -0.0009055207738402489
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.233051374864509,
+            "mae": 0.2527732154735934,
+            "signed_error": 0.0024227255931329205
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.32316341451012487,
+            "mae": 0.36715864469851334,
+            "signed_error": -0.031171719453160406
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2234660913650624,
+            "mae": 0.35173015922024076,
+            "signed_error": -0.006074784912268203
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.1628131449579647,
+            "mae": 0.3031575096906543,
+            "signed_error": 0.032368260325284254
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.23102406857598856,
+            "mae": 0.36333269477139823,
+            "signed_error": -0.0007742542553683992
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.3150416799239003,
+            "mae": 0.35297387723429924,
+            "signed_error": -0.0355982125803278
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.15779558000394855,
+            "mae": 0.31660785313021017,
+            "signed_error": 0.028894401006694947
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.22600419587233594,
+            "mae": 0.26165706105029835,
+            "signed_error": -0.006193965604967054
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.27194101306441304,
+            "mae": 0.3771898633609742,
+            "signed_error": -0.021995958187922424
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2763593002862019,
+            "mae": 0.31308384921559085,
+            "signed_error": -0.0020818673139097825
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.4151551839473756,
+            "mae": 0.46346510240718947,
+            "signed_error": 0.0011892806481616299
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2708421208792613,
+            "mae": 0.3953125173461099,
+            "signed_error": -0.011004640249129559
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16832261220396133,
+            "mae": 0.1824466020865754,
+            "signed_error": -0.029969918294615733
+          }
+        }
+      },
+      "selected_epoch": 5,
+      "epochs": 11,
+      "optimizer_steps": 7755,
+      "training_seconds": 5.888030584901571,
+      "wall_seconds": 7.065012917388231,
+      "latency_us": 54.1665,
+      "checkpoint_sha256": "96353bf25e6bb40a5e89047e6303d301e080d10e22e351749f94cf9ca786bfb9",
+      "predictions_sha256": "5fe79517f4416aad802815ace30107c4c99de0a2d7828023af808855c87d3eb4",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.25224394485908974,
+              0.27743747317894213
+            ],
+            "mae": [
+              0.33285564159429953,
+              0.3510025647059414
+            ],
+            "signed_error": [
+              -0.024556430443551196,
+              -0.00446301600123738
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26343264032251223,
+              0.2893470718646362
+            ],
+            "mae": [
+              0.3449975693253601,
+              0.3636321866116272
+            ],
+            "signed_error": [
+              -0.043765304841945955,
+              -0.023561055633303806
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.019342808440991222,
+              -0.0036480619943951077
+            ],
+            "mae": [
+              -0.017831025806100083,
+              -0.006596728572704649
+            ],
+            "signed_error": [
+              0.012897040319847584,
+              0.02487528434098826
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "relative",
+      "category": "representation",
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 2,
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.14930901785608794,
+        "mae": 0.25444413801467813,
+        "signed_error": 0.01080184635371734
+      },
+      "validation": {
+        "mse": 0.2681581105740885,
+        "mae": 0.33338839509331863,
+        "signed_error": 0.012004369537297116
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.27386160223491035,
+            "mae": 0.33969195661680385,
+            "signed_error": 0.00522235262492987
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.26220089215391934,
+            "mae": 0.32680441197323734,
+            "signed_error": 0.019088092715816036
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.24946430515633136,
+            "mae": 0.2519318410843438,
+            "signed_error": 0.009205334073453987
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.33296098227902887,
+            "mae": 0.3599472594781571,
+            "signed_error": 0.008043371696734575
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.21667209127835788,
+            "mae": 0.33908003018153066,
+            "signed_error": 0.01658249001599515
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.16797398758372048,
+            "mae": 0.30716617865195706,
+            "signed_error": 0.05775447922095903
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2656095837404088,
+            "mae": 0.3816867310361463,
+            "signed_error": 0.03898890993635481
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.31452644325187545,
+            "mae": 0.3367784238460496,
+            "signed_error": -0.006774293253648904
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.16630028464544502,
+            "mae": 0.3210106784346559,
+            "signed_error": 0.0482553935283254
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.24529099507948174,
+            "mae": 0.2612706051615401,
+            "signed_error": 0.006566656962744533
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2664322259634082,
+            "mae": 0.3630873157325819,
+            "signed_error": 0.010683910513512824
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2912141349390846,
+            "mae": 0.31253444365580296,
+            "signed_error": 0.01991006469688395
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.43870707323951685,
+            "mae": 0.4563128046176399,
+            "signed_error": 0.051132506056319735
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2717257914347669,
+            "mae": 0.3874536111469443,
+            "signed_error": 0.016952066483944442
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16490511815766581,
+            "mae": 0.17178907088566728,
+            "signed_error": -0.0186751192092197
+          }
+        }
+      },
+      "selected_epoch": 7,
+      "epochs": 13,
+      "optimizer_steps": 9165,
+      "training_seconds": 8.753578500356525,
+      "wall_seconds": 10.287386999931186,
+      "latency_us": 53.917,
+      "checkpoint_sha256": "1fae1f91625e8bb5ccf8cc9e4131d07080f548b3ec9de39e5ec23a5db1db7b1b",
+      "predictions_sha256": "df3f90aa82e6c810a3db2c39a8abdb5167039c18eae4083be52bbfcbbbfca55c",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.2557106900017144,
+              0.2812867298995696
+            ],
+            "mae": [
+              0.3247216991633707,
+              0.34257933320965755
+            ],
+            "signed_error": [
+              0.00169813301231538,
+              0.022311936551197124
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.2573971559038727,
+              0.2840807582637107
+            ],
+            "mae": [
+              0.33410183853984865,
+              0.3530088950513709
+            ],
+            "signed_error": [
+              -0.023485037556040436,
+              -0.002625294258467718
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.010947444971424834,
+              0.007316717570713696
+            ],
+            "mae": [
+              -0.015996376424396896,
+              -0.003798469012310366
+            ],
+            "signed_error": [
+              0.018463968325437115,
+              0.03184971219094922
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "relative-material",
+      "category": "representation",
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 3,
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.14811292736855855,
+        "mae": 0.25217394662647985,
+        "signed_error": 0.029804133613716408
+      },
+      "validation": {
+        "mse": 0.24093040095682872,
+        "mae": 0.31625999148450235,
+        "signed_error": 0.026702340695454036
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.24733929637519222,
+            "mae": 0.32323273654427825,
+            "signed_error": 0.017461601482911274
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.2342363980355179,
+            "mae": 0.30897705538509984,
+            "signed_error": 0.036354165424344255
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.214687642995855,
+            "mae": 0.2361638567717639,
+            "signed_error": 0.033122592828180794
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.2948552063438553,
+            "mae": 0.33705769780082395,
+            "signed_error": 0.025407069261461142
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.20196713656944001,
+            "mae": 0.3266383488584115,
+            "signed_error": 0.025536101973279927
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14829692800773628,
+            "mae": 0.2947018300946351,
+            "signed_error": 0.050254846651912474
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2619776940090739,
+            "mae": 0.38700377449184803,
+            "signed_error": 0.055240732706049935
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.27920040939722846,
+            "mae": 0.315883186281315,
+            "signed_error": 0.004126014656821042
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1546504244055541,
+            "mae": 0.3090935352394286,
+            "signed_error": 0.07577193995491852
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.19932959054984184,
+            "mae": 0.23689634217497443,
+            "signed_error": 0.029550602568123318
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.24919209817929874,
+            "mae": 0.3506928002013479,
+            "signed_error": 0.019640282657132167
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2525177417309519,
+            "mae": 0.2886514181289402,
+            "signed_error": 0.043206054590694015
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.36082366247280667,
+            "mae": 0.3954299677324029,
+            "signed_error": 0.04671762625847491
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.25208084530786623,
+            "mae": 0.374858052239452,
+            "signed_error": 0.03552126777680507
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.15371353960641465,
+            "mae": 0.1719265881650693,
+            "signed_error": 0.00036318437580484895
+          }
+        }
+      },
+      "selected_epoch": 7,
+      "epochs": 13,
+      "optimizer_steps": 9165,
+      "training_seconds": 7.387965123169124,
+      "wall_seconds": 8.753811500035226,
+      "latency_us": 64.0835,
+      "checkpoint_sha256": "6383940eb6c6e6a263e29c63b85a74a87134dd55fc77ea01e7bf6816f7884362",
+      "predictions_sha256": "4e3e9ffc3c9443735f85512c4de5f2c6fef58bb6fb6988785c6d7c162431d290",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.2289855494712925,
+              0.25328752223944234
+            ],
+            "mae": [
+              0.30759651301535024,
+              0.3250080028464271
+            ],
+            "signed_error": [
+              0.016835937842895332,
+              0.036297153945613676
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26104201468143334,
+              0.2877650369976787
+            ],
+            "mae": [
+              0.34651903824520547,
+              0.36432804022639925
+            ],
+            "signed_error": [
+              -0.02088158099152707,
+              -0.0001814101056474519
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.04114824484577732,
+              -0.02502050628851556
+            ],
+            "mae": [
+              -0.04501381165615327,
+              -0.03382774849192806
+            ],
+            "signed_error": [
+              0.03124203805943502,
+              0.04328089704272793
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "relative-material",
+      "category": "representation",
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 3,
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.1880305813631555,
+        "mae": 0.28935054375988434,
+        "signed_error": -0.00889789941719825
+      },
+      "validation": {
+        "mse": 0.24639048037241634,
+        "mae": 0.32950686484831604,
+        "signed_error": -0.01328056472049214
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.25729559036269944,
+            "mae": 0.33670077739149873,
+            "signed_error": -0.019728300346548478
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.23500024330863062,
+            "mae": 0.32199292236116966,
+            "signed_error": -0.006545993737637555
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2126065221273259,
+            "mae": 0.23814365472136223,
+            "signed_error": -0.005251367397017701
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.2857942159148738,
+            "mae": 0.3429100681070884,
+            "signed_error": -0.028212922399084985
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.22322308111365396,
+            "mae": 0.3506253624747456,
+            "signed_error": -0.0027679844726931054
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.13924844692594904,
+            "mae": 0.27528931001172763,
+            "signed_error": 0.02448939874397629
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.23946988686946585,
+            "mae": 0.37621824434687046,
+            "signed_error": -0.00717780857736136
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.29507950353862283,
+            "mae": 0.3426397763880474,
+            "signed_error": -0.036767641039077585
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.14042195287662848,
+            "mae": 0.2969692609985282,
+            "signed_error": 0.03953830986518017
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.19414588064956062,
+            "mae": 0.23643322610429318,
+            "signed_error": -0.011992335069370962
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.2623702150587547,
+            "mae": 0.3723063356713806,
+            "signed_error": -0.013239858425376467
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.24602090016874972,
+            "mae": 0.2906897319397053,
+            "signed_error": -0.014428942999031743
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.36406287600703996,
+            "mae": 0.42137870735196775,
+            "signed_error": -0.0022885851872804417
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.2576934129031907,
+            "mae": 0.3914150800349656,
+            "signed_error": -0.010344475967506818
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.16018135008607992,
+            "mae": 0.17232930631023677,
+            "signed_error": -0.024516791313226954
+          }
+        }
+      },
+      "selected_epoch": 4,
+      "epochs": 10,
+      "optimizer_steps": 7050,
+      "training_seconds": 6.350842623505741,
+      "wall_seconds": 7.465347166638821,
+      "latency_us": 64.292,
+      "checkpoint_sha256": "02ce2fabbe7e5d55b183324ce1d9453f7192978f6fc78dde85532d75796a33e8",
+      "predictions_sha256": "ef4907e0796f2e8fa2fbf8f65bd6fa763d5d2f135d185cd3726644bf9f81ba74",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.23521981100061837,
+              0.2581310553587705
+            ],
+            "mae": [
+              0.32117722536560417,
+              0.33765149231569846
+            ],
+            "signed_error": [
+              -0.02358565586434734,
+              -0.0035796586554856695
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26343264032251223,
+              0.2893470718646362
+            ],
+            "mae": [
+              0.3449975693253601,
+              0.3636321866116272
+            ],
+            "signed_error": [
+              -0.043765304841945955,
+              -0.023561055633303806
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.037517703247455174,
+              -0.021830864091408032
+            ],
+            "mae": [
+              -0.030292841417294117,
+              -0.019418641915730075
+            ],
+            "signed_error": [
+              0.014352984611129459,
+              0.025952005071825972
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "relative-material",
+      "category": "representation",
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 3,
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.16313899183393482,
+        "mae": 0.2670070943807384,
+        "signed_error": 0.032013369654385955
+      },
+      "validation": {
+        "mse": 0.2451954767420076,
+        "mae": 0.3221884029000064,
+        "signed_error": 0.03076006576762343
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.2514895938527922,
+            "mae": 0.32690817983018744,
+            "signed_error": 0.02283375782970114
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.23862135818080588,
+            "mae": 0.31725866095601407,
+            "signed_error": 0.039038985148899405
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.21073357863877795,
+            "mae": 0.2311489912778356,
+            "signed_error": 0.034000899896063
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.29425086106486287,
+            "mae": 0.34063291517212885,
+            "signed_error": 0.029643002840280663
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.21359509345565303,
+            "mae": 0.3386560059523757,
+            "signed_error": 0.03058792373723566
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14261784444522088,
+            "mae": 0.2854010171770137,
+            "signed_error": 0.06719037846719124
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.24494920437676657,
+            "mae": 0.37344264765136925,
+            "signed_error": 0.0688531596901591
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.28762524191176725,
+            "mae": 0.3248204269887626,
+            "signed_error": 0.005823274644536152
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.15333527735367114,
+            "mae": 0.31288808833143283,
+            "signed_error": 0.0822884423687069
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.1982408931611833,
+            "mae": 0.23613425315197345,
+            "signed_error": 0.03551821353284556
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.25753062117761255,
+            "mae": 0.3611847139256175,
+            "signed_error": 0.025673494247880044
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.2502591646720919,
+            "mae": 0.2878305248927844,
+            "signed_error": 0.04046207183278825
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.3663026335879411,
+            "mae": 0.40807905641162484,
+            "signed_error": 0.059583297309027276
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.25576055515154306,
+            "mae": 0.38165447906474265,
+            "signed_error": 0.04130022873943086
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.15827771959248196,
+            "mae": 0.17255466345148548,
+            "signed_error": -0.003513672122246741
+          }
+        }
+      },
+      "selected_epoch": 6,
+      "epochs": 12,
+      "optimizer_steps": 8460,
+      "training_seconds": 7.4749905820935965,
+      "wall_seconds": 8.779786790721118,
+      "latency_us": 63.7295,
+      "checkpoint_sha256": "c5be4be0c7c2c3ce96783e89c589f071ea6a30add49fdb1b10d83ef92d2154ce",
+      "predictions_sha256": "9078d30b87a76baeacf468bcbca9807aa909805b4bf9100a8278d4656b8c6634",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.23328909246744084,
+              0.25729859174782366
+            ],
+            "mae": [
+              0.3134871200651744,
+              0.330758866396469
+            ],
+            "signed_error": [
+              0.020945147567736466,
+              0.040373853561250145
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.2573971559038727,
+              0.2840807582637107
+            ],
+            "mae": [
+              0.33410183853984865,
+              0.3530088950513709
+            ],
+            "signed_error": [
+              -0.023485037556040436,
+              -0.002625294258467718
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.03352161663715985,
+              -0.01665456794844329
+            ],
+            "mae": [
+              -0.02704097392657664,
+              -0.015530984303614664
+            ],
+            "signed_error": [
+              0.03758050997965408,
+              0.05009954324955896
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "combined",
+      "category": "combination",
+      "seed": 42,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 3,
+        "seed": 42
+      },
+      "train": {
+        "mse": 0.1720414934101018,
+        "mae": 0.2741457540423814,
+        "signed_error": 0.021332331724787847
+      },
+      "validation": {
+        "mse": 0.2415842412651438,
+        "mae": 0.32084321691539386,
+        "signed_error": 0.02267479395187111
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.24810283690334536,
+            "mae": 0.32708899443561756,
+            "signed_error": 0.015206366403917976
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.23477565797637062,
+            "mae": 0.31431958839019775,
+            "signed_error": 0.030475463577458745
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.20758339548133115,
+            "mae": 0.23599887435286845,
+            "signed_error": 0.016109655639450146
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.2882730990733918,
+            "mae": 0.3384286105947741,
+            "signed_error": 0.01671919805268869
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.2119445331520116,
+            "mae": 0.3358341333376862,
+            "signed_error": 0.030413887072400832
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.13390059149599937,
+            "mae": 0.27552355933035794,
+            "signed_error": 0.06763175290748501
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2341182360640103,
+            "mae": 0.36560444642110995,
+            "signed_error": 0.04373823930741653
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.28425349542237294,
+            "mae": 0.32561794224660195,
+            "signed_error": -0.002197665533136703
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.15107295229134093,
+            "mae": 0.30847054509033917,
+            "signed_error": 0.0754800489137126
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.18659939761317612,
+            "mae": 0.2307737193781684,
+            "signed_error": 0.012109893123108032
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.25379773594304483,
+            "mae": 0.35912707994672544,
+            "signed_error": 0.026612643407666687
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.25345470524223884,
+            "mae": 0.29162388646339393,
+            "signed_error": 0.020719152165802203
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.35614610831063076,
+            "mae": 0.4072952931897636,
+            "signed_error": 0.046675312832543864
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.25261786249061663,
+            "mae": 0.3799438749239548,
+            "signed_error": 0.03474884328813235
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.1576040563144909,
+            "mae": 0.1715081194305094,
+            "signed_error": -0.011446867336402647
+          }
+        }
+      },
+      "selected_epoch": 11,
+      "epochs": 17,
+      "optimizer_steps": 11985,
+      "training_seconds": 9.575105293188244,
+      "wall_seconds": 11.281707582995296,
+      "latency_us": 64.083,
+      "checkpoint_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+      "predictions_sha256": "f19c7ee8d551dab4d8d86b59cb580936aaae1e64c2fe204fc72cc30991013325",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.22973302928254838,
+              0.2536828354130809
+            ],
+            "mae": [
+              0.31213427918278075,
+              0.32956549107308075
+            ],
+            "signed_error": [
+              0.013017378872292873,
+              0.032230534496356635
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26104201468143334,
+              0.2877650369976787
+            ],
+            "mae": [
+              0.34651903824520547,
+              0.36432804022639925
+            ],
+            "signed_error": [
+              -0.02088158099152707,
+              -0.0001814101056474519
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.04026627687216001,
+              -0.02481397221881669
+            ],
+            "mae": [
+              -0.04008586747897052,
+              -0.029521081009739554
+            ],
+            "signed_error": [
+              0.027739318521605442,
+              0.038814700396893644
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "combined",
+      "category": "combination",
+      "seed": 43,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 3,
+        "seed": 43
+      },
+      "train": {
+        "mse": 0.17472035389520804,
+        "mae": 0.27518778681722894,
+        "signed_error": -0.006117879651406006
+      },
+      "validation": {
+        "mse": 0.23990710665837695,
+        "mae": 0.31970443056365583,
+        "signed_error": -0.009059525074343476
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.24939262911621302,
+            "mae": 0.3280831988329543,
+            "signed_error": -0.01932249052825984
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.2299996092039829,
+            "mae": 0.31095292260317925,
+            "signed_error": 0.0016600008728235506
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.20836162228339775,
+            "mae": 0.23645714588336147,
+            "signed_error": 0.01000215873849311
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.28412748714478636,
+            "mae": 0.33319192547062704,
+            "signed_error": -0.0026844587438890387
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.21159567968367693,
+            "mae": 0.33780048823634296,
+            "signed_error": -0.02171293121295325
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14012901790255808,
+            "mae": 0.28113236758686905,
+            "signed_error": 0.022785576112682417
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.23701287215560365,
+            "mae": 0.35985770100986003,
+            "signed_error": 0.002343192243373017
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.2806443300752241,
+            "mae": 0.32205008683977804,
+            "signed_error": -0.02418930297720522
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.1523410026034368,
+            "mae": 0.31320376436489666,
+            "signed_error": 0.022595410592003123
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.1940255675086301,
+            "mae": 0.2347032942820885,
+            "signed_error": -0.0007297372366054135
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.25339646610301975,
+            "mae": 0.359171389641201,
+            "signed_error": -0.019291468217938874
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.24103135610816687,
+            "mae": 0.28324332123244345,
+            "signed_error": 0.011458920392863767
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.3500525039820858,
+            "mae": 0.4012108110529997,
+            "signed_error": 0.020187312250749934
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.252147468200562,
+            "mae": 0.3810803473420448,
+            "signed_error": -0.011590226110382256
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.1564012980929435,
+            "mae": 0.16933636657891718,
+            "signed_error": -0.021445745495633068
+          }
+        }
+      },
+      "selected_epoch": 10,
+      "epochs": 16,
+      "optimizer_steps": 11280,
+      "training_seconds": 8.730493247974664,
+      "wall_seconds": 10.3573761661537,
+      "latency_us": 64.6875,
+      "checkpoint_sha256": "97a1d18524de0d5eac6cca9a38b8dce3446e06d73a10f53f1b012fbc122318c7",
+      "predictions_sha256": "8e9486c9635c9d4bbb94233f1e478d25695f1433025bdf0f26fa50986febbe87",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.22827731745771376,
+              0.25183973626613604
+            ],
+            "mae": [
+              0.31118010229190085,
+              0.3283453060707777
+            ],
+            "signed_error": [
+              -0.01887987221584542,
+              0.000858853730240019
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.26343264032251223,
+              0.2893470718646362
+            ],
+            "mae": [
+              0.3449975693253601,
+              0.3636321866116272
+            ],
+            "signed_error": [
+              -0.043765304841945955,
+              -0.023561055633303806
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.0434955524797387,
+              -0.028678956070202932
+            ],
+            "mae": [
+              -0.039872939019714955,
+              -0.02937951750476582
+            ],
+            "signed_error": [
+              0.0189818951813722,
+              0.030115924554451286
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    },
+    {
+      "name": "combined",
+      "category": "combination",
+      "seed": 44,
+      "config": {
+        "hidden": [
+          128,
+          64
+        ],
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001,
+        "dropout": 0,
+        "batch_size": 256,
+        "epochs": 40,
+        "patience": 6,
+        "device": "cpu",
+        "evidence": "fixed-data-development",
+        "feature_version": 3,
+        "seed": 44
+      },
+      "train": {
+        "mse": 0.17556017212852792,
+        "mae": 0.2752144208497303,
+        "signed_error": -0.0075375418421809405
+      },
+      "validation": {
+        "mse": 0.24078840017962916,
+        "mae": 0.31859368404973754,
+        "signed_error": -0.011287172853560585
+      },
+      "breakdown": {
+        "side": {
+          "black": {
+            "positions": 5001,
+            "games": 2063,
+            "sparse": false,
+            "mse": 0.24813854898125012,
+            "mae": 0.3245281285733285,
+            "signed_error": -0.018148658251079978
+          },
+          "white": {
+            "positions": 4788,
+            "games": 2056,
+            "sparse": false,
+            "mse": 0.2331112710741767,
+            "mae": 0.3123952385479667,
+            "signed_error": -0.004120445937730492
+          }
+        },
+        "move_count_phase": {
+          "endgame": {
+            "positions": 1571,
+            "games": 819,
+            "sparse": false,
+            "mse": 0.2080853478415794,
+            "mae": 0.23267633084475728,
+            "signed_error": 0.009070470017238142
+          },
+          "middlegame": {
+            "positions": 3891,
+            "games": 1970,
+            "sparse": false,
+            "mse": 0.2870472023436234,
+            "mae": 0.334116029040683,
+            "signed_error": -0.02612911251389177
+          },
+          "opening": {
+            "positions": 4327,
+            "games": 2193,
+            "sparse": false,
+            "mse": 0.21106422546342266,
+            "mae": 0.33582934791043895,
+            "signed_error": -0.005331977506131919
+          }
+        },
+        "target_magnitude": {
+          "[.25,.5)": {
+            "positions": 392,
+            "games": 360,
+            "sparse": false,
+            "mse": 0.14541659853293368,
+            "mae": 0.29124531068492265,
+            "signed_error": 0.00485001496937392
+          },
+          "[.5,.75)": {
+            "positions": 411,
+            "games": 379,
+            "sparse": false,
+            "mse": 0.2369512019656996,
+            "mae": 0.3656777093864506,
+            "signed_error": 0.00846619131678031
+          },
+          "[.75,1]": {
+            "positions": 6447,
+            "games": 2072,
+            "sparse": false,
+            "mse": 0.2841195538724943,
+            "mae": 0.324102442575661,
+            "signed_error": -0.02614925757394018
+          },
+          "[0,.25)": {
+            "positions": 2539,
+            "games": 1371,
+            "sparse": false,
+            "mse": 0.14610816656542203,
+            "mae": 0.3012065480627307,
+            "signed_error": 0.020761448608308974
+          }
+        },
+        "nonpawn_material": {
+          "0-8": {
+            "positions": 1768,
+            "games": 761,
+            "sparse": false,
+            "mse": 0.1908852383260135,
+            "mae": 0.2318632775733676,
+            "signed_error": 0.002062703037886813
+          },
+          "17+": {
+            "positions": 5831,
+            "games": 2099,
+            "sparse": false,
+            "mse": 0.25423048233547013,
+            "mae": 0.3577968408318239,
+            "signed_error": -0.019658412935587077
+          },
+          "9-16": {
+            "positions": 2190,
+            "games": 1186,
+            "sparse": false,
+            "mse": 0.24528520799080908,
+            "mae": 0.28423101348073126,
+            "signed_error": 0.00022429762233780126
+          }
+        },
+        "material_imbalance": {
+          "1-3": {
+            "positions": 1710,
+            "games": 969,
+            "sparse": false,
+            "mse": 0.35509452242624706,
+            "mae": 0.3990054790611373,
+            "signed_error": 0.017449985202864813
+          },
+          "<=1": {
+            "positions": 5079,
+            "games": 1973,
+            "sparse": false,
+            "mse": 0.25171032449120206,
+            "mae": 0.3790822028985126,
+            "signed_error": -0.018002860075442783
+          },
+          ">3": {
+            "positions": 3000,
+            "games": 1384,
+            "sparse": false,
+            "mse": 0.15714309263956408,
+            "mae": 0.1703518984822634,
+            "signed_error": -0.016297694479076502
+          }
+        }
+      },
+      "selected_epoch": 10,
+      "epochs": 16,
+      "optimizer_steps": 11280,
+      "training_seconds": 9.209807998500764,
+      "wall_seconds": 10.830444750376046,
+      "latency_us": 64.042,
+      "checkpoint_sha256": "9195fbc1498503f117406544a7b665c903a27af9fe925cb0b267c1d8f1d5bf0e",
+      "predictions_sha256": "63888589a68ea75035e57ed392e4668ec364055a86c99fc92a03b7ab5fa4c802",
+      "provenance": {
+        "commit": "5b9882eeb9df8e431bb043dc45ea455cbb349755",
+        "dirty": true,
+        "python": "3.10.6",
+        "platform": "macOS-15.6.1-arm64-arm-64bit"
+      },
+      "bootstrap": {
+        "intervals": {
+          "supervised": {
+            "mse": [
+              0.22927889617358863,
+              0.2532450101577939
+            ],
+            "mae": [
+              0.31007580863175443,
+              0.32725897687583383
+            ],
+            "signed_error": [
+              -0.020961747791781456,
+              -0.0018335625414868206
+            ]
+          },
+          "reference": {
+            "mse": [
+              0.2573971559038727,
+              0.2840807582637107
+            ],
+            "mae": [
+              0.33410183853984865,
+              0.3530088950513709
+            ],
+            "signed_error": [
+              -0.023485037556040436,
+              -0.002625294258467718
+            ]
+          }
+        },
+        "paired_supervised_minus_baseline": {
+          "reference": {
+            "mse": [
+              -0.03745215733602514,
+              -0.02070686605729183
+            ],
+            "mae": [
+              -0.030400429558847558,
+              -0.01885078523237135
+            ],
+            "signed_error": [
+              -0.004150287308166063,
+              0.008031022943560288
+            ]
+          }
+        },
+        "resamples": 2000,
+        "seed": 2026,
+        "unit": "source game",
+        "estimand": "position-weighted metrics; games sampled with replacement"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "name": "combined",
+      "category": "combination",
+      "mean_mse": 0.24075991603438332,
+      "seed_sd": 0.0008389300520314815,
+      "relative_reduction": 0.11969864252363649,
+      "improving_seeds": 3,
+      "latency_us": 64.27083333333333,
+      "promising": true
+    },
+    {
+      "name": "relative-material",
+      "category": "representation",
+      "mean_mse": 0.2441721193570842,
+      "seed_sd": 0.0028702895427271504,
+      "relative_reduction": 0.10722244936642522,
+      "improving_seeds": 3,
+      "latency_us": 64.035,
+      "promising": true
+    },
+    {
+      "name": "smaller-lr",
+      "category": "optimization",
+      "mean_mse": 0.26325946211368184,
+      "seed_sd": 0.0004672980772004385,
+      "relative_reduction": 0.03743253576282546,
+      "improving_seeds": 3,
+      "latency_us": 42.763666666666666,
+      "promising": true
+    },
+    {
+      "name": "relative",
+      "category": "representation",
+      "mean_mse": 0.266619864057412,
+      "seed_sd": 0.0018050118845154511,
+      "relative_reduction": 0.0251457463277045,
+      "improving_seeds": 3,
+      "latency_us": 54.007000000000005,
+      "promising": true
+    },
+    {
+      "name": "adaptive-lr",
+      "category": "optimization",
+      "mean_mse": 0.27246918331330766,
+      "seed_sd": 0.003086451405312605,
+      "relative_reduction": 0.0037586160857159268,
+      "improving_seeds": 1,
+      "latency_us": 43.861,
+      "promising": false
+    },
+    {
+      "name": "reference",
+      "category": "reference",
+      "mean_mse": 0.2734971541161662,
+      "seed_sd": 0.0028730594316677014,
+      "relative_reduction": 0.0,
+      "improving_seeds": 0,
+      "latency_us": 43.32633333333333,
+      "promising": false
+    }
+  ],
+  "combination": {
+    "name": "combined",
+    "category": "combination",
+    "settings": {
+      "learning_rate": 0.0003,
+      "feature_version": 3
+    },
+    "parents": [
+      "smaller-lr",
+      "relative-material"
+    ]
+  },
+  "wall_seconds": 363.14276479231194,
+  "training_seconds": 142.42341141682118,
+  "paid_cost_cad": 0
+}

@@ -1,0 +1,10 @@
+{
+  "canonical_cross_split_overlaps": 0,
+  "positions": 190091,
+  "split_counts": [
+    180302,
+    9789
+  ],
+  "training_records_sha256": "da45051e405843e6f80159edbab1ce5defc51f1d859e88378ec80c7223b5770b",
+  "validation_records_sha256": "d292fe09d65213f9ea0097850bc0a412a4346762f94acb56f7bff6165c3c6ee9"
+}

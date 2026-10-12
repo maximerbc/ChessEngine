@@ -52,3 +52,13 @@ git push -u origin feat/supervised-200k
 ```
 
 Target `main` after diagnostics merges (or temporarily target `feat/supervised-diagnostics`). Preserve merge-commit ancestry to avoid repeating the diagnostics diff. Title: **Expand supervised training to 200k positions**. Full datasets and trial checkpoints stay local; the private repository receives code, configs and compact evidence only.
+
+## Follow-up: fixed-data improvements
+
+`feat/fixed-data-improvements` follows `feat/supervised-200k`. Merge the 200k PR first, then target this PR at `main` (or temporarily use the 200k branch as its base). Preserve merge-commit ancestry. User push:
+
+```bash
+git push -u origin feat/fixed-data-improvements
+```
+
+Title: **Improve supervised fitting with fixed training data**. The seventh draft in `docs/pr-descriptions.md` records the actual experiment results. No checkpoint or deployment replacement is included. Wait for remote checks before merging.

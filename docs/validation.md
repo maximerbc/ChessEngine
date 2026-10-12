@@ -59,3 +59,13 @@ Both health probes now retry all curl errors, with a 5-second per-attempt timeou
 - Visually inspected both generated figures and the HTML report. The original diagnostics report, public website assets and released checkpoint files remain unchanged.
 - Expanded corpus: 180,302 train, 9,789 validation, 9,912 unused test. Labeling wall time 822.2 seconds; expanded training/diagnostics wall time 216.6 seconds. C$0 paid compute.
 - Limitations: same historical source, repeated development validation use, three training seeds and unequal optimizer-update budgets. No claim of stronger chess or deployment readiness for a new checkpoint; controlled matches and fresh confirmatory data remain future work.
+
+## Fixed-data improvements (2026-10-11)
+
+- Full local Python suite: 52 tests passed; Ruff and whitespace checks passed. The tiny study covers all five configurations and the conditional combination path. Additional assertions verify asymmetric castling/en-passant mapping and unchanged targets across all trial versions.
+- CPU resume reproduces uninterrupted model weights exactly for all three feature versions with an active scheduler. Export parity, canonical leakage rejection, mismatch rejection and experimental-feature RL guards pass.
+- A pre-study smoke test caught a NumPy-boolean JSON serialization failure in summary generation. It was fixed and retested before the protocol commit and any full experiment.
+- Scientific implementation/configuration frozen at `5b9882e` before running the full study. Raw predictions and trial weights are ignored; released models, public assets and final-test data remain unchanged.
+- Completed 18 CPU runs. Historical references reproduced exactly (zero weight differences); no canonical train/validation overlap. Combined relative/material features and LR 0.0003 achieved mean MSE 0.240760, an 11.97% reduction; all three paired source-game intervals versus reference are below zero. Adaptive LR did not meet the development criterion.
+- Independently verified all 18 checkpoint/prediction checksums, recomputed validation MSE from saved predictions, checked identical target/game arrays, subgroup position totals, optimizer-step totals, final ranking and frozen dataset/code hashes. Visually inspected both figures and opened the HTML report in the browser.
+- Final local suite on 2026-10-12: 52 passed. Remote GitHub CI remains pending the user push. Epoch work 142.4 seconds, full invocation 363.1 seconds, C$0. Repeated validation selection, unequal compute and slower experimental encoding limit interpretation; no claim of stronger play.

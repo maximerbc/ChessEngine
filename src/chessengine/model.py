@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import numpy as np
-from .features import encode, FEATURE_SIZE, FEATURE_VERSION
+from .features import encode, FEATURE_VERSION, feature_size
 from .common import digest
 
 CHECKPOINT_VERSION = 1
@@ -15,11 +15,11 @@ class NumpyEvaluator:
         with np.load(path, allow_pickle=False) as data:
             self.metadata = json.loads(str(data["metadata"]))
             if (
-                self.metadata["feature_version"] != FEATURE_VERSION
-                or self.metadata["format_version"] != CHECKPOINT_VERSION
+                self.metadata["format_version"] != CHECKPOINT_VERSION
             ):
                 raise ValueError("Unsupported checkpoint/feature schema")
-            widths = [FEATURE_SIZE, *self.metadata["hidden"], 1]
+            self.feature_version = self.metadata['feature_version']
+            widths = [feature_size(self.feature_version), *self.metadata["hidden"], 1]
             self.layers = []
             for i, (left, right) in enumerate(zip(widths, widths[1:])):
                 w, b = data[f"w{i}"].copy(), data[f"b{i}"].copy()
@@ -40,21 +40,23 @@ class NumpyEvaluator:
         return x.squeeze(-1)
 
     def __call__(self, board):
-        return float(self.batch(encode(board)))
+        return float(self.batch(encode(board, self.feature_version)))
 
 
-def build_model(hidden=(128, 64), dropout=0.0):
+def build_model(hidden=(128, 64), dropout=0.0, feature_version=1):
     import torch.nn as nn
 
     if not 0 <= dropout < 1:
         raise ValueError("Dropout must be in [0, 1)")
-    widths = [FEATURE_SIZE, *hidden, 1]
+    widths = [feature_size(feature_version), *hidden, 1]
     layers = []
     for i, (a, b) in enumerate(zip(widths, widths[1:])):
         layers += [nn.Linear(a, b), nn.ReLU() if i < len(widths) - 2 else nn.Tanh()]
         if dropout and i < len(widths) - 2:
             layers.append(nn.Dropout(dropout))
-    return nn.Sequential(*layers)
+    model = nn.Sequential(*layers)
+    model.feature_version = feature_version
+    return model
 
 
 def export(model, path, metadata):
@@ -64,7 +66,10 @@ def export(model, path, metadata):
     for i, layer in enumerate(m for m in model if isinstance(m, nn.Linear)):
         arrays[f"w{i}"] = layer.weight.detach().cpu().numpy()
         arrays[f"b{i}"] = layer.bias.detach().cpu().numpy()
-    metadata = {**metadata, "feature_version": FEATURE_VERSION, "format_version": CHECKPOINT_VERSION}
+    version = getattr(model, 'feature_version', FEATURE_VERSION)
+    if metadata.get('feature_version', version) != version:
+        raise ValueError('Model/metadata feature mismatch')
+    metadata = {**metadata, "feature_version": version, "format_version": CHECKPOINT_VERSION}
     arrays["metadata"] = np.array(json.dumps(metadata))
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(path, **arrays)
@@ -74,7 +79,8 @@ def load_export(path):
     import torch
 
     evaluator = NumpyEvaluator(path)
-    model = build_model(evaluator.metadata["hidden"], evaluator.metadata.get("config", {}).get("dropout", 0))
+    model = build_model(evaluator.metadata["hidden"], evaluator.metadata.get("config", {}).get("dropout", 0),
+                        evaluator.feature_version)
     with torch.no_grad():
         for layer, (w, b) in zip((m for m in model if isinstance(m, torch.nn.Linear)), evaluator.layers):
             layer.weight.copy_(torch.from_numpy(w))
