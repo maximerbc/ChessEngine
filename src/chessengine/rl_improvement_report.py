@@ -5,7 +5,7 @@ import shutil
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from .common import read_json
+from .common import read_json, write_json
 from .diagnostics_report import table
 
 
@@ -40,6 +40,7 @@ def generate(source, output):
              f"{x['final']['score']:.2%}",str(x['final']['ci95']),
              f"{x['final']['wins']}/{x['final']['draws']}/{x['final']['losses']}",f"{x['equal-time']['score']:.2%}"]
             for x in r['seeds']])
+        curves, search_stats = [], []
         fig,axes=plt.subplots(1,2,figsize=(10,4),layout='constrained')
         for x in r['seeds']:
             h=x['training']['history']
@@ -48,6 +49,18 @@ def generate(source, output):
             for batch in decision['development_batches']:
                 summary=read_json(source/f"seed-{x['seed']}/development-{batch}/summary.json")
                 scores.append(summary['score'])
+                curves.append(dict(seed=x['seed'],batch=batch,**summary))
+            for phase in ['selfplay','final','equal-time']:
+                if phase=='selfplay':
+                    games=[g for path in sorted((source/f"seed-{x['seed']}/training").glob('games-*.json'))
+                           for g in read_json(path)]
+                else:
+                    games=read_json(source/f"seed-{x['seed']}/{phase}/matches.json")['games']
+                count=sum(g['searched_moves'] for g in games)
+                search_stats.append(dict(seed=x['seed'],phase=phase,searched_moves=count,
+                                         depth_one_fraction=sum(g['depth_one_moves'] for g in games)/count if count else None,
+                                         mean_completed_depth=sum(g['depth_sum'] for g in games)/count if count else None,
+                                         nodes=sum(g['nodes'] for g in games)))
             axes[1].plot([b*decision['games_per_batch'] for b in decision['development_batches']],scores,marker='o',label=str(x['seed']))
         axes[0].set(xlabel='Self-play games',ylabel='Outcome training MSE',title='Changing self-play distribution')
         axes[1].set(xlabel='Self-play games',ylabel='Development match score',title='Checkpoint selection evidence')
@@ -56,11 +69,17 @@ def generate(source, output):
             ax.legend(title='RL seed')
         fig.savefig(output/'learning.png',dpi=160)
         plt.close(fig)
+        write_json(output/'development-curves.json',curves)
+        write_json(output/'search-statistics.json',search_stats)
         html+='<img src="learning.png" alt="RL training loss and development playing scores">'
         html+=f"<p>Final move-cap adjudications: {a['capped_games']}/{a['games']}; uncapped opening pairs across all seeds: {a['uncapped_pairs']}. Uncapped score: {a['uncapped_score']}. Assigning all capped games losses or wins gives score bounds {a['cap_score_bounds']}.</p>"
         html+='<h2>Teacher agreement is a separate diagnostic</h2>'
         html+=table(['Model','Validation Stockfish MSE','MAE'],[[name,f"{v['mse']:.6f}",f"{v['mae']:.6f}"] for name,v in r['teacher_agreement'].items()])
         html+='<p>These teacher errors are measured after selection and cannot choose RL checkpoints. Outcome training MSE uses actual self-play returns and is not comparable to teacher-target MSE. A lower outcome loss can reflect the changing game distribution rather than stronger play.</p>'
+        html+='<h2>Search work</h2>'
+        html+=table(['Seed','Phase','Searched moves','Depth-one fraction','Mean completed depth','Nodes'],
+                    [[x['seed'],x['phase'],x['searched_moves'],x['depth_one_fraction'],x['mean_completed_depth'],x['nodes']]
+                     for x in search_stats])
         html+='<h2>Generation and update costs</h2>'
         html+=table(['Seed','Generated','Completed','Truncated','Generation seconds','Update seconds'],[
             [x['seed'],x['training']['history'][-1]['games_total'],

@@ -1,0 +1,29 @@
+[
+  {
+    "nodes": 128,
+    "games": 20,
+    "truncated": 0,
+    "searched_moves": 1753,
+    "depth_one_moves": 1744,
+    "mean_game_seconds": 3.463951008254662,
+    "p90_plies": 126.7000000000001
+  },
+  {
+    "nodes": 256,
+    "games": 20,
+    "truncated": 0,
+    "searched_moves": 2117,
+    "depth_one_moves": 2117,
+    "mean_game_seconds": 8.745868477178737,
+    "p90_plies": 185.90000000000003
+  },
+  {
+    "nodes": 512,
+    "games": 20,
+    "truncated": 0,
+    "searched_moves": 1982,
+    "depth_one_moves": 1982,
+    "mean_game_seconds": 15.362637070938945,
+    "p90_plies": 163.80000000000004
+  }
+]

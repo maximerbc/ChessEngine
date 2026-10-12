@@ -44,7 +44,7 @@
 - Report frozen-checkpoint training error separately from online training loss. Preserve per-seed evidence and whole-game bootstrap uncertainty; development improvements do not establish stronger play.
 
 ## Averaging and RL follow-up
-- The bounded averaging study did not meet the 2% adoption criterion. The stronger RL study initializes every seed from fixed-data combined seed 42, not the best seed or the prediction ensemble.
+- Averaging adoption requires at least 2% lower mean MSE and two improving seeds. The stronger RL study uses seed 42 of the qualifying supervised configuration as the common initialization; never choose the best seed or initialize RL from the prediction ensemble. Record the actual selection and results in the study evidence.
 - RL improvement uses a quality-gated 128/256/512-node pilot and a persisted 12-hour local allowance. Do not relax quality thresholds or extend compute silently.
 - Fresh final openings exclude corpus and old reserved source games/canonical positions. Complete all development selections before any new final matches. Teacher-validation error is secondary and cannot select RL checkpoints.
 - No new supervised search precedes this RL study. Released models remain unchanged.

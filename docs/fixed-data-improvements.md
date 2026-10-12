@@ -17,7 +17,7 @@ Feature v1 retains its original 841 inputs and inference behavior. Feature v2 ch
 
 Feature v3 appends 12 values: five own and five opponent piece counts divided by starting counts (8,2,2,2,1), total non-pawn phase units divided by 24, and own-minus-opponent material divided by 40. Piece values remain (1,3.2,3.3,5,9); phase units are (0,1,1,2,4). Promoted material is not clipped. The extra 12 inputs add 1,536 first-layer weights, so this is not an identical-parameter-count comparison.
 
-Metadata dispatches the encoder and validates dimensions. Existing checkpoints need no conversion. Experimental v2/v3 models are rejected by RL entry points. Released checkpoints and public assets remain untouched.
+Metadata dispatches the encoder and validates dimensions. Existing checkpoints need no conversion. At the time of this study, experimental v2/v3 models were rejected by RL entry points. The subsequent approved RL-improvement study adds v3 support with separate tests; v2 remains rejected. Released checkpoints and public assets remain untouched.
 
 ## Evidence and reproducibility
 

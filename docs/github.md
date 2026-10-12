@@ -66,3 +66,7 @@ Title: **Improve supervised fitting with fixed training data**. The seventh draf
 ## Averaging follow-up
 
 Merge fixed-data improvements first. Push `feat/supervised-averaging` and use draft 8 in `docs/pr-descriptions.md`, titled **Compare supervised averaging methods**. The subsequent `feat/rl-improvement-study` branch builds on this work. Target `main` after the parent merges; preserve merge ancestry. The user handles pushes.
+
+## Stronger RL follow-up
+
+`feat/rl-improvement-study` builds on `feat/supervised-averaging`. Merge averaging first; then target `main` with **Run a quality-gated self-play study**. The user pushes each branch. Do not merge or promote model checkpoints based on an in-progress run: the report distinguishes completed, budget-exhausted and pilot-rejected studies. Released assets are unchanged.

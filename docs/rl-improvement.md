@@ -23,3 +23,15 @@ Evaluate middle (ceiling of half the batch count) and final checkpoints on all 4
 Primary aggregate: mean score of fixed RL seeds 42/43/44, bootstrapping the same opening pairs jointly across seeds 10,000 times. Report individual seed intervals and seed SD separately. Lower interval >50% supports improvement under this protocol; an interval crossing 50% is inconclusive. Report caps as draws plus uncapped-pair and pessimistic/optimistic sensitivity. Teacher-validation MSE is computed only after all selection and never controls it.
 
 No new final labels, paid resources, public checkpoints or deployment changes. Do not conflate this study with the old 60-game/48-node study or isolate a causal effect of one changed setting.
+
+## Executed pilot and main-run launch (2026-10-12)
+
+All 60 pilot games finished without truncation. Depth-one completion was 99.49%, 100% and 100% at 128, 256 and 512 nodes, respectively. Mean game times were 3.46, 8.75 and 15.36 seconds. The frozen decision selected **1,000 games per seed, ten batches of 100, at 128 nodes**, with an 8.71-hour total forecast including the safety margin. Higher budgets did not fit while preserving the target game count.
+
+The fresh final set contains 200 unique source games and canonical positions. An independent metadata-only audit confirmed zero source-game/canonical overlaps with the full supervised corpus or old reserved groups and verified the saved checksum. These checks do not inspect final match outcomes.
+
+The main local run has started. Its results and playing-strength conclusion remain pending; the pilot establishes feasibility only. Raw resumable progress is in `runs/rl-improvement`, excluded from Git. Do not launch a second runner while one is active. After completion, generate compact evidence with:
+
+```bash
+MPLCONFIGDIR=/private/tmp/chess-rl-mpl .venv/bin/python -m chessengine.rl_improvement_report runs/rl-improvement docs/experiments/rl-improvement
+```
