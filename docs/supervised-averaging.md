@@ -15,3 +15,13 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m chessengine.averagi
 MSE remains teacher-target agreement, not chess strength. Bootstrap 2,000 source games jointly for paired comparisons. The ensemble represents one predictor, not three independent replicates. Validation-selection bias remains; final-test data and released models are untouched. Averaging source histories/resume tensors are local trusted artifacts.
 
 Next: proceed directly to the approved RL pilot, regardless of the averaging result. No additional architecture or hyperparameter search.
+
+## Completed evidence
+
+All three ordinary trajectories reproduced exactly (maximum weight/loss delta zero). Mean ordinary MSE 0.240760; mean weight-average MSE 0.236791, a 1.648% reduction with all three seeds improving. This does **not** meet the predefined 2% threshold: do not adopt averaged weights for RL. The fixed common RL initialization is `runs/fixed-data-improvements/combined-42/best.npz`.
+
+The prediction ensemble achieved MSE 0.226863, 5.772% below mean member MSE. Median per-position inference including encoding was approximately 193 microseconds versus 65 for one member. The ensemble is a diagnostic, not a selected RL model. No seed-level uncertainty is inferred from this single ensemble.
+
+Full local invocation: 230.8 seconds; paid compute C$0. All seven saved prediction arrays were independently checked against reported MSE and their artifact checksum. Both figures were visually inspected. The local suite passed 55 tests before the separate RL changes. A tiny-study check initially used an unnecessarily strict 1e-10 cross-runtime MSE tolerance; NumPy/PyTorch differed by 3.6e-10. It was corrected to the approved 1e-6 tolerance before protocol commit and full training. Ordinary trajectories still reproduced exactly.
+
+[Read the comparison report](experiments/supervised-averaging/index.html). The next work is the RL pilot, not another supervised search.

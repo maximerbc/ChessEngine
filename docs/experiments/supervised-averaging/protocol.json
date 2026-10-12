@@ -1,0 +1,40 @@
+{
+  "identity": {
+    "config": {
+      "source": "runs/supervised-200k/subset-all.jsonl",
+      "previous": "runs/fixed-data-improvements",
+      "output": "runs/supervised-averaging",
+      "expected_counts": [
+        180302,
+        9789
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "average_start_epoch": 8,
+      "resamples": 2000,
+      "bootstrap_seed": 2026,
+      "tolerance": 1e-06
+    },
+    "source_sha256": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+    "previous_sha256": "df006866c8001c050ede53396038a2b7d2e3ed4b4457cfe2191bc63ae2ac25c0",
+    "code": {
+      "averaging": "4720a4a2f393b3037fe709b49f72714df5949a83185bdfda2e08def1be9660e8",
+      "train": "00b512b53402f015eb6c11e1886ac075c08f55f9419ea5fe18fdb0c3fae87cfb",
+      "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+      "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+      "diagnostics": "28323081e93f1c92e0d865e3bb2e5ef55747f6e3b1b5fa5990341507bed39588",
+      "fixed_data": "86ec2238284c6e26794928adbc976c00fe086fda4b2106d4aef78fca2928348e",
+      "data": "8577aee898a8a56844d7170f7f3626fa5c6b9652a00f52ecff222e69e8870c5f",
+      "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a"
+    }
+  },
+  "provenance": {
+    "commit": "0349a9e38d843109b14b983355a88bd533d494e0",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}
