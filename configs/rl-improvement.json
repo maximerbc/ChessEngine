@@ -1,0 +1,31 @@
+{
+  "averaging_results": "runs/supervised-averaging/results.json",
+  "output": "runs/rl-improvement",
+  "old_openings": "configs/openings.json",
+  "corpus": "data/expanded-200k-labeled.jsonl",
+  "development_data": "runs/supervised-200k/subset-all.jsonl",
+  "archive": "data/lichess-2013-01.pgn.zst",
+  "seeds": [42, 43, 44],
+  "pilot_seed": 2027,
+  "nodes": [128, 256, 512],
+  "pilot_games": 20,
+  "game_targets": [1000, 500, 250],
+  "forecast_seconds": 32400,
+  "allowance_seconds": 43200,
+  "development_pairs": 40,
+  "final_pairs": 200,
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 2026,
+  "max_plies": 512,
+  "equal_time_ms": 100,
+  "training": {
+    "learning_rate": 0.0001,
+    "batch_size": 256,
+    "positions_per_game": 32,
+    "qdepth": 2,
+    "epsilon": 0.1,
+    "exploration_plies": 20,
+    "device": "cpu",
+    "evidence": "rl-improvement-development"
+  }
+}

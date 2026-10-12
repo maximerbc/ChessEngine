@@ -18,22 +18,30 @@ def outcome_value(winner, turn):
     return 0.0 if winner is None else 1.0 if winner == turn else -1.0
 
 
-def play_game(evaluator, opening, config, rng):
-    if getattr(evaluator, 'feature_version', 1) != 1:
-        raise ValueError('RL currently supports feature version 1 only')
+def play_game(evaluator, opening, config, rng, budget=None):
+    version = getattr(evaluator, 'feature_version', 1)
+    if version not in (1, 3):
+        raise ValueError('RL supports feature versions 1 and 3 only')
     board = restore(opening)
     root = board.copy(stack=True)
     samples, played = [], []
+    searched, depth_one, total_depth, total_nodes = 0, 0, 0, 0
     started = time.perf_counter()
     for ply in range(config["max_plies"]):
+        if budget:
+            budget.check()
         if board.is_game_over(claim_draw=True):
             break
-        samples.append((encode(board), board.turn))
+        samples.append((encode(board, version), board.turn))
         if ply < config["exploration_plies"] and rng.random() < config["epsilon"]:
             move = rng.choice(list(board.legal_moves))
         else:
             result = Search(evaluator, nodes=config["nodes"], qdepth=config.get("qdepth", 2)).run(board)
             move = chess.Move.from_uci(result.move)
+            searched += 1
+            depth_one += result.depth >= 1
+            total_depth += result.depth
+            total_nodes += result.nodes
         board.push(move)
         played.append(move)
     outcome = board.outcome(claim_draw=True)
@@ -49,6 +57,8 @@ def play_game(evaluator, opening, config, rng):
         "seconds": time.perf_counter() - started,
         "opening_id": opening.get("id", json_hash(root.fen())),
         "termination": game.headers["Termination"],
+        "searched_moves": searched, "depth_one_moves": depth_one,
+        "depth_sum": total_depth, "nodes": total_nodes,
     }
     if outcome is None or not samples:
         return result, None
@@ -58,9 +68,9 @@ def play_game(evaluator, opening, config, rng):
     )
 
 
-def selfplay(checkpoint, openings_path, output, config, resume=False):
-    if NumpyEvaluator(checkpoint).feature_version != 1:
-        raise ValueError('RL currently supports feature version 1 only')
+def selfplay(checkpoint, openings_path, output, config, resume=False, budget=None):
+    if NumpyEvaluator(checkpoint).feature_version not in (1, 3):
+        raise ValueError('RL supports feature versions 1 and 3 only')
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     seed_all(config["seed"])
@@ -86,7 +96,7 @@ def selfplay(checkpoint, openings_path, output, config, resume=False):
     )
     history, start_batch, games_total = [], 0, 0
     state_path = output / "resume.pt"
-    if resume:
+    if resume and state_path.exists():
         state = trusted_load(state_path)
         if state["signature"] != signature:
             raise ValueError("Resume data/config mismatch")
@@ -95,19 +105,37 @@ def selfplay(checkpoint, openings_path, output, config, resume=False):
         restore_rng(state["rng"])
         rng.setstate(state["game_rng"])
         history, start_batch, games_total = state["history"], state["batch"], state["games_total"]
-    elif state_path.exists():
+    elif not resume and (state_path.exists() or (output / "pending.pt").exists()):
         raise ValueError("Output exists; use --resume")
     for batch in range(start_batch, config["batches"]):
         actor_path = output / "actor.npz"
         export(model, actor_path, {**metadata, "kind": "rl-actor"})
         actor = NumpyEvaluator(actor_path)
         game_records, game_samples = [], []
-        for _ in range(config["games_per_batch"]):
-            result, sample = play_game(actor, rng.choice(openings), config, rng)
+        pending_path = output / "pending.pt"
+        if pending_path.exists():
+            pending = trusted_load(pending_path)
+            if pending["signature"] != signature:
+                raise ValueError("Pending game configuration mismatch")
+            if pending["batch"] == batch:
+                if pending["actor_sha256"] != actor.checkpoint_id:
+                    raise ValueError("Pending frozen actor changed")
+                game_records, game_samples = pending["records"], pending["samples"]
+                rng.setstate(pending["game_rng"])
+            elif pending["batch"] != batch - 1:
+                raise ValueError("Pending batch mismatch")
+        for _ in range(len(game_records), config["games_per_batch"]):
+            if budget:
+                budget.check()
+            result, sample = play_game(actor, rng.choice(openings), config, rng, budget)
             result["actor_sha256"] = actor.checkpoint_id
             game_records.append(result)
             if sample is not None:
                 game_samples.append(sample)
+            save_state(pending_path, {"signature": signature, "batch": batch, "actor_sha256": actor.checkpoint_id, "records": game_records,
+                                     "samples": game_samples, "game_rng": rng.getstate()})
+            if budget:
+                budget.checkpoint()
         # Same number of samples from each completed game => equal game weighting.
         started = time.perf_counter()
         losses = []
@@ -165,6 +193,9 @@ def selfplay(checkpoint, openings_path, output, config, resume=False):
                 "games_total": games_total,
             },
         )
+        pending_path.unlink(missing_ok=True)
+        if budget:
+            budget.checkpoint()
         write_json(
             output / "metrics.json",
             {
@@ -176,4 +207,8 @@ def selfplay(checkpoint, openings_path, output, config, resume=False):
                 "provenance": provenance(),
             },
         )
+    # Repair the small crash window between atomic resume-state and metrics writes.
+    write_json(output / "metrics.json", {"config": config, "device": device, "history": history,
+               "initial_sha256": digest(checkpoint), "openings_sha256": digest(openings_path),
+               "provenance": provenance()})
     return {"batches": len(history), "games": games_total, "checkpoint": str(output / "last.npz")}

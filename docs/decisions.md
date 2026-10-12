@@ -43,3 +43,11 @@ The approved next study holds all expanded training/validation examples and labe
 ## 2026-10-12 — Bounded averaging before RL
 
 Run one three-seed supervised weight-averaging experiment and an equal-weight prediction ensemble on unchanged data. First weight snapshot is taken after completing epoch 8; ordinary training controls stopping. Retain the approved 2%/two-seed adoption rule and preselect seed 42 for common RL initialization. The ensemble will not initialize RL. No further supervised search precedes the RL pilot.
+
+## 2026-10-12 — v3 RL and bounded stronger study
+
+Enable feature v3 in self-play while retaining v1; keep v2 rejected. Preserve full-history encoding and STM outcomes. Every RL seed starts from the preselected combined supervised seed-42 checkpoint because averaging missed the 2% criterion. Actor state remains frozen per batch, and per-game pending state supports interruption without losing completed generation.
+
+Benchmark 20 games at each of 128/256/512 nodes. Require at least 90% depth-one completion on searched moves and at most 20% truncation. Forecast includes generation, both development checkpoints, fresh final matches, equal-time matches and conservative update overhead, with a 50% throughput margin. Prefer 1,000 games per seed, then 500, then 250; within each count choose the highest qualifying budget. Freeze before main training and enforce 12 hours including the pilot.
+
+Fresh 12-ply final starts come from unused games in the existing archive, excluding canonical corpus/old reserved positions and source games. Do not use old final scores to select anything. Select all three RL candidates on development matches before any fresh final evaluation. Bootstrap shared opening pairs jointly across fixed seeds and report seed SD separately. C$0; no release change.
