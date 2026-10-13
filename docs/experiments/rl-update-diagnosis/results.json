@@ -1,0 +1,1049 @@
+{
+  "protocol": {
+    "identity": {
+      "config": {
+        "source": "runs/rl-improvement",
+        "baseline": "runs/fixed-data-improvements/combined-42/best.npz",
+        "development_data": "runs/supervised-200k/subset-all.jsonl",
+        "output": "runs/rl-update-diagnosis",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "batches": 10,
+        "positions_per_game": 32,
+        "sampling_seed": 20261013,
+        "batch_size": 256,
+        "treatments": {
+          "reference": {
+            "learning_rate": 0.0001,
+            "anchor_weight": 0.0
+          },
+          "smaller-step": {
+            "learning_rate": 1e-05,
+            "anchor_weight": 0.0
+          },
+          "anchored": {
+            "learning_rate": 0.0001,
+            "anchor_weight": 1.0
+          }
+        },
+        "evaluation": {
+          "pairs": 40,
+          "nodes": 128,
+          "qdepth": 2,
+          "max_plies": 512,
+          "seed": 2026,
+          "evidence": "fixed-trajectory-development-diagnostic"
+        }
+      },
+      "baseline": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+      "data": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+      "openings": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+      "games": {
+        "runs/rl-improvement/seed-42/training/games-001.json": "c392c08cdcb97a490aad00d19929f81a6bcf4abcb4e89a00ce13c96f202b5589",
+        "runs/rl-improvement/seed-42/training/games-002.json": "a24f1a7e203a262052b9e06e2ac9a5e3f2370021e2a725d8c4bdc5beda721c78",
+        "runs/rl-improvement/seed-42/training/games-003.json": "99b6ab2e5b2bacad79d0fc1552e02a40af202434c4b6098ced5b798bc8642ee7",
+        "runs/rl-improvement/seed-42/training/games-004.json": "4111f3adcd26fc217623ef1b7b6b7b0a6d4e96554c9408bc26783fd4947b3750",
+        "runs/rl-improvement/seed-42/training/games-005.json": "f7c3fafcd664eba400080474ad83585c9bf23278861d22fcd7a09db4bf07d224",
+        "runs/rl-improvement/seed-42/training/games-006.json": "0a949d24b35f55916ac822d46b680f9f2d849c492fff72d7613e36e5998a41cf",
+        "runs/rl-improvement/seed-42/training/games-007.json": "3d90b142d0ccd722ad40cf6b3fb50ce153a5b8d0c8cd9f20cf4f85a8ee9488f7",
+        "runs/rl-improvement/seed-42/training/games-008.json": "e284acce3c0e53dd2bb559e17f8c45bb8f28cb2ff1eecd8aecda6fe81628203a",
+        "runs/rl-improvement/seed-42/training/games-009.json": "dde1ba47d4f27c405c7785fa6919d984e7d4a805cdd7198a4a7aff0ef81f3bdd",
+        "runs/rl-improvement/seed-42/training/games-010.json": "580aa97d414eaa3f9f159ff4e3573beb65619bb6da5a382088a7b465eac8a3f7",
+        "runs/rl-improvement/seed-43/training/games-001.json": "799371da1c3eedec54e449840bb215b36eb9111bf6f14a117f04e25459de32d1",
+        "runs/rl-improvement/seed-43/training/games-002.json": "0da7c1e78fe1abd0c868aec12340e64bdad238ea96d538ea5b7f7b7a9330ee86",
+        "runs/rl-improvement/seed-43/training/games-003.json": "72d69bcf210a0600c1c823e0aba0d3f9e2574c964419eee9371264e1730299e0",
+        "runs/rl-improvement/seed-43/training/games-004.json": "12b5730829786733b80e0ce97c69500d7dd9d2955a58a366a038549db7cb2296",
+        "runs/rl-improvement/seed-43/training/games-005.json": "ba6a87f692d8286e0a02928eb24c9259d36247f36d60e68d08850c98d52244e2",
+        "runs/rl-improvement/seed-43/training/games-006.json": "33f0d847d29fb98e15d086ad3bc97f58e731f4c478e8fffb04f6a0039b56f92c",
+        "runs/rl-improvement/seed-43/training/games-007.json": "07c27cfa111ef2fc37ce20c297b10bc580adbda45cde82e0f7ec699ad8b88a6d",
+        "runs/rl-improvement/seed-43/training/games-008.json": "a0de1c2fb8a31a5cec826a169a0a41f2de861ae0a6ec3acac1805893137d6f06",
+        "runs/rl-improvement/seed-43/training/games-009.json": "7281e94df74adf9deeca307a279ad20e302d4635bea6c3aa65e69264dbda73e9",
+        "runs/rl-improvement/seed-43/training/games-010.json": "e99fd0f94aff0f675faf5d0fdad27ab2838b88850e8b6b0e37ec8eee56910df3",
+        "runs/rl-improvement/seed-44/training/games-001.json": "c81d9f80954a3f66b3435dc542119709f4c619b4b30496eb02f069968a34151a",
+        "runs/rl-improvement/seed-44/training/games-002.json": "26047613f8a81ebc4a76cfe0bd4c9a7564112ec09ebaad6aa224ae63c4de14c4",
+        "runs/rl-improvement/seed-44/training/games-003.json": "ff419799cee2d0df0b14280eb8088cc87e559825a634847bb41b87e0a55108b3",
+        "runs/rl-improvement/seed-44/training/games-004.json": "9a2ef970a26c7315f364760b0fb2f8b7987627401aa390bf18b354b719dec092",
+        "runs/rl-improvement/seed-44/training/games-005.json": "e09bc2c54a4bb2091cbe4292af4ca537a15aa6d1c7df1369357ad9db653c8d5c",
+        "runs/rl-improvement/seed-44/training/games-006.json": "5822e9c388b71ac8bbababdd822c1d1c80c55b4c7d23bd9c3e30764a76e17752",
+        "runs/rl-improvement/seed-44/training/games-007.json": "f7b4bb53d5d9eb590e845de30f8dc7c5e5947e1e742d64de6d7afd874481745e",
+        "runs/rl-improvement/seed-44/training/games-008.json": "5eea2d7f8f09d57acbb1b76819a93b39c62d4a711037eaf867dfb04086542cf4",
+        "runs/rl-improvement/seed-44/training/games-009.json": "841f5e0e1175499b4a996e957c1af6081606fd1ae5023261c5bf4b0d71ddf770",
+        "runs/rl-improvement/seed-44/training/games-010.json": "502065c79c809fb3bb8ca830a1b08119f92a534939d890d7e1068bb2d9974d89"
+      },
+      "code": {
+        "rl_update_diagnosis": "3348a61524bab04dacff8ef8fc2eecfb9937e838d87b5d085b71398bb6456e77",
+        "rl_updates": "78525bc379cb14d20580ef91c6956951b4e9e41c6ccec8c70053c98491bdb346",
+        "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+        "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+        "train": "00b512b53402f015eb6c11e1886ac075c08f55f9419ea5fe18fdb0c3fae87cfb",
+        "evaluate": "462d438d70cf06b443416c090d2450771b0d3fceaa2732c8de6e6056e6d559bb",
+        "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a"
+      }
+    },
+    "provenance": {
+      "commit": "90fd9646152093d977d98381072ff77b2266b809",
+      "dirty": false,
+      "python": "3.10.6",
+      "platform": "macOS-15.6.1-arm64-arm-64bit"
+    },
+    "evidence": "Off-policy fixed-trajectory development ablation; no new final results"
+  },
+  "baseline_validation": {
+    "mse": 0.24158424108853738,
+    "mae": 0.3208432167391851,
+    "signed_error": 0.022674794051372113
+  },
+  "baseline_prediction_std": 0.6827043453914254,
+  "runs": [
+    {
+      "treatment": "reference",
+      "seed": 42,
+      "checkpoint": "runs/rl-update-diagnosis/reference-42/batch-010.npz",
+      "sha256": "dffca189610da9736540c0623934623a3e66860b469363d11d61875c6eaa9f39",
+      "validation": {
+        "mse": 0.2980284498700546,
+        "mae": 0.4150844988634586,
+        "signed_error": 0.07675746847923827
+      },
+      "validation_drift_mse": 0.07171702710277486,
+      "prediction_std": 0.513445590391568,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.5116943120956421,
+          "after_outcome_mse": 0.4611280858516693,
+          "initial_outcome_mse": 0.5116943120956421,
+          "drift_mse": 0.010079741477966309,
+          "seconds": 0.10615962510928512
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.5720588564872742,
+          "after_outcome_mse": 0.542738139629364,
+          "initial_outcome_mse": 0.5744275450706482,
+          "drift_mse": 0.005199314560741186,
+          "seconds": 0.010658415965735912
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.44273802638053894,
+          "after_outcome_mse": 0.4141601324081421,
+          "initial_outcome_mse": 0.452693372964859,
+          "drift_mse": 0.00799771212041378,
+          "seconds": 0.01003654208034277
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.3886871039867401,
+          "after_outcome_mse": 0.36173081398010254,
+          "initial_outcome_mse": 0.4127553701400757,
+          "drift_mse": 0.016071338206529617,
+          "seconds": 0.010486000217497349
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.6035224795341492,
+          "after_outcome_mse": 0.5660842657089233,
+          "initial_outcome_mse": 0.657410740852356,
+          "drift_mse": 0.026726825162768364,
+          "seconds": 0.009814249817281961
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.47957125306129456,
+          "after_outcome_mse": 0.4531277120113373,
+          "initial_outcome_mse": 0.5181198716163635,
+          "drift_mse": 0.025166230276226997,
+          "seconds": 0.01003179233521223
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.46859124302864075,
+          "after_outcome_mse": 0.4431946575641632,
+          "initial_outcome_mse": 0.5226877331733704,
+          "drift_mse": 0.03729722648859024,
+          "seconds": 0.0102654998190701
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.4523119330406189,
+          "after_outcome_mse": 0.4365602135658264,
+          "initial_outcome_mse": 0.5055660009384155,
+          "drift_mse": 0.03576841205358505,
+          "seconds": 0.00970595795661211
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.5098610520362854,
+          "after_outcome_mse": 0.4883122146129608,
+          "initial_outcome_mse": 0.6190332174301147,
+          "drift_mse": 0.05767645314335823,
+          "seconds": 0.009630332700908184
+        },
+        {
+          "batch": 10,
+          "positions": 3200,
+          "before_outcome_mse": 0.5147106051445007,
+          "after_outcome_mse": 0.4966219365596771,
+          "initial_outcome_mse": 0.5950852036476135,
+          "drift_mse": 0.057470232248306274,
+          "seconds": 0.009625874925404787
+        }
+      ]
+    },
+    {
+      "treatment": "reference",
+      "seed": 43,
+      "checkpoint": "runs/rl-update-diagnosis/reference-43/batch-010.npz",
+      "sha256": "db6d48e02bd67c1954be1be06a716ab9ca844e357b7dd5668994d07875be1be3",
+      "validation": {
+        "mse": 0.30258675409763003,
+        "mae": 0.41925636849835796,
+        "signed_error": 0.06798601986950037
+      },
+      "validation_drift_mse": 0.0765492117703317,
+      "prediction_std": 0.5149196187113032,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.4613722860813141,
+          "after_outcome_mse": 0.4248591661453247,
+          "initial_outcome_mse": 0.4613722562789917,
+          "drift_mse": 0.005620232783257961,
+          "seconds": 0.010011875070631504
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.4747903347015381,
+          "after_outcome_mse": 0.44812697172164917,
+          "initial_outcome_mse": 0.48689526319503784,
+          "drift_mse": 0.009287629276514053,
+          "seconds": 0.009592750109732151
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.5068956613540649,
+          "after_outcome_mse": 0.4726751446723938,
+          "initial_outcome_mse": 0.5332317352294922,
+          "drift_mse": 0.011658969335258007,
+          "seconds": 0.009570625144988298
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.544847309589386,
+          "after_outcome_mse": 0.5028228759765625,
+          "initial_outcome_mse": 0.5851946473121643,
+          "drift_mse": 0.019941652193665504,
+          "seconds": 0.00947387469932437
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.4255811274051666,
+          "after_outcome_mse": 0.39298316836357117,
+          "initial_outcome_mse": 0.4591768682003021,
+          "drift_mse": 0.024748677387833595,
+          "seconds": 0.010009750258177519
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.4421696364879608,
+          "after_outcome_mse": 0.41858696937561035,
+          "initial_outcome_mse": 0.49427786469459534,
+          "drift_mse": 0.03108685091137886,
+          "seconds": 0.009867749642580748
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.5627259612083435,
+          "after_outcome_mse": 0.5381395220756531,
+          "initial_outcome_mse": 0.6245529055595398,
+          "drift_mse": 0.035880718380212784,
+          "seconds": 0.009888125117868185
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.5303399562835693,
+          "after_outcome_mse": 0.5092771053314209,
+          "initial_outcome_mse": 0.5889019966125488,
+          "drift_mse": 0.04205969348549843,
+          "seconds": 0.009897541254758835
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.4522600471973419,
+          "after_outcome_mse": 0.43757134675979614,
+          "initial_outcome_mse": 0.5192745923995972,
+          "drift_mse": 0.043687038123607635,
+          "seconds": 0.009671540930867195
+        },
+        {
+          "batch": 10,
+          "positions": 3200,
+          "before_outcome_mse": 0.48896118998527527,
+          "after_outcome_mse": 0.4700919985771179,
+          "initial_outcome_mse": 0.5917786955833435,
+          "drift_mse": 0.05510980263352394,
+          "seconds": 0.009969708975404501
+        }
+      ]
+    },
+    {
+      "treatment": "reference",
+      "seed": 44,
+      "checkpoint": "runs/rl-update-diagnosis/reference-44/batch-010.npz",
+      "sha256": "dd781cce096567cc006c0335e1591c68671d3a844afa79ce270b7ff0475e7e79",
+      "validation": {
+        "mse": 0.31060643777025576,
+        "mae": 0.42733351770244526,
+        "signed_error": 0.08553909533351768
+      },
+      "validation_drift_mse": 0.08287848620738937,
+      "prediction_std": 0.500337448645276,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.5571168661117554,
+          "after_outcome_mse": 0.5037014484405518,
+          "initial_outcome_mse": 0.5571168661117554,
+          "drift_mse": 0.006298854481428862,
+          "seconds": 0.009926959406584501
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.5619257688522339,
+          "after_outcome_mse": 0.5333514213562012,
+          "initial_outcome_mse": 0.5696159601211548,
+          "drift_mse": 0.00670655770227313,
+          "seconds": 0.010251375380903482
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.454560786485672,
+          "after_outcome_mse": 0.43080148100852966,
+          "initial_outcome_mse": 0.47915518283843994,
+          "drift_mse": 0.011979558505117893,
+          "seconds": 0.009330374654382467
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.5015556812286377,
+          "after_outcome_mse": 0.479276567697525,
+          "initial_outcome_mse": 0.5271113514900208,
+          "drift_mse": 0.01525990292429924,
+          "seconds": 0.00963087473064661
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.5403240919113159,
+          "after_outcome_mse": 0.5055024027824402,
+          "initial_outcome_mse": 0.5830757021903992,
+          "drift_mse": 0.019846176728606224,
+          "seconds": 0.009170291014015675
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.43958908319473267,
+          "after_outcome_mse": 0.4063834249973297,
+          "initial_outcome_mse": 0.49252617359161377,
+          "drift_mse": 0.03235705941915512,
+          "seconds": 0.009170999750494957
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.4705372750759125,
+          "after_outcome_mse": 0.4509103298187256,
+          "initial_outcome_mse": 0.5360649228096008,
+          "drift_mse": 0.03514934703707695,
+          "seconds": 0.00938100041821599
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.47932326793670654,
+          "after_outcome_mse": 0.45996761322021484,
+          "initial_outcome_mse": 0.5458265542984009,
+          "drift_mse": 0.0439397431910038,
+          "seconds": 0.009347791783511639
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.4973982870578766,
+          "after_outcome_mse": 0.47823241353034973,
+          "initial_outcome_mse": 0.5708079934120178,
+          "drift_mse": 0.05083693563938141,
+          "seconds": 0.009309125132858753
+        },
+        {
+          "batch": 10,
+          "positions": 3168,
+          "before_outcome_mse": 0.528418242931366,
+          "after_outcome_mse": 0.5043572187423706,
+          "initial_outcome_mse": 0.6336513161659241,
+          "drift_mse": 0.056743867695331573,
+          "seconds": 0.009202708024531603
+        }
+      ]
+    },
+    {
+      "treatment": "smaller-step",
+      "seed": 42,
+      "checkpoint": "runs/rl-update-diagnosis/smaller-step-42/batch-010.npz",
+      "sha256": "7f6c972bec872ed59b1d5a90ee34f70c3b9d32dd8e5f6736f75f5239db07dda8",
+      "validation": {
+        "mse": 0.2436602147780111,
+        "mae": 0.32944752950744915,
+        "signed_error": 0.0435457908091795
+      },
+      "validation_drift_mse": 0.0022679426105690014,
+      "prediction_std": 0.6623620759760036,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.5116943120956421,
+          "after_outcome_mse": 0.5051860213279724,
+          "initial_outcome_mse": 0.5116943120956421,
+          "drift_mse": 0.0004336861602496356,
+          "seconds": 0.009534624870866537
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.5738604068756104,
+          "after_outcome_mse": 0.5709986686706543,
+          "initial_outcome_mse": 0.5744275450706482,
+          "drift_mse": 0.0007204764406196773,
+          "seconds": 0.010262750089168549
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.45268866419792175,
+          "after_outcome_mse": 0.4491104185581207,
+          "initial_outcome_mse": 0.452693372964859,
+          "drift_mse": 0.000449409824796021,
+          "seconds": 0.00921033276244998
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.40875113010406494,
+          "after_outcome_mse": 0.4053296744823456,
+          "initial_outcome_mse": 0.4127553701400757,
+          "drift_mse": 0.0005020705284550786,
+          "seconds": 0.010811583139002323
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.6513113379478455,
+          "after_outcome_mse": 0.6460059881210327,
+          "initial_outcome_mse": 0.657410740852356,
+          "drift_mse": 0.0008249629172496498,
+          "seconds": 0.009705250151455402
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.5131557583808899,
+          "after_outcome_mse": 0.509564995765686,
+          "initial_outcome_mse": 0.5181198716163635,
+          "drift_mse": 0.0008857494685798883,
+          "seconds": 0.010019749868661165
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.5140693783760071,
+          "after_outcome_mse": 0.5102348923683167,
+          "initial_outcome_mse": 0.5226877331733704,
+          "drift_mse": 0.0010115205077454448,
+          "seconds": 0.009393124841153622
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.4985685348510742,
+          "after_outcome_mse": 0.49582022428512573,
+          "initial_outcome_mse": 0.5055660009384155,
+          "drift_mse": 0.0008981642313301563,
+          "seconds": 0.009134667459875345
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.6013815402984619,
+          "after_outcome_mse": 0.5955670475959778,
+          "initial_outcome_mse": 0.6190332174301147,
+          "drift_mse": 0.0014551260974258184,
+          "seconds": 0.009284833911806345
+        },
+        {
+          "batch": 10,
+          "positions": 3200,
+          "before_outcome_mse": 0.5822012424468994,
+          "after_outcome_mse": 0.5781612396240234,
+          "initial_outcome_mse": 0.5950852036476135,
+          "drift_mse": 0.0013124356046319008,
+          "seconds": 0.009378375019878149
+        }
+      ]
+    },
+    {
+      "treatment": "smaller-step",
+      "seed": 43,
+      "checkpoint": "runs/rl-update-diagnosis/smaller-step-43/batch-010.npz",
+      "sha256": "e22e0b1d384938df3459378812de177d79378db6ceeeddb2f799530f39447003",
+      "validation": {
+        "mse": 0.24401483435026397,
+        "mae": 0.3295061261125883,
+        "signed_error": 0.04168679983063856
+      },
+      "validation_drift_mse": 0.0026294040381792225,
+      "prediction_std": 0.6632237868183309,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.4613722860813141,
+          "after_outcome_mse": 0.4573553204536438,
+          "initial_outcome_mse": 0.4613722562789917,
+          "drift_mse": 4.151042958255857e-05,
+          "seconds": 0.010490084066987038
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.4854392111301422,
+          "after_outcome_mse": 0.48159149289131165,
+          "initial_outcome_mse": 0.48689526319503784,
+          "drift_mse": 0.00033156320569105446,
+          "seconds": 0.009698708076030016
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.5301878452301025,
+          "after_outcome_mse": 0.5259113311767578,
+          "initial_outcome_mse": 0.5332317352294922,
+          "drift_mse": 0.00039107754128053784,
+          "seconds": 0.009793916251510382
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.580068826675415,
+          "after_outcome_mse": 0.5750366449356079,
+          "initial_outcome_mse": 0.5851946473121643,
+          "drift_mse": 0.0006610619020648301,
+          "seconds": 0.009446584153920412
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.4545339345932007,
+          "after_outcome_mse": 0.4503115713596344,
+          "initial_outcome_mse": 0.4591768682003021,
+          "drift_mse": 0.0008046210277825594,
+          "seconds": 0.009547790978103876
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.48808228969573975,
+          "after_outcome_mse": 0.48451024293899536,
+          "initial_outcome_mse": 0.49427786469459534,
+          "drift_mse": 0.0008394966134801507,
+          "seconds": 0.009473124984651804
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.6159908175468445,
+          "after_outcome_mse": 0.6123849749565125,
+          "initial_outcome_mse": 0.6245529055595398,
+          "drift_mse": 0.0007129328441806138,
+          "seconds": 0.009614041075110435
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.5800628066062927,
+          "after_outcome_mse": 0.5766723155975342,
+          "initial_outcome_mse": 0.5889019966125488,
+          "drift_mse": 0.0010024213697761297,
+          "seconds": 0.009944541845470667
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.5087982416152954,
+          "after_outcome_mse": 0.5055971145629883,
+          "initial_outcome_mse": 0.5192745923995972,
+          "drift_mse": 0.0010399434249848127,
+          "seconds": 0.009387291967868805
+        },
+        {
+          "batch": 10,
+          "positions": 3200,
+          "before_outcome_mse": 0.5773608088493347,
+          "after_outcome_mse": 0.5738312005996704,
+          "initial_outcome_mse": 0.5917786955833435,
+          "drift_mse": 0.0012571174884214997,
+          "seconds": 0.009439249988645315
+        }
+      ]
+    },
+    {
+      "treatment": "smaller-step",
+      "seed": 44,
+      "checkpoint": "runs/rl-update-diagnosis/smaller-step-44/batch-010.npz",
+      "sha256": "d2a6cfffdc6fd550965b2f4824a41aa7dc1b633813ecb96ee6e0ba4d28da6949",
+      "validation": {
+        "mse": 0.24450755602665455,
+        "mae": 0.3304812691868484,
+        "signed_error": 0.0431672951154396
+      },
+      "validation_drift_mse": 0.0027441235836079096,
+      "prediction_std": 0.6605309948614561,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.5571168661117554,
+          "after_outcome_mse": 0.5512979626655579,
+          "initial_outcome_mse": 0.5571168661117554,
+          "drift_mse": 7.034442387521267e-05,
+          "seconds": 0.009746291674673557
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.5686577558517456,
+          "after_outcome_mse": 0.5655881762504578,
+          "initial_outcome_mse": 0.5696159601211548,
+          "drift_mse": 8.618293941253796e-05,
+          "seconds": 0.009255165699869394
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.4764070212841034,
+          "after_outcome_mse": 0.47336387634277344,
+          "initial_outcome_mse": 0.47915518283843994,
+          "drift_mse": 0.00014479320088867098,
+          "seconds": 0.009638708084821701
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.5237367749214172,
+          "after_outcome_mse": 0.5210654735565186,
+          "initial_outcome_mse": 0.5271113514900208,
+          "drift_mse": 0.00037157931365072727,
+          "seconds": 0.009058250114321709
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.5780510902404785,
+          "after_outcome_mse": 0.5734827518463135,
+          "initial_outcome_mse": 0.5830757021903992,
+          "drift_mse": 0.0004933808231726289,
+          "seconds": 0.00948812486603856
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.48531028628349304,
+          "after_outcome_mse": 0.4795924127101898,
+          "initial_outcome_mse": 0.49252617359161377,
+          "drift_mse": 0.0007729281205683947,
+          "seconds": 0.00947895785793662
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.5269932746887207,
+          "after_outcome_mse": 0.5233117341995239,
+          "initial_outcome_mse": 0.5360649228096008,
+          "drift_mse": 0.0007924420642666519,
+          "seconds": 0.00949958385899663
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.5370269417762756,
+          "after_outcome_mse": 0.5334967374801636,
+          "initial_outcome_mse": 0.5458265542984009,
+          "drift_mse": 0.0009937477298080921,
+          "seconds": 0.009866416919976473
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.5589861869812012,
+          "after_outcome_mse": 0.555641770362854,
+          "initial_outcome_mse": 0.5708079934120178,
+          "drift_mse": 0.0011887152213603258,
+          "seconds": 0.00897241709753871
+        },
+        {
+          "batch": 10,
+          "positions": 3168,
+          "before_outcome_mse": 0.6177349090576172,
+          "after_outcome_mse": 0.6128068566322327,
+          "initial_outcome_mse": 0.6336513161659241,
+          "drift_mse": 0.0014256006106734276,
+          "seconds": 0.009599791839718819
+        }
+      ]
+    },
+    {
+      "treatment": "anchored",
+      "seed": 42,
+      "checkpoint": "runs/rl-update-diagnosis/anchored-42/batch-010.npz",
+      "sha256": "3f91d724dd178c929667993b55e27cf92da80d61e9575722cb1f555e52fe191d",
+      "validation": {
+        "mse": 0.2620417921106577,
+        "mae": 0.3732276469206579,
+        "signed_error": 0.03738365643102756
+      },
+      "validation_drift_mse": 0.03225045543820507,
+      "prediction_std": 0.5725570383621947,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.5116943120956421,
+          "after_outcome_mse": 0.4650668203830719,
+          "initial_outcome_mse": 0.5116943120956421,
+          "drift_mse": 0.005013144109398127,
+          "seconds": 0.010413416661322117
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.5704675912857056,
+          "after_outcome_mse": 0.542746365070343,
+          "initial_outcome_mse": 0.5744275450706482,
+          "drift_mse": 0.003646740922704339,
+          "seconds": 0.010451457928866148
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.44214239716529846,
+          "after_outcome_mse": 0.414775013923645,
+          "initial_outcome_mse": 0.452693372964859,
+          "drift_mse": 0.005844190251082182,
+          "seconds": 0.009974416811019182
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.39254963397979736,
+          "after_outcome_mse": 0.3678314685821533,
+          "initial_outcome_mse": 0.4127553701400757,
+          "drift_mse": 0.009679589420557022,
+          "seconds": 0.010702583938837051
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.6104550957679749,
+          "after_outcome_mse": 0.5768669843673706,
+          "initial_outcome_mse": 0.657410740852356,
+          "drift_mse": 0.01428673043847084,
+          "seconds": 0.009871500078588724
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.4836927652359009,
+          "after_outcome_mse": 0.4588204622268677,
+          "initial_outcome_mse": 0.5181198716163635,
+          "drift_mse": 0.013634963892400265,
+          "seconds": 0.009974583052098751
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.47726646065711975,
+          "after_outcome_mse": 0.45226040482521057,
+          "initial_outcome_mse": 0.5226877331733704,
+          "drift_mse": 0.019661715254187584,
+          "seconds": 0.010315582621842623
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.46447449922561646,
+          "after_outcome_mse": 0.44803157448768616,
+          "initial_outcome_mse": 0.5055660009384155,
+          "drift_mse": 0.017250314354896545,
+          "seconds": 0.010471999645233154
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.5339465141296387,
+          "after_outcome_mse": 0.510581374168396,
+          "initial_outcome_mse": 0.6190332174301147,
+          "drift_mse": 0.02765703946352005,
+          "seconds": 0.010220333002507687
+        },
+        {
+          "batch": 10,
+          "positions": 3200,
+          "before_outcome_mse": 0.5364511013031006,
+          "after_outcome_mse": 0.5159333944320679,
+          "initial_outcome_mse": 0.5950852036476135,
+          "drift_mse": 0.023632459342479706,
+          "seconds": 0.00978995906189084
+        }
+      ]
+    },
+    {
+      "treatment": "anchored",
+      "seed": 43,
+      "checkpoint": "runs/rl-update-diagnosis/anchored-43/batch-010.npz",
+      "sha256": "8c23361472efc619a91f1e68f9cd24c3c911a5678650c3daefd35c14e22aab35",
+      "validation": {
+        "mse": 0.26612352224178415,
+        "mae": 0.3779556099132346,
+        "signed_error": 0.05080415064650837
+      },
+      "validation_drift_mse": 0.03505245089100047,
+      "prediction_std": 0.5708925706686744,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.4613722860813141,
+          "after_outcome_mse": 0.42498478293418884,
+          "initial_outcome_mse": 0.4613722562789917,
+          "drift_mse": 0.00451593566685915,
+          "seconds": 0.0103387082926929
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.4750213623046875,
+          "after_outcome_mse": 0.44917920231819153,
+          "initial_outcome_mse": 0.48689526319503784,
+          "drift_mse": 0.004901513922959566,
+          "seconds": 0.009633874986320734
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.5071437358856201,
+          "after_outcome_mse": 0.47634533047676086,
+          "initial_outcome_mse": 0.5332317352294922,
+          "drift_mse": 0.008134648203849792,
+          "seconds": 0.010093375109136105
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.5476671457290649,
+          "after_outcome_mse": 0.5078621506690979,
+          "initial_outcome_mse": 0.5851946473121643,
+          "drift_mse": 0.013502661138772964,
+          "seconds": 0.009758167434483767
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.42893752455711365,
+          "after_outcome_mse": 0.3980540931224823,
+          "initial_outcome_mse": 0.4591768682003021,
+          "drift_mse": 0.014078392647206783,
+          "seconds": 0.010211083106696606
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.4467996656894684,
+          "after_outcome_mse": 0.4269985258579254,
+          "initial_outcome_mse": 0.49427786469459534,
+          "drift_mse": 0.018880028277635574,
+          "seconds": 0.009426459204405546
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.5712809562683105,
+          "after_outcome_mse": 0.5468763709068298,
+          "initial_outcome_mse": 0.6245529055595398,
+          "drift_mse": 0.019138062372803688,
+          "seconds": 0.00977537501603365
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.543704092502594,
+          "after_outcome_mse": 0.5224497318267822,
+          "initial_outcome_mse": 0.5889019966125488,
+          "drift_mse": 0.019595488905906677,
+          "seconds": 0.00938387494534254
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.46972545981407166,
+          "after_outcome_mse": 0.4535800814628601,
+          "initial_outcome_mse": 0.5192745923995972,
+          "drift_mse": 0.019154172390699387,
+          "seconds": 0.009918374940752983
+        },
+        {
+          "batch": 10,
+          "positions": 3200,
+          "before_outcome_mse": 0.5148833394050598,
+          "after_outcome_mse": 0.4969833493232727,
+          "initial_outcome_mse": 0.5917786955833435,
+          "drift_mse": 0.022755280137062073,
+          "seconds": 0.009488916955888271
+        }
+      ]
+    },
+    {
+      "treatment": "anchored",
+      "seed": 44,
+      "checkpoint": "runs/rl-update-diagnosis/anchored-44/batch-010.npz",
+      "sha256": "30674178784a4f0846ad8706c1ec41cc290bed5001a0e2142970a54707c1293e",
+      "validation": {
+        "mse": 0.2676144041292184,
+        "mae": 0.3801194761516898,
+        "signed_error": 0.04815321164929776
+      },
+      "validation_drift_mse": 0.03588960776271814,
+      "prediction_std": 0.5633749514080664,
+      "history": [
+        {
+          "batch": 1,
+          "positions": 3200,
+          "before_outcome_mse": 0.5571168661117554,
+          "after_outcome_mse": 0.5050990581512451,
+          "initial_outcome_mse": 0.5571168661117554,
+          "drift_mse": 0.006186170969158411,
+          "seconds": 0.010083208791911602
+        },
+        {
+          "batch": 2,
+          "positions": 3200,
+          "before_outcome_mse": 0.5620725750923157,
+          "after_outcome_mse": 0.5328708291053772,
+          "initial_outcome_mse": 0.5696159601211548,
+          "drift_mse": 0.005166999064385891,
+          "seconds": 0.009760542307049036
+        },
+        {
+          "batch": 3,
+          "positions": 3200,
+          "before_outcome_mse": 0.4582538902759552,
+          "after_outcome_mse": 0.433707594871521,
+          "initial_outcome_mse": 0.47915518283843994,
+          "drift_mse": 0.008941921405494213,
+          "seconds": 0.010017292108386755
+        },
+        {
+          "batch": 4,
+          "positions": 3200,
+          "before_outcome_mse": 0.5044201016426086,
+          "after_outcome_mse": 0.4841409921646118,
+          "initial_outcome_mse": 0.5271113514900208,
+          "drift_mse": 0.009768047370016575,
+          "seconds": 0.010254707653075457
+        },
+        {
+          "batch": 5,
+          "positions": 3200,
+          "before_outcome_mse": 0.5480300784111023,
+          "after_outcome_mse": 0.5138751864433289,
+          "initial_outcome_mse": 0.5830757021903992,
+          "drift_mse": 0.012412921525537968,
+          "seconds": 0.01018333388492465
+        },
+        {
+          "batch": 6,
+          "positions": 3200,
+          "before_outcome_mse": 0.4437345862388611,
+          "after_outcome_mse": 0.41227486729621887,
+          "initial_outcome_mse": 0.49252617359161377,
+          "drift_mse": 0.019020214676856995,
+          "seconds": 0.010054999962449074
+        },
+        {
+          "batch": 7,
+          "positions": 3200,
+          "before_outcome_mse": 0.48366883397102356,
+          "after_outcome_mse": 0.4642326235771179,
+          "initial_outcome_mse": 0.5360649228096008,
+          "drift_mse": 0.01862921565771103,
+          "seconds": 0.009875291027128696
+        },
+        {
+          "batch": 8,
+          "positions": 3200,
+          "before_outcome_mse": 0.492234468460083,
+          "after_outcome_mse": 0.4743143320083618,
+          "initial_outcome_mse": 0.5458265542984009,
+          "drift_mse": 0.0219265129417181,
+          "seconds": 0.009878082666546106
+        },
+        {
+          "batch": 9,
+          "positions": 3200,
+          "before_outcome_mse": 0.516682505607605,
+          "after_outcome_mse": 0.4956938922405243,
+          "initial_outcome_mse": 0.5708079934120178,
+          "drift_mse": 0.022423066198825836,
+          "seconds": 0.009923958219587803
+        },
+        {
+          "batch": 10,
+          "positions": 3168,
+          "before_outcome_mse": 0.5554619431495667,
+          "after_outcome_mse": 0.5321885943412781,
+          "initial_outcome_mse": 0.6336513161659241,
+          "drift_mse": 0.02490963041782379,
+          "seconds": 0.010402750223875046
+        }
+      ]
+    }
+  ],
+  "paid_cost_cad": 0,
+  "evidence": "Development-only fixed-trajectory ablation; no on-policy or final-test claim"
+}

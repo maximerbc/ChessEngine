@@ -36,3 +36,11 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.rl_u
 ```
 
 Tests cover anchor gradients and detachment, unchanged zero-anchor loss, original-history/sign recovery, truncation exclusion, exact CPU resume, data/config/cache mismatch rejection and a complete tiny paired-match study.
+
+## First executed diagnostics
+
+All nine fits completed. Reference mean teacher-validation MSE is about 0.30374, compared with 0.24158 for the initializer. Smaller-step fits average about 0.24406; anchored fits average about 0.26526. All reference seeds reduce same-batch outcome loss while moving away from the initializer. The baseline validation prediction SD is 0.683; reference fits shrink it to approximately 0.50–0.51. This is measurable prediction drift and range compression, not proof that every changed prediction is worse.
+
+Among equally weighted sampled self-play states where the initializer has absolute value at least 0.75, about 22–24% subsequently draw and 6% finish with the opposite outcome sign. The game outcomes are valid: this demonstrates objective mismatch, not mislabeled games. There are 233–239 unique openings and 989–993 distinct PGNs per seed, so exact duplicated games alone do not explain the regression.
+
+Development matches are in progress. Neither preserving teacher agreement nor lowering replay outcome loss proves stronger play. No candidate is promoted before the predeclared playing-strength screen, and passing that screen only motivates a separate live self-play study.

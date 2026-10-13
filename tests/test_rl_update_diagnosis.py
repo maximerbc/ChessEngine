@@ -113,6 +113,11 @@ def test_tiny_complete_study_and_mismatch(tmp_path):
         evaluation=dict(pairs=1, nodes=128, qdepth=2, max_plies=4, seed=2026),
     )
     results = run(config)
+    from chessengine.rl_update_report import generate
+
+    report = generate(tmp_path / "out", tmp_path / "report")
+    assert "Development screening" in report.read_text()
+    assert (tmp_path / "report/follow-up.json").exists()
     assert len(results) == 2 and all(r["development"]["games"] == 2 for r in results)
     assert run(config)[0]["development"] == results[0]["development"]
     with pytest.raises(ValueError, match="mismatch"):

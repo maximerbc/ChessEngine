@@ -1,0 +1,20 @@
+[
+  {
+    "treatment": "reference",
+    "teacher_mse": 0.30374054724598015,
+    "mean_drift": 0.07704824169349865,
+    "development_score": null
+  },
+  {
+    "treatment": "smaller-step",
+    "teacher_mse": 0.24406086838497654,
+    "mean_drift": 0.002547156744118711,
+    "development_score": null
+  },
+  {
+    "treatment": "anchored",
+    "teacher_mse": 0.2652599061605534,
+    "mean_drift": 0.034397504697307894,
+    "development_score": null
+  }
+]

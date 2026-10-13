@@ -90,3 +90,10 @@ Both health probes now retry all curl errors, with a 5-second per-attempt timeou
 - One final game hit the move cap; assigning it a loss or win yields aggregate scores 0.440833–0.441667, leaving the conclusion unchanged. The training audit independently confirmed the single truncated self-play game was excluded.
 - Measured saved-game and update work totals 6.488 hours, excluding preparation/reporting and interrupted unsaved games. The conservative ledger totals 12.195 hours, including interruption downtime; the user authorized removal of the time cap. C$0 paid compute.
 - Inspected the completed learning figure and checked report completion, findings and local asset links. Released models and public website assets are unchanged. Negative results are retained; remote CI, pushes and any future release remain user-controlled.
+
+## RL update diagnosis (2026-10-13, development comparisons running)
+
+- Frozen nine-fit fixed-trajectory protocol committed before execution at `90fd964`. The original completed RL evidence and released models are unchanged.
+- All nine fits completed using the same replay samples and matched minibatch RNG per seed. Resume and cache/source/config/code mismatch checks are enforced. Full local suite: 64 passed, including anchor arithmetic/detachment, replay history and return signs, truncation exclusion, exact resumed weights and a complete tiny development comparison/report.
+- Reference updates reduce sampled outcome loss but worsen mean teacher-validation error to about 0.30374 and compress prediction spread. Smaller-step error averages about 0.24406; anchoring about 0.26526, versus initializer 0.24158. These are diagnostic findings, not playing-strength conclusions.
+- The target audit quantifies disagreements with the initializer without consuming old final results. Development matches are still running; no passing screen, improved chess strength, remote CI or deployment is claimed.

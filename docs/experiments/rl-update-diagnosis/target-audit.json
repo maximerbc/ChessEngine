@@ -1,0 +1,32 @@
+{
+  "seeds": [
+    {
+      "seed": 42,
+      "sampled_positions": 32000,
+      "strong_initial_positions": 23259,
+      "opposite_outcome_fraction_when_strong": 0.06143858291414076,
+      "draw_fraction_when_strong": 0.22494518250999612,
+      "unique_openings": 239,
+      "unique_pgns": 989
+    },
+    {
+      "seed": 43,
+      "sampled_positions": 32000,
+      "strong_initial_positions": 23639,
+      "opposite_outcome_fraction_when_strong": 0.05778586234612293,
+      "draw_fraction_when_strong": 0.22132915943990863,
+      "unique_openings": 233,
+      "unique_pgns": 993
+    },
+    {
+      "seed": 44,
+      "sampled_positions": 31968,
+      "strong_initial_positions": 23407,
+      "opposite_outcome_fraction_when_strong": 0.06404067159396762,
+      "draw_fraction_when_strong": 0.24039817148716197,
+      "unique_openings": 236,
+      "unique_pgns": 989
+    }
+  ],
+  "note": "Strong means |initializer prediction| >= .75; this is not a calibrated probability and disagreement does not prove an outcome label wrong. Sampling is equal-game weighted."
+}
