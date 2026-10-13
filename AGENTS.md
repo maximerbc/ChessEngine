@@ -48,3 +48,8 @@
 - RL improvement retains its frozen quality-gated pilot and experimental settings. On 2026-10-13 the user removed local CPU time caps: provide a runtime estimate before launching local compute and continue tracking elapsed time. Paid compute still requires authorization; do not relax scientific quality thresholds.
 - Fresh final openings exclude corpus and old reserved source games/canonical positions. Complete all development selections before any new final matches. Teacher-validation error is secondary and cannot select RL checkpoints.
 - No new supervised search precedes this RL study. Released models remain unchanged.
+
+## RL regression diagnosis
+- Preserve the completed negative RL study. Fixed-trajectory replay is explicitly an off-policy development diagnostic, not new on-policy self-play or fresh final evidence.
+- Prediction anchoring is a separately named treatment toward a detached frozen initializer; never describe it as the original pure outcome-only treatment. Do not silently add teacher labels.
+- Keep treatments, selection screens and replay sampling in versioned configs/protocols. Candidates require subsequent live self-play and fresh confirmatory evaluation before a release decision.

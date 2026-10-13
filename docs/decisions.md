@@ -55,3 +55,7 @@ Fresh 12-ply final starts come from unused games in the existing archive, exclud
 ## 2026-10-13 — User removes local CPU time cap
 
 The user explicitly revoked artificial local CPU allowances and requested runtime estimates before launches. Resume the existing study with `--unlimited-local`, retaining compute accounting, all scientific settings, fixed pilot decision, and completed games. This changes stopping administration only, not model selection or evaluation. Archive the original study protocol and record an explicit code-hash amendment for the runner/budget implementation before resuming. The original 12-hour forecast policy remains historical evidence. The ledger includes conservatively charged interruption downtime and is not an exact measure of active CPU work. Paid-resource authorization remains unchanged.
+
+## 2026-10-13 — Diagnose RL regression with matched fixed trajectories
+
+The user requested investigation and remediation of the completed negative RL result. Preserve it and all released assets. First isolate update sensitivity with a bounded nine-fit ablation on saved training-only trajectories: outcome-only reference, tenfold smaller step, and prediction anchoring to the frozen initializer. This is explicitly off-policy diagnostic fitting, not a replacement on-policy study. Select follow-up candidates using development matches only under the frozen screen in `docs/rl-update-diagnosis.md`. No automatic promotion or reuse of final outcomes for candidate selection. Estimate local runtime before execution; no artificial local cap.
