@@ -39,3 +39,11 @@ MPLCONFIGDIR=/private/tmp/chess-rl-mpl .venv/bin/python -m chessengine.rl_improv
 ### Authorized local-time amendment (2026-10-13)
 
 The user removed the local CPU time cap. Use `--unlimited-local` for subsequent resumes; report a runtime estimate before launching. The historical pilot decision and all learning/evaluation settings remain frozen. Elapsed-time accounting continues, including conservatively charged downtime. The original protocol and explicit code-hash amendment are preserved with the run evidence.
+
+## Completed results (2026-10-13)
+
+All 3,000 self-play games and 1,920 evaluation games are complete. One self-play game truncated and was excluded. Development selected batches 10, 5 and 10 for seeds 42, 43 and 44. Final scores were 39.875%, 44.625% and 47.875%. The mean was **44.125%**, with a 95% shared-opening-pair bootstrap interval **41.542–46.583%**: a regression under the frozen protocol. Seed SD was 4.023 percentage points. Equal-time development scores were 40.0%, 38.75% and 44.375%.
+
+Supervised validation MSE was 0.241584 for the common initializer; selected RL models reached 0.301090, 0.273926 and 0.306823. This measures changed teacher agreement, not fit to self-play outcomes. Outcome MSE is computed against realized returns from changing self-play positions; these two losses cannot be compared as one learning curve.
+
+The released models remain unchanged. A plausible next investigation is to constrain how far RL updates move from the initializer, but this study does not isolate the cause of regression. Further experiments require a separately frozen plan and fresh confirmation data; do not reuse these final outcomes to tune this study. See the [complete report](experiments/rl-improvement/index.html).

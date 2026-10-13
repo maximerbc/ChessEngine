@@ -1,0 +1,74 @@
+[
+  {
+    "seed": 42,
+    "phase": "selfplay",
+    "searched_moves": 96953,
+    "depth_one_fraction": 0.995998060916114,
+    "mean_completed_depth": 1.4020092209627346,
+    "nodes": 12312515
+  },
+  {
+    "seed": 42,
+    "phase": "final",
+    "searched_moves": 38673,
+    "depth_one_fraction": 0.9949577224420139,
+    "mean_completed_depth": 1.400848136943087,
+    "nodes": 4908892
+  },
+  {
+    "seed": 42,
+    "phase": "equal-time",
+    "searched_moves": 7073,
+    "depth_one_fraction": 1.0,
+    "mean_completed_depth": 1.7752014703803196,
+    "nodes": 2246995
+  },
+  {
+    "seed": 43,
+    "phase": "selfplay",
+    "searched_moves": 101118,
+    "depth_one_fraction": 0.9958464368361716,
+    "mean_completed_depth": 1.4107577285943156,
+    "nodes": 12840697
+  },
+  {
+    "seed": 43,
+    "phase": "final",
+    "searched_moves": 41932,
+    "depth_one_fraction": 0.9955880950109701,
+    "mean_completed_depth": 1.4291233425546122,
+    "nodes": 5328726
+  },
+  {
+    "seed": 43,
+    "phase": "equal-time",
+    "searched_moves": 7601,
+    "depth_one_fraction": 1.0,
+    "mean_completed_depth": 1.8267333245625577,
+    "nodes": 2475286
+  },
+  {
+    "seed": 44,
+    "phase": "selfplay",
+    "searched_moves": 101387,
+    "depth_one_fraction": 0.9955319715545385,
+    "mean_completed_depth": 1.417844496828982,
+    "nodes": 12877911
+  },
+  {
+    "seed": 44,
+    "phase": "final",
+    "searched_moves": 39427,
+    "depth_one_fraction": 0.9941157075100819,
+    "mean_completed_depth": 1.3760620894311004,
+    "nodes": 5007583
+  },
+  {
+    "seed": 44,
+    "phase": "equal-time",
+    "searched_moves": 7040,
+    "depth_one_fraction": 1.0,
+    "mean_completed_depth": 1.7860795454545455,
+    "nodes": 2247999
+  }
+]

@@ -110,12 +110,12 @@ Base: `main` after supervised averaging | Head: `feat/rl-improvement-study`
 
 ### Change
 
-Enables history-preserving feature-v3 self-play with resumable frozen actors, a persisted 12-hour compute allowance, preregistered pilot gates, and fresh source-game-separated final openings. All three RL seeds share the predetermined supervised seed-42 initializer. Development selection is locked across seeds before final matches. Adds shared-opening-pair uncertainty, equal-time matches, teacher-agreement diagnostics and a separate evidence report.
+Enables feature-v3 self-play with resumable frozen actors, preregistered pilot gates and 200 fresh source-game-separated final opening pairs. All RL seeds share the predetermined supervised seed-42 initializer. Development selection is locked before final evaluation. Adds paired uncertainty, equal-time comparisons, teacher-agreement diagnostics and a separate report. The user explicitly removed the local time cap during execution; the original protocol, amendment and elapsed-time accounting are preserved.
 
-### Current evidence — main study running
+### Results
 
-All 60 pilot games completed without truncation. The frozen cost/quality rule selected 1,000 games per seed at 128 nodes, with an 8.71-hour total forecast including safety margin. The 200 fresh opening pairs passed an independent source-game/canonical-position exclusion audit. Main training and playing-strength results are pending; do not present the pilot as evidence of RL improvement.
+Completed 3,000 self-play games, 480 development matches, 1,200 final matches and 240 equal-time matches. One truncated self-play game was excluded from learning. Final RL scores were 39.875%, 44.625% and 47.875%; aggregate 44.125%, with a shared-opening-pair 95% interval of 41.542–46.583%. This supports regression under the tested protocol. Seed standard deviation is 4.023 percentage points, separate from match uncertainty. One final move-cap draw does not change the conclusion. Teacher agreement also worsened; neither loss curve nor pilot feasibility implies stronger chess.
 
 ### Validation and boundaries
 
-60 local Python tests passed before the pilot, covering the complete tiny study, exact CPU resume, actor freezing, outcome signs, feature compatibility, opening separation, budget enforcement and selection-before-final ordering. Report additions passed the targeted complete-study test. No paid compute, remote pushes, deployment changes or released-model replacement. Remote CI and final experiment verification remain pending.
+60 local Python tests passed. Independently replayed all training and evaluation PGNs, verified actor/checkpoint hashes, development selections, color pairing, score perspective and the 10,000-resample aggregate bootstrap. The report records negative evidence, seed variability, compute accounting and limitations. Paid compute C$0. No remote push, deployment or released-model replacement. GitHub CI requires the user push.

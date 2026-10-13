@@ -1,0 +1,99 @@
+{
+  "matches": [
+    {
+      "seed": 42,
+      "phase": "development-5",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 42,
+      "phase": "development-10",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 42,
+      "phase": "final",
+      "games": 400,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 42,
+      "phase": "equal-time",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 43,
+      "phase": "development-5",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 43,
+      "phase": "development-10",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 43,
+      "phase": "final",
+      "games": 400,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 43,
+      "phase": "equal-time",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 44,
+      "phase": "development-5",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 44,
+      "phase": "development-10",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 44,
+      "phase": "final",
+      "games": 400,
+      "legal_outcomes_and_pairing_verified": true
+    },
+    {
+      "seed": 44,
+      "phase": "equal-time",
+      "games": 80,
+      "legal_outcomes_and_pairing_verified": true
+    }
+  ],
+  "raw_match_hashes": {
+    "runs/rl-improvement/seed-42/development-5/matches.json": "8bf590f29a983a546ab4043abc1dc30d5101efc692dad75dbe511fbd0a67c74d",
+    "runs/rl-improvement/seed-42/development-10/matches.json": "2beb12ad36276f8e4f55a6ec41977f45d8380983ea82b669493d96942dc8f364",
+    "runs/rl-improvement/seed-42/final/matches.json": "c71a7afddfb912e9e81b66180c62cca9efd1cfdfcdaf672e04d8a12b7c4f3e4d",
+    "runs/rl-improvement/seed-42/equal-time/matches.json": "35e1afb4897a74ccebb7d331ed62ae324f49ab2df6140886f094f273577ce7ba",
+    "runs/rl-improvement/seed-43/development-5/matches.json": "81d50fef511f89e48abeada218e95a1d7ecd3725705b40fefd0dc11c1fea2feb",
+    "runs/rl-improvement/seed-43/development-10/matches.json": "fa91279a3c6377039245bcd4d207fcbec8f0c0224b4717bf8bb210972042a894",
+    "runs/rl-improvement/seed-43/final/matches.json": "f82ab4a398d170af9287b2f0d38f890d86d01691d841703407dc6fea82a25cb6",
+    "runs/rl-improvement/seed-43/equal-time/matches.json": "ee9fb06fd229fdef0b8a5a1cbb75b544caa48a420645709e7f93f44c477d3322",
+    "runs/rl-improvement/seed-44/development-5/matches.json": "3db69118dbcd721db5ebf712e5b63e70d57e0e2869aa48a6e0f8c91f400034ca",
+    "runs/rl-improvement/seed-44/development-10/matches.json": "2496d828d56a4d963be94fa9edca49acefa80119d2a105f662c9e0d4861a831a",
+    "runs/rl-improvement/seed-44/final/matches.json": "56d1c1aea60b01f39a425d99465999e9ea90e060cae6af6151272c433df8a498",
+    "runs/rl-improvement/seed-44/equal-time/matches.json": "ac1550f3143f6fdcf937030ebd2e36b208967a9838b576ea35d1c871a677f62a"
+  },
+  "aggregate_score": 0.44125,
+  "ci95": [
+    0.4154166666666667,
+    0.4658333333333334
+  ],
+  "bootstrap_resamples": 10000,
+  "selection_locks_verified": true,
+  "measured_game_and_update_seconds": 23357.826774574816,
+  "note": "Measured phase work excludes preparation/reporting overhead and interrupted unsaved games; ledger includes conservative downtime."
+}

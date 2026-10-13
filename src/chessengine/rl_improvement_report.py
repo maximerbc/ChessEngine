@@ -12,7 +12,7 @@ from .diagnostics_report import table
 def generate(source, output):
     source,output=Path(source),Path(output)
     output.mkdir(parents=True,exist_ok=True)
-    for name in ['study-protocol','pilot-summary','decision','compute','status','openings-manifest','results','compute-amendment','study-protocol-original','training-audit']:
+    for name in ['study-protocol','pilot-summary','decision','compute','status','openings-manifest','results','compute-amendment','study-protocol-original','training-audit','final-audit']:
         path=source/f'{name}.json'
         if path.exists():
             shutil.copyfile(path,output/path.name)
@@ -30,7 +30,7 @@ def generate(source, output):
     if not decision['approved']:
         html+='<p><b>No approved main study.</b> The predefined quality/compute gates rejected the pilot options. No main RL training or fresh final matches were run. The next step is a separately approved investigation of search completion and game truncation, not relaxation of the thresholds or an unreported larger budget.</p>'
     else:
-        html+=f"<p>Frozen protocol: {decision['nodes']} nodes/move; {decision['games_per_seed']} games per seed; forecast {decision['forecast_seconds']/3600:.2f} hours including safety margin, within the nine-hour planning allowance. A separate persisted 12-hour allowance applies.</p>"
+        html+=f"<p>Frozen protocol: {decision['nodes']} nodes/move; {decision['games_per_seed']} games per seed; forecast {decision['forecast_seconds']/3600:.2f} hours including safety margin, within the nine-hour planning allowance. The original planning protocol specified a persisted 12-hour allowance; any authorized amendment is recorded below.</p>"
     if (source/'compute-amendment.json').exists():
         html+='<p><b>Authorized amendment:</b> on 13 October the user removed the local CPU time cap. The original 12-hour limit above is historical; scientific settings and elapsed-time accounting remain unchanged.</p>'
     if (source/'training-audit.json').exists():
@@ -82,6 +82,8 @@ def generate(source, output):
         html+='<h2>Teacher agreement is a separate diagnostic</h2>'
         html+=table(['Model','Validation Stockfish MSE','MAE'],[[name,f"{v['mse']:.6f}",f"{v['mae']:.6f}"] for name,v in r['teacher_agreement'].items()])
         html+='<p>These teacher errors are measured after selection and cannot choose RL checkpoints. Outcome training MSE uses actual self-play returns and is not comparable to teacher-target MSE. A lower outcome loss can reflect the changing game distribution rather than stronger play.</p>'
+        if a['conclusion']=='regression':
+            html+='<h2>Interpretation and next experiment</h2><p>The aggregate interval is entirely below 50%: this outcome-only RL procedure weakened play against its supervised initialization under the tested conditions. Keep the released model unchanged. Teacher-target MSE also increased, consistent with loss of teacher agreement; this does not establish why playing strength fell.</p><p>Possible explanations include noisy terminal targets from shallow self-play, changes in the visited positions, and updates that overwrite useful supervised estimates. These are hypotheses, not isolated causal findings. A separately preregistered follow-up could compare a smaller RL update rate or an explicit constraint toward the initial model, one change at a time. That would be a new treatment, not a repair to these results. This final set is now used evidence; reserve new confirmation data before a later confirmatory claim.</p>'
         html+='<h2>Search work</h2>'
         html+=table(['Seed','Phase','Searched moves','Depth-one fraction','Mean completed depth','Nodes'],
                     [[x['seed'],x['phase'],x['searched_moves'],x['depth_one_fraction'],x['mean_completed_depth'],x['nodes']]
@@ -92,6 +94,9 @@ def generate(source, output):
              sum(h['completed'] for h in x['training']['history']),sum(h['truncated'] for h in x['training']['history']),
              f"{sum(h['generation_seconds'] for h in x['training']['history']):.2f}",
              f"{sum(h['update_seconds'] for h in x['training']['history']):.2f}"] for x in r['seeds']])
+    if (source/'final-audit.json').exists():
+        audit=read_json(source/'final-audit.json')
+        html+=f"<p>Independent audit: all 1,920 evaluation PGNs, color pairs, outcome scores, checkpoint identities and aggregate bootstrap verified. Measured saved-game and training-update work: {audit['measured_game_and_update_seconds']/3600:.2f} hours; excludes preparation, report overhead and interrupted unsaved games.</p>"
     budget=read_json(source/'compute.json')
     html+=f"<h2>Limitations and reproducibility</h2><p>Recorded study ledger time (including conservatively charged interruption downtime) {budget['consumed']/3600:.3f} hours. Fresh final positions use unused games from the same historical archive, not a new era or population. Repeated development selection, only three training seeds and finite search budgets restrict conclusions. Aggregate bootstrap uncertainty is conditional on these fixed seeds. No public Elo or general chess-strength claim is made.</p>"
     html+='<p>Training/evaluation inputs and code hashes are frozen in the protocol. Graceful interruption saves completed games; an unclosed crash interval is charged conservatively to the allowance. See <a href="../../rl-improvement.md">methods and commands</a>.</p><ul>'

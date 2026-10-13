@@ -1,0 +1,673 @@
+{
+  "protocol": {
+    "identity": {
+      "config": {
+        "averaging_results": "runs/supervised-averaging/results.json",
+        "output": "runs/rl-improvement",
+        "old_openings": "configs/openings.json",
+        "corpus": "data/expanded-200k-labeled.jsonl",
+        "development_data": "runs/supervised-200k/subset-all.jsonl",
+        "archive": "data/lichess-2013-01.pgn.zst",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "pilot_seed": 2027,
+        "nodes": [
+          128,
+          256,
+          512
+        ],
+        "pilot_games": 20,
+        "game_targets": [
+          1000,
+          500,
+          250
+        ],
+        "forecast_seconds": 32400,
+        "allowance_seconds": 43200,
+        "development_pairs": 40,
+        "final_pairs": 200,
+        "bootstrap_resamples": 10000,
+        "bootstrap_seed": 2026,
+        "max_plies": 512,
+        "equal_time_ms": 100,
+        "training": {
+          "learning_rate": 0.0001,
+          "batch_size": 256,
+          "positions_per_game": 32,
+          "qdepth": 2,
+          "epsilon": 0.1,
+          "exploration_plies": 20,
+          "device": "cpu",
+          "evidence": "rl-improvement-development"
+        }
+      },
+      "baseline_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+      "averaging_sha256": "0697eb38421b692b382fcd0dd00c6ed670060d98659894cd6a05ae89df265056",
+      "sources": {
+        "old_openings": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+        "corpus": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+        "development_data": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+        "archive": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635"
+      },
+      "code": {
+        "rl_improvement": "d721c9cb4f0829e156483e8fc1a8d5b83ac1fc2ec5f84b017c96d6d272e2f0ab",
+        "compute_budget": "576d957218bee9a75345060364ab5355e4fc58c7a8a004867370edd04eaebc44",
+        "rl": "0410c418523daed6d4a533e1469396ea63e0210757f52e2cbbb25edb116dd2a0",
+        "evaluate": "462d438d70cf06b443416c090d2450771b0d3fceaa2732c8de6e6056e6d559bb",
+        "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a",
+        "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+        "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+        "train": "00b512b53402f015eb6c11e1886ac075c08f55f9419ea5fe18fdb0c3fae87cfb",
+        "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a"
+      }
+    },
+    "provenance": {
+      "commit": "36ce76b540f296ca910410c9b281a1e0fe898b90",
+      "dirty": false,
+      "python": "3.10.6",
+      "platform": "macOS-15.6.1-arm64-arm-64bit"
+    }
+  },
+  "decision": {
+    "approved": true,
+    "nodes": 128,
+    "games_per_seed": 1000,
+    "batches": 10,
+    "games_per_batch": 100,
+    "development_batches": [
+      5,
+      10
+    ],
+    "forecast_seconds": 31337.823204590757,
+    "rejected_pilots": []
+  },
+  "pilots": [
+    {
+      "nodes": 128,
+      "games": 20,
+      "truncated": 0,
+      "searched_moves": 1753,
+      "depth_one_moves": 1744,
+      "mean_game_seconds": 3.463951008254662,
+      "p90_plies": 126.7000000000001
+    },
+    {
+      "nodes": 256,
+      "games": 20,
+      "truncated": 0,
+      "searched_moves": 2117,
+      "depth_one_moves": 2117,
+      "mean_game_seconds": 8.745868477178737,
+      "p90_plies": 185.90000000000003
+    },
+    {
+      "nodes": 512,
+      "games": 20,
+      "truncated": 0,
+      "searched_moves": 1982,
+      "depth_one_moves": 1982,
+      "mean_game_seconds": 15.362637070938945,
+      "p90_plies": 163.80000000000004
+    }
+  ],
+  "seeds": [
+    {
+      "seed": 42,
+      "selection": {
+        "checkpoint": "runs/rl-improvement/seed-42/training/batch-010.npz",
+        "sha256": "8b7ad33a2648ff715af0957f398e624cd9c511d6841a1429f9f4a458e96a4126",
+        "development_score": 0.46875,
+        "selection": "highest paired development score; input-order tie break"
+      },
+      "final": {
+        "games": 400,
+        "pairs": 200,
+        "wins": 115,
+        "draws": 89,
+        "losses": 196,
+        "score": 0.39875,
+        "ci95": [
+          0.35625,
+          0.44125
+        ],
+        "capped_games": 0,
+        "uncapped_pairs": 200,
+        "uncapped_score": 0.39875,
+        "conclusion": "regression"
+      },
+      "equal-time": {
+        "games": 80,
+        "pairs": 40,
+        "wins": 29,
+        "draws": 6,
+        "losses": 45,
+        "score": 0.4,
+        "ci95": [
+          0.29375,
+          0.5
+        ],
+        "capped_games": 0,
+        "uncapped_pairs": 40,
+        "uncapped_score": 0.4,
+        "conclusion": "inconclusive"
+      },
+      "training": {
+        "config": {
+          "learning_rate": 0.0001,
+          "batch_size": 256,
+          "positions_per_game": 32,
+          "qdepth": 2,
+          "epsilon": 0.1,
+          "exploration_plies": 20,
+          "device": "cpu",
+          "evidence": "rl-improvement-development",
+          "seed": 42,
+          "max_plies": 512,
+          "nodes": 128,
+          "batches": 10,
+          "games_per_batch": 100
+        },
+        "device": "cpu",
+        "history": [
+          {
+            "batch": 1,
+            "games_total": 100,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.48353018522262575,
+            "generation_seconds": 411.9142715446651,
+            "update_seconds": 0.7430436671711504,
+            "actor_sha256": "ac1230b0fd49fc13f031067e822fa4ecc249847a1e3904671630036b70e99e91"
+          },
+          {
+            "batch": 2,
+            "games_total": 200,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5535208320617676,
+            "generation_seconds": 424.4112806688063,
+            "update_seconds": 0.09480670839548111,
+            "actor_sha256": "204bd26d4d434b0b13c72e0d6c1476ab9ba76579e45a5d36e18039ca8abd5494"
+          },
+          {
+            "batch": 3,
+            "games_total": 300,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4361301469802856,
+            "generation_seconds": 386.04876412590966,
+            "update_seconds": 0.12029862497001886,
+            "actor_sha256": "9a9427fc193510f07344f3f832e04798ad760cfda2f01fdd86316a4a6e6aeffd"
+          },
+          {
+            "batch": 4,
+            "games_total": 400,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.3925649964809418,
+            "generation_seconds": 424.1506103654392,
+            "update_seconds": 0.07120608258992434,
+            "actor_sha256": "7ba07f4d79bf526130a2710b9d6f863dcafa3cee5415e6a31d98125962f7b566"
+          },
+          {
+            "batch": 5,
+            "games_total": 500,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5957504105567932,
+            "generation_seconds": 431.43056070711464,
+            "update_seconds": 0.08417387492954731,
+            "actor_sha256": "c0d0b39412eefab56e46cd809aef3912815e342e66c1f0c3ec99f78b07c5dc5a"
+          },
+          {
+            "batch": 6,
+            "games_total": 600,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.46337284088134767,
+            "generation_seconds": 438.13994511961937,
+            "update_seconds": 0.10510100005194545,
+            "actor_sha256": "a73e9531f78852b36f89e01d301fb94e172a9ed2d9d8191fb6eeca7abf92084f"
+          },
+          {
+            "batch": 7,
+            "games_total": 700,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4807967782020569,
+            "generation_seconds": 426.1722501241602,
+            "update_seconds": 0.19084325013682246,
+            "actor_sha256": "5f3b6fa876a27287af787720a5476da35d0712d7a3fad27726ef72b9626362ea"
+          },
+          {
+            "batch": 8,
+            "games_total": 800,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.43920629620552065,
+            "generation_seconds": 447.91854000557214,
+            "update_seconds": 0.07300058379769325,
+            "actor_sha256": "837a1e987f7aabdaf7dca8b1b52331fb7f71c6b1a0daf6d0a4757bbf64dfad54"
+          },
+          {
+            "batch": 9,
+            "games_total": 900,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5177472710609436,
+            "generation_seconds": 415.0476966993883,
+            "update_seconds": 0.07660379121080041,
+            "actor_sha256": "22631b831d0f4a3289e0722fcf0741a8e65349e868bea323449a480a121ab59b"
+          },
+          {
+            "batch": 10,
+            "games_total": 1000,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5331381964683533,
+            "generation_seconds": 402.8598934235051,
+            "update_seconds": 0.08943399973213673,
+            "actor_sha256": "41af0bef684b53a3247edfa8341e7dfc97dc42565b8d766b31a7fb3c0315b595"
+          }
+        ],
+        "initial_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+        "openings_sha256": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+        "provenance": {
+          "commit": "12662b47897cb315dbe65e1881b7a0385188eef1",
+          "dirty": true,
+          "python": "3.10.6",
+          "platform": "macOS-15.6.1-arm64-arm-64bit"
+        }
+      }
+    },
+    {
+      "seed": 43,
+      "selection": {
+        "checkpoint": "runs/rl-improvement/seed-43/training/batch-005.npz",
+        "sha256": "717d79b9fe859a677bc196e6492f27e22cdbca938e817691d6384bd20ebfbdda",
+        "development_score": 0.5125,
+        "selection": "highest paired development score; input-order tie break"
+      },
+      "final": {
+        "games": 400,
+        "pairs": 200,
+        "wins": 126,
+        "draws": 105,
+        "losses": 169,
+        "score": 0.44625,
+        "ci95": [
+          0.405,
+          0.4875
+        ],
+        "capped_games": 0,
+        "uncapped_pairs": 200,
+        "uncapped_score": 0.44625,
+        "conclusion": "regression"
+      },
+      "equal-time": {
+        "games": 80,
+        "pairs": 40,
+        "wins": 28,
+        "draws": 6,
+        "losses": 46,
+        "score": 0.3875,
+        "ci95": [
+          0.29375,
+          0.48125
+        ],
+        "capped_games": 0,
+        "uncapped_pairs": 40,
+        "uncapped_score": 0.3875,
+        "conclusion": "regression"
+      },
+      "training": {
+        "config": {
+          "learning_rate": 0.0001,
+          "batch_size": 256,
+          "positions_per_game": 32,
+          "qdepth": 2,
+          "epsilon": 0.1,
+          "exploration_plies": 20,
+          "device": "cpu",
+          "evidence": "rl-improvement-development",
+          "seed": 43,
+          "max_plies": 512,
+          "nodes": 128,
+          "batches": 10,
+          "games_per_batch": 100
+        },
+        "device": "cpu",
+        "history": [
+          {
+            "batch": 1,
+            "games_total": 100,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4524352300167084,
+            "generation_seconds": 383.38389533152804,
+            "update_seconds": 0.08223875006660819,
+            "actor_sha256": "ac1230b0fd49fc13f031067e822fa4ecc249847a1e3904671630036b70e99e91"
+          },
+          {
+            "batch": 2,
+            "games_total": 200,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.48529710531234743,
+            "generation_seconds": 430.61264858208597,
+            "update_seconds": 0.08511350024491549,
+            "actor_sha256": "5c629b54ada6d64c82ced4052cd8ffb9c4898c3f6f0102f7295a34236f9252b8"
+          },
+          {
+            "batch": 3,
+            "games_total": 300,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5122195649147033,
+            "generation_seconds": 411.6673917043954,
+            "update_seconds": 0.0733672920614481,
+            "actor_sha256": "ae44ce30443ebc9be891ed1f043291db6a172b6ce079a4a257b7f92fc1c9f3b6"
+          },
+          {
+            "batch": 4,
+            "games_total": 400,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.509116861820221,
+            "generation_seconds": 412.66602291958407,
+            "update_seconds": 0.07409550016745925,
+            "actor_sha256": "b82905b3619a62b464d71f245ae7d9a2a50058f9f86ce196b73eda2a3783af88"
+          },
+          {
+            "batch": 5,
+            "games_total": 500,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4071583890914917,
+            "generation_seconds": 428.52435499895364,
+            "update_seconds": 0.07470208406448364,
+            "actor_sha256": "d7da0ed75ac6c22b451030f12055e5a6cc07578fb3cdf4d44eecd6b881c3a37a"
+          },
+          {
+            "batch": 6,
+            "games_total": 600,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.43474515199661257,
+            "generation_seconds": 417.3639489985071,
+            "update_seconds": 0.0743781658820808,
+            "actor_sha256": "5b449ebc9a63899648f7b07d3dc1f002fc43aabf9c5b3b6826a1df5ea2475867"
+          },
+          {
+            "batch": 7,
+            "games_total": 700,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5409526550769805,
+            "generation_seconds": 471.898887578398,
+            "update_seconds": 0.07823916617780924,
+            "actor_sha256": "38181c87b7a06e217deee2a8fc65980d95e821d58888a3161ec36a8dffe3c20b"
+          },
+          {
+            "batch": 8,
+            "games_total": 800,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5182102513313294,
+            "generation_seconds": 440.51517520984635,
+            "update_seconds": 0.11237516580149531,
+            "actor_sha256": "8caee5cd8773a12497bcbc228722e604906a7a19d4be7c8a4bf51e896797b6d5"
+          },
+          {
+            "batch": 9,
+            "games_total": 900,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.44459074854850766,
+            "generation_seconds": 410.9763888423331,
+            "update_seconds": 0.07324999989941716,
+            "actor_sha256": "c54ad81c729af05316381e7b1a1c2d79e79345b3eb5a7b72eccb237bb242f8bb"
+          },
+          {
+            "batch": 10,
+            "games_total": 1000,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4917741656303406,
+            "generation_seconds": 411.7262970409356,
+            "update_seconds": 0.0852474169805646,
+            "actor_sha256": "5fcf28e1f6cc3965e30b3976165c2e3d75fc1d3e6beb86c99f6c934453fe8690"
+          }
+        ],
+        "initial_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+        "openings_sha256": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+        "provenance": {
+          "commit": "12662b47897cb315dbe65e1881b7a0385188eef1",
+          "dirty": true,
+          "python": "3.10.6",
+          "platform": "macOS-15.6.1-arm64-arm-64bit"
+        }
+      }
+    },
+    {
+      "seed": 44,
+      "selection": {
+        "checkpoint": "runs/rl-improvement/seed-44/training/batch-010.npz",
+        "sha256": "5246915d34029221fe74a850c59715960c6c370bc2c76bb64432a2655a05b104",
+        "development_score": 0.49375,
+        "selection": "highest paired development score; input-order tie break"
+      },
+      "final": {
+        "games": 400,
+        "pairs": 200,
+        "wins": 148,
+        "draws": 87,
+        "losses": 165,
+        "score": 0.47875,
+        "ci95": [
+          0.43625,
+          0.5225
+        ],
+        "capped_games": 1,
+        "uncapped_pairs": 199,
+        "uncapped_score": 0.478643216080402,
+        "conclusion": "inconclusive"
+      },
+      "equal-time": {
+        "games": 80,
+        "pairs": 40,
+        "wins": 31,
+        "draws": 9,
+        "losses": 40,
+        "score": 0.44375,
+        "ci95": [
+          0.35,
+          0.5375
+        ],
+        "capped_games": 0,
+        "uncapped_pairs": 40,
+        "uncapped_score": 0.44375,
+        "conclusion": "inconclusive"
+      },
+      "training": {
+        "config": {
+          "learning_rate": 0.0001,
+          "batch_size": 256,
+          "positions_per_game": 32,
+          "qdepth": 2,
+          "epsilon": 0.1,
+          "exploration_plies": 20,
+          "device": "cpu",
+          "evidence": "rl-improvement-development",
+          "seed": 44,
+          "max_plies": 512,
+          "nodes": 128,
+          "batches": 10,
+          "games_per_batch": 100
+        },
+        "device": "cpu",
+        "history": [
+          {
+            "batch": 1,
+            "games_total": 100,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5548486614227295,
+            "generation_seconds": 371.2947357916273,
+            "update_seconds": 0.06958291726186872,
+            "actor_sha256": "ac1230b0fd49fc13f031067e822fa4ecc249847a1e3904671630036b70e99e91"
+          },
+          {
+            "batch": 2,
+            "games_total": 200,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5586978721618653,
+            "generation_seconds": 398.5445020403713,
+            "update_seconds": 0.07368345791473985,
+            "actor_sha256": "978b2c90d4671f059de6b52cc8f95feb2cebacecb2ad0bb444b3077417c1ad5b"
+          },
+          {
+            "batch": 3,
+            "games_total": 300,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.47747331857681274,
+            "generation_seconds": 473.3414183757268,
+            "update_seconds": 0.08110537473112345,
+            "actor_sha256": "32c44ec55875b19726b3dbc346e6d0cb24082a3cb2bfb22770c01ef68da2ee05"
+          },
+          {
+            "batch": 4,
+            "games_total": 400,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4924065256118774,
+            "generation_seconds": 461.7351559945382,
+            "update_seconds": 0.08603199990466237,
+            "actor_sha256": "d3fc3624a91eeb7e4c726b94cfa44ad10b599cbda523e7f8c7d221ae908b4598"
+          },
+          {
+            "batch": 5,
+            "games_total": 500,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5181117486953736,
+            "generation_seconds": 447.458699867595,
+            "update_seconds": 0.07113470789045095,
+            "actor_sha256": "8794e543871cb8eb6400ebf2a87a99c70da4dda4367c2ad897c320ee5888390a"
+          },
+          {
+            "batch": 6,
+            "games_total": 600,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4608102834224701,
+            "generation_seconds": 372.50853629317135,
+            "update_seconds": 0.07388583291321993,
+            "actor_sha256": "9ec1495f844030651421c32a57ef7715790dfa44913db7f1c8daea558799d31f"
+          },
+          {
+            "batch": 7,
+            "games_total": 700,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.46838332056999205,
+            "generation_seconds": 418.0229753269814,
+            "update_seconds": 0.0724879577755928,
+            "actor_sha256": "bc80e2b6a71afddc19a2ca5be819a8549dde854dda08b574c41303bc6a6439f9"
+          },
+          {
+            "batch": 8,
+            "games_total": 800,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.4923000717163086,
+            "generation_seconds": 440.35864145774394,
+            "update_seconds": 0.08508662460371852,
+            "actor_sha256": "4ff9044b8a448780fe8b27e8609e684a44c6e6e36eb1ec8f049b8e97ec837ba4"
+          },
+          {
+            "batch": 9,
+            "games_total": 900,
+            "completed": 100,
+            "truncated": 0,
+            "loss": 0.5048109686374664,
+            "generation_seconds": 403.03193641873077,
+            "update_seconds": 0.07482237508520484,
+            "actor_sha256": "50a4d6dd7ac7cb41e7a9470091beef3fc11e7cfa9ed62e36c163a3092a529e13"
+          },
+          {
+            "batch": 10,
+            "games_total": 1000,
+            "completed": 99,
+            "truncated": 1,
+            "loss": 0.49744580490420565,
+            "generation_seconds": 492.6803894620389,
+            "update_seconds": 0.07917220797389746,
+            "actor_sha256": "773586a1b0bf3a70e99372f6539ec0d0141458c3a3ba994cfe9cb0285f6d191f"
+          }
+        ],
+        "initial_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+        "openings_sha256": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+        "provenance": {
+          "commit": "12662b47897cb315dbe65e1881b7a0385188eef1",
+          "dirty": true,
+          "python": "3.10.6",
+          "platform": "macOS-15.6.1-arm64-arm-64bit"
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "score": 0.44125,
+    "ci95": [
+      0.4154166666666667,
+      0.4658333333333334
+    ],
+    "seed_scores": [
+      0.39875,
+      0.44625,
+      0.47875
+    ],
+    "seed_sd": 0.04023369234857771,
+    "pairs": 200,
+    "games": 1200,
+    "capped_games": 1,
+    "uncapped_pairs": 199,
+    "uncapped_score": 0.440536013400335,
+    "cap_score_bounds": [
+      0.4408333333333333,
+      0.44166666666666665
+    ],
+    "conclusion": "regression",
+    "note": "Opening-pair uncertainty conditional on these three trained seeds; not a population-of-seeds interval"
+  },
+  "teacher_agreement": {
+    "baseline": {
+      "mse": 0.24158424108853738,
+      "mae": 0.3208432167391851,
+      "signed_error": 0.022674794051372113
+    },
+    "42": {
+      "mse": 0.3010901380234253,
+      "mae": 0.4178667527392041,
+      "signed_error": 0.07602919589344842
+    },
+    "43": {
+      "mse": 0.27392605299878015,
+      "mae": 0.3766543608691685,
+      "signed_error": 0.08637873366802144
+    },
+    "44": {
+      "mse": 0.306822596703585,
+      "mae": 0.4243583235350443,
+      "signed_error": 0.046629000101634364
+    }
+  },
+  "compute_seconds": 43900.65018649865,
+  "paid_cost_cad": 0
+}
