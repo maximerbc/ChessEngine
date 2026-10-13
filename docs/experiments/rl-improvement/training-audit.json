@@ -1,0 +1,29 @@
+{
+  "seeds": [
+    {
+      "seed": 42,
+      "games": 1000,
+      "truncated": 0,
+      "completed": 1000,
+      "actor_hashes_verified": true,
+      "legal_pgn_outcomes_verified": true
+    },
+    {
+      "seed": 43,
+      "games": 1000,
+      "truncated": 0,
+      "completed": 1000,
+      "actor_hashes_verified": true,
+      "legal_pgn_outcomes_verified": true
+    },
+    {
+      "seed": 44,
+      "games": 1000,
+      "truncated": 1,
+      "completed": 999,
+      "actor_hashes_verified": true,
+      "legal_pgn_outcomes_verified": true
+    }
+  ],
+  "scope": "Independent replay of all saved self-play PGNs; reconstruct actors from preceding checkpoint weights and original actor metadata before verifying hashes. No final results inspected."
+}

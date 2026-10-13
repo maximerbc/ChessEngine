@@ -12,7 +12,7 @@ from .diagnostics_report import table
 def generate(source, output):
     source,output=Path(source),Path(output)
     output.mkdir(parents=True,exist_ok=True)
-    for name in ['study-protocol','pilot-summary','decision','compute','status','openings-manifest','results','compute-amendment','study-protocol-original']:
+    for name in ['study-protocol','pilot-summary','decision','compute','status','openings-manifest','results','compute-amendment','study-protocol-original','training-audit']:
         path=source/f'{name}.json'
         if path.exists():
             shutil.copyfile(path,output/path.name)
@@ -33,6 +33,10 @@ def generate(source, output):
         html+=f"<p>Frozen protocol: {decision['nodes']} nodes/move; {decision['games_per_seed']} games per seed; forecast {decision['forecast_seconds']/3600:.2f} hours including safety margin, within the nine-hour planning allowance. A separate persisted 12-hour allowance applies.</p>"
     if (source/'compute-amendment.json').exists():
         html+='<p><b>Authorized amendment:</b> on 13 October the user removed the local CPU time cap. The original 12-hour limit above is historical; scientific settings and elapsed-time accounting remain unchanged.</p>'
+    if (source/'training-audit.json').exists():
+        audit=read_json(source/'training-audit.json')
+        html+='<h2>Completed training audit</h2><p>All recorded games were replayed to verify legal histories and terminal outcomes. Actor exports were reconstructed from preceding weights and original actor metadata to verify each frozen batch.</p>'
+        html+=table(['Seed','Games','Completed','Truncated'],[[x['seed'],x['games'],x['completed'],x['truncated']] for x in audit['seeds']])
     if status['status']=='complete':
         r=read_json(source/'results.json')
         a=r['aggregate']
