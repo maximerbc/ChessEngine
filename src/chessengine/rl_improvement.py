@@ -131,7 +131,7 @@ def aggregate_finals(game_sets, repetitions=10000, seed=2026):
                 note='Opening-pair uncertainty conditional on these three trained seeds; not a population-of-seeds interval')
 
 
-def run(config, stage='all'):
+def run(config, stage='all', unlimited_local=False):
     root=Path(config['output'])
     root.mkdir(parents=True,exist_ok=True)
     averaging=read_json(config['averaging_results'])
@@ -152,7 +152,7 @@ def run(config, stage='all'):
     else:
         write_json(snapshot,dict(identity=identity,provenance=provenance()))
     try:
-        with ComputeBudget(root/'compute.json',config['allowance_seconds']) as budget, threadpool_limits(limits=1):
+        with ComputeBudget(root/'compute.json',config['allowance_seconds'], enforce=not unlimited_local) as budget, threadpool_limits(limits=1):
             budget.check()
             openings=read_json(config['old_openings'])['train']
             actor=NumpyEvaluator(baseline)
@@ -269,8 +269,10 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('config')
     p.add_argument('--stage',choices=['all','pilot'],default='all')
+    p.add_argument('--unlimited-local', action='store_true',
+                   help='Explicitly authorized local run without a time cap; retain compute accounting')
     a=p.parse_args()
-    run(read_json(a.config),a.stage)
+    run(read_json(a.config),a.stage,unlimited_local=a.unlimited_local)
 
 
 if __name__=='__main__':

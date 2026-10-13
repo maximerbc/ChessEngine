@@ -32,6 +32,11 @@ def test_budget_persists_and_rejects_change(tmp_path, monkeypatch):
         with pytest.raises(BudgetExceeded):
             b.check()
     assert read_json(path)['consumed']==20
+    with ComputeBudget(path,20,enforce=False) as b:
+        now[0]+=5
+        b.check()
+        assert b.remaining == -5
+    assert read_json(path)['consumed']==25
     with pytest.raises(ValueError,match='mismatch'):
         ComputeBudget(path,30)
 

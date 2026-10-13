@@ -45,6 +45,6 @@
 
 ## Averaging and RL follow-up
 - Averaging adoption requires at least 2% lower mean MSE and two improving seeds. The stronger RL study uses seed 42 of the qualifying supervised configuration as the common initialization; never choose the best seed or initialize RL from the prediction ensemble. Record the actual selection and results in the study evidence.
-- RL improvement uses a quality-gated 128/256/512-node pilot and a persisted 12-hour local allowance. Do not relax quality thresholds or extend compute silently.
+- RL improvement retains its frozen quality-gated pilot and experimental settings. On 2026-10-13 the user removed local CPU time caps: provide a runtime estimate before launching local compute and continue tracking elapsed time. Paid compute still requires authorization; do not relax scientific quality thresholds.
 - Fresh final openings exclude corpus and old reserved source games/canonical positions. Complete all development selections before any new final matches. Teacher-validation error is secondary and cannot select RL checkpoints.
 - No new supervised search precedes this RL study. Released models remain unchanged.

@@ -10,7 +10,8 @@ class BudgetExceeded(RuntimeError):
 
 
 class ComputeBudget(AbstractContextManager):
-    def __init__(self, path, seconds):
+    def __init__(self, path, seconds, enforce=True):
+        self.enforce = enforce
         self.path, self.allowance = Path(path), seconds
         self.state = read_json(path) if self.path.exists() else dict(allowance=seconds, consumed=0., running_since=None)
         if self.state['allowance'] != seconds:
@@ -27,7 +28,7 @@ class ComputeBudget(AbstractContextManager):
         return self.allowance-self.state['consumed']-(time.perf_counter()-self.started)
 
     def check(self):
-        if self.remaining <= 1:
+        if self.enforce and self.remaining <= 1:
             raise BudgetExceeded('Local study compute allowance exhausted; progress preserved')
 
     def checkpoint(self):

@@ -4,7 +4,7 @@ Approved 2026-10-12; exact settings are in configs/rl-improvement.json. This fol
 
 Run locally:
 ```bash
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.rl_improvement configs/rl-improvement.json
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.rl_improvement configs/rl-improvement.json --unlimited-local
 ```
 Use the same command after interruption. It verifies frozen inputs/code and resumes completed pilot games, pending self-play games, training batches and match games. Add --stage pilot to stop after the affordable-protocol decision. No main training occurs if all pilots fail their quality/cost gates.
 
@@ -35,3 +35,7 @@ The main local run has started. Its results and playing-strength conclusion rema
 ```bash
 MPLCONFIGDIR=/private/tmp/chess-rl-mpl .venv/bin/python -m chessengine.rl_improvement_report runs/rl-improvement docs/experiments/rl-improvement
 ```
+
+### Authorized local-time amendment (2026-10-13)
+
+The user removed the local CPU time cap. Use `--unlimited-local` for subsequent resumes; report a runtime estimate before launching. The historical pilot decision and all learning/evaluation settings remain frozen. Elapsed-time accounting continues, including conservatively charged downtime. The original protocol and explicit code-hash amendment are preserved with the run evidence.

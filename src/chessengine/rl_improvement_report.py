@@ -12,7 +12,7 @@ from .diagnostics_report import table
 def generate(source, output):
     source,output=Path(source),Path(output)
     output.mkdir(parents=True,exist_ok=True)
-    for name in ['study-protocol','pilot-summary','decision','compute','status','openings-manifest','results']:
+    for name in ['study-protocol','pilot-summary','decision','compute','status','openings-manifest','results','compute-amendment','study-protocol-original']:
         path=source/f'{name}.json'
         if path.exists():
             shutil.copyfile(path,output/path.name)
@@ -31,6 +31,8 @@ def generate(source, output):
         html+='<p><b>No approved main study.</b> The predefined quality/compute gates rejected the pilot options. No main RL training or fresh final matches were run. The next step is a separately approved investigation of search completion and game truncation, not relaxation of the thresholds or an unreported larger budget.</p>'
     else:
         html+=f"<p>Frozen protocol: {decision['nodes']} nodes/move; {decision['games_per_seed']} games per seed; forecast {decision['forecast_seconds']/3600:.2f} hours including safety margin, within the nine-hour planning allowance. A separate persisted 12-hour allowance applies.</p>"
+    if (source/'compute-amendment.json').exists():
+        html+='<p><b>Authorized amendment:</b> on 13 October the user removed the local CPU time cap. The original 12-hour limit above is historical; scientific settings and elapsed-time accounting remain unchanged.</p>'
     if status['status']=='complete':
         r=read_json(source/'results.json')
         a=r['aggregate']
@@ -87,7 +89,7 @@ def generate(source, output):
              f"{sum(h['generation_seconds'] for h in x['training']['history']):.2f}",
              f"{sum(h['update_seconds'] for h in x['training']['history']):.2f}"] for x in r['seeds']])
     budget=read_json(source/'compute.json')
-    html+=f"<h2>Limitations and reproducibility</h2><p>Recorded active study wall time {budget['consumed']/3600:.3f} hours. Fresh final positions use unused games from the same historical archive, not a new era or population. Repeated development selection, only three training seeds and finite search budgets restrict conclusions. Aggregate bootstrap uncertainty is conditional on these fixed seeds. No public Elo or general chess-strength claim is made.</p>"
+    html+=f"<h2>Limitations and reproducibility</h2><p>Recorded study ledger time (including conservatively charged interruption downtime) {budget['consumed']/3600:.3f} hours. Fresh final positions use unused games from the same historical archive, not a new era or population. Repeated development selection, only three training seeds and finite search budgets restrict conclusions. Aggregate bootstrap uncertainty is conditional on these fixed seeds. No public Elo or general chess-strength claim is made.</p>"
     html+='<p>Training/evaluation inputs and code hashes are frozen in the protocol. Graceful interruption saves completed games; an unclosed crash interval is charged conservatively to the allowance. See <a href="../../rl-improvement.md">methods and commands</a>.</p><ul>'
     html+=''.join(f'<li><a href="{p.name}">{p.name}</a></li>' for p in sorted(output.glob('*.json')))
     (output/'index.html').write_text(html+'</ul></html>')
