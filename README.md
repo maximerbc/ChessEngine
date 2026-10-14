@@ -95,3 +95,5 @@ The Research tab contains all seeds, downloadable game records, and an HTML/PDF 
 The [fixed-data study protocol](docs/fixed-data-improvements.md) compares optimization and player-relative representations on the same 180,302 training positions. Its [separate comparison report](docs/experiments/fixed-data-improvements/index.html) records development evidence; these experimental models do not replace the demo checkpoints.
 
 [Averaging study](docs/experiments/supervised-averaging/index.html): prediction averaging improves MSE at higher inference cost; weight averaging misses the predefined adoption threshold. [Protocol and RL handoff](docs/supervised-averaging.md).
+
+[Stronger RL study](docs/experiments/rl-improvement/index.html): 3,000 self-play games and 1,200 final comparison games. RL scored 44.13% against its supervised initializer (95% paired interval 41.54–46.58%), supporting regression under this protocol. Released models remain unchanged. [Methods and limitations](docs/rl-improvement.md).

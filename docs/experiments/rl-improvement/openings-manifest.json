@@ -1,0 +1,12 @@
+{
+  "inputs": {
+    "old_openings": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+    "corpus": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+    "archive": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635"
+  },
+  "sha256": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+  "fresh_pairs": 200,
+  "scanned_games": 24316,
+  "canonical_overlaps": 0,
+  "note": "12-ply starts; no test labels consumed; old test positions excluded"
+}

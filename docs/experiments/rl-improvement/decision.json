@@ -1,0 +1,13 @@
+{
+  "approved": true,
+  "nodes": 128,
+  "games_per_seed": 1000,
+  "batches": 10,
+  "games_per_batch": 100,
+  "development_batches": [
+    5,
+    10
+  ],
+  "forecast_seconds": 31337.823204590757,
+  "rejected_pilots": []
+}

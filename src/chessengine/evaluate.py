@@ -82,7 +82,7 @@ def freeze_protocol(candidate, baseline, openings, config, output, split="test")
     return protocol
 
 
-def run_matches(protocol_path, output):
+def run_matches(protocol_path, output, budget=None):
     """Always close the optional reference engine, including on interruption."""
     protocol = read_json(protocol_path)
     reference = None
@@ -93,13 +93,13 @@ def run_matches(protocol_path, output):
         reference = chess.engine.SimpleEngine.popen_uci(binary)
         reference.configure({"Threads": 1, "Hash": 32})
     try:
-        return _run_matches(protocol_path, output, reference)
+        return _run_matches(protocol_path, output, reference, budget)
     finally:
         if reference:
             reference.quit()
 
 
-def _run_matches(protocol_path, output, reference=None):
+def _run_matches(protocol_path, output, reference=None, budget=None):
     protocol = read_json(protocol_path)
     for field in ("candidate", "baseline"):
         if identity(protocol[field]) != protocol[field + "_sha256"]:
@@ -128,7 +128,10 @@ def _run_matches(protocol_path, output, reference=None):
                 reference.configure({"Clear Hash": None})
             started = time.perf_counter()
             node_count = 0
+            depth_sum, searched_moves, depth_one_moves = 0, 0, 0
             for _ in range(config["max_plies"]):
+                if budget:
+                    budget.check()
                 if board.is_game_over(claim_draw=True):
                     break
                 if reference and board.turn != color:
@@ -146,6 +149,9 @@ def _run_matches(protocol_path, output, reference=None):
                 )
                 result = search.run(board)
                 node_count += result.nodes
+                depth_sum += result.depth
+                searched_moves += 1
+                depth_one_moves += result.depth >= 1
                 board.push_uci(result.move)
             outcome = board.outcome(claim_draw=True)
             capped = outcome is None
@@ -164,11 +170,14 @@ def _run_matches(protocol_path, output, reference=None):
                     "capped": capped,
                     "pgn": str(game),
                     "nodes": node_count,
+                    "searched_moves": searched_moves, "depth_one_moves": depth_one_moves, "depth_sum": depth_sum,
                     "seconds": time.perf_counter() - started,
                     "result": game.headers["Result"],
                 }
             )
             write_json(result_path, {"protocol_sha256": protocol_hash, "protocol": protocol, "games": games})
+            if budget:
+                budget.checkpoint()
     summary = paired_summary(games, config["seed"])
     write_json(
         output / "summary.json",

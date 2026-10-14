@@ -10,7 +10,7 @@
 - `src/chessengine`: Python engine, features, NumPy inference, data, PyTorch training, RL, evaluation, reports, FastAPI, CLI. `web`: React/TypeScript UI. `configs`: experimental settings. `tests`: correctness and research-integrity checks. `docs`: decisions, mathematics, operations, PR handoffs.
 - python-chess owns rules and PGN; our negamax/alpha-beta engine chooses moves. Stockfish only labels data or acts as an explicitly named reference opponent. Never silently substitute Stockfish for our demo engine.
 - One shared engine for self-play, matches, and API. Runtime inference uses exported NumPy MLP weights; PyTorch is training-only. Feature/checkpoint schema versions must be validated, not guessed.
-- Side-to-move value in [-1,1]; terminal mate search scores are outside that range. Negate child scores exactly once per ply. Feature v1 uses absolute square/color coordinates; experimental v2 uses player-relative coordinates and v3 adds normalized material summaries. All preserve castling, en passant, halfmove clock and original-history repetition indicators. Labels retain their side-to-move sign. Checkpoints select the encoder explicitly; RL supports v1 only until separately extended.
+- Side-to-move value in [-1,1]; terminal mate search scores are outside that range. Negate child scores exactly once per ply. Feature v1 uses absolute square/color coordinates; experimental v2 uses player-relative coordinates and v3 adds normalized material summaries. All preserve castling, en passant, halfmove clock and original-history repetition indicators. Labels retain their side-to-move sign. Checkpoints select the encoder explicitly; RL supports v1 and v3 explicitly; v2 remains unsupported.
 - Preserve complete move history. Draw claims are automatically taken consistently across API/self-play/evaluation; document this convention. TT keys must distinguish reversible history/halfmove state. Never reuse TT values across models or games.
 - No MCTS, policy network, custom move generator, UCI engine protocol, user accounts, database, or online training in v1.
 
@@ -42,3 +42,9 @@
 - Diagnostics use training/validation records only; old test results cannot select candidates. Keep released checkpoints and public website assets unchanged.
 - Freeze the diagnostic configuration before running experiments. Conditional regularization follows its predefined gap rule; do not expand the search after viewing outcomes.
 - Report frozen-checkpoint training error separately from online training loss. Preserve per-seed evidence and whole-game bootstrap uncertainty; development improvements do not establish stronger play.
+
+## Averaging and RL follow-up
+- Averaging adoption requires at least 2% lower mean MSE and two improving seeds. The stronger RL study uses seed 42 of the qualifying supervised configuration as the common initialization; never choose the best seed or initialize RL from the prediction ensemble. Record the actual selection and results in the study evidence.
+- RL improvement retains its frozen quality-gated pilot and experimental settings. On 2026-10-13 the user removed local CPU time caps: provide a runtime estimate before launching local compute and continue tracking elapsed time. Paid compute still requires authorization; do not relax scientific quality thresholds.
+- Fresh final openings exclude corpus and old reserved source games/canonical positions. Complete all development selections before any new final matches. Teacher-validation error is secondary and cannot select RL checkpoints.
+- No new supervised search precedes this RL study. Released models remain unchanged.

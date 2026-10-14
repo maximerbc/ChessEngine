@@ -1,0 +1,72 @@
+{
+  "identity": {
+    "config": {
+      "averaging_results": "runs/supervised-averaging/results.json",
+      "output": "runs/rl-improvement",
+      "old_openings": "configs/openings.json",
+      "corpus": "data/expanded-200k-labeled.jsonl",
+      "development_data": "runs/supervised-200k/subset-all.jsonl",
+      "archive": "data/lichess-2013-01.pgn.zst",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "pilot_seed": 2027,
+      "nodes": [
+        128,
+        256,
+        512
+      ],
+      "pilot_games": 20,
+      "game_targets": [
+        1000,
+        500,
+        250
+      ],
+      "forecast_seconds": 32400,
+      "allowance_seconds": 43200,
+      "development_pairs": 40,
+      "final_pairs": 200,
+      "bootstrap_resamples": 10000,
+      "bootstrap_seed": 2026,
+      "max_plies": 512,
+      "equal_time_ms": 100,
+      "training": {
+        "learning_rate": 0.0001,
+        "batch_size": 256,
+        "positions_per_game": 32,
+        "qdepth": 2,
+        "epsilon": 0.1,
+        "exploration_plies": 20,
+        "device": "cpu",
+        "evidence": "rl-improvement-development"
+      }
+    },
+    "baseline_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+    "averaging_sha256": "0697eb38421b692b382fcd0dd00c6ed670060d98659894cd6a05ae89df265056",
+    "sources": {
+      "old_openings": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+      "corpus": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+      "development_data": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+      "archive": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635"
+    },
+    "code": {
+      "rl_improvement": "d721c9cb4f0829e156483e8fc1a8d5b83ac1fc2ec5f84b017c96d6d272e2f0ab",
+      "compute_budget": "576d957218bee9a75345060364ab5355e4fc58c7a8a004867370edd04eaebc44",
+      "rl": "0410c418523daed6d4a533e1469396ea63e0210757f52e2cbbb25edb116dd2a0",
+      "evaluate": "462d438d70cf06b443416c090d2450771b0d3fceaa2732c8de6e6056e6d559bb",
+      "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a",
+      "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+      "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+      "train": "00b512b53402f015eb6c11e1886ac075c08f55f9419ea5fe18fdb0c3fae87cfb",
+      "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a"
+    }
+  },
+  "provenance": {
+    "commit": "36ce76b540f296ca910410c9b281a1e0fe898b90",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

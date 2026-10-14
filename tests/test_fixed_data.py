@@ -74,9 +74,9 @@ def test_canonical_leakage_and_rl_rejection(tmp_path):
     path = tmp_path / 'relative.npz'
     export(build_model([16,8], feature_version=2), path, {'hidden':[16,8]})
     evaluator = NumpyEvaluator(path)
-    with pytest.raises(ValueError, match='version 1 only'):
+    with pytest.raises(ValueError, match='versions 1 and 3 only'):
         play_game(evaluator, {}, {}, random.Random(42))
-    with pytest.raises(ValueError, match='version 1 only'):
+    with pytest.raises(ValueError, match='versions 1 and 3 only'):
         selfplay(path, 'missing', tmp_path / 'rl', {})
 
 

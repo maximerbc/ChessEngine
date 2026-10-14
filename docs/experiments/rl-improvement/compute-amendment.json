@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-13",
+  "authorization": "User explicitly removed local CPU compute allowances; provide runtime estimate before launching.",
+  "enforce_time_limit": false,
+  "code_changes": {
+    "compute_budget": {
+      "before": "5f00ba8fe0ebd5c5417226bca81e77ec0c4848d24366f557f61bc70ee6f28247",
+      "after": "576d957218bee9a75345060364ab5355e4fc58c7a8a004867370edd04eaebc44"
+    },
+    "rl_improvement": {
+      "before": "23a2f8db2f04004260b4295b9709923337ee092fe5bdcf12b91f17de7e32d594",
+      "after": "d721c9cb4f0829e156483e8fc1a8d5b83ac1fc2ec5f84b017c96d6d272e2f0ab"
+    }
+  },
+  "original_protocol_sha256": "306ee9b7381fca7684ab8afd6a23dbe09971a16c4252a7e1624b15df11dc0260",
+  "amended_protocol_sha256": "9826a89af758d0a54f6206a516a6aea031be0381441b8f40da7f0187c9a054ec",
+  "scientific_settings_changed": false,
+  "ledger_note": "Original conservative downtime charges preserved; ledger is not exact active CPU time."
+}

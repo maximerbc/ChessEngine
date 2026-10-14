@@ -69,3 +69,24 @@ Both health probes now retry all curl errors, with a 5-second per-attempt timeou
 - Completed 18 CPU runs. Historical references reproduced exactly (zero weight differences); no canonical train/validation overlap. Combined relative/material features and LR 0.0003 achieved mean MSE 0.240760, an 11.97% reduction; all three paired source-game intervals versus reference are below zero. Adaptive LR did not meet the development criterion.
 - Independently verified all 18 checkpoint/prediction checksums, recomputed validation MSE from saved predictions, checked identical target/game arrays, subgroup position totals, optimizer-step totals, final ranking and frozen dataset/code hashes. Visually inspected both figures and opened the HTML report in the browser.
 - Final local suite on 2026-10-12: 52 passed. Remote GitHub CI remains pending the user push. Epoch work 142.4 seconds, full invocation 363.1 seconds, C$0. Repeated validation selection, unequal compute and slower experimental encoding limit interpretation; no claim of stronger play.
+
+## Averaging and RL follow-up implementation (2026-10-12)
+
+- Averaging study: 55 local tests passed before the RL changes. Three ordinary trajectories reproduced exactly. Weight-average MSE 0.236791 is a 1.65% reduction, below the 2% adoption rule; all three seeds improved. Ensemble MSE 0.226863 costs about three times one-model inference. Saved prediction MSE/checksums independently verified; both figures visually inspected. C$0.
+- RL implementation: 60 local tests passed with Ruff and whitespace checks. Includes complete tiny three-seed training/development/final/equal-time/report flow; selection-before-final enforcement; v3 target/pending-resume tests; fresh-source-game/canonical exclusions; pilot selection and shared-pair statistics; persisted compute allowance. An intermediate smoke resume correctly rejected a code change made while that test was running; the final fixed-code suite passed.
+- Scientific RL implementation frozen at `36ce76b` before the pilot. The actual full-study outcome is recorded separately in the RL report once available. Tiny test results are not the main experiment. Remote CI requires user pushes.
+
+## RL continuation audit (2026-10-13)
+
+- Full local suite after the authorized time-cap removal: 60 passed. Local CPU computation remains accounted for, but the explicitly requested unlimited-local mode no longer stops at 12 hours. Scientific settings, selection rules and original protocol evidence remain preserved.
+- Independently replayed all 3,000 saved self-play PGNs: legal histories and recorded terminal outcomes agree. Seeds 42 and 43 each completed 1,000 games; seed 44 completed 999 and correctly marked one truncated game. Per-batch completed/truncated counts and generation-time totals agree with raw records.
+- Reconstructed all 30 frozen actor exports using the preceding model weights and original actor metadata; hashes match every batch and every game. A preliminary audit compared whole-file hashes against training exports and correctly failed because actor metadata differs; reconstruction with the actual actor metadata resolves that audit assumption without changing models or evidence.
+- Final evaluation remains in progress. No playing-strength conclusion, remote CI result, push or deployment is claimed.
+
+## Completed stronger RL study (2026-10-13)
+
+- All 3,000 self-play games, 480 development matches, 1,200 final matches and 240 equal-time matches completed. The final runner status is complete and its ledger is closed.
+- Independently replayed all 1,920 evaluation PGNs and verified legal outcomes, candidate-perspective scoring, complete swapped-color pairs, candidate/baseline hashes, selection locks and the prescribed development tie rule. Recomputed the shared-pair 10,000-resample aggregate interval independently: score 0.44125, interval [0.4154166667, 0.4658333333].
+- One final game hit the move cap; assigning it a loss or win yields aggregate scores 0.440833–0.441667, leaving the conclusion unchanged. The training audit independently confirmed the single truncated self-play game was excluded.
+- Measured saved-game and update work totals 6.488 hours, excluding preparation/reporting and interrupted unsaved games. The conservative ledger totals 12.195 hours, including interruption downtime; the user authorized removal of the time cap. C$0 paid compute.
+- Inspected the completed learning figure and checked report completion, findings and local asset links. Released models and public website assets are unchanged. Negative results are retained; remote CI, pushes and any future release remain user-controlled.
