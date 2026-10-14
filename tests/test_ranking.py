@@ -231,3 +231,35 @@ def test_guided_bundle_and_api_identity(tmp_path, monkeypatch):
     rank.write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="checksum"):
         load_guided(bundle)
+
+
+def test_guided_matches_resume_and_pairing(tmp_path):
+    from chessengine.common import write_json, digest
+    from chessengine.features import record_board
+    from chessengine.evaluate import freeze_protocol, run_matches
+
+    value = baseline(tmp_path)
+    rank = tmp_path / "rank.npz"
+    export_ranker(build_ranker(value), rank, {})
+    bundle = tmp_path / "bundle.json"
+    write_json(
+        bundle,
+        dict(value=value.name, ranker=rank.name, value_sha256=digest(value), ranker_sha256=digest(rank)),
+    )
+    openings = tmp_path / "openings.json"
+    write_json(openings, {"development": [dict(id="tiny", **record_board(chess.Board()))]})
+    protocol = tmp_path / "protocol.json"
+    freeze_protocol(
+        "guided:" + str(bundle),
+        str(value),
+        openings,
+        dict(pairs=1, nodes=10, max_plies=2, seed=42),
+        protocol,
+        "development",
+    )
+    result = run_matches(protocol, tmp_path / "matches")
+    assert result["games"] == 2 and result["capped_games"] == 2
+    assert run_matches(protocol, tmp_path / "matches") == result
+    rank.write_bytes(b"changed")
+    with pytest.raises(ValueError, match="checksum"):
+        run_matches(protocol, tmp_path / "matches")
