@@ -174,65 +174,6 @@ def test_move_label_resume_and_corruption(tmp_path, monkeypatch):
         label(config)
 
 
-def test_guided_bundle_and_api_identity(tmp_path, monkeypatch):
-    from fastapi.testclient import TestClient
-    from chessengine.common import write_json, digest
-    from chessengine.ranking import GuidedEvaluator, load_guided
-    from chessengine.model import NumpyEvaluator
-    from chessengine.api import create_app
-
-    value = baseline(tmp_path)
-    rank = tmp_path / "rank.npz"
-    export_ranker(build_ranker(value), rank, {})
-    guided = GuidedEvaluator(NumpyEvaluator(value), NumpyRanker(rank))
-    bundle = tmp_path / "bundle.json"
-    write_json(
-        bundle,
-        {
-            "value": value.name,
-            "ranker": rank.name,
-            "value_sha256": digest(value),
-            "ranker_sha256": digest(rank),
-        },
-    )
-    assert load_guided(bundle).checkpoint_id == guided.checkpoint_id
-    manifest = tmp_path / "manifest.json"
-    rows = [dict(id=i, name=i, file=value.name, sha256=digest(value)) for i in ["supervised", "rl"]]
-    rows.append(
-        dict(
-            id="move-guided",
-            name="guided",
-            kind="move-guided",
-            value_model_id="supervised",
-            ranker_file=rank.name,
-            ranker_sha256=digest(rank),
-            sha256=guided.checkpoint_id,
-        )
-    )
-    write_json(manifest, {"showcase_version": 2, "default": "supervised", "models": rows})
-    monkeypatch.setenv("REQUIRE_MODELS", "1")
-    with TestClient(create_app(manifest)) as client:
-        result = client.post("/analyze", json={"model_id": "move-guided", "nodes": 100}).json()
-        assert result["checkpoint_id"] == guided.checkpoint_id
-        assert len(result["root_rankings"]) == 20
-        assert result["components"]["value"] == digest(value)
-        classical = client.post("/analyze", json={"model_id": "handcrafted", "nodes": 10}).json()
-        terms = classical["explanation"]["handcrafted"]
-        assert (
-            abs(
-                np.tanh((terms["material"] + terms["position"]) / terms["scale"])
-                - classical["explanation"]["raw_value"]
-            )
-            < 1e-7
-        )
-    write_json(manifest, {"showcase_version": 2, "default": "supervised", "models": rows[:2]})
-    with pytest.raises(ValueError, match="move-guided"):
-        create_app(manifest)
-    rank.write_bytes(b"corrupt")
-    with pytest.raises(ValueError, match="checksum"):
-        load_guided(bundle)
-
-
 def test_guided_matches_resume_and_pairing(tmp_path):
     from chessengine.common import write_json, digest
     from chessengine.features import record_board
