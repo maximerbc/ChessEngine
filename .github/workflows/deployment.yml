@@ -46,6 +46,9 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
           npx playwright test tests/deployment.spec.ts
+          if node -e 'process.exit(JSON.parse(require("fs").readFileSync("../artifacts/models/manifest.json")).showcase_version === 2 ? 0 : 1)'; then
+            RUN_SHOWCASE_TESTS=1 npx playwright test tests/showcase.spec.ts
+          fi
       - name: Container logs
         if: always()
         run: |

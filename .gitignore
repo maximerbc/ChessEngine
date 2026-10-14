@@ -25,3 +25,5 @@ artifacts/models/*
 !artifacts/models/supervised.npz
 !artifacts/models/rl.npz
 web/*.tsbuildinfo
+
+!artifacts/models/ranker.npz

@@ -12,6 +12,7 @@ from threadpoolctl import threadpool_limits
 from .common import read_json
 from .engine import Search, Handcrafted, MATE
 from .model import NumpyEvaluator
+from .ranking import NumpyRanker, GuidedEvaluator
 
 
 class AnalysisRequest(BaseModel):
@@ -40,6 +41,8 @@ def create_app(manifest_path=None):
     if manifest_path.exists():
         manifest = read_json(manifest_path)
         for row in manifest["models"]:
+            if row.get("kind") == "move-guided":
+                continue
             evaluator = NumpyEvaluator(manifest_path.parent / row["file"])
             if evaluator.checkpoint_id != row["sha256"]:
                 raise ValueError("Model manifest checksum mismatch")
@@ -49,7 +52,34 @@ def create_app(manifest_path=None):
                 "evidence": evaluator.metadata.get("evidence", "unknown"),
                 "checkpoint_id": evaluator.checkpoint_id,
                 "evaluator": evaluator,
+                "documentation_path": row.get("documentation_path"),
+                "experimental": row.get("experimental", row["id"] == "rl"),
+                "components": {"value": evaluator.checkpoint_id},
             }
+        for row in manifest["models"]:
+            if row.get("kind") != "move-guided":
+                continue
+            value_id = row["value_model_id"]
+            if value_id not in models:
+                raise ValueError("Guided value component is missing")
+            ranker = NumpyRanker(manifest_path.parent / row["ranker_file"])
+            if ranker.checkpoint_id != row["ranker_sha256"]:
+                raise ValueError("Ranker checksum mismatch")
+            evaluator = GuidedEvaluator(models[value_id]["evaluator"], ranker)
+            if evaluator.checkpoint_id != row["sha256"]:
+                raise ValueError("Guided component identity mismatch")
+            models[row["id"]] = dict(
+                name=row["name"],
+                kind="move-guided",
+                evidence="supervised-root-ordering",
+                checkpoint_id=evaluator.checkpoint_id,
+                evaluator=evaluator,
+                documentation_path=row.get("documentation_path"),
+                experimental=row.get("experimental", True),
+                components={"value": models[value_id]["checkpoint_id"], "ranker": ranker.checkpoint_id},
+            )
+        if require_models and manifest.get("showcase_version") == 2 and "move-guided" not in models:
+            raise ValueError("Production showcase requires move-guided components")
         default_model = manifest.get("default", default_model)
         if default_model not in models:
             raise ValueError("Default model is missing")
@@ -126,6 +156,19 @@ def create_app(manifest_path=None):
             "value_perspective": "side_to_move_at_request",
             "model_id": request.model_id,
             "checkpoint_id": models[request.model_id]["checkpoint_id"],
+            "components": models[request.model_id].get("components", {}),
+            "explanation": {
+                "handcrafted": Handcrafted().explain(board) if request.model_id == "handcrafted" else None,
+                "feature_version": getattr(models[request.model_id]["evaluator"], "feature_version", None),
+                "raw_value": float(models[request.model_id]["evaluator"](board)),
+                "side_to_move": "white" if board.turn else "black",
+                "piece_counts": {
+                    ("own" if color == board.turn else "opponent"): {
+                        chess.piece_name(piece): len(board.pieces(piece, color)) for piece in range(1, 6)
+                    }
+                    for color in [board.turn, not board.turn]
+                },
+            },
         }
 
     return app

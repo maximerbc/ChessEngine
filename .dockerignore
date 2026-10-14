@@ -26,3 +26,5 @@
 !web/public/models/**
 !web/public/research/
 !web/public/research/**
+
+!artifacts/models/ranker.npz

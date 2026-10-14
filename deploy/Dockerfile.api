@@ -7,6 +7,6 @@ COPY requirements-runtime.txt pyproject.toml README.md LICENSE ./
 COPY src/chessengine ./src/chessengine
 RUN pip install --no-cache-dir -r requirements-runtime.txt && pip install --no-cache-dir --no-deps . \
     && useradd --uid 10001 --create-home engine
-COPY artifacts/models/manifest.json artifacts/models/supervised.npz artifacts/models/rl.npz ./artifacts/models/
+COPY artifacts/models/manifest.json artifacts/models/*.npz ./artifacts/models/
 USER 10001
 CMD ["sh", "-c", "exec uvicorn chessengine.api:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1"]
