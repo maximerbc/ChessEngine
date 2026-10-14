@@ -119,3 +119,11 @@ Completed 3,000 self-play games, 480 development matches, 1,200 final matches an
 ### Validation and boundaries
 
 60 local Python tests passed. Independently replayed all training and evaluation PGNs, verified actor/checkpoint hashes, development selections, color pairing, score perspective and the 10,000-resample aggregate bootstrap. The report records negative evidence, seed variability, compute accounting and limitations. Paid compute C$0. No remote push, deployment or released-model replacement. GitHub CI requires the user push.
+
+## 10. Diagnose and constrain RL update drift
+
+Head: `codex/rl-update-diagnosis`, after the completed RL study.
+
+Adds a frozen fixed-trajectory ablation comparing outcome fitting, smaller updates and a penalty toward initial predictions. Nine fits and 720 development games completed. Anchoring scored 52.083% against the initializer versus 44.583% for the matched replay reference, with all three seeds improving relative to reference. This is off-policy development evidence, not a successful live RL or final-test claim.
+
+64 local tests passed, including detached anchor targets, replay history/signs, exact resume, mismatch rejection and the complete tiny study/report. All nine checkpoint identities and raw match score totals verified. Released assets unchanged; no paid compute or remote push.
