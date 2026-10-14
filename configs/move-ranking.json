@@ -1,0 +1,23 @@
+{
+  "source": "data/expanded-200k-labeled.jsonl",
+  "baseline": "runs/fixed-data-improvements/combined-42/best.npz",
+  "rl_checkpoint": "runs/rl-improvement/seed-42/training/batch-010.npz",
+  "teacher_manifest": "data/main-labeled.jsonl.manifest.json",
+  "binary": "tools/stockfish/stockfish-macos-universal",
+  "old_openings": "configs/openings.json",
+  "previous_openings": "runs/rl-improvement/openings.json",
+  "archive": "data/lichess-2013-01.pgn.zst",
+  "output": "runs/move-ranking",
+  "train_positions": 50000,
+  "validation_positions": 5000,
+  "sampling_seed": 20261014,
+  "label_nodes": 10000,
+  "label_chunk_size": 1000,
+  "seeds": [42,43,44],
+  "training": {"learning_rate": 0.0003, "weight_decay": 0.0001, "batch_size": 256, "epochs": 40, "patience": 6},
+  "development_pairs": 40,
+  "final_pairs": 200,
+  "evaluation_nodes": 2000,
+  "evaluation_time_ms": 100,
+  "max_plies": 512
+}
