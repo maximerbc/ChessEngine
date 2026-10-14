@@ -39,3 +39,7 @@ After the negative regularization study, the user approved 200k total labelled p
 ## Fixed-data optimization and representation (2026-10-11)
 
 The approved next study holds all expanded training/validation examples and labels fixed. Add explicit feature schemas: v1 remains unchanged, v2 rank-reflects Black-to-move inputs and swaps color roles, and v3 appends material counts, phase and balance. Preserve history features and target signs. Legacy defaults remain v1; experimental schemas are rejected by RL entry points. Compare two learning-rate treatments and two representation treatments with a reproduced reference before one conditional combination; no additional search or released-model replacement.
+
+## 2026-10-12 — Bounded averaging before RL
+
+Run one three-seed supervised weight-averaging experiment and an equal-weight prediction ensemble on unchanged data. First weight snapshot is taken after completing epoch 8; ordinary training controls stopping. Retain the approved 2%/two-seed adoption rule and preselect seed 42 for common RL initialization. The ensemble will not initialize RL. No further supervised search precedes the RL pilot.

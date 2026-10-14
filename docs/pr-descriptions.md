@@ -91,3 +91,15 @@ Completed the 15 predefined fits plus three conditionally authorized combination
 ### Boundaries
 
 No new labels, augmentation, final-test evaluation, RL training or deployment change. Released checkpoints and public website assets are untouched. Repeated validation selection and unequal compute remain limitations; lower teacher-target MSE does not establish stronger chess. Fresh confirmatory data and controlled matches are proposed separately. Full evidence and reproduction instructions: `docs/fixed-data-improvements.md`.
+
+## 8. Compare supervised averaging methods
+
+Base: `main` after fixed-data improvements | Head: `feat/supervised-averaging`
+
+### Change and evidence
+
+Adds equal-weight prediction ensembling and a bounded three-seed weight-averaging study on unchanged data. Saves averaging/resume state without changing ordinary updates or early stopping. Ordinary trajectories reproduced exactly. Weight averaging reduced mean MSE by 1.65%, below the predefined 2% adoption rule; retain the existing seed-42 model for RL. Prediction averaging reached MSE 0.22686 but costs about three times one-model inference and is diagnostic only.
+
+### Validation
+
+55 local Python tests passed, including arithmetic, unchanged trajectories, exact resume, export parity and the tiny complete study/report. Full prediction metrics and checksums were independently verified; figures inspected. Paid compute C$0. No final-test selection, new data, public model or deployment changes. Remote checks require user push.

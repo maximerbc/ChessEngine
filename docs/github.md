@@ -62,3 +62,7 @@ git push -u origin feat/fixed-data-improvements
 ```
 
 Title: **Improve supervised fitting with fixed training data**. The seventh draft in `docs/pr-descriptions.md` records the actual experiment results. No checkpoint or deployment replacement is included. Wait for remote checks before merging.
+
+## Averaging follow-up
+
+Merge fixed-data improvements first. Push `feat/supervised-averaging` and use draft 8 in `docs/pr-descriptions.md`, titled **Compare supervised averaging methods**. The subsequent `feat/rl-improvement-study` branch builds on this work. Target `main` after the parent merges; preserve merge ancestry. The user handles pushes.

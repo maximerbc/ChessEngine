@@ -93,3 +93,5 @@ The release includes a **bounded local study**: 100,000 teacher-labeled position
 The Research tab contains all seeds, downloadable game records, and an HTML/PDF report. See [validation and limitations](docs/validation.md), [the preregistered local protocol](docs/local-study-preregistration.md), and [the prepared PR descriptions](docs/pr-descriptions.md). Actual paid compute cost: **C$0**.
 
 The [fixed-data study protocol](docs/fixed-data-improvements.md) compares optimization and player-relative representations on the same 180,302 training positions. Its [separate comparison report](docs/experiments/fixed-data-improvements/index.html) records development evidence; these experimental models do not replace the demo checkpoints.
+
+[Averaging study](docs/experiments/supervised-averaging/index.html): prediction averaging improves MSE at higher inference cost; weight averaging misses the predefined adoption threshold. [Protocol and RL handoff](docs/supervised-averaging.md).

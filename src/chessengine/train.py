@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import copy
 import time
 from pathlib import Path
 import numpy as np
@@ -47,6 +48,25 @@ def trusted_load(path):
     return torch.load(path, map_location="cpu", weights_only=False)
 
 
+def update_average(average, model, count):
+    """Equal-weight running mean; no random draws or changes to the actor model."""
+    with torch.no_grad():
+        for dst, src in zip(average.parameters(), model.parameters()):
+            if count == 0:
+                dst.copy_(src)
+            else:
+                dst.add_((src - dst) / (count + 1))
+
+
+def validation_mse(model, x, y, batch_size, device):
+    model.eval()
+    total = 0.0
+    with torch.no_grad():
+        for ids in torch.arange(len(x)).split(batch_size):
+            total += ((model(x[ids].to(device)).squeeze(-1) - y[ids].to(device)) ** 2).sum().item()
+    return total / len(x)
+
+
 def fit(source, output, config, resume=False, prepared=None):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
@@ -81,6 +101,8 @@ def fit(source, output, config, resume=False, prepared=None):
     identity = {k: v for k, v in config.items() if k != "epochs"}
     signature = json_hash({"data": source_sha, "config": identity, "features": version})
     history, start_epoch, best, stale, elapsed = [], 0, float("inf"), 0, 0.0
+    average = copy.deepcopy(model) if config.get("average_start_epoch") else None
+    average_count, average_best = 0, float("inf")
     state_path = output / "resume.pt"
     if resume:
         state = trusted_load(state_path)
@@ -93,6 +115,9 @@ def fit(source, output, config, resume=False, prepared=None):
         history, start_epoch, best, stale, elapsed = (
             state[k] for k in ["history", "epoch", "best", "stale", "elapsed"]
         )
+        if average is not None:
+            average.load_state_dict(state["average"])
+            average_count, average_best = state["average_count"], state["average_best"]
         restore_rng(state["rng"])
     elif state_path.exists():
         raise ValueError("Output already contains a run; use --resume or a new directory")
@@ -150,6 +175,17 @@ def fit(source, output, config, resume=False, prepared=None):
         else:
             stale += 1
         export(model, output / "last.npz", metadata)
+        if average is not None and epoch + 1 >= config["average_start_epoch"]:
+            update_average(average, model, average_count)
+            average_count += 1
+            avg_loss = validation_mse(average, xv, yv, config["batch_size"], device)
+            history[-1].update(average_validation_loss=avg_loss, average_count=average_count)
+            avg_meta = {**metadata, "averaging": {"start_epoch": config["average_start_epoch"],
+                                                "count": average_count}}
+            if avg_loss < average_best:
+                average_best = avg_loss
+                export(average, output / "average-best.npz", avg_meta)
+            export(average, output / "average-last.npz", avg_meta)
         save_state(
             state_path,
             {
@@ -157,6 +193,9 @@ def fit(source, output, config, resume=False, prepared=None):
                 "model": model.state_dict(),
                 "optimizer": optimizer.state_dict(),
                 "scheduler": scheduler.state_dict() if scheduler else None,
+                "average": average.state_dict() if average is not None else None,
+                "average_count": average_count,
+                "average_best": average_best,
                 "rng": rng_state(),
                 "epoch": epoch + 1,
                 "best": best,
