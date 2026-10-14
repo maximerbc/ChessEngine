@@ -126,3 +126,32 @@ def export_ranker(model, path, metadata):
     }
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(path, metadata=np.array(json.dumps(meta)), **arrays)
+
+
+class GuidedEvaluator:
+    """Compose a frozen value evaluator with a separate root move scorer."""
+
+    def __init__(self, value, ranker):
+        from .common import json_hash
+
+        self.value = value
+        self.ranker = ranker
+        self.checkpoint_id = json_hash({"value": value.checkpoint_id, "ranker": ranker.checkpoint_id})
+        self.metadata = {**value.metadata, "kind": "move-guided"}
+        self.feature_version = value.feature_version
+
+    def __call__(self, board):
+        return self.value(board)
+
+
+def load_guided(path):
+    from .common import read_json
+    from .model import NumpyEvaluator
+
+    path = Path(path)
+    bundle = read_json(path)
+    value_path = path.parent / bundle["value"]
+    rank_path = path.parent / bundle["ranker"]
+    if digest(value_path) != bundle["value_sha256"] or digest(rank_path) != bundle["ranker_sha256"]:
+        raise ValueError("Guided component checksum mismatch")
+    return GuidedEvaluator(NumpyEvaluator(value_path), NumpyRanker(rank_path))

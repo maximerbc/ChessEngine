@@ -70,35 +70,52 @@ def prepare(config):
     # Training openings are not excluded from the existing scalar corpus here: the original
     # data pipeline already excluded reserved positions; all fresh finals exclude the full corpus.
     split_games = {}
-    split_positions = {}
+    positions = {}
     split_rows = {"train": [], "validation": []}
+    excluded_games = set()
     terminal = 0
     for row in records(config["source"]):
         split = row["split"]
         game = row["game_id"]
-        board = restore(row)
+        board = chess.Board(row["fen"])
         key = canonical(board)
-        for mapping, item in [(split_games, game), (split_positions, key)]:
-            if item in mapping and mapping[item] != split:
-                raise ValueError("Canonical or source-game split leakage")
-            mapping[item] = split
-        if split not in split_rows:
-            continue
-        if board.is_game_over(claim_draw=True):
-            terminal += 1
-            continue
+        if game in split_games and split_games[game] != split:
+            raise ValueError("Source-game split leakage")
+        split_games[game] = split
+        positions.setdefault(key, {}).setdefault(split, set()).add(game)
         if key in reserved:
-            continue
-        split_rows[split].append(row)
+            excluded_games.add(game)
+        if split in split_rows:
+            split_rows[split].append(row)
+    conflicts = {k: groups for k, groups in positions.items() if len(groups) > 1}
+    for groups in conflicts.values():
+        for games in groups.values():
+            excluded_games.update(games)
     selected = []
     counts = {}
     for split, target in [
         ("train", config["train_positions"]),
         ("validation", config["validation_positions"]),
     ]:
-        rows = select_games(split_rows[split], target, config["sampling_seed"])
-        selected.extend(rows)
-        counts[split] = len(rows)
+        eligible = [row for row in split_rows[split] if row["game_id"] not in excluded_games]
+        rows = select_games(eligible, target, config["sampling_seed"])
+        valid = []
+        for row in rows:
+            if restore(row).is_game_over(claim_draw=True):
+                terminal += 1
+            else:
+                valid.append(row)
+        selected.extend(valid)
+        counts[split] = len(valid)
+    write_json(
+        root / "exclusion-audit.json",
+        dict(
+            canonical_cross_split_positions=len(conflicts),
+            excluded_source_games=sorted(excluded_games),
+            split_combinations=[sorted(groups) for groups in conflicts.values()],
+            policy="Quarantine complete conflicting/reserved source games from ranking only; leave original corpus unchanged",
+        ),
+    )
     write_json(root / "positions.json", selected)
     all_old = {**old, "previous_final": previous["test"]}
     write_json(root / "reserved-all.json", all_old)

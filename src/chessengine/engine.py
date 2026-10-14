@@ -15,6 +15,19 @@ class Evaluator(Protocol):
 
 
 class Handcrafted:
+    def explain(self, board):
+        material = position = 0.0
+        for square, piece in board.piece_map().items():
+            sign = 1 if piece.color == board.turn else -1
+            rank = chess.square_rank(square) if piece.color else 7 - chess.square_rank(square)
+            centrality = 3.5 - (abs(chess.square_file(square) - 3.5) + abs(rank - 3.5)) / 2
+            bonus = 0.05 * centrality if piece.piece_type in (chess.KNIGHT, chess.BISHOP) else 0
+            if piece.piece_type == chess.PAWN:
+                bonus += rank * 0.04
+            material += sign * VALUES[piece.piece_type]
+            position += sign * bonus
+        return {"material": material, "position": position, "scale": 6}
+
     def __call__(self, board: chess.Board) -> float:
         score = 0.0
         for square, piece in board.piece_map().items():
@@ -64,7 +77,7 @@ class Search:
         self.time_ms = time_ms
         self.max_depth = max_depth
         self.qdepth = qdepth
-        self.ranker = ranker
+        self.ranker = ranker if ranker is not None else getattr(evaluator, "ranker", None)
         self.root_order = {}
         self.nodes = 0
         self.tt: dict = {}

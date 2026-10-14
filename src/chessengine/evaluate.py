@@ -14,10 +14,16 @@ from .model import NumpyEvaluator
 
 
 def evaluator_for(spec):
+    if str(spec).startswith("guided:"):
+        from .ranking import load_guided
+
+        return load_guided(str(spec).removeprefix("guided:"))
     return Handcrafted() if spec == "handcrafted" else NumpyEvaluator(spec)
 
 
 def identity(spec):
+    if str(spec).startswith("guided:"):
+        return evaluator_for(spec).checkpoint_id
     if str(spec).startswith("stockfish:"):
         return "stockfish:" + digest(str(spec).removeprefix("stockfish:"))
     return "handcrafted-v1" if spec == "handcrafted" else digest(spec)
@@ -170,7 +176,9 @@ def _run_matches(protocol_path, output, reference=None, budget=None):
                     "capped": capped,
                     "pgn": str(game),
                     "nodes": node_count,
-                    "searched_moves": searched_moves, "depth_one_moves": depth_one_moves, "depth_sum": depth_sum,
+                    "searched_moves": searched_moves,
+                    "depth_one_moves": depth_one_moves,
+                    "depth_sum": depth_sum,
                     "seconds": time.perf_counter() - started,
                     "result": game.headers["Result"],
                 }
