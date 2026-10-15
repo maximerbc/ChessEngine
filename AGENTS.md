@@ -12,7 +12,7 @@
 - One shared engine for self-play, matches, and API. Runtime inference uses exported NumPy MLP weights; PyTorch is training-only. Feature/checkpoint schema versions must be validated, not guessed.
 - Side-to-move value in [-1,1]; terminal mate search scores are outside that range. Negate child scores exactly once per ply. Feature v1 uses absolute square/color coordinates; experimental v2 uses player-relative coordinates and v3 adds normalized material summaries. All preserve castling, en passant, halfmove clock and original-history repetition indicators. Labels retain their side-to-move sign. Checkpoints select the encoder explicitly; RL supports v1 and v3 explicitly; v2 remains unsupported.
 - Preserve complete move history. Draw claims are automatically taken consistently across API/self-play/evaluation; document this convention. TT keys must distinguish reversible history/halfmove state. Never reuse TT values across models or games.
-- No MCTS, policy network, custom move generator, UCI engine protocol, user accounts, database, or online training in v1.
+- No MCTS, custom move generator, UCI engine protocol, user accounts, database, or online training. The approved showcase extension permits a supervised legal-move ranker for root ordering only; it does not replace the value evaluator or prune legal moves.
 
 ## Research invariants
 - Split source games before position sampling, deduplicate positions across splits, exclude reserved evaluation positions, and preserve data/source manifests. Do not train on validation/test labels or select checkpoints using final-test matches.
@@ -48,3 +48,14 @@
 - RL improvement retains its frozen quality-gated pilot and experimental settings. On 2026-10-13 the user removed local CPU time caps: provide a runtime estimate before launching local compute and continue tracking elapsed time. Paid compute still requires authorization; do not relax scientific quality thresholds.
 - Fresh final openings exclude corpus and old reserved source games/canonical positions. Complete all development selections before any new final matches. Teacher-validation error is secondary and cannot select RL checkpoints.
 - No new supervised search precedes this RL study. Released models remain unchanged.
+
+## RL regression diagnosis
+- Preserve the completed negative RL study. Fixed-trajectory replay is explicitly an off-policy development diagnostic, not new on-policy self-play or fresh final evidence.
+- Prediction anchoring is a separately named treatment toward a detached frozen initializer; never describe it as the original pure outcome-only treatment. Do not silently add teacher labels.
+- Keep treatments, selection screens and replay sampling in versioned configs/protocols. Candidates require subsequent live self-play and fresh confirmatory evaluation before a release decision.
+
+## Four-model showcase and move ranking
+- Present four approaches: handcrafted baseline, supervised value evaluator, supervised ranker plus that same value evaluator, and experimental live-self-play RL. Do not expose each seed as a separate model or label offline replay as live RL.
+- Ranker inputs use feature v3 and player-relative move coordinates including promotions. Teacher move labels are separate from scalar value labels. Freeze whole-game splits and fresh final openings before training.
+- Learned ordering applies only at the search root, computed once per request; previous-iteration principal variation stays first. Time accounting includes ranking inference. Existing behavior remains identical when no ranker is supplied.
+- Production component identities must match the evidence shown on each page. Publish new checkpoints only through an explicit release manifest and validation gate; preserve the old release if the supervised candidate fails its development gate.

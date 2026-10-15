@@ -1,0 +1,92 @@
+{
+  "identity": {
+    "config": {
+      "source": "runs/rl-improvement",
+      "baseline": "runs/fixed-data-improvements/combined-42/best.npz",
+      "development_data": "runs/supervised-200k/subset-all.jsonl",
+      "output": "runs/rl-update-diagnosis",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "batches": 10,
+      "positions_per_game": 32,
+      "sampling_seed": 20261013,
+      "batch_size": 256,
+      "treatments": {
+        "reference": {
+          "learning_rate": 0.0001,
+          "anchor_weight": 0.0
+        },
+        "smaller-step": {
+          "learning_rate": 1e-05,
+          "anchor_weight": 0.0
+        },
+        "anchored": {
+          "learning_rate": 0.0001,
+          "anchor_weight": 1.0
+        }
+      },
+      "evaluation": {
+        "pairs": 40,
+        "nodes": 128,
+        "qdepth": 2,
+        "max_plies": 512,
+        "seed": 2026,
+        "evidence": "fixed-trajectory-development-diagnostic"
+      }
+    },
+    "baseline": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+    "data": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+    "openings": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+    "games": {
+      "runs/rl-improvement/seed-42/training/games-001.json": "c392c08cdcb97a490aad00d19929f81a6bcf4abcb4e89a00ce13c96f202b5589",
+      "runs/rl-improvement/seed-42/training/games-002.json": "a24f1a7e203a262052b9e06e2ac9a5e3f2370021e2a725d8c4bdc5beda721c78",
+      "runs/rl-improvement/seed-42/training/games-003.json": "99b6ab2e5b2bacad79d0fc1552e02a40af202434c4b6098ced5b798bc8642ee7",
+      "runs/rl-improvement/seed-42/training/games-004.json": "4111f3adcd26fc217623ef1b7b6b7b0a6d4e96554c9408bc26783fd4947b3750",
+      "runs/rl-improvement/seed-42/training/games-005.json": "f7c3fafcd664eba400080474ad83585c9bf23278861d22fcd7a09db4bf07d224",
+      "runs/rl-improvement/seed-42/training/games-006.json": "0a949d24b35f55916ac822d46b680f9f2d849c492fff72d7613e36e5998a41cf",
+      "runs/rl-improvement/seed-42/training/games-007.json": "3d90b142d0ccd722ad40cf6b3fb50ce153a5b8d0c8cd9f20cf4f85a8ee9488f7",
+      "runs/rl-improvement/seed-42/training/games-008.json": "e284acce3c0e53dd2bb559e17f8c45bb8f28cb2ff1eecd8aecda6fe81628203a",
+      "runs/rl-improvement/seed-42/training/games-009.json": "dde1ba47d4f27c405c7785fa6919d984e7d4a805cdd7198a4a7aff0ef81f3bdd",
+      "runs/rl-improvement/seed-42/training/games-010.json": "580aa97d414eaa3f9f159ff4e3573beb65619bb6da5a382088a7b465eac8a3f7",
+      "runs/rl-improvement/seed-43/training/games-001.json": "799371da1c3eedec54e449840bb215b36eb9111bf6f14a117f04e25459de32d1",
+      "runs/rl-improvement/seed-43/training/games-002.json": "0da7c1e78fe1abd0c868aec12340e64bdad238ea96d538ea5b7f7b7a9330ee86",
+      "runs/rl-improvement/seed-43/training/games-003.json": "72d69bcf210a0600c1c823e0aba0d3f9e2574c964419eee9371264e1730299e0",
+      "runs/rl-improvement/seed-43/training/games-004.json": "12b5730829786733b80e0ce97c69500d7dd9d2955a58a366a038549db7cb2296",
+      "runs/rl-improvement/seed-43/training/games-005.json": "ba6a87f692d8286e0a02928eb24c9259d36247f36d60e68d08850c98d52244e2",
+      "runs/rl-improvement/seed-43/training/games-006.json": "33f0d847d29fb98e15d086ad3bc97f58e731f4c478e8fffb04f6a0039b56f92c",
+      "runs/rl-improvement/seed-43/training/games-007.json": "07c27cfa111ef2fc37ce20c297b10bc580adbda45cde82e0f7ec699ad8b88a6d",
+      "runs/rl-improvement/seed-43/training/games-008.json": "a0de1c2fb8a31a5cec826a169a0a41f2de861ae0a6ec3acac1805893137d6f06",
+      "runs/rl-improvement/seed-43/training/games-009.json": "7281e94df74adf9deeca307a279ad20e302d4635bea6c3aa65e69264dbda73e9",
+      "runs/rl-improvement/seed-43/training/games-010.json": "e99fd0f94aff0f675faf5d0fdad27ab2838b88850e8b6b0e37ec8eee56910df3",
+      "runs/rl-improvement/seed-44/training/games-001.json": "c81d9f80954a3f66b3435dc542119709f4c619b4b30496eb02f069968a34151a",
+      "runs/rl-improvement/seed-44/training/games-002.json": "26047613f8a81ebc4a76cfe0bd4c9a7564112ec09ebaad6aa224ae63c4de14c4",
+      "runs/rl-improvement/seed-44/training/games-003.json": "ff419799cee2d0df0b14280eb8088cc87e559825a634847bb41b87e0a55108b3",
+      "runs/rl-improvement/seed-44/training/games-004.json": "9a2ef970a26c7315f364760b0fb2f8b7987627401aa390bf18b354b719dec092",
+      "runs/rl-improvement/seed-44/training/games-005.json": "e09bc2c54a4bb2091cbe4292af4ca537a15aa6d1c7df1369357ad9db653c8d5c",
+      "runs/rl-improvement/seed-44/training/games-006.json": "5822e9c388b71ac8bbababdd822c1d1c80c55b4c7d23bd9c3e30764a76e17752",
+      "runs/rl-improvement/seed-44/training/games-007.json": "f7b4bb53d5d9eb590e845de30f8dc7c5e5947e1e742d64de6d7afd874481745e",
+      "runs/rl-improvement/seed-44/training/games-008.json": "5eea2d7f8f09d57acbb1b76819a93b39c62d4a711037eaf867dfb04086542cf4",
+      "runs/rl-improvement/seed-44/training/games-009.json": "841f5e0e1175499b4a996e957c1af6081606fd1ae5023261c5bf4b0d71ddf770",
+      "runs/rl-improvement/seed-44/training/games-010.json": "502065c79c809fb3bb8ca830a1b08119f92a534939d890d7e1068bb2d9974d89"
+    },
+    "code": {
+      "rl_update_diagnosis": "3348a61524bab04dacff8ef8fc2eecfb9937e838d87b5d085b71398bb6456e77",
+      "rl_updates": "78525bc379cb14d20580ef91c6956951b4e9e41c6ccec8c70053c98491bdb346",
+      "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+      "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+      "train": "00b512b53402f015eb6c11e1886ac075c08f55f9419ea5fe18fdb0c3fae87cfb",
+      "evaluate": "462d438d70cf06b443416c090d2450771b0d3fceaa2732c8de6e6056e6d559bb",
+      "engine": "54d8d62655ca207f34c507e74a5b294de313ae0b32ebcde3f5c1ef38f7627a0a"
+    }
+  },
+  "provenance": {
+    "commit": "90fd9646152093d977d98381072ff77b2266b809",
+    "dirty": false,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  },
+  "evidence": "Off-policy fixed-trajectory development ablation; no new final results"
+}

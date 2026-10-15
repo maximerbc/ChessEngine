@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Protocol
 import chess
 
@@ -15,6 +15,19 @@ class Evaluator(Protocol):
 
 
 class Handcrafted:
+    def explain(self, board):
+        material = position = 0.0
+        for square, piece in board.piece_map().items():
+            sign = 1 if piece.color == board.turn else -1
+            rank = chess.square_rank(square) if piece.color else 7 - chess.square_rank(square)
+            centrality = 3.5 - (abs(chess.square_file(square) - 3.5) + abs(rank - 3.5)) / 2
+            bonus = 0.05 * centrality if piece.piece_type in (chess.KNIGHT, chess.BISHOP) else 0
+            if piece.piece_type == chess.PAWN:
+                bonus += rank * 0.04
+            material += sign * VALUES[piece.piece_type]
+            position += sign * bonus
+        return {"material": material, "position": position, "scale": 6}
+
     def __call__(self, board: chess.Board) -> float:
         score = 0.0
         for square, piece in board.piece_map().items():
@@ -37,6 +50,7 @@ class SearchResult:
     elapsed_ms: float
     pv: list[str]
     terminal: str | None = None
+    root_rankings: list[dict] = field(default_factory=list)
 
     def to_dict(self):
         return asdict(self)
@@ -56,12 +70,15 @@ class Search:
         time_ms: int | None = None,
         max_depth: int = 64,
         qdepth: int = 4,
+        ranker=None,
     ):
         self.evaluate = evaluator
         self.limit = max(1, nodes)
         self.time_ms = time_ms
         self.max_depth = max_depth
         self.qdepth = qdepth
+        self.ranker = ranker if ranker is not None else getattr(evaluator, "ranker", None)
+        self.root_order = {}
         self.nodes = 0
         self.tt: dict = {}
         self.deadline = float("inf")
@@ -148,7 +165,10 @@ class Search:
             if flag == "exact" or (flag == "lower" and value >= beta) or (flag == "upper" and value <= alpha):
                 return value, line
         best, best_line = -float("inf"), []
-        for move in self.ordered(board, preferred):
+        moves = self.ordered(board, preferred)
+        if ply == 0 and self.root_order:
+            moves.sort(key=lambda move: (move != preferred, self.root_order[move.uci()]))
+        for move in moves:
             board.push(move)
             try:
                 value, line = self.negamax(board, depth - 1, -beta, -alpha, ply + 1)
@@ -168,11 +188,18 @@ class Search:
         board = board.copy(stack=True)
         start = time.perf_counter()
         self.nodes, self.tt = 0, {}
+        self.root_order = {}
         self.deadline = start + self.time_ms / 1000 if self.time_ms is not None else float("inf")
         terminal = self.terminal(board, 0)
         if terminal is not None:
             return SearchResult(None, terminal, 0, 0, 0, [], board.result(claim_draw=True))
-        fallback = self.ordered(board)[0]
+        rankings = self.ranker.rank(board) if self.ranker is not None else []
+        if rankings:
+            legal = {move.uci() for move in board.legal_moves}
+            if len(rankings) != len(legal) or {row['move'] for row in rankings} != legal:
+                raise ValueError('Ranker must include every legal root move exactly once')
+            self.root_order = {row['move']: i for i, row in enumerate(rankings)}
+        fallback = chess.Move.from_uci(rankings[0]['move']) if rankings else self.ordered(board)[0]
         best_line, best_value, depth_done = [fallback], self.evaluate(board), 0
         for depth in range(1, self.max_depth + 1):
             try:
@@ -190,4 +217,5 @@ class Search:
             self.nodes,
             (time.perf_counter() - start) * 1000,
             [m.uci() for m in best_line],
+            root_rankings=rankings,
         )

@@ -1,0 +1,22 @@
+[
+  {
+    "treatment": "smaller-step",
+    "mean_score_delta": 0.041666666666666685,
+    "improving_seeds": 2,
+    "paired_difference_ci95": [
+      -0.01666666666666667,
+      0.10208333333333335
+    ],
+    "passes_screen": true
+  },
+  {
+    "treatment": "anchored",
+    "mean_score_delta": 0.07500000000000001,
+    "improving_seeds": 3,
+    "paired_difference_ci95": [
+      0.020833333333333332,
+      0.13130208333333257
+    ],
+    "passes_screen": true
+  }
+]
