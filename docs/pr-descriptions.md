@@ -127,3 +127,23 @@ Head: `codex/rl-update-diagnosis`, after the completed RL study.
 Adds a frozen fixed-trajectory ablation comparing outcome fitting, smaller updates and a penalty toward initial predictions. Nine fits and 720 development games completed. Anchoring scored 52.083% against the initializer versus 44.583% for the matched replay reference, with all three seeds improving relative to reference. This is off-policy development evidence, not a successful live RL or final-test claim.
 
 64 local tests passed, including detached anchor targets, replay history/signs, exact resume, mismatch rejection and the complete tiny study/report. All nine checkpoint identities and raw match score totals verified. Released assets unchanged; no paid compute or remote push.
+
+## 11. Train and evaluate root move ranking
+
+Head: `codex/move-ranking`; base: `main`. Includes the previously unpushed RL update diagnosis as research context, plus a bounded three-seed legal-move ranking study.
+
+Trains a separate feature-v3 scorer against 55,006 pinned Stockfish move labels, uses its rankings only at the search root, and preserves the frozen value evaluator. Adds resumable training/evaluation, whole-game exclusions, fresh final openings, NumPy export parity and a reproducible report.
+
+Completed 960 main matches and 160 fixed-depth searches. Fresh final score: 48.75%, paired 95% interval 45.75–51.625%; inconclusive. The new supervised initializer scored 46.25% against the deployed default and failed the predefined release gate. Public checkpoints remain unchanged. Four affected source games were quarantined after the initial audit found two old train/test position overlaps.
+
+Validation: independent score audit of all 960 games, three-seed training/resume checks, root-order legality and NumPy parity. Full local Python suite and frontend checks are recorded in the handoff. No paid compute, new live RL, remote push or public release.
+
+## 12. Add an identity-checked four-model preview
+
+Head: `codex/showcase-four-models`; merge after the ranking research PR.
+
+Adds one explanatory, interactive page for each approach: handcrafted evaluation, supervised value learning, root move ranking and the completed negative live-self-play experiment. Pages preserve board history and reject mismatched model identities. Includes training curves, mathematical explanations, component exports, offline research, mobile layout, Railway route support and gated publication tooling.
+
+The development release gate failed. Therefore the four-model gallery remains a local development preview; ordinary production builds retain the existing interface and released checkpoints. Explicit preview exports are ignored local artifacts, with private training metadata stripped. No model replacement or paid deployment occurs.
+
+Validation: 73 Python tests, eight mocked browser flows, real-checkpoint analysis on all four pages, mobile screenshot inspection, production frontend build, lint and whitespace checks. Docker checks run in GitHub Actions; they are not claimed as locally verified.

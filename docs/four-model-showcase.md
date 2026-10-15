@@ -27,3 +27,9 @@ Complete the frozen ranking evaluation first. Only a passing development compari
 The command refuses publication without completed evidence and a passing gate. It updates the explicit manifest, model downloads and designated report assets. A failed gate leaves the current deployment intact; the four-model preview remains reviewable locally. The user handles remote pushes and Railway deployment.
 
 Railway continues to use the two existing Dockerfiles. Nginx explicitly serves the four `/lab/` routes; missing research/model files still return 404. The API requires checksummed value and ranking components for a version-2 showcase manifest, one worker and one bounded search. No training dependency enters the runtime image.
+
+## Completed release decision
+
+The supervised candidate scored 46.25% against the deployed default and did not pass the 50% gate. The public checkpoints are therefore unchanged. The gallery is enabled in local development only; ordinary production builds keep the existing interface. `VITE_SHOWCASE=1` is reserved for an explicitly staged preview build with matching assets, not an instruction to replace the live deployment.
+
+Final move-guided score was 48.75% (95% interval 45.75–51.625%), an inconclusive result. The research report is committed under `docs/experiments/move-ranking/`.

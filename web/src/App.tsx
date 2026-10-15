@@ -289,9 +289,10 @@ function routePosition() {
     return { fen, moves };
   } catch { return { fen: DEFAULT_POSITION, moves: [] as string[] }; }
 }
+const showcaseEnabled = import.meta.env.DEV || import.meta.env.VITE_SHOWCASE === "1";
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
-  const page = approaches.find(a => a.path === path);
+  const page = showcaseEnabled ? approaches.find(a => a.path === path) : undefined;
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [initialFen, setInitialFen] = useState(() => routePosition().fen);
   const [tab, setTab] = useState<"play" | "compare" | "research">("play");
@@ -358,7 +359,7 @@ export default function App() {
         "/models",
       );
       setModels(data.models);
-      setModel(approaches.find(a => a.path === window.location.pathname)?.id || data.default);
+      setModel((showcaseEnabled && approaches.find(a => a.path === window.location.pathname)?.id) || data.default);
       setConnection("ready");
     } catch {
       setConnection("offline");
@@ -601,7 +602,7 @@ export default function App() {
             </button>
           </div>
         </section>
-        <ModelGallery navigate={navigate} disabled={busy} />
+        {showcaseEnabled && <ModelGallery navigate={navigate} disabled={busy} />}
         {page && <><ModelGuide approach={page} catalog={catalog} checkpoint={currentModel?.checkpoint_id} analysis={analysis} analyze={inspectPosition} busy={busy} available={connection === "ready" && identityMatches}/><div className="curated-positions"><span className="tiny-label">TRY THE SAME POSITION ACROSS MODELS</span>{examples.map((e,i)=><button key={e.name} disabled={busy} onClick={()=>loadExample(i)}>{e.name}</button>)}</div></>}
         {connection !== "ready" && (
           <div className="notice">
