@@ -2,6 +2,21 @@ from chessengine.common import write_json, read_json
 import chessengine.pv_continue as continuation
 
 
+def test_closed_feasibility_release_cannot_resume_training(tmp_path, monkeypatch):
+    import pytest
+
+    write_json(tmp_path / "release-scope.json", {"status": "feasibility_complete"})
+
+    def forbidden(*args):
+        raise AssertionError("Closed study must not train or overwrite reports")
+
+    monkeypatch.setattr(continuation, "run", forbidden)
+    monkeypatch.setattr(continuation, "publish", forbidden)
+    with pytest.raises(RuntimeError, match="new authorization"):
+        continuation.continue_study({"output": str(tmp_path)})
+    assert not (tmp_path / "continuation-status.json").exists()
+
+
 def test_continuation_records_forecast_before_full_launch(tmp_path, monkeypatch):
     write_json(tmp_path / "status.json", {"status": "pilot_complete"})
     write_json(tmp_path / "pilot-decision.json", {"approved": True})

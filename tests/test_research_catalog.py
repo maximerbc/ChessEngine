@@ -27,6 +27,11 @@ def test_report_publication_is_independent_of_failed_model_gate(tmp_path):
     rank = next(r for r in rows if r["id"] == "move-ranking")
     assert rank["result"] == "inconclusive" and rank["availability"] == "local preview"
     assert json.load(open("docs/experiments/move-ranking/final-audit.json"))["release_eligible"] is False
+    pilot = next(r for r in rows if r["id"] == "policy-value")
+    assert pilot["level"] == "Completed feasibility pilot"
+    assert pilot["result"] == "pilot"
+    assert "deferred" in pilot["takeaway"]
+    assert (tmp_path / "research/policy-value/release-scope.json").is_file()
     for p, sha in original.items():
         assert digest(p) == sha
     for document in (tmp_path / "research").glob("*/index.html"):
@@ -96,3 +101,41 @@ def test_measured_learning_figure_is_a_standalone_svg(tmp_path):
     assert path.name == "learning.svg" and "<svg" in text
     assert "Changing self-play data" in text
     assert learning_plot({}, tmp_path, tmp_path) is None
+
+
+def test_scope_amendment_preserves_interrupted_study_without_claiming_full_results(tmp_path):
+    from chessengine.common import write_json
+    from chessengine.pv_reporting import build
+
+    source = {
+        "identity": {
+            "inputs": {"runs/private.npz": "f" * 64},
+            "config": {
+                "pilot_simulations": [128, 256, 512],
+                "anchor_weights": {"baseline": 0.0, "anchored": 0.1},
+                "seeds": [42, 43, 44],
+                "initializer": "runs/private.npz",
+                "policy_seed": 20261015,
+            },
+        }
+    }
+    # Closure must match the exact private protocol bytes, before publication strips paths.
+    root, out = tmp_path / "run", tmp_path / "report"
+    write_json(root / "protocol.json", source)
+    write_json(root / "status.json", {"status": "training", "seed": 42})
+    write_json(root / "continuation-status.json", {"status": "interrupted"})
+    scope = json.loads(Path("docs/experiments/policy-value/release-scope.json").read_text())
+    scope["original_protocol_sha256"] = digest(root / "protocol.json")
+    write_json(out / "release-scope.json", scope)
+    evidence = build(root, out)
+    assert evidence["status"]["status"] == "feasibility_complete"
+    assert evidence["execution_status"]["status"] == "training"
+    assert evidence["continuation-status"]["status"] == "interrupted"
+    assert "results" not in evidence
+    text = (out / "index.html").read_text()
+    assert "Comparison deferred" in text and "remains untested" in text
+    assert "All six fits and selections" not in text
+    scope["original_protocol_sha256"] = "0" * 64
+    write_json(out / "release-scope.json", scope)
+    with pytest.raises(ValueError, match="does not match"):
+        build(root, out)

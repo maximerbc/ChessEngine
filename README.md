@@ -113,7 +113,9 @@ This does not copy checkpoints or change the released manifest/default. The newe
 
 ## Local policy/value research
 
-See `docs/policy-value-preregistration.md` and `configs/policy-value.json`. This adapted AlphaZero-inspired path uses the existing v3 supervised initializer, a fresh legal-move policy head, and history-preserving PUCT. Exactly two treatments compare visit-policy/outcome learning with a detached 0.1 prediction anchor. It never enters the production API automatically.
+**Release status: completed feasibility pilot; full comparison deferred.** The user requested an immediate release after the 559.6-hour forecast. All three pilot budgets passed (59 rule-completed games in 60 attempts). The long run is stopped. The anchoring comparison is untested; released models are unchanged. See `docs/policy-value-release.md` for the scope decision and audited report.
+
+For the original future-study methodology, see `docs/policy-value-preregistration.md` and `configs/policy-value.json`. This adapted AlphaZero-inspired path uses the existing v3 supervised initializer, a fresh legal-move policy head, and history-preserving PUCT. Exactly two treatments compare visit-policy/outcome learning with a detached 0.1 prediction anchor. It never enters the production API automatically.
 
 ```sh
 # Disposable timing benchmark; report the estimate before the pilot.
@@ -128,7 +130,7 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_s
 
 All stages resume from verified inputs and completed games. CPU updates resume at minibatch boundaries; interrupted simulation-budget games replay from deterministic seeds. Wall-clock match trajectories are not promised bitwise reproducible. Do not change scientific code/configuration to bypass a frozen identity mismatch. Historical studies and negative results remain intact; no paid resources or remote pushes are part of this workflow.
 
-For an already running approved pilot, a single optional continuation can wait for it, publish/log its measured forecast, and resume the frozen full study automatically:
+The following continuation is retained for a separately authorized future study; it is stopped and outside this release. A closure marker prevents resuming the closed run. Do not remove that marker or launch the full-run commands above without new user authorization:
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_continue configs/policy-value.json --wait-pilot

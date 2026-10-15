@@ -16,6 +16,8 @@ from .research_catalog import publish
 def continue_study(config, wait_pilot=False):
     root = Path(config["output"])
     root.mkdir(parents=True, exist_ok=True)
+    if (root / "release-scope.json").exists():
+        raise RuntimeError("Study closed at feasibility scope; a new authorization is required to resume")
     # This lock prevents duplicate continuation processes; never run a raw stage concurrently.
     with (root / "continuation.lock").open("w") as lock:
         try:

@@ -1,13 +1,82 @@
 {
   "status": {
+    "status": "feasibility_complete",
+    "main_study_status": "stopped_by_scope_change"
+  },
+  "paid_cost_cad": 0,
+  "model_promotion": false,
+  "protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a",
+  "release-scope": {
+    "version": 1,
+    "closed_on": "2026-10-15",
+    "status": "feasibility_complete",
+    "main_study_status": "stopped_by_scope_change",
+    "reason": "User requested an immediately pushable finished product. Close this release after the completed feasibility pilot; defer the full anchored-versus-baseline comparison.",
+    "original_protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a",
+    "pilot_audit": [
+      {
+        "simulations": 128,
+        "attempted": 20,
+        "completed": 20,
+        "hashes_verified": true,
+        "legal_histories_and_outcomes_verified": true,
+        "common_initializer_verified": true
+      },
+      {
+        "simulations": 256,
+        "attempted": 20,
+        "completed": 20,
+        "hashes_verified": true,
+        "legal_histories_and_outcomes_verified": true,
+        "common_initializer_verified": true
+      },
+      {
+        "simulations": 512,
+        "attempted": 20,
+        "completed": 19,
+        "hashes_verified": true,
+        "legal_histories_and_outcomes_verified": true,
+        "common_initializer_verified": true
+      }
+    ],
+    "completed_pilot_games": 59,
+    "attempted_pilot_games": 60,
+    "retained_partial_generation": {
+      "baseline-42": 8
+    },
+    "completed_training_updates": 0,
+    "development_selections": 0,
+    "final_matches": 0,
+    "background_compute_stopped": true,
+    "model_promotion": false,
+    "released_manifest_sha256": "39e8edba79ff4f36881fa805bdb493bd2bb58c769512200b5e8587d0b06ca6c1",
+    "released_models_unchanged": true,
+    "paid_cost_cad": 0,
+    "resume_requires_new_authorization": true,
+    "partial_generation_audit": {
+      "baseline-42": {
+        "attempted": 8,
+        "completed": 7,
+        "game_hashes": [
+          "5a89b4208308f60ceea089e07e45f17baddb7af886cd6beb80c31ac13f836569",
+          "f6fd404e8b05e1072734117a01617e149f4df213da24a2a7405c51226dc0a5fe",
+          "eb45216a770a20050a727118e81d88e2ec0b4e90396d88876dec667207106ea9",
+          "2d17bc00d4296e88054ea3a03ca2b74f458e9e3795fbc0a502b169c32efebed7",
+          "6cd8acaa6537597d7fd263e99d46a34fac8a7a981a359257ad92358ec93048e8",
+          "1b8477a8a2e3cf798257473be9abca84fd5193128cad01c7e6dfa194662f7283",
+          "bc33fe2740626403b5ed5d78bb263919f5cd6c2e3b851dddaaeb557238a42bc2",
+          "cef8efe8eeea02e7e4a9268c258425d7af3cff3dfd8866a1a801a8e7f7a91a37"
+        ],
+        "legal_histories_and_outcomes_verified": true
+      }
+    }
+  },
+  "execution_status": {
     "status": "training",
     "treatment": "baseline",
     "seed": 42,
     "signature": "93ec226b7519c8b3b322b4616c1683912becf233693fcf8fc1c791618a1227a2"
   },
-  "paid_cost_cad": 0,
-  "model_promotion": false,
-  "protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a",
   "pilot-summary": [
     {
       "simulations": 128,
@@ -127,8 +196,8 @@
     "paid_cost_cad": 0
   },
   "compute": {
-    "active_seconds": 5437.152747625019,
-    "peak_ram_mb": 172.328125,
+    "active_seconds": 7060.214275666047,
+    "peak_ram_mb": 179.265625,
     "paid_cost_cad": 0
   },
   "pilot-handoff-compute": {
@@ -219,11 +288,10 @@
     "paid_cost_cad": 0
   },
   "continuation-status": {
-    "status": "main_running",
-    "forecast_hours": 559.6232450849992
+    "status": "interrupted"
   },
   "continuation-compute": {
-    "main_runner_seconds": 1531.8094158750027,
+    "main_runner_seconds": 1623.070078541059,
     "peak_ram_mb": 179.265625,
     "paid_cost_cad": 0
   },

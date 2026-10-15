@@ -244,10 +244,20 @@ test("the main navigation contains only Demo and Research and reports work offli
   for (const path of [
     "/research/move-ranking/index.html",
     "/research/rl-improvement/index.html",
+    "/research/policy-value/index.html",
+    "/research/policy-value/release-scope.json",
     "/research/report.pdf",
   ]) {
     expect((await page.request.get(path)).ok()).toBeTruthy();
   }
+  await expect(page.locator("#study-policy-value")).toContainText(
+    "Completed feasibility pilot",
+  );
+  await expect(page.locator("#study-policy-value")).toContainText("deferred");
+  const evidence = await page.request.get(
+    "/research/policy-value/evidence.json",
+  );
+  expect((await evidence.json()).status.status).toBe("feasibility_complete");
 });
 
 test("promotion choices preserve underpromotions", async ({ page }) => {

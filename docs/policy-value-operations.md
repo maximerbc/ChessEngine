@@ -6,7 +6,11 @@ Implementation branch: `codex/policy-value-research`. Its starting tree at `e0b2
 
 The released default remains the older local-study RL checkpoint. The later negative v3 RL, coefficient-1 replay diagnosis, move ranker, and new coefficient-0.1 policy/value study have separate evidence. New public reports are published independently of model release; existing checksummed weights remain unchanged.
 
-## Compute protocol
+## Current release scope
+
+The user closed this release at completed feasibility on 2026-10-15 to allow an immediate push. All three pilot budgets passed (59 rule-completed games in 60 attempts). The main-run forecast was 559.6 hours including margin. The continuation was gracefully stopped; eight generated games and its ledgers are retained locally, with no completed update, selection or final match. No background study remains active. The original full protocol below is historical/planned methodology, not a pending release requirement. See `policy-value-release.md` and the versioned `release-scope.json`. Any future full run requires new authorization.
+
+## Historical compute protocol
 
 The disposable 128-simulation, 32-ply benchmark took 2.65 seconds and implied an upper-envelope pilot estimate of 2.47 hours (maximum 512 plies, all three budgets, 50% margin). This estimate was communicated before launch. It is not the main-study forecast. The pilot begins by auditing fresh source games/opening positions, then attempts 20 games each at 128/256/512 simulations. No paid compute is used. No artificial local runtime cap is imposed.
 
@@ -22,13 +26,13 @@ The automated suite covers search signs and budgets, legal priors, promotions/ca
 
 Public research assets are an explicit filename allowlist. Private run paths and non-allowlisted links are removed; opaque artifact IDs preserve distinct hashes. No raw training directory is copied into the website. The original PDF and released model-download URLs remain valid.
 
-## Background continuation
+## Historical background continuation (stopped)
 
-A single local continuation is running for this approved study. It waits for the existing pilot's recorded completion rather than starting a duplicate. A rejected pilot stops the continuation. A passing pilot publishes and logs the exact forecast before the main run, then executes the unchanged frozen runner through training, selection, final evaluation and reports.
+A single local continuation previously ran for this study. It waited for the existing pilot's recorded completion rather than starting a duplicate. A rejected pilot stops the continuation. A passing pilot publishes and logs the exact forecast before the main run, then executes the unchanged frozen runner through training, selection, final evaluation and reports.
 
 Local process/status records: `runs/policy-value/continuation-process.json` and `continuation-status.json`; output: `continuation.log`; prelaunch estimate: `launch-estimate.json`. The main elapsed-time/RAM ledger is checkpointed every 30 seconds in `continuation-compute.json`. Its timing overlaps the completed-run compute ledger and must not be added to it. Continuation checks the recorded CPU package versions and project dependency identity before resume. A lock prevents duplicate continuation processes.
 
-This is a single ongoing local computation, not a scheduled automation or a hosted service. There is no paid resource, online training, model promotion or remote push. Current pilot/main progress is execution evidence only; it is not a completed final study. The continuation writes final reports when it finishes, or preserves failure/interruption status. Do not start another raw study process concurrently.
+This was one local computation, without a scheduled automation or hosted service. It used no paid resource, online training, model promotion or remote push. The final interruption record and ledgers are preserved. The completed feasibility report explicitly separates pilot evidence from the deferred full study. Do not restart the closed study without new authorization.
 
 The two main verified implementation milestones are 91 passing Python tests and 16 passing local browser workflows (one optional staged four-model preview workflow skipped). Frozen scientific source identities were rechecked after the implementation commit; administrative continuation and reporting do not alter the search/training protocol.
 

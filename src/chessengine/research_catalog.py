@@ -160,6 +160,8 @@ def publish(destination="web/public/research"):
         target = out / "policy-value"
         target.mkdir(exist_ok=True)
         names = ["index.html", "evidence.json", "protocol.json"]
+        if "release-scope" in state:
+            names.append("release-scope.json")
         if (pv / "learning.svg").exists():
             names.append("learning.svg")
         for name in names:
@@ -175,7 +177,11 @@ def publish(destination="web/public/research"):
         dict(
             id="policy-value",
             title="Policy/value self-play",
-            level="Completed final study" if status == "complete" else "Preregistered feasibility pilot",
+            level="Completed feasibility pilot"
+            if status == "feasibility_complete"
+            else "Completed final study"
+            if status == "complete"
+            else "Preregistered feasibility pilot",
             result=state["results"]["aggregate"]["conclusion"]
             if state and "results" in state
             else "pilot"
@@ -183,7 +189,9 @@ def publish(destination="web/public/research"):
             else "planned",
             availability="research only",
             question="Does prediction anchoring improve policy/value self-play?",
-            takeaway=f"Execution status: {status.replace('_', ' ')}. Two treatments and three paired seeds; no automatic model promotion.",
+            takeaway="All three search budgets passed the 60-game feasibility pilot. The full anchoring comparison was deferred because of its compute cost; no strength improvement is claimed."
+            if status == "feasibility_complete"
+            else f"Execution status: {status.replace('_', ' ')}. Two treatments and three paired seeds; no automatic model promotion.",
             report="/research/policy-value/index.html" if state else None,
         )
     )

@@ -70,6 +70,15 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
     evidence = dict(
         status=status, paid_cost_cad=0, model_promotion=False, protocol_sha256=digest(root / "protocol.json")
     )
+    scope_path = out / "release-scope.json"
+    if scope_path.exists():
+        scope = read_json(scope_path)
+        if scope["original_protocol_sha256"] != evidence["protocol_sha256"]:
+            raise ValueError("Release scope does not match the frozen protocol")
+        evidence["release-scope"] = scope
+        evidence["execution_status"] = status
+        status = {"status": scope["status"], "main_study_status": scope["main_study_status"]}
+        evidence["status"] = status
     for name in [
         "pilot-summary",
         "pilot-decision",
@@ -119,6 +128,14 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
         + html.escape(str(evidence["pilot_progress"]))
         + ". Pilot evidence tests feasibility; it is not final playing-strength evidence.</p>",
     ]
+    if "release-scope" in evidence:
+        scope = evidence["release-scope"]
+        sections.insert(
+            1,
+            f"<h2>Completed feasibility release</h2><p>The product scope was reduced by the user on {html.escape(scope['closed_on'])} after the measured full-study forecast. All {scope['attempted_pilot_games']} pilot attempts are recorded; {scope['completed_pilot_games']} reached a rule-based outcome. All three search budgets passed the frozen feasibility gates. The long main run was stopped, and its partial generation was preserved. No training update, development selection or final match was completed.</p>"
+            "<p>This release includes the consolidated demo, research archive, tested research implementation and audited pilot. Whether prediction anchoring improves play remains untested. A full comparison is optional future work requiring new authorization; it is not a release requirement. No background study remains running.</p>"
+            '<p><a href="release-scope.json">Scope decision and independent pilot audit</a></p>',
+        )
     if "openings-manifest" in evidence:
         m = evidence["openings-manifest"]
         sections.append(
@@ -208,10 +225,17 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
             )
     else:
         sections.append(
-            "<h2>Final evidence</h2><p>No completed final comparison is claimed. All six fits and selections, fresh finals and integrity audits are required before the study can be called complete.</p>"
+            "<h2>Comparison deferred</h2><p>No completed final comparison is claimed. The original six-run protocol remains preserved for possible future work; the completed deliverable is the feasibility release.</p>"
+            if "release-scope" in evidence
+            else "<h2>Final evidence</h2><p>No completed final comparison is claimed. All six fits and selections, fresh finals and integrity audits are required before the study can be called complete.</p>"
         )
     sections.append(
-        '<h2>Methods and limits</h2><p>Actor frozen per batch; no new teacher labels; exactly 32 sampled states per completed game; truncated games excluded from both losses. Three seeds share one initialization. All six development selections precede final games. Bootstrap shared color-swapped opening pairs jointly across fixed seeds; seed variation is reported separately. No Elo or calibrated win-probability claim. Lower drift and a head-to-head advantage can still mean less regression rather than improvement over initialization.</p><p><a href="protocol.json">Frozen protocol and identities</a> · <a href="evidence.json">All measured evidence</a></p>'
+        (
+            '<h2>Original full-study protocol (deferred)</h2>'
+            if "release-scope" in evidence
+            else '<h2>Methods and limits</h2>'
+        )
+        + '<p>Actor frozen per batch; no new teacher labels; exactly 32 sampled states per completed game; truncated games excluded from both losses. Three seeds share one initialization. All six development selections precede final games. Bootstrap shared color-swapped opening pairs jointly across fixed seeds; seed variation is reported separately. No Elo or calibrated win-probability claim. Lower drift and a head-to-head advantage can still mean less regression rather than improvement over initialization.</p><p><a href="protocol.json">Frozen protocol and identities</a> · <a href="evidence.json">All measured evidence</a></p>'
     )
     style = "body{font:16px/1.6 system-ui;max-width:1050px;margin:36px auto;padding:0 20px;color:#23382f}table{border-collapse:collapse;width:100%}td,th{padding:9px;border-bottom:1px solid #ccd;text-align:left}code{font-size:11px;overflow-wrap:anywhere}.table-wrap{overflow:auto}svg,img{max-width:100%;height:auto}h2{margin-top:36px}"
     (out / "index.html").write_text(

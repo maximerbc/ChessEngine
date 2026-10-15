@@ -1,6 +1,6 @@
 # Bounded policy/value self-play study and website consolidation
 
-Status: implementation authorized by the user on 2026-10-15. The website and research pipeline are implemented and locally validated. The prospective scientific protocol is `docs/policy-value-preregistration.md`, with frozen settings in `configs/policy-value.json`; this planning document remains the design rationale. The actual feasibility pilot is in progress, with one resumable continuation waiting to run the full protocol only if its frozen gates pass. No complete main study, model promotion or deployment is claimed. See `docs/policy-value-operations.md` and `docs/experiments/policy-value/` for execution evidence.
+Status: **completed feasibility release**, scoped by the user on 2026-10-15 for an immediate push. The website and research pipeline are implemented and locally validated. All 60 pilot attempts finished recording; 59 reached rule-based outcomes and all three search budgets passed their frozen gates. The 559.6-hour main-study forecast led the user to defer the full comparison. The background run was stopped with eight generated games and no completed training update. No strength result, model promotion or deployment is claimed. The original prospective protocol and settings remain unchanged for possible future work; they no longer define this release's completion gate. See `docs/policy-value-release.md` for the scope amendment and `docs/experiments/policy-value/` for audited evidence.
 
 ## Post-merge baseline check
 

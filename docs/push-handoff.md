@@ -9,19 +9,17 @@ PRs #9 and #10 are already merged. This branch starts from their verified equiva
 - Demo and Research navigation; Play/Compare share the current board/history. Existing model explanations and archived game replay remain accessible. Old model links resolve to the corresponding study without substituting checkpoints.
 - Research index and an explicit public report allowlist, independent of the failed move-ranking checkpoint release gate. All negative/inconclusive results remain visible.
 - Research-only NumPy policy/value model, legal-history-preserving PUCT, baseline/0.1 anchored training, frozen actors, uniform completed-game weighting, exact CPU minibatch resume, source/config/code locks, development-only selection, fresh paired finals and audits/reports.
-- **91 Python tests passed**, lint passed, CLI help and production frontend build passed. **16 real/mocked local browser flows passed**, one optional four-model preview flow skipped in that suite. The staged four-model compatibility workflow was subsequently run separately and passed for all four routes. Local workflows do not establish Docker, remote CI or Railway deployment success.
+- **93 Python tests passed**, lint passed, CLI help and production frontend build passed after the scope change. **16 real/mocked local browser flows passed**, including the completed feasibility label, deferred comparison and public scope audit; one optional four-model preview flow was skipped. The staged four-model compatibility workflow previously passed separately for all four routes. Local workflows do not establish Docker, remote CI or Railway deployment success.
 - Actual CPU pilot/main-study status is in `docs/experiments/policy-value/` and `runs/policy-value/`. Tiny fixture runs verify integration only. Do not describe the main study as complete until all six runs, selections, planned finals and audits are present.
 - Released checkpoint hashes and default are unchanged. No MCTS player enters the public API and no model is promoted automatically.
 
 ## User-managed push
 
-**Final-product handoff is pending the completed study.** The user requested one finished product before pushing on 2026-10-15. Do not treat the implementation commits or a pilot report as that final handoff.
+**Ready for the reduced feasibility release.** The user explicitly replaced the full-study requirement with an immediately pushable product on 2026-10-15. Scope and audit: `docs/policy-value-release.md` and `docs/experiments/policy-value/release-scope.json`.
 
-All three feasibility budgets passed; the frozen decision selected 512 simulations. The main study is running locally. Its pilot-throughput forecast is **559.6 hours (23.3 days), including a 50% margin**, rather than a promised completion date. Laptop sleep and interruptions can extend wall-clock completion. Paid cost remains C$0.
+All three feasibility budgets passed: 60 attempts, 59 rule-completed games, one truncated game. The 559.6-hour main comparison was stopped after eight generated games, with no training update, selection or final match. Its data and original protocol are preserved; it is deferred future work rather than an outstanding release task. No background computation remains running and no strength improvement is claimed.
 
-The completion gate remains all six training runs, all development selections locked before final matches, fresh paired final evaluations, integrity audits, and the generated final report. After the run finishes, inspect any failures, regenerate the public reports, validate their assets and released-model identities, run the required checks, and commit all final evidence before presenting the branch as finished. The continuation generates reports but does not create Git commits or perform this final release review.
-
-The following command is for the eventual completed handoff:
+The website, existing playable collection, historical reports, research implementation and completed feasibility report form the finished release. Push the committed branch:
 
 ```sh
 git push -u origin codex/policy-value-research

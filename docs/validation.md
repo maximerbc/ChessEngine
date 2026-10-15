@@ -110,3 +110,11 @@ Both health probes now retry all curl errors, with a 5-second per-attempt timeou
 - The pilot was handed from the interactive process to the durable continuation after hashing 34 completed game records. All 34 hashes matched after handoff, and new games continued. The previous process's elapsed-time/peak-RAM ledger was preserved; no scientific settings, actor identity or completed targets changed.
 
 - The final expanded suite passed **91 Python tests**. New measured learning figures use Matplotlib and export a standalone `learning.svg` only when actual training records exist; the export is tested, and an empty/pilot-only study produces no invented learning curve.
+
+## 2026-10-15 — Completed feasibility release
+
+- User-authorized scope reduction closes this product after the completed pilot; the full comparison is deferred. Gracefully stopped continuation PID 65060 and independently confirmed the process exited. No background study remains running.
+- Replayed all 60 pilot trajectories and all eight retained main-generation trajectories. Verified legal move/visit counts and actual terminal outcomes, every pilot game hash, shared initializer identity, original frozen scientific-source hashes, and all released checkpoint checksums. Pilot completion was 20/20, 20/20 and 19/20 at 128/256/512 simulations; all frozen feasibility gates passed. No update, selection or final match completed, and none is claimed.
+- **93 Python tests passed in 45.53 seconds** after the scope change. Includes preventing continuation of a closed run and binding the published scope amendment to the exact original protocol. An initial new test incorrectly used the path-sanitized public protocol as a private fixture; it failed on the absent initializer field and was corrected to construct the proper private schema. The complete rerun passed.
+- Lint, CLI help, production frontend build and report-asset checksum/link checks passed. **16 real/mocked browser workflows passed**, with the optional four-model preview skipped in this run. The report and scope audit work during an API outage and distinguish completed feasibility from the deferred comparison. Visually inspected the updated research screenshot.
+- Released weights/default and the frozen original study protocol are unchanged. No paid compute, remote push, remote CI, PR merge or deployment is claimed.

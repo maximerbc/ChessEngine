@@ -65,3 +65,8 @@
 - Freeze pilot criteria before pilot measurements and the main protocol before training. Report a measured forecast before full local compute; no local CPU time cap, no paid compute authorization.
 - Preserve history and automatic draw claims. MCTS terminal values are -1/0/+1; rebuild each tree per move and do not merge transpositions. Count simulations separately from alpha-beta nodes.
 - Select all six checkpoints on development matches before fresh final comparisons. Publish complete seed-level evidence, truncation sensitivity and negative/inconclusive outcomes. Research report publication is independent of model promotion; released checkpoints and default remain unchanged.
+
+## Immediate feasibility release (2026-10-15)
+- The user explicitly reduced scope to an immediately pushable product after the 559.6-hour main-study forecast. The release includes the consolidated website, existing released models, tested policy/value research infrastructure and the completed 60-attempt feasibility pilot. The full baseline-versus-anchor comparison is deferred, not completed or a release blocker.
+- Stop the long run gracefully and preserve its partial generation and frozen original protocol. Record the scope amendment and independent pilot audit in `docs/experiments/policy-value/release-scope.json`; do not rewrite the preregistration or call pilot results strength evidence. No model promotion or new deployment is authorized.
+- No study continuation runs for this release. A future full study needs new explicit user authorization; preserve its original quality and evidence requirements. Commit the verified final release assets locally and hand the branch to the user for pushing.

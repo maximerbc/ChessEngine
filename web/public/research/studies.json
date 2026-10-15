@@ -114,11 +114,11 @@
     {
       "id": "policy-value",
       "title": "Policy/value self-play",
-      "level": "Preregistered feasibility pilot",
+      "level": "Completed feasibility pilot",
       "result": "pilot",
       "availability": "research only",
       "question": "Does prediction anchoring improve policy/value self-play?",
-      "takeaway": "Execution status: training. Two treatments and three paired seeds; no automatic model promotion.",
+      "takeaway": "All three search budgets passed the 60-game feasibility pilot. The full anchoring comparison was deferred because of its compute cost; no strength improvement is claimed.",
       "report": "/research/policy-value/index.html"
     }
   ],
@@ -140,8 +140,9 @@
     "rl-improvement/learning.png": "92c028dfd2b7c0e3a10676f9be831f8ce599fbf6497f26a47181f475bc82c858",
     "rl-update-diagnosis/index.html": "fa330900432925625d52bd8185fa03145044285e083aeb9020d1f93071c762fd",
     "move-ranking/index.html": "2f0a211c3048e31be39e77f47d21c62b8393c11e70c8d339974dabc73893f16b",
-    "policy-value/index.html": "8a957513f1cd6f40658d61f1b71e9290b24d5006f45d4df11d9bce63223e208c",
-    "policy-value/evidence.json": "4097643958a55937f802cea155e405594a9ae23d8bda83f17c2983df7aa4bcfe",
-    "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866"
+    "policy-value/index.html": "6b3aa8455ee6dc895415618145cda5ad8c650bcabb9e8cd201219a30123573a2",
+    "policy-value/evidence.json": "e04ada459d3ff3a0e22eecee1cef6324c608ddbeb055051d65439e59af3ab43d",
+    "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866",
+    "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d"
   }
 }
