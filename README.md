@@ -127,3 +127,11 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_s
 ```
 
 All stages resume from verified inputs and completed games. CPU updates resume at minibatch boundaries; interrupted simulation-budget games replay from deterministic seeds. Wall-clock match trajectories are not promised bitwise reproducible. Do not change scientific code/configuration to bypass a frozen identity mismatch. Historical studies and negative results remain intact; no paid resources or remote pushes are part of this workflow.
+
+For an already running approved pilot, a single optional continuation can wait for it, publish/log its measured forecast, and resume the frozen full study automatically:
+
+```sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_continue configs/policy-value.json --wait-pilot
+```
+
+Do not run this alongside another continuation or a raw main-study process. It checks the recorded runtime environment, preserves failures, handles interruption through existing resume state, and checkpoints elapsed time every 30 seconds. Reports state the actual evidence level; no background process promotes a model or deploys the website.

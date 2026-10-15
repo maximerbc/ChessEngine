@@ -15,7 +15,7 @@ def public(value):
                 else k
             ): public(v)
             for k, v in value.items()
-            if k not in ("initializer", "archive", "corpus", "reserved", "output")
+            if k not in ("initializer", "archive", "corpus", "reserved", "output", "pid")
         }
     if isinstance(value, list):
         return [public(v) for v in value]
@@ -24,15 +24,35 @@ def public(value):
     return value
 
 
-def curve(values, label):
-    if len(values) < 2:
-        return ""
-    low, high = min(values), max(values)
-    points = " ".join(
-        f"{15 + i * 570 / (len(values) - 1):.1f},{165 - (v - low) * 145 / (high - low or 1):.1f}"
-        for i, v in enumerate(values)
-    )
-    return f'<figure><svg viewBox="0 0 600 180" role="img" aria-label="{html.escape(label)}"><polyline fill="none" stroke="#24705b" stroke-width="3" points="{points}"/></svg><figcaption>{html.escape(label)}: first {values[0]:.5f}, last {values[-1]:.5f}; range {low:.5f}–{high:.5f}</figcaption></figure>'
+def learning_plot(training, output, root):
+    """Standalone scientific figure, generated only from actual run records."""
+    if not training:
+        return None
+    import os
+
+    os.environ.setdefault("MPLCONFIGDIR", str((root / "report-matplotlib").resolve()))
+    import matplotlib
+
+    matplotlib.use("Agg")
+    matplotlib.rcParams["svg.hashsalt"] = "chessengine-policy-value"
+    import matplotlib.pyplot as plt
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4), constrained_layout=True)
+    for name, record in training.items():
+        rows = record["history"]
+        for axis, key in zip(axes, ["frozen_checkpoint_outcome_mse", "frozen_checkpoint_anchor_mse"]):
+            axis.plot([r["batch"] for r in rows], [r[key] for r in rows], marker="o", label=name)
+            axis.set_xlabel("Batch")
+            axis.set_ylabel("Mean squared error")
+            axis.grid(alpha=0.2)
+    axes[0].set_title("Outcome error on each batch")
+    axes[1].set_title("Deviation from frozen initializer")
+    axes[1].legend(fontsize=8)
+    fig.suptitle("Changing self-play data; these are not fixed-data generalization curves", fontsize=10)
+    target = output / "learning.svg"
+    fig.savefig(target, metadata={"Date": None})
+    plt.close(fig)
+    return target
 
 
 def build(root="runs/policy-value", destination="docs/experiments/policy-value"):
@@ -55,16 +75,26 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
         "pilot-decision",
         "forecast",
         "compute",
+        "pilot-handoff-compute",
+        "pilot-handoff",
         "results",
         "final-audit",
         "failures",
         "openings-manifest",
         "initial-seal",
         "environment",
+        "continuation-status",
+        "continuation-compute",
+        "launch-estimate",
         "selection-lock",
     ]:
         if (root / f"{name}.json").exists():
             evidence[name] = read_json(root / f"{name}.json")
+    if evidence.get("continuation-status", {}).get("status") in ("interrupted", "failed") and status[
+        "status"
+    ] in ("training", "evaluation"):
+        status = {**status, "status": evidence["continuation-status"]["status"]}
+        evidence["status"] = status
     evidence["pilot_progress"] = {
         str(n): len(list((root / f"pilot-{n}").glob("*.json"))) for n in config["pilot_simulations"]
     }
@@ -84,7 +114,7 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
     write_json(out / "protocol.json", public(read_json(root / "protocol.json")))
     sections = [
         f"<h1>Policy/value self-play and prediction anchoring</h1><p>Status: <strong>{html.escape(status['status'])}</strong>. Local CPU; C$0 paid resources. No model promotion.</p>",
-        "<p>Two treatments share a supervised-initialized value network and fresh policy head: visit-policy/outcome learning, and the same objective plus a 0.1 penalty toward frozen initial value predictions. This is an adapted AlphaZero-inspired study, with batch-frozen actors and a compact MLP.</p>",
+        "<p>Two treatments share a supervised-initialized value network and fresh policy head: visit-policy/outcome learning, and the same objective plus a 0.1 penalty toward frozen initial value predictions. This is an adapted AlphaZero-inspired study, with batch-frozen actors and a compact MLP. <a href='https://arxiv.org/abs/1712.01815'>Original AlphaZero paper</a>.</p>",
         "<h2>Execution and provenance</h2><p>Pilot games completed by simulation budget: "
         + html.escape(str(evidence["pilot_progress"]))
         + ". Pilot evidence tests feasibility; it is not final playing-strength evidence.</p>",
@@ -99,9 +129,16 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
             f"<p>Measured forecast before main launch: {evidence['forecast']['seconds'] / 3600:.1f} hours, including a 50% throughput margin. This is an estimate, not measured completion time.</p>"
         )
     if "compute" in evidence:
-        c = evidence["compute"]
+        c = dict(evidence["compute"])
+        c["peak_ram_mb"] = max(
+            c["peak_ram_mb"], evidence.get("pilot-handoff-compute", {}).get("peak_ram_mb", 0)
+        )
         sections.append(
             f"<p>Recorded active elapsed time: {c['active_seconds'] / 3600:.2f} hours. Peak process RAM: {c['peak_ram_mb']:.1f} MiB.</p>"
+        )
+    if "continuation-compute" in evidence:
+        sections.append(
+            f"<p>Main-run continuation ledger: {evidence['continuation-compute']['main_runner_seconds'] / 3600:.2f} elapsed hours, checkpointed every 30 seconds. This overlaps the completed-run ledger; do not add the two.</p>"
         )
     if "pilot-summary" in evidence:
         sections.append(
@@ -115,24 +152,16 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
             "</table></div><p>Frozen gates: at least 80% completed games, at least 50% mean coverage on positions with four or more legal moves, fewer than 90% dominant positions, at most 4 GiB peak RAM. A dominant position assigns at least 99% of visits to one move.</p>"
         )
     if evidence["training"]:
+        learning_plot(evidence["training"], out, root)
+        sections.append(
+            '<figure><img src="learning.svg" alt="Outcome and anchor error by batch for every completed training run"><figcaption>Actual checkpoint measurements on changing batch data; no playing-strength inference follows from these curves.</figcaption></figure>'
+        )
         sections.append(
             "<h2>All run-level learning records</h2><p>Online losses use changing self-play data and cannot be read as a fixed-data learning curve. Frozen checkpoint errors are measured separately. Fitting returns or limiting drift does not establish stronger play.</p>"
         )
         for name, training in evidence["training"].items():
             rows = training["history"]
             sections.append(f"<h3>{html.escape(name)}</h3>")
-            sections.append(
-                curve(
-                    [r["frozen_checkpoint_outcome_mse"] for r in rows],
-                    "Frozen-checkpoint outcome MSE on that batch",
-                )
-            )
-            sections.append(
-                curve(
-                    [r["frozen_checkpoint_anchor_mse"] for r in rows],
-                    "Deviation from frozen initializer on that batch",
-                )
-            )
             sections.append(
                 '<div class="table-wrap"><table><tr><th>Batch</th><th>Completed/attempted</th><th>Online objective</th><th>Outcome MSE</th><th>Anchor MSE</th><th>Checkpoint SHA-256</th></tr>'
             )
@@ -184,7 +213,7 @@ def build(root="runs/policy-value", destination="docs/experiments/policy-value")
     sections.append(
         '<h2>Methods and limits</h2><p>Actor frozen per batch; no new teacher labels; exactly 32 sampled states per completed game; truncated games excluded from both losses. Three seeds share one initialization. All six development selections precede final games. Bootstrap shared color-swapped opening pairs jointly across fixed seeds; seed variation is reported separately. No Elo or calibrated win-probability claim. Lower drift and a head-to-head advantage can still mean less regression rather than improvement over initialization.</p><p><a href="protocol.json">Frozen protocol and identities</a> · <a href="evidence.json">All measured evidence</a></p>'
     )
-    style = "body{font:16px/1.6 system-ui;max-width:1050px;margin:36px auto;padding:0 20px;color:#23382f}table{border-collapse:collapse;width:100%}td,th{padding:9px;border-bottom:1px solid #ccd;text-align:left}code{font-size:11px;overflow-wrap:anywhere}.table-wrap{overflow:auto}svg{max-width:600px;width:100%}h2{margin-top:36px}"
+    style = "body{font:16px/1.6 system-ui;max-width:1050px;margin:36px auto;padding:0 20px;color:#23382f}table{border-collapse:collapse;width:100%}td,th{padding:9px;border-bottom:1px solid #ccd;text-align:left}code{font-size:11px;overflow-wrap:anywhere}.table-wrap{overflow:auto}svg,img{max-width:100%;height:auto}h2{margin-top:36px}"
     (out / "index.html").write_text(
         '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Policy/value self-play</title><style>'
         + style

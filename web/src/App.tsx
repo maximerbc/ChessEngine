@@ -357,6 +357,20 @@ export default function App() {
       !!expectedCheckpoint &&
       expectedCheckpoint === currentModel.checkpoint_id);
   const done = !!terminal || game.isGameOver();
+  useEffect(() => {
+    if (connection !== "ready") return;
+    const query = new URLSearchParams(window.location.search);
+    query.set("fen", initialFen);
+    query.set("moves", history.join(","));
+    query.set("model", model);
+    query.set("mode", tab === "compare" ? "compare" : "play");
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + "?" + query,
+    );
+  }, [initialFen, history, model, tab, connection]);
+
   const studyId =
     new URLSearchParams(window.location.search).get("study") ||
     (!showcaseEnabled ? legacyStudies[path] : undefined);
@@ -421,6 +435,12 @@ export default function App() {
       const target = approaches.find(
         (a) => a.path === window.location.pathname,
       );
+      const requested = new URLSearchParams(window.location.search).get(
+        "model",
+      );
+      if (requested && models.some((m) => m.id === requested))
+        setModel(requested);
+
       if (target) setModel(target.id);
       generation.current++;
       setAnalysis(null);
@@ -431,7 +451,7 @@ export default function App() {
     };
     window.addEventListener("popstate", back);
     return () => window.removeEventListener("popstate", back);
-  }, []);
+  }, [models]);
   async function inspectPosition() {
     if (busy || !identityMatches || connection !== "ready") return;
     setBusy(true);
@@ -961,33 +981,35 @@ export default function App() {
                     </button>
                   ))}
                 </div>
-                <details className="released-explanation">
-                  <summary>How this evaluator works</summary>
-                  <p>
-                    {currentModel?.kind === "handcrafted"
-                      ? "Material and piece-square rules score the board."
-                      : "The released compact network estimates position value; alpha-beta searches legal moves. The earlier self-play checkpoint learned from completed game outcomes."}
-                  </p>
-                  <p>
-                    Positive values favour the player to move; they are not
-                    calibrated win probabilities. The model identity and
-                    evidence below apply to this exact release.
-                  </p>
-                  <button
-                    onClick={inspectPosition}
-                    disabled={
-                      busy || connection !== "ready" || !identityMatches
-                    }
-                  >
-                    Analyze this position
-                  </button>
-                  {analysis && (
+                {!page && (
+                  <details className="released-explanation">
+                    <summary>How this evaluator works</summary>
                     <p>
-                      Last analysis: {analysis.value.toFixed(3)} from the
-                      player-to-move perspective.
+                      {currentModel?.kind === "handcrafted"
+                        ? "Material and piece-square rules score the board."
+                        : "The released compact network estimates position value; alpha-beta searches legal moves. The earlier self-play checkpoint learned from completed game outcomes."}
                     </p>
-                  )}
-                </details>
+                    <p>
+                      Positive values favour the player to move; they are not
+                      calibrated win probabilities. The model identity and
+                      evidence below apply to this exact release.
+                    </p>
+                    <button
+                      onClick={inspectPosition}
+                      disabled={
+                        busy || connection !== "ready" || !identityMatches
+                      }
+                    >
+                      Analyze this position
+                    </button>
+                    {analysis && (
+                      <p>
+                        Last analysis: {analysis.value.toFixed(3)} from the
+                        player-to-move perspective.
+                      </p>
+                    )}
+                  </details>
+                )}
                 <div className="color-row">
                   <span>Play as</span>
                   <div className="segmented">

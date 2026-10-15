@@ -339,3 +339,20 @@ test("compare uses the actual shared position and Research has a compact archive
     fullPage: true,
   });
 });
+
+test("new game and move history survive a refresh", async ({ page }) => {
+  await mock(page);
+  await page.goto("/?moves=e2e4,e7e5");
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "New game", exact: true }).click();
+  await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "e2 white pawn", exact: true })
+    .click();
+  await page.getByRole("button", { name: "e4", exact: true }).click();
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+});

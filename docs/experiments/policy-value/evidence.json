@@ -15,7 +15,7 @@
       "root_coverage": 0.6298115976415329,
       "dominant_fraction": 0.061812851209381875,
       "mean_depth": 5.488639139995113,
-      "peak_ram_mb": 176.6875,
+      "peak_ram_mb": 172.328125,
       "game_hashes": [
         "fe0389a1159098346112083dfb5ed63e6350f8c5cebda96954c1d04a21ff41b8",
         "7e784acf866536bdb64b8d25a9fc5a127cb0ff5615eee000ca484f7d87c79bd4",
@@ -39,8 +39,92 @@
         "559dbf764eba13a74fc9c2401a4b01ce8ef0369754c9ca70f970a2de54b30864"
       ],
       "qualifies": true
+    },
+    {
+      "simulations": 256,
+      "attempted": 20,
+      "completed": 20,
+      "mean_game_seconds": 81.40202334159986,
+      "p90_plies": 390.90000000000003,
+      "root_coverage": 0.727829176078669,
+      "dominant_fraction": 0.001696712619300106,
+      "mean_depth": 6.2120890774125135,
+      "peak_ram_mb": 172.328125,
+      "game_hashes": [
+        "4810c1865900a3e8d3b77c0e2f15cc97a56e0579b85b44be4205fa98acf7877d",
+        "3c3c4aa71bbc2711498913b80e61e3bb8bc65589900ca07924fa14445726be91",
+        "505d6f3c03c51e40793a35fd79bffc6dc62cd697b6e5d6a5ee3b4c8ca1ce9673",
+        "0b069357d3ab31ded4ceafc4d007de06d46db706a5967b942ad9fa1fffdc8488",
+        "78a299caadf9412f2f6d83cf0fb6596b8c1665d3c8910760c1ee162c1f5b43e5",
+        "8f3abb68c8eaed31a253961a96c1c7ab877cb2aec19cf6379f2e265aeb98efbf",
+        "bb2b71b5f11825e93f19a007a9aa4765cca5d8d795cf85c0f64eeac8bb7f5a71",
+        "70c2653e605e20ac7c8a24429106290d05ae8496f3b337de22919331448b4691",
+        "a231e91a9b6e9683f9ebef072bd2ace3daef0e6e387a24bd39a7d568ece2e928",
+        "72b787a6979e2d6663566be6c31ee686d12e748d92c224055c520c046811ebb4",
+        "6f8960e8e55d12e9295517ef300cf3493e93f14a54cd556061641e17583448c1",
+        "763bdf18ff9cf2dd31c2019e3e6e11e503d7ed172694cd32fcbcf0af52393d01",
+        "0dbfabfba766c38ed26878c358161b029a2f912b643a8a77a0f872c6c464acd8",
+        "bc69b2c5a23b545e04f434adfa17a0dccd102c32d76081ec3ec9615dea1eb8e1",
+        "6c49fb19f1fe8a66ccc63637bf53b643381695e65ad3793a06fe60aed8f05896",
+        "68ae45cbfb0d2aafe360ae29dae553f1380ed52b5338547fc6e081d4edc2d24f",
+        "db43bb4430b6a91d6bc24d9dc657b441de3706a23320ff58cbc8897457737642",
+        "d81c14029c8804e6ab3c6e006e15112ad2bbcd1bd40f2c8c89368f04c522d646",
+        "22890dfa1e28cb35ca9a85210016137b2638796b9d3440a2112c565c5e6a550e",
+        "92113852578651fd7b6609bdaadd4a89505183ecd9a3c35ce7a8fd567285ec29"
+      ],
+      "qualifies": true
     }
   ],
+  "compute": {
+    "active_seconds": 1846.8404095838778,
+    "peak_ram_mb": 176.6875,
+    "paid_cost_cad": 0
+  },
+  "pilot-handoff-compute": {
+    "active_seconds": 1846.8404095838778,
+    "peak_ram_mb": 176.6875,
+    "paid_cost_cad": 0
+  },
+  "pilot-handoff": {
+    "reason": "Move the existing pilot into the durable continuation process without changing scientific settings",
+    "completed_games": {
+      "pilot-128/0009.json": "2471f863c34f1ed37925550108f34d61a3a8a7dee66b1064ad88e19bce2c0cb2",
+      "pilot-128/0013.json": "daccb356610fe2119f87510a960feb353b9a2e044a3c05df1c80df38764640aa",
+      "pilot-128/0005.json": "fd0c5bd16e725441a78d265bb13b27558a9c55b7e542c8f038642b94560a550f",
+      "pilot-128/0004.json": "11f8436b998334427d142de0981fb201450a8a407fd720874f7b7b52917801de",
+      "pilot-128/0012.json": "d2ec189a53a595eb510b12e19c800a68b5e65b42329ca08d2f182c69fca974f8",
+      "pilot-128/0008.json": "a632f2479885643449d1ea57e44cf1316dee48e600c5104d9b878eec21ede8f6",
+      "pilot-128/0015.json": "aa20fbae1001d8bcd6ce12718ee9eaf4c0e7ab79d78c9bac5815df7f078d1daa",
+      "pilot-128/0003.json": "a44b34e8cb4154f3f6570234f1054fbcecf8d84c8076de9fcd0cb16ed5a2f3c6",
+      "pilot-128/0019.json": "559dbf764eba13a74fc9c2401a4b01ce8ef0369754c9ca70f970a2de54b30864",
+      "pilot-128/0018.json": "b34c210b0759ca6f6c0176c1bf3bcbdc2ee0d02ff5ec3708fb5697d78aeeaf94",
+      "pilot-128/0002.json": "d8693528a6d378474d5d1be62f9961e8e2cdd2141b1e596c438bd6cd262b5536",
+      "pilot-128/0014.json": "040e82eff05511f28ff9cdb8447b75ce23485a4a81c8a592b7f048808d6f26f7",
+      "pilot-128/0001.json": "7e784acf866536bdb64b8d25a9fc5a127cb0ff5615eee000ca484f7d87c79bd4",
+      "pilot-128/0017.json": "172765cdd90d748e3d9a2ec6a2fe072f1fd17bc4753ad6d5cf93a918488893d9",
+      "pilot-128/0016.json": "664a4911f012b8bcf924400fc54c2a0b3007482522f6879b69613cd00baea225",
+      "pilot-128/0000.json": "fe0389a1159098346112083dfb5ed63e6350f8c5cebda96954c1d04a21ff41b8",
+      "pilot-128/0007.json": "9fc446999e1c18bf8562395fbd459d46df2dbe522d7b6b864e0b8d981856d514",
+      "pilot-128/0011.json": "41391bce3c7eb8649b1674c5abc0cb84af37b91cc0c530778caf59919a06b068",
+      "pilot-128/0010.json": "bcd4e3e41b6ec536fd362f534a0948ab2d820bef044f7a6fb4023fed496d53df",
+      "pilot-128/0006.json": "8130aa55af96b07c21bbb55c9659a8c457e832389a1f5ba7e9a4ba64497c64bc",
+      "pilot-256/0009.json": "72b787a6979e2d6663566be6c31ee686d12e748d92c224055c520c046811ebb4",
+      "pilot-256/0013.json": "bc69b2c5a23b545e04f434adfa17a0dccd102c32d76081ec3ec9615dea1eb8e1",
+      "pilot-256/0005.json": "8f3abb68c8eaed31a253961a96c1c7ab877cb2aec19cf6379f2e265aeb98efbf",
+      "pilot-256/0004.json": "78a299caadf9412f2f6d83cf0fb6596b8c1665d3c8910760c1ee162c1f5b43e5",
+      "pilot-256/0012.json": "0dbfabfba766c38ed26878c358161b029a2f912b643a8a77a0f872c6c464acd8",
+      "pilot-256/0008.json": "a231e91a9b6e9683f9ebef072bd2ace3daef0e6e387a24bd39a7d568ece2e928",
+      "pilot-256/0003.json": "0b069357d3ab31ded4ceafc4d007de06d46db706a5967b942ad9fa1fffdc8488",
+      "pilot-256/0002.json": "505d6f3c03c51e40793a35fd79bffc6dc62cd697b6e5d6a5ee3b4c8ca1ce9673",
+      "pilot-256/0001.json": "3c3c4aa71bbc2711498913b80e61e3bb8bc65589900ca07924fa14445726be91",
+      "pilot-256/0000.json": "4810c1865900a3e8d3b77c0e2f15cc97a56e0579b85b44be4205fa98acf7877d",
+      "pilot-256/0007.json": "70c2653e605e20ac7c8a24429106290d05ae8496f3b337de22919331448b4691",
+      "pilot-256/0011.json": "763bdf18ff9cf2dd31c2019e3e6e11e503d7ed172694cd32fcbcf0af52393d01",
+      "pilot-256/0010.json": "6f8960e8e55d12e9295517ef300cf3493e93f14a54cd556061641e17583448c1",
+      "pilot-256/0006.json": "bb2b71b5f11825e93f19a007a9aa4765cca5d8d795cf85c0f64eeac8bb7f5a71"
+    },
+    "scientific_protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a"
+  },
   "openings-manifest": {
     "signature": "921e540fff5d68efccaad13ec2b5375cd9903aec2142faeeef6a72f1477c5f4e",
     "inputs": {
@@ -83,10 +167,13 @@
     "compute": "CPU, single numerical-library thread",
     "paid_cost_cad": 0
   },
+  "continuation-status": {
+    "status": "waiting_for_pilot"
+  },
   "pilot_progress": {
     "128": 20,
-    "256": 4,
-    "512": 0
+    "256": 20,
+    "512": 1
   },
   "initialization": {
     "supervised_value_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",

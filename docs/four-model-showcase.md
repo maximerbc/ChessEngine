@@ -11,7 +11,7 @@ After all ranker fits finish:
 ```sh
 .venv/bin/python -m chessengine.showcase configs/move-ranking.json runs/showcase-preview
 MODEL_MANIFEST=runs/showcase-preview/models/manifest.json .venv/bin/python -m uvicorn chessengine.api:app --port 8000
-SHOWCASE_PUBLIC_DIR=../runs/showcase-preview/public npm --prefix web run dev
+VITE_SHOWCASE=1 SHOWCASE_PUBLIC_DIR=../runs/showcase-preview/public npm --prefix web run dev
 ```
 
 The preview includes only explicitly exported checkpoints and report assets. Public weight metadata omits local training paths. Original historical research remains separately identified as an archive in the existing Research view.
@@ -30,6 +30,6 @@ Railway continues to use the two existing Dockerfiles. Nginx explicitly serves t
 
 ## Completed release decision
 
-The supervised candidate scored 46.25% against the deployed default and did not pass the 50% gate. The public checkpoints are therefore unchanged. The gallery is enabled in local development only; ordinary production builds keep the existing interface. `VITE_SHOWCASE=1` is reserved for an explicitly staged preview build with matching assets, not an instruction to replace the live deployment.
+The supervised candidate scored 46.25% against the deployed default and did not pass the 50% gate. The public checkpoints are therefore unchanged. The historical four-model explanations require explicit `VITE_SHOWCASE=1` and matching preview assets. Ordinary development and production builds use the consolidated Demo/Research interface. `VITE_SHOWCASE=1` is reserved for an explicitly staged preview build with matching assets, not an instruction to replace the live deployment.
 
 Final move-guided score was 48.75% (95% interval 45.75–51.625%), an inconclusive result. The research report is committed under `docs/experiments/move-ranking/`.

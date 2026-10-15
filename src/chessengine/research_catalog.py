@@ -160,6 +160,8 @@ def publish(destination="web/public/research"):
         target = out / "policy-value"
         target.mkdir(exist_ok=True)
         names = ["index.html", "evidence.json", "protocol.json"]
+        if (pv / "learning.svg").exists():
+            names.append("learning.svg")
         for name in names:
             source = pv / name
             if not source.exists():

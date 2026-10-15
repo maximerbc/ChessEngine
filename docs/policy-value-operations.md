@@ -21,3 +21,17 @@ The prospective protocol names exactly two treatments and run seeds 42/43/44. A 
 The automated suite covers search signs and budgets, legal priors, promotions/castling/en passant, history-based and halfmove draws, initial value and NumPy export parity, anchor detachment/gradients, truncation exclusion, uniform sampling, exact CPU minibatch resume, identity mismatches and paired comparisons. Production release-model checks remain active. Local browser checks exercise both mocked failure cases and the actual released-model API. Docker/remote CI and Railway deployment are separate and are not established by these local checks.
 
 Public research assets are an explicit filename allowlist. Private run paths and non-allowlisted links are removed; opaque artifact IDs preserve distinct hashes. No raw training directory is copied into the website. The original PDF and released model-download URLs remain valid.
+
+## Background continuation
+
+A single local continuation is running for this approved study. It waits for the existing pilot's recorded completion rather than starting a duplicate. A rejected pilot stops the continuation. A passing pilot publishes and logs the exact forecast before the main run, then executes the unchanged frozen runner through training, selection, final evaluation and reports.
+
+Local process/status records: `runs/policy-value/continuation-process.json` and `continuation-status.json`; output: `continuation.log`; prelaunch estimate: `launch-estimate.json`. The main elapsed-time/RAM ledger is checkpointed every 30 seconds in `continuation-compute.json`. Its timing overlaps the completed-run compute ledger and must not be added to it. Continuation checks the recorded CPU package versions and project dependency identity before resume. A lock prevents duplicate continuation processes.
+
+This is a single ongoing local computation, not a scheduled automation or a hosted service. There is no paid resource, online training, model promotion or remote push. Current pilot/main progress is execution evidence only; it is not a completed final study. The continuation writes final reports when it finishes, or preserves failure/interruption status. Do not start another raw study process concurrently.
+
+The two main verified implementation milestones are 91 passing Python tests and 16 passing local browser workflows (one optional staged four-model preview workflow skipped). Frozen scientific source identities were rechecked after the implementation commit; administrative continuation and reporting do not alter the search/training protocol.
+
+The interactive pilot was handed over after 34 completed games. `pilot-handoff.json` preserves every completed-game hash and `pilot-handoff-compute.json` preserves the original process ledger. All 34 records were verified unchanged after the continuation resumed, and later games advanced. Remaining pilot output now goes to `continuation.log`; `pilot.log` is the earlier process's historical log. Reported peak memory retains the maximum across the handoff ledger and the current run.
+
+The separately staged real four-model preview compatibility workflow also passed for all four historical routes. It remains behind the explicit preview flag and does not change the consolidated demo or release decision.

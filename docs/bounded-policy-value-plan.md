@@ -1,6 +1,6 @@
 # Bounded policy/value self-play study and website consolidation
 
-Status: implementation authorized by the user on 2026-10-15. The website and research pipeline are implemented and locally validated. The prospective scientific protocol is `docs/policy-value-preregistration.md`, with frozen settings in `configs/policy-value.json`; this planning document remains the design rationale. The actual feasibility pilot is in progress. No complete main study, model promotion or deployment is claimed. See `docs/policy-value-operations.md` and `docs/experiments/policy-value/` for execution evidence.
+Status: implementation authorized by the user on 2026-10-15. The website and research pipeline are implemented and locally validated. The prospective scientific protocol is `docs/policy-value-preregistration.md`, with frozen settings in `configs/policy-value.json`; this planning document remains the design rationale. The actual feasibility pilot is in progress, with one resumable continuation waiting to run the full protocol only if its frozen gates pass. No complete main study, model promotion or deployment is claimed. See `docs/policy-value-operations.md` and `docs/experiments/policy-value/` for execution evidence.
 
 ## Post-merge baseline check
 

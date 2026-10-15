@@ -48,3 +48,24 @@ An interval entirely above 50% supports improvement against that opponent at tha
 Choose checkpoints using development games, then freeze them before final matches. Repeatedly selecting a model using the final test turns that test into development data. Fixed nodes compare playing decisions under equal search work; fixed time additionally includes inference efficiency.
 
 Questions at milestone three: What exactly does the evidence support? What does it not support? Is a gain specific to one seed, opponent or search budget? Would the conclusion survive removing move-cap adjudications?
+
+## Research policy/value follow-up
+
+The local research player predicts legal-move policy `p_theta(a|s)` and side-to-move value `v_theta(s)`. Root policy targets are completed MCTS visit fractions `pi(a|s)=N(s,a)/sum_b N(s,b)`, with target temperature one. Actual completed-game outcome `z` is +1/0/-1 for the player to move at each sampled state.
+
+For each completed game sample exactly K=32 states with replacement. The objective averages games uniformly:
+
+```text
+L_lambda = mean_over_games mean_over_K_states [
+    -sum_legal_a pi(a|s) log p_theta(a|s)
+    + (v_theta(s)-z)^2
+    + lambda (v_theta(s)-stop_gradient(v_initial(s)))^2
+]
+lambda = 0 (baseline) or 0.1 (anchored)
+```
+
+For a single unconstrained value prediction, the value-only minimizer is `(z + lambda*v_initial)/(1+lambda)`. At lambda=0.1 this is approximately 90.9% outcome and 9.1% initializer. The actual network shares its trunk with policy learning, so this is an explanation of the local penalty, not a closed-form solution for all parameters. The detached initializer never receives gradients. Both arms inherit the same supervised knowledge; the anchored arm also explicitly retains its predictions. Neither obtains new Stockfish labels.
+
+An MCTS node predicts from its own side-to-move perspective. A terminal checkmate is -1 for that side; backup negates once to give +1 to the parent mover. Edge Q is stored from its selecting parent's perspective. This is distinct from alpha-beta's out-of-range mate sentinel. PUCT uses `Q+c*P*sqrt(max(1,total N))/(1+N_edge)` with zero initial Q and legal-generator tie order. Trees are rebuilt each move, retaining the full board history for claims without merging history-sensitive transpositions.
+
+This follows the policy/value, search-target and outcome-learning combination of the [original AlphaZero paper](https://arxiv.org/abs/1712.01815), adapted to a supervised-initialized MLP, CPU scale and batch-frozen actors. It does not reproduce tabula-rasa AlphaZero training. Treatment trajectories diverge after updates, so their comparison estimates the overall learning-process effect; the earlier fixed-trajectory diagnostic estimates a different, off-policy effect.

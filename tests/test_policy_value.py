@@ -230,3 +230,128 @@ def test_tiny_six_run_selection_final_and_report(initial, tmp_path):
     write_json(root / "selection-lock.json", old)
     with pytest.raises(ValueError, match="identity"):
         evaluate(cfg, groups, root, init, "tiny-study")
+
+
+def test_generation_resume_reuses_completed_games(initial, tmp_path, monkeypatch):
+    import chessengine.pv_train as training
+    from chessengine.train import trusted_load
+    from chessengine.common import digest
+
+    cfg = {**tiny_config(initial, tmp_path / "full"), "games_per_batch": 2, "minimum_completed_per_batch": 2}
+    groups = {"train": [mate_opening("train")]}
+    training.train(cfg, groups, "baseline", 42, "study")
+    resumed = {**cfg, "output": str(tmp_path / "resume")}
+    real = training.generate
+    calls = 0
+
+    def interrupted(*args):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise InterruptedError("simulated interruption during generation")
+        return real(*args)
+
+    monkeypatch.setattr(training, "generate", interrupted)
+    with pytest.raises(InterruptedError):
+        training.train(resumed, groups, "baseline", 42, "study")
+    first = tmp_path / "resume/baseline-42/games-001/0000.json"
+    saved_sha = digest(first)
+    monkeypatch.setattr(training, "generate", real)
+    training.train(resumed, groups, "baseline", 42, "study")
+    assert digest(first) == saved_sha
+    a = trusted_load(tmp_path / "full/baseline-42/resume.pt")
+    b = trusted_load(tmp_path / "resume/baseline-42/resume.pt")
+    for name in a["model"]:
+        torch.testing.assert_close(a["model"][name], b["model"][name], rtol=0, atol=0)
+
+
+def test_fresh_openings_exclude_corpus_and_reserved_source_games(tmp_path):
+    import random
+    import chess.pgn
+    from chessengine.common import json_hash
+    from chessengine.pv_data import prepare
+
+    rng = random.Random(91)
+    games, rows = [], []
+    for i in range(16):
+        b = chess.Board()
+        for _ in range(20):
+            if b.is_game_over(claim_draw=True):
+                break
+            b.push(rng.choice(list(b.legal_moves)))
+        if len(b.move_stack) < 16:
+            continue
+        moves = [m.uci() for m in b.move_stack]
+        source = json_hash({"initial": chess.STARTING_FEN, "moves": moves})
+        prefix = chess.Board()
+        for uci in moves[:12]:
+            prefix.push_uci(uci)
+        games.append(str(chess.pgn.Game.from_board(b)))
+        rows.append({**record_board(prefix), "source_game_id": source, "id": str(i)})
+    archive = tmp_path / "archive.pgn"
+    archive.write_text("\n\n".join(games))
+    corpus = tmp_path / "corpus.jsonl"
+    corpus.write_text(json.dumps({**rows[0], "game_id": rows[0]["source_game_id"]}) + "\n")
+    reserved = tmp_path / "reserved.json"
+    write_json(reserved, {"test": [rows[1]]})
+    config = {
+        "output": str(tmp_path / "openings"),
+        "archive": str(archive),
+        "corpus": str(corpus),
+        "reserved": [str(reserved)],
+        "sampling_seed": 42,
+        "pilot_games": 1,
+        "train_openings": 1,
+        "development_pairs": 1,
+        "final_pairs": 1,
+        "control_pairs": 1,
+        "reference_pairs": 1,
+    }
+    groups = prepare(config)
+    assert len(groups) == 6
+    assert not {r["source_game_id"] for rows_ in groups.values() for r in rows_} & {
+        rows[0]["source_game_id"],
+        rows[1]["source_game_id"],
+    }
+    assert prepare(config) == groups
+    corpus.write_text(corpus.read_text() + "\n")
+    with pytest.raises(ValueError, match="inputs changed"):
+        prepare(config)
+
+
+def test_pilot_gates_and_seal_are_prospective(initial, tmp_path, monkeypatch):
+    import chessengine.pv_study as study
+
+    root = tmp_path / "pilot"
+    root.mkdir()
+    cfg = {**tiny_config(initial, root), "pilot_games": 2, "pilot_simulations": [128, 256]}
+    init = study.initialize(cfg, root)
+    actor = PolicyValue(init)
+
+    def game(model, opening, config, seed):
+        return dict(
+            actor_sha256=actor.checkpoint_id,
+            opening=opening,
+            seed=seed,
+            seconds=0.01,
+            played=["a2a3"],
+            truncated=False,
+            metrics=[
+                dict(
+                    legal=20,
+                    root_coverage=0.6 if config["simulations"] == 128 else 0.4,
+                    root_max_share=0.3,
+                    max_depth=2,
+                )
+            ],
+        )
+
+    monkeypatch.setattr(study, "generate", game)
+    monkeypatch.setattr(study, "peak_mb", lambda: 200.0)
+    groups = {"pilot": [mate_opening("pilot-a"), mate_opening("pilot-b")]}
+    decision = study.pilot(cfg, groups, init, root)
+    assert decision["approved"] and decision["simulations"] == 128
+    assert study.pilot(cfg, groups, init, root) == decision
+    write_json(root / "pilot-128/0000.json", {"corrupt": True})
+    with pytest.raises(ValueError, match="pilot game changed"):
+        study.pilot(cfg, groups, init, root)

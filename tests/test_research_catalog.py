@@ -78,3 +78,21 @@ def test_public_evidence_keeps_distinct_artifact_hashes_and_omits_paths(tmp_path
     assert "No completed final comparison is claimed" in text
     assert "<svg" not in text
     assert "runs/" not in (tmp_path / "report/protocol.json").read_text()
+
+
+def test_measured_learning_figure_is_a_standalone_svg(tmp_path):
+    from chessengine.pv_reporting import learning_plot
+
+    training = {
+        "baseline-42": {
+            "history": [
+                {"batch": 1, "frozen_checkpoint_outcome_mse": 0.4, "frozen_checkpoint_anchor_mse": 0.01},
+                {"batch": 2, "frozen_checkpoint_outcome_mse": 0.3, "frozen_checkpoint_anchor_mse": 0.02},
+            ]
+        }
+    }
+    path = learning_plot(training, tmp_path, tmp_path)
+    text = path.read_text()
+    assert path.name == "learning.svg" and "<svg" in text
+    assert "Changing self-play data" in text
+    assert learning_plot({}, tmp_path, tmp_path) is None
