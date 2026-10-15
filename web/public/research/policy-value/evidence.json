@@ -1,6 +1,9 @@
 {
   "status": {
-    "status": "pilot_in_progress"
+    "status": "training",
+    "treatment": "baseline",
+    "seed": 42,
+    "signature": "93ec226b7519c8b3b322b4616c1683912becf233693fcf8fc1c791618a1227a2"
   },
   "paid_cost_cad": 0,
   "model_promotion": false,
@@ -73,11 +76,59 @@
         "92113852578651fd7b6609bdaadd4a89505183ecd9a3c35ce7a8fd567285ec29"
       ],
       "qualifies": true
+    },
+    {
+      "simulations": 512,
+      "attempted": 20,
+      "completed": 19,
+      "mean_game_seconds": 153.0942347458331,
+      "p90_plies": 399.20000000000005,
+      "root_coverage": 0.8394060380955118,
+      "dominant_fraction": 0.0,
+      "mean_depth": 7.194072657743786,
+      "peak_ram_mb": 172.328125,
+      "game_hashes": [
+        "4824fb4ede4188262d33cfaff4042ae5d6bb0dcf8f38ed8a5509daf8e9060d13",
+        "3e47cc2946eff06668713284aebbcf55205cd3b5e61cba73162f0fcb0e9c2477",
+        "7155ae6fbc482e98310462a48055786f1a971b769abb003261f6e3a96a396ba8",
+        "7ab11d5ac9a35c1f31cf190e23b225389995be91842653c0e96b309ecbcbd1e6",
+        "084992dc0d26ca4c7cdd91eca0b1ae2851237a32d6403b5fd3db1dc3d5641476",
+        "511c3bdf7a5ee1a367591e86a0699ec7cfe3bb366acb10acadd5f60d08a3de56",
+        "8c00207e2be5f318a0d91d81c6349ea2a7c2f4118a7f0b29969a020b5c13c3d4",
+        "3c495c0561b6fe59cef4ee96eb6aab43512fc90edff956e9c45b262a51ec3d9c",
+        "0ce61454d3ac57aaac9638ab77a1dcded83ff051ad7324b32d28efdbbd19f59f",
+        "10df769e5e598272724d1a4ac416e48eb8946e3dcaadbc5660d6cc27fe073d6e",
+        "e04bfbeb373531a03cef4bc8bc1ec942df012a8eb0d4a2bb817ed2867edafd4b",
+        "291748294b372e4e177b2f9ba0a0ffd3261249c8b39e59044b7cabf23a1d0e5b",
+        "2067a535f808333eb2b0852f70eb45b88e992d87527dbad6549cbd43d039c7ec",
+        "30729bdb19f4b237680d587957ad9e00817dbe662b5ea6ea2ee8ca1d1c83f6a6",
+        "9d13139e33e747f39380ef925e0bc49e9da81d5505a596baf37cd01e0bf842c6",
+        "400bb970a09c0a5ddf75f688e97cce8110fcca6141074225a8eaabfeb33811cd",
+        "267c7b754ff5c5ca24ec78836ccc7015d2b570c3a55022823fdf6b4e39d4d634",
+        "5b9613292169ed83b60afad7ddb5e0ddc56aa00e4ac7351bd2008ff2cae74818",
+        "71e6510aaeb4854ba568c3a04d8d140fe67c2c06a79233080f3608deffa120df",
+        "2edf4bfc6957c7f5406b389d4f9607bda2bed9a2559155eb9706a007ce0fae8c"
+      ],
+      "qualifies": true
     }
   ],
+  "pilot-decision": {
+    "approved": true,
+    "simulations": 512,
+    "reason": "Highest quality-gated simulation budget"
+  },
+  "forecast": {
+    "seconds": 2014643.682305997,
+    "generation_seconds": 918565.4084749985,
+    "development_games": 960,
+    "final_games": 2160,
+    "margin": 1.5,
+    "note": "Pilot-throughput estimate; deterministic match lengths can differ substantially",
+    "paid_cost_cad": 0
+  },
   "compute": {
-    "active_seconds": 1846.8404095838778,
-    "peak_ram_mb": 176.6875,
+    "active_seconds": 5437.152747625019,
+    "peak_ram_mb": 172.328125,
     "paid_cost_cad": 0
   },
   "pilot-handoff-compute": {
@@ -168,12 +219,23 @@
     "paid_cost_cad": 0
   },
   "continuation-status": {
-    "status": "waiting_for_pilot"
+    "status": "main_running",
+    "forecast_hours": 559.6232450849992
+  },
+  "continuation-compute": {
+    "main_runner_seconds": 1531.8094158750027,
+    "peak_ram_mb": 179.265625,
+    "paid_cost_cad": 0
+  },
+  "launch-estimate": {
+    "forecast_sha256": "6468db6aff8072e06a50e1aea3dd29dbf47faa139834c8984e1b4eda977f8ee7",
+    "estimated_hours": 559.6232450849992,
+    "paid_cost_cad": 0
   },
   "pilot_progress": {
     "128": 20,
     "256": 20,
-    "512": 1
+    "512": 20
   },
   "initialization": {
     "supervised_value_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",

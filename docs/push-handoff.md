@@ -15,11 +15,19 @@ PRs #9 and #10 are already merged. This branch starts from their verified equiva
 
 ## User-managed push
 
+**Final-product handoff is pending the completed study.** The user requested one finished product before pushing on 2026-10-15. Do not treat the implementation commits or a pilot report as that final handoff.
+
+All three feasibility budgets passed; the frozen decision selected 512 simulations. The main study is running locally. Its pilot-throughput forecast is **559.6 hours (23.3 days), including a 50% margin**, rather than a promised completion date. Laptop sleep and interruptions can extend wall-clock completion. Paid cost remains C$0.
+
+The completion gate remains all six training runs, all development selections locked before final matches, fresh paired final evaluations, integrity audits, and the generated final report. After the run finishes, inspect any failures, regenerate the public reports, validate their assets and released-model identities, run the required checks, and commit all final evidence before presenting the branch as finished. The continuation generates reports but does not create Git commits or perform this final release review.
+
+The following command is for the eventual completed handoff:
+
 ```sh
 git push -u origin codex/policy-value-research
 ```
 
-Open the branch against `main` and wait for Python, browser and container CI. Suggested title: **Unify the demo and add policy/value research**. The implementation is reviewable independently of long-running experimental evidence; retain accurate execution status in its description. Hosting continues to use the two existing Railway services and Dockerfiles, with no paid activation or new services.
+Then open the branch against `main` and wait for Python, browser and container CI. Suggested title: **Unify the demo and add policy/value research**. Hosting continues to use the two existing Railway services and Dockerfiles, with no paid activation or new services.
 
 ## Local reproduction
 
