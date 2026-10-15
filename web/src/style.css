@@ -1041,3 +1041,20 @@ select {
   margin: 24px auto 0;
   border-radius: 5px;
 }
+
+/* Four transparent, versioned model walkthroughs. */
+.model-gallery {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:24px 0 30px}
+.model-tile {background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:left;color:inherit;cursor:pointer;transition:transform .15s,border-color .15s}
+.model-tile:hover {transform:translateY(-3px);border-color:#4d7762}
+.model-tile h2 {font-size:19px;margin:12px 0}.model-tile p {font-size:14px;line-height:1.55;min-height:45px}
+.tile-link {display:flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);margin-top:16px}
+.model-guide {background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:30px;margin:0 0 24px}
+.guide-heading {display:flex;align-items:center;justify-content:space-between;gap:20px}.guide-heading h2 {font-size:26px;margin:10px 0}
+.guide-badge {font-size:12px;padding:8px 12px;background:#29382e;border-radius:20px;white-space:nowrap}
+.model-guide p,.model-guide li {line-height:1.7}.model-flow {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 0;margin:15px 0}.model-flow span {padding:16px;background:#202f26;border-radius:8px;text-align:center;flex:1;font-size:14px}.model-flow svg {flex:none;width:18px}
+.model-guide details {border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0}.model-guide summary {cursor:pointer;font-weight:600}.model-formula {font-family:monospace;font-size:16px;overflow-wrap:anywhere}
+.guide-columns {display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px}.guide-columns ul {padding-left:18px}.guide-columns li {margin-bottom:8px}.guide-limit {padding:18px 20px;background:#302b20;border-left:3px solid #ae8b4c;margin-top:24px}.guide-limit p {margin:6px 0 0}.checkpoint-label {font:11px/1.7 monospace!important;overflow-wrap:anywhere;color:var(--muted);margin-top:20px}
+.move-rankings {padding:0;list-style:none;margin-top:20px}.move-rankings li {display:flex;align-items:center;gap:12px}.move-rankings meter {flex:1;min-width:0}.move-rankings code {width:48px}.move-rankings span {width:50px;text-align:right}.live-explanation {font-size:14px;margin-top:16px}.mini-curve {margin:20px 0}.mini-curve svg {display:block;width:100%;max-height:130px;color:var(--accent)}.mini-curve figcaption {font-size:12px;color:var(--muted)}.curated-positions {display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:18px 0 28px}.curated-positions button {border:1px solid var(--border);background:var(--panel);border-radius:20px;padding:9px 14px;font-size:13px;cursor:pointer}
+@media(max-width:950px){.model-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.guide-columns{gap:24px}}
+@media(max-width:600px){.model-gallery{gap:10px}.model-tile{padding:14px}.model-tile h2{font-size:16px}.model-tile p{font-size:12px}.model-guide{padding:18px}.guide-heading{align-items:flex-start;flex-direction:column;gap:4px}.guide-heading h2{font-size:23px}.guide-columns{grid-template-columns:1fr}.model-flow{flex-direction:column}.model-flow span{width:100%}.model-flow svg{transform:rotate(90deg)}.tile-link{font-size:11px}.model-tile .tiny-label{font-size:9px}}
+.model-intro h1 {font-size:clamp(34px,4vw,54px);line-height:1.15}.model-intro h1 em {font-size:.72em}.model-intro {margin-bottom:20px}

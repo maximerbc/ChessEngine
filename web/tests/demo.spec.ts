@@ -177,3 +177,30 @@ test("saved-game replay works without the API", async ({ page }) => {
     page.getByRole("button", { name: "e2 white pawn", exact: true }),
   ).toBeVisible();
 });
+
+test("model pages preserve the position and enforce checkpoint identity", async ({ page }) => {
+  await mock(page);
+  await page.route("**/research/model-catalog.json", route => route.fulfill({json:{models:{
+    supervised:{checkpoint_id:"s".repeat(64),name:"Supervised",facts:["Verified seed 42"],experimental:false},
+    rl:{checkpoint_id:"different",name:"RL",facts:["Negative live-self-play result"],experimental:true}
+  }}}));
+  await page.goto("/lab/supervised?moves=e2e4,e7e5");
+  await expect(page.getByRole("heading", {name:/Supervised evaluator/,level:1})).toBeVisible();
+  await expect(page.getByText("2 plies", {exact:true})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Analyze this position",exact:true})).toBeEnabled();
+  await page.locator('.model-tile').filter({hasText:'Self-play experiment'}).click();
+  await expect(page).toHaveURL(/lab\/rl.*moves=e2e4%2Ce7e5/);
+  await expect(page.getByText("2 plies", {exact:true})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Analyze this position",exact:true})).toBeDisabled();
+  await expect(page.getByText("The live engine is serving a different checkpoint.", {exact:false})).toBeVisible();
+});
+
+test("model explanation remains readable offline on mobile", async ({ page }) => {
+  await page.setViewportSize({width:390,height:844});
+  await page.route("**/api/models", route=>route.abort());
+  await page.goto('/lab/move-guided');
+  await expect(page.getByRole('heading',{name:/Move-guided engine/,level:1})).toBeVisible();
+  await expect(page.getByText('Does learned ordering make search more efficient?',{exact:true}).last()).toBeVisible();
+  await expect(page.getByRole('button',{name:'Analyze this position',exact:true})).toBeDisabled();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
+});

@@ -32,7 +32,7 @@ def test_production_models_and_cors(monkeypatch):
     monkeypatch.setenv("REQUIRE_MODELS", "1")
     monkeypatch.setenv("ALLOWED_ORIGINS", "https://demo.example")
     with TestClient(create_app()) as client:
-        assert client.get("/health").json()["models"] == 3
+        assert client.get("/health").json()["models"] == 1 + len(json.load(open("artifacts/models/manifest.json"))["models"])
         expected = json.load(open("artifacts/models/manifest.json"))
         actual = {row["id"]: row for row in client.get("/models").json()["models"]}
         for row in expected["models"]:

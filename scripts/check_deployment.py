@@ -1,4 +1,5 @@
 """Smoke-check running production containers; no credentials or mutations."""
+
 import hashlib
 import json
 import re
@@ -15,38 +16,63 @@ def get(url):
 
 def main():
     api, web = "http://127.0.0.1:8000", "http://127.0.0.1:8080"
-    assert json.loads(get(api + "/health")[0])["models"] == 3
+    assert json.loads(get(api + "/health")[0])["models"] >= 3
     models = {row["id"]: row for row in json.loads(get(api + "/models")[0])["models"]}
     with open("artifacts/models/manifest.json") as source:
         manifest = json.load(source)
     for row in manifest["models"]:
         assert models[row["id"]]["checkpoint_id"] == row["sha256"]
-        weights, headers = get(web + "/models/" + row["file"])
-        assert hashlib.sha256(weights).hexdigest() == row["sha256"]
+        weights, headers = get(web + "/models/" + row.get("file", row.get("ranker_file")))
+        assert hashlib.sha256(weights).hexdigest() == row.get("ranker_sha256", row["sha256"])
         assert "text/html" not in headers["Content-Type"]
-        request = urllib.request.Request(api + "/analyze", data=json.dumps({
-            "model_id": row["id"], "moves": ["e2e4"], "nodes": 128,
-        }).encode(), headers={"Content-Type": "application/json", "Origin": web})
+        request = urllib.request.Request(
+            api + "/analyze",
+            data=json.dumps(
+                {
+                    "model_id": row["id"],
+                    "moves": ["e2e4"],
+                    "nodes": 128,
+                }
+            ).encode(),
+            headers={"Content-Type": "application/json", "Origin": web},
+        )
         with urllib.request.urlopen(request, timeout=15) as response:
             assert response.headers["Access-Control-Allow-Origin"] == web
             result = json.load(response)
         board = chess.Board()
         board.push_uci("e2e4")
         assert chess.Move.from_uci(result["best_move"]) in board.legal_moves
-    for path, content_type in [("/", "text/html"), ("/health", "text/plain"),
-                               ("/research/report.pdf", "application/pdf"),
-                               ("/research/rl.png", "image/png"),
-                               ("/research/games-seed-42.json", "application/json")]:
+    for path, content_type in [
+        ("/", "text/html"),
+        ("/health", "text/plain"),
+        ("/research/report.pdf", "application/pdf"),
+        ("/research/rl.png", "image/png"),
+        ("/research/games-seed-42.json", "application/json"),
+    ]:
         body, headers = get(web + path)
         assert body and content_type in headers["Content-Type"]
         assert headers["X-Content-Type-Options"] == "nosniff"
+    for route in ["classical", "supervised", "move-guided", "rl"]:
+        body, headers = get(web + "/lab/" + route)
+        assert body and "text/html" in headers["Content-Type"]
+    if manifest.get("showcase_version") == 2:
+        catalog = json.loads(get(web + "/research/model-catalog.json")[0])
+        for key, row in catalog["models"].items():
+            assert models[key]["checkpoint_id"] == row["checkpoint_id"]
+            if row.get("report"):
+                assert "text/html" in get(web + row["report"])[1]["Content-Type"]
     homepage = get(web + "/")[0].decode()
     for asset in re.findall(r'"(/assets/[^"]+)"', homepage):
         body, headers = get(web + asset)
         assert body and "max-age=31536000" in headers["Cache-Control"]
-    denied = urllib.request.Request(api + "/analyze", method="OPTIONS", headers={
-        "Origin": "https://other.example", "Access-Control-Request-Method": "POST",
-    })
+    denied = urllib.request.Request(
+        api + "/analyze",
+        method="OPTIONS",
+        headers={
+            "Origin": "https://other.example",
+            "Access-Control-Request-Method": "POST",
+        },
+    )
     try:
         urllib.request.urlopen(denied)
     except urllib.error.HTTPError as error:
@@ -54,8 +80,14 @@ def main():
         assert error.headers.get("Access-Control-Allow-Origin") is None
     else:
         raise AssertionError("Unexpected CORS acceptance")
-    for path in ["/.env", "/AGENTS.md", "/src/chessengine/api.py", "/runs/test.pt",
-                 "/research/missing.pdf", "/models/missing.npz"]:
+    for path in [
+        "/.env",
+        "/AGENTS.md",
+        "/src/chessengine/api.py",
+        "/runs/test.pt",
+        "/research/missing.pdf",
+        "/models/missing.npz",
+    ]:
         try:
             get(web + path)
         except urllib.error.HTTPError as error:

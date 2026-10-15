@@ -16,6 +16,14 @@ def test_release_models_and_recorded_results_are_consistent():
         pytest.skip("Release artifacts are delivered in the showcase batch")
     manifest = json.loads(manifest_path.read_text())
     for entry in manifest["models"]:
+        if entry.get("kind") == "move-guided":
+            from chessengine.ranking import NumpyRanker, GuidedEvaluator
+            rank = manifest_path.parent / entry["ranker_file"]
+            assert digest(rank) == entry["ranker_sha256"]
+            assert digest(root / "web/public/models" / entry["ranker_file"]) == entry["ranker_sha256"]
+            value = NumpyEvaluator(manifest_path.parent / "supervised.npz")
+            assert GuidedEvaluator(value, NumpyRanker(rank)).checkpoint_id == entry["sha256"]
+            continue
         path = manifest_path.parent / entry["file"]
         assert digest(path) == entry["sha256"]
         assert digest(root / "web/public/models" / entry["file"]) == entry["sha256"]

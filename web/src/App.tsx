@@ -15,6 +15,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 
+import { approaches, ModelGallery, ModelGuide, type Catalog, type GuideAnalysis } from "./ModelGuide";
+
 const API = import.meta.env.VITE_API_URL || "/api";
 type Model = {
   id: string;
@@ -23,7 +25,7 @@ type Model = {
   checkpoint_id: string;
   kind: string;
 };
-type Analysis = {
+type Analysis = GuideAnalysis & {
   best_move: string | null;
   value: number;
   depth: number;
@@ -277,14 +279,29 @@ function Chart({
   );
 }
 
+function routePosition() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const fen = params.get("fen") || DEFAULT_POSITION;
+    const moves = (params.get("moves") || "").split(",").filter(Boolean);
+    if (moves.length > 1024 || fen.length > 100) throw new Error("Invalid position");
+    boardFrom(fen, moves);
+    return { fen, moves };
+  } catch { return { fen: DEFAULT_POSITION, moves: [] as string[] }; }
+}
+const showcaseEnabled = import.meta.env.DEV || import.meta.env.VITE_SHOWCASE === "1";
 export default function App() {
+  const [path, setPath] = useState(window.location.pathname);
+  const page = showcaseEnabled ? approaches.find(a => a.path === path) : undefined;
+  const [catalog, setCatalog] = useState<Catalog | null>(null);
+  const [initialFen, setInitialFen] = useState(() => routePosition().fen);
   const [tab, setTab] = useState<"play" | "compare" | "research">("play");
   const [models, setModels] = useState<Model[]>([]);
   const [model, setModel] = useState("handcrafted");
   const [connection, setConnection] = useState<"loading" | "ready" | "offline">(
     "loading",
   );
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<string[]>(() => routePosition().moves);
   const [color, setColor] = useState("w");
   const [selected, setSelected] = useState<Square | null>(null);
   const [promotion, setPromotion] = useState<{
@@ -305,9 +322,36 @@ export default function App() {
   const [replayPly, setReplayPly] = useState(0);
   const generation = useRef(0);
   const activeRequest = useRef(false);
-  const game = boardFrom(DEFAULT_POSITION, history);
+  const game = boardFrom(initialFen, history);
   const currentModel = models.find((m) => m.id === model);
+  const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
+  const identityMatches = !page || (!!currentModel && currentModel.id === page.id && (!!expectedCheckpoint && expectedCheckpoint === currentModel.checkpoint_id));
   const done = !!terminal || game.isGameOver();
+  function navigate(id: string) {
+    if (busy) return;
+    const target = approaches.find(a => a.id === id);
+    const query = new URLSearchParams({ fen: initialFen, moves: history.join(",") });
+    window.history.pushState(null, "", (target?.path || "/") + "?" + query);
+    setPath(window.location.pathname);
+    if (target) setModel(target.id);
+    generation.current++; setAnalysis(null); setSelected(null); setPromotion(null); setError(""); setTab("play");
+  }
+  useEffect(() => {
+    const back = () => { const position = routePosition(); setInitialFen(position.fen); setHistory(position.moves); setPath(window.location.pathname); const target = approaches.find(a => a.path === window.location.pathname); if (target) setModel(target.id); generation.current++; setAnalysis(null); setSelected(null); setPromotion(null); setError(""); setTerminal(null); };
+    window.addEventListener("popstate", back); return () => window.removeEventListener("popstate", back);
+  }, []);
+  async function inspectPosition() {
+    if (busy || !identityMatches || connection !== "ready") return;
+    setBusy(true); setError(""); const token = generation.current;
+    try { const result = await request<Analysis>("/analyze", { initial_fen: initialFen, moves: history, model_id: model, nodes: 2000, time_ms: 1500 });
+      if (page && result.checkpoint_id !== expectedCheckpoint) throw new Error("The engine checkpoint changed. Reconnect before continuing.");
+      if (token === generation.current) { setAnalysis(result); setAnalysisHistory(history); }
+    } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+  }
+  function loadExample(index: number) {
+    if (busy) return;
+    const position = examples[index]; generation.current++; setInitialFen(position.fen); setHistory(position.moves || []); setColor(boardFrom(position.fen, position.moves || []).turn()); setSelected(null); setAnalysis(null); setTerminal(null); setError("");
+  }
   async function connect() {
     setConnection("loading");
     try {
@@ -315,7 +359,7 @@ export default function App() {
         "/models",
       );
       setModels(data.models);
-      setModel(data.default);
+      setModel((showcaseEnabled && approaches.find(a => a.path === window.location.pathname)?.id) || data.default);
       setConnection("ready");
     } catch {
       setConnection("offline");
@@ -323,6 +367,7 @@ export default function App() {
   }
   useEffect(() => {
     void connect();
+    fetch("/research/model-catalog.json").then(r => r.ok ? r.json() : null).then(setCatalog).catch(() => setCatalog(null));
     fetch("/research/results.json")
       .then((r) => (r.ok ? r.json() : null))
       .then(setResearch)
@@ -331,6 +376,7 @@ export default function App() {
   function reset(newColor = color) {
     generation.current++;
     setHistory([]);
+    setInitialFen(DEFAULT_POSITION);
     setSelected(null);
     setPromotion(null);
     setAnalysis(null);
@@ -339,8 +385,9 @@ export default function App() {
     setColor(newColor);
   }
   function move(from: Square, to: Square, piece = "q") {
+    if (!identityMatches) return;
     try {
-      const copy = boardFrom(DEFAULT_POSITION, history);
+      const copy = boardFrom(initialFen, history);
       const m = copy.move({ from, to, promotion: piece });
       setHistory([...history, m.from + m.to + (m.promotion || "")]);
       setSelected(null);
@@ -351,7 +398,7 @@ export default function App() {
     }
   }
   function clickSquare(sq: Square) {
-    if (busy || done || game.turn() !== color || connection !== "ready") return;
+    if (busy || done || !identityMatches || game.turn() !== color || connection !== "ready") return;
     if (selected) {
       const options = game
         .moves({ square: selected, verbose: true })
@@ -373,12 +420,14 @@ export default function App() {
     const token = generation.current;
     try {
       const result = await request<Analysis>("/analyze", {
+        initial_fen: initialFen,
         moves: history,
         model_id: model,
         nodes: 2000,
         time_ms: 1500,
       });
       if (token !== generation.current) return;
+      if (page && result.checkpoint_id !== expectedCheckpoint) throw new Error("The engine checkpoint changed. Reconnect before continuing.");
       setAnalysis(result);
       setAnalysisHistory(history);
       setTerminal(result.terminal);
@@ -393,6 +442,7 @@ export default function App() {
   useEffect(() => {
     if (
       tab === "play" &&
+      identityMatches &&
       game.turn() !== color &&
       !done &&
       !busy &&
@@ -400,7 +450,7 @@ export default function App() {
       connection === "ready"
     )
       void engineMove();
-  }, [history, color, tab, connection, busy, error]);
+  }, [history, initialFen, color, tab, connection, busy, error, model, identityMatches]);
   function undo() {
     generation.current++;
     setHistory((h) =>
@@ -471,7 +521,7 @@ export default function App() {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            setTab("play");
+            navigate("overview");
           }}
         >
           <span className="brand-mark">♞</span>
@@ -511,10 +561,10 @@ export default function App() {
           <span /> FROM SUPERVISION TO SELF-PLAY{" "}
           <span className="version">EXPERIMENT 01</span>
         </div>
-        <section className="intro">
+        <section className={`intro ${page ? "model-intro" : ""}`}>
           <div>
             <h1>
-              {tab === "play" ? (
+              {page ? <>{page.title}<br/><em>{page.subtitle}</em></> : tab === "play" ? (
                 <>
                   Learning, one
                   <br />
@@ -535,7 +585,7 @@ export default function App() {
               )}
             </h1>
             <p>
-              {tab === "play"
+              {page ? page.description : tab === "play"
                 ? "Play against a neural chess evaluator. Explore what changes when a model learns from its own games."
                 : tab === "compare"
                   ? "Look inside the experiment. Compare the moves and evaluations of the supervised and self-play models."
@@ -545,15 +595,15 @@ export default function App() {
           <div className="intro-note">
             <span className="tiny-label">THE RESEARCH QUESTION</span>
             <p>
-              Does learning through self-play
-              <br />
-              make a chess evaluator better?
+              {page ? page.question : <>Does learning through self-play<br />make a chess evaluator better?</>}
             </p>
             <button className="text-button" onClick={() => setTab("research")}>
               Explore the evidence <ArrowUpRight size={16} />
             </button>
           </div>
         </section>
+        {showcaseEnabled && <ModelGallery navigate={navigate} disabled={busy} />}
+        {page && <><ModelGuide approach={page} catalog={catalog} checkpoint={currentModel?.checkpoint_id} analysis={analysis} analyze={inspectPosition} busy={busy} available={connection === "ready" && identityMatches}/><div className="curated-positions"><span className="tiny-label">TRY THE SAME POSITION ACROSS MODELS</span>{examples.map((e,i)=><button key={e.name} disabled={busy} onClick={()=>loadExample(i)}>{e.name}</button>)}</div></>}
         {connection !== "ready" && (
           <div className="notice">
             <Activity size={18} />
@@ -606,7 +656,7 @@ export default function App() {
                 flip={color === "b"}
                 selected={selected}
                 onSquare={clickSquare}
-                disabled={busy || done}
+                disabled={busy || done || !identityMatches}
                 lastMove={history.at(-1)}
               />
               <div className="player-strip bottom">
@@ -641,15 +691,14 @@ export default function App() {
                       key={m.id}
                       className={`model-option ${model === m.id ? "chosen" : ""}`}
                       onClick={() => {
-                        setModel(m.id);
-                        setAnalysis(null);
+                        if (page) navigate(m.id); else { setModel(m.id); setAnalysis(null); }
                       }}
                     >
                       <span className="radio" />
                       <span>
                         <strong>{m.name}</strong>
                         <small>
-                          {m.kind === "rl"
+                          {m.kind === "move-guided" ? "Learned root ordering + supervised value" : m.kind === "rl"
                             ? "Learned from self-play outcomes"
                             : m.kind === "supervised"
                               ? "Learned from Stockfish evaluations"
@@ -743,7 +792,7 @@ export default function App() {
                 <p className="pv">
                   {analysis
                     ? sanLine(
-                        boardFrom(DEFAULT_POSITION, analysisHistory),
+                        boardFrom(initialFen, analysisHistory),
                         analysis.pv,
                       ) || "No continuation"
                     : "Make a move to begin the analysis."}
@@ -874,7 +923,7 @@ export default function App() {
             <div className="research-grid">
               <section className="card">
                 <span className="tiny-label">01 / FITTING THE EVALUATOR</span>
-                <h2>Does the model learn?</h2>
+                <h2>Does the model learn?</h2><p className="notice">Archive: these charts and saved games describe the original local study. The four model pages show evidence for their own checkpoint versions.</p>
                 {research?.supervised ? (
                   <Chart data={research.supervised.history} />
                 ) : (
