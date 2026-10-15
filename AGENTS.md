@@ -8,16 +8,16 @@
 
 ## Architecture
 - `src/chessengine`: Python engine, features, NumPy inference, data, PyTorch training, RL, evaluation, reports, FastAPI, CLI. `web`: React/TypeScript UI. `configs`: experimental settings. `tests`: correctness and research-integrity checks. `docs`: decisions, mathematics, operations, PR handoffs.
-- python-chess owns rules and PGN; our negamax/alpha-beta engine chooses moves. Stockfish only labels data or acts as an explicitly named reference opponent. Never silently substitute Stockfish for our demo engine.
-- One shared engine for self-play, matches, and API. Runtime inference uses exported NumPy MLP weights; PyTorch is training-only. Feature/checkpoint schema versions must be validated, not guessed.
+- python-chess owns rules and PGN; our negamax/alpha-beta engine chooses released demo moves. The approved local policy/value study uses a separately named PUCT strategy. Stockfish only labels data or acts as an explicitly named reference opponent. Never silently substitute Stockfish for our demo engine.
+- Share each named search strategy across its self-play and matches; the released API stays alpha-beta. Runtime inference uses exported NumPy MLP weights; PyTorch is training-only. Feature/checkpoint schema versions must be validated, not guessed.
 - Side-to-move value in [-1,1]; terminal mate search scores are outside that range. Negate child scores exactly once per ply. Feature v1 uses absolute square/color coordinates; experimental v2 uses player-relative coordinates and v3 adds normalized material summaries. All preserve castling, en passant, halfmove clock and original-history repetition indicators. Labels retain their side-to-move sign. Checkpoints select the encoder explicitly; RL supports v1 and v3 explicitly; v2 remains unsupported.
 - Preserve complete move history. Draw claims are automatically taken consistently across API/self-play/evaluation; document this convention. TT keys must distinguish reversible history/halfmove state. Never reuse TT values across models or games.
-- No MCTS, custom move generator, UCI engine protocol, user accounts, database, or online training. The approved showcase extension permits a supervised legal-move ranker for root ordering only; it does not replace the value evaluator or prune legal moves.
+- MCTS is permitted only for the approved local policy/value experiment, never implicitly in production. No custom move generator, UCI engine protocol, user accounts, database, or online training. The approved showcase extension permits a supervised legal-move ranker for root ordering only; it does not replace the value evaluator or prune legal moves.
 
 ## Research invariants
 - Split source games before position sampling, deduplicate positions across splits, exclude reserved evaluation positions, and preserve data/source manifests. Do not train on validation/test labels or select checkpoints using final-test matches.
 - Teacher targets are (wins-losses)/total from Stockfish WDL estimates, from side-to-move perspective. Pin teacher executable hash/version and node/hash/thread settings.
-- RL is Monte Carlo outcome value learning. Actor frozen per batch; no teacher labels in the primary RL treatment. Outcome targets are +1/0/-1 for the player to move. Uniform game weighting. Truncated self-play games do not get fabricated outcomes or enter training.
+- Existing RL is Monte Carlo outcome value learning. The separately named policy/value study adds MCTS visit-policy targets and compares zero anchoring with coefficient 0.1. Actor frozen per batch; no teacher labels in either treatment. Outcome targets are +1/0/-1 for the player to move. Uniform game weighting. Truncated self-play games do not get fabricated outcomes or enter training.
 - Store seeds, configs, commit IDs, checkpoint/data hashes, optimizer/RNG state, generation/update times, and costs. CPU resume reproducibility is required; accelerator determinism is not assumed.
 - Select on development matches, freeze final protocol, swap colors per opening, use equal node budgets including quiescence, clear game caches, bootstrap opening pairs, and distinguish seed variance from match uncertainty. Report truncation/adjudication sensitivity.
 - Smoke/pilot evidence is never presented as the final study. Publish negative/inconclusive results. No unsupported Elo, calibrated win-probability claims, or invented graphs.
@@ -55,7 +55,18 @@
 - Keep treatments, selection screens and replay sampling in versioned configs/protocols. Candidates require subsequent live self-play and fresh confirmatory evaluation before a release decision.
 
 ## Four-model showcase and move ranking
-- Present four approaches: handcrafted baseline, supervised value evaluator, supervised ranker plus that same value evaluator, and experimental live-self-play RL. Do not expose each seed as a separate model or label offline replay as live RL.
+- Present Demo and Research as the two main destinations. Reuse the four approach explanations in context; unreleased candidates and inconclusive/negative studies remain discoverable in Research, not separate main playable pages. Do not expose each seed as a separate model or label offline replay as live RL.
 - Ranker inputs use feature v3 and player-relative move coordinates including promotions. Teacher move labels are separate from scalar value labels. Freeze whole-game splits and fresh final openings before training.
 - Learned ordering applies only at the search root, computed once per request; previous-iteration principal variation stays first. Time accounting includes ranking inference. Existing behavior remains identical when no ranker is supplied.
 - Production component identities must match the evidence shown on each page. Publish new checkpoints only through an explicit release manifest and validation gate; preserve the old release if the supervised candidate fails its development gate.
+
+## Bounded policy/value follow-up
+- The user authorized implementation on 2026-10-15. Use the seed-42 combined v3 value initializer, one fixed fresh policy initialization, paired run seeds 42/43/44, and exactly two treatments. Never import trained ranker weights or teacher labels into this study.
+- Freeze pilot criteria before pilot measurements and the main protocol before training. Report a measured forecast before full local compute; no local CPU time cap, no paid compute authorization.
+- Preserve history and automatic draw claims. MCTS terminal values are -1/0/+1; rebuild each tree per move and do not merge transpositions. Count simulations separately from alpha-beta nodes.
+- Select all six checkpoints on development matches before fresh final comparisons. Publish complete seed-level evidence, truncation sensitivity and negative/inconclusive outcomes. Research report publication is independent of model promotion; released checkpoints and default remain unchanged.
+
+## Immediate feasibility release (2026-10-15)
+- The user explicitly reduced scope to an immediately pushable product after the 559.6-hour main-study forecast. The release includes the consolidated website, existing released models, tested policy/value research infrastructure and the completed 60-attempt feasibility pilot. The full baseline-versus-anchor comparison is deferred, not completed or a release blocker.
+- Stop the long run gracefully and preserve its partial generation and frozen original protocol. Record the scope amendment and independent pilot audit in `docs/experiments/policy-value/release-scope.json`; do not rewrite the preregistration or call pilot results strength evidence. No model promotion or new deployment is authorized.
+- No study continuation runs for this release. A future full study needs new explicit user authorization; preserve its original quality and evidence requirements. Commit the verified final release assets locally and hand the branch to the user for pushing.

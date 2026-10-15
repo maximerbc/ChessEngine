@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-test("live backend and released study render together", async ({ page }, testInfo) => {
+test("live backend and released study render together", async ({
+  page,
+}, testInfo) => {
   test.skip(
     !process.env.RUN_LIVE_TESTS,
     "Requires the local Python server and released research artifacts.",
@@ -27,6 +29,9 @@ test("live backend and released study render together", async ({ page }, testInf
     quality: 85,
   });
   await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page
+    .getByText("Original study: charts and saved games", { exact: true })
+    .click();
   await expect(
     page.getByText("One result is not the whole experiment."),
   ).toBeVisible();

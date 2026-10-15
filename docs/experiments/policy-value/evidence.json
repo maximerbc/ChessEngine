@@ -1,0 +1,318 @@
+{
+  "status": {
+    "status": "feasibility_complete",
+    "main_study_status": "stopped_by_scope_change"
+  },
+  "paid_cost_cad": 0,
+  "model_promotion": false,
+  "protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a",
+  "release-scope": {
+    "version": 1,
+    "closed_on": "2026-10-15",
+    "status": "feasibility_complete",
+    "main_study_status": "stopped_by_scope_change",
+    "reason": "User requested an immediately pushable finished product. Close this release after the completed feasibility pilot; defer the full anchored-versus-baseline comparison.",
+    "original_protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a",
+    "pilot_audit": [
+      {
+        "simulations": 128,
+        "attempted": 20,
+        "completed": 20,
+        "hashes_verified": true,
+        "legal_histories_and_outcomes_verified": true,
+        "common_initializer_verified": true
+      },
+      {
+        "simulations": 256,
+        "attempted": 20,
+        "completed": 20,
+        "hashes_verified": true,
+        "legal_histories_and_outcomes_verified": true,
+        "common_initializer_verified": true
+      },
+      {
+        "simulations": 512,
+        "attempted": 20,
+        "completed": 19,
+        "hashes_verified": true,
+        "legal_histories_and_outcomes_verified": true,
+        "common_initializer_verified": true
+      }
+    ],
+    "completed_pilot_games": 59,
+    "attempted_pilot_games": 60,
+    "retained_partial_generation": {
+      "baseline-42": 8
+    },
+    "completed_training_updates": 0,
+    "development_selections": 0,
+    "final_matches": 0,
+    "background_compute_stopped": true,
+    "model_promotion": false,
+    "released_manifest_sha256": "39e8edba79ff4f36881fa805bdb493bd2bb58c769512200b5e8587d0b06ca6c1",
+    "released_models_unchanged": true,
+    "paid_cost_cad": 0,
+    "resume_requires_new_authorization": true,
+    "partial_generation_audit": {
+      "baseline-42": {
+        "attempted": 8,
+        "completed": 7,
+        "game_hashes": [
+          "5a89b4208308f60ceea089e07e45f17baddb7af886cd6beb80c31ac13f836569",
+          "f6fd404e8b05e1072734117a01617e149f4df213da24a2a7405c51226dc0a5fe",
+          "eb45216a770a20050a727118e81d88e2ec0b4e90396d88876dec667207106ea9",
+          "2d17bc00d4296e88054ea3a03ca2b74f458e9e3795fbc0a502b169c32efebed7",
+          "6cd8acaa6537597d7fd263e99d46a34fac8a7a981a359257ad92358ec93048e8",
+          "1b8477a8a2e3cf798257473be9abca84fd5193128cad01c7e6dfa194662f7283",
+          "bc33fe2740626403b5ed5d78bb263919f5cd6c2e3b851dddaaeb557238a42bc2",
+          "cef8efe8eeea02e7e4a9268c258425d7af3cff3dfd8866a1a801a8e7f7a91a37"
+        ],
+        "legal_histories_and_outcomes_verified": true
+      }
+    }
+  },
+  "execution_status": {
+    "status": "training",
+    "treatment": "baseline",
+    "seed": 42,
+    "signature": "93ec226b7519c8b3b322b4616c1683912becf233693fcf8fc1c791618a1227a2"
+  },
+  "pilot-summary": [
+    {
+      "simulations": 128,
+      "attempted": 20,
+      "completed": 20,
+      "mean_game_seconds": 31.919427324901335,
+      "p90_plies": 325.70000000000005,
+      "root_coverage": 0.6298115976415329,
+      "dominant_fraction": 0.061812851209381875,
+      "mean_depth": 5.488639139995113,
+      "peak_ram_mb": 172.328125,
+      "game_hashes": [
+        "fe0389a1159098346112083dfb5ed63e6350f8c5cebda96954c1d04a21ff41b8",
+        "7e784acf866536bdb64b8d25a9fc5a127cb0ff5615eee000ca484f7d87c79bd4",
+        "d8693528a6d378474d5d1be62f9961e8e2cdd2141b1e596c438bd6cd262b5536",
+        "a44b34e8cb4154f3f6570234f1054fbcecf8d84c8076de9fcd0cb16ed5a2f3c6",
+        "11f8436b998334427d142de0981fb201450a8a407fd720874f7b7b52917801de",
+        "fd0c5bd16e725441a78d265bb13b27558a9c55b7e542c8f038642b94560a550f",
+        "8130aa55af96b07c21bbb55c9659a8c457e832389a1f5ba7e9a4ba64497c64bc",
+        "9fc446999e1c18bf8562395fbd459d46df2dbe522d7b6b864e0b8d981856d514",
+        "a632f2479885643449d1ea57e44cf1316dee48e600c5104d9b878eec21ede8f6",
+        "2471f863c34f1ed37925550108f34d61a3a8a7dee66b1064ad88e19bce2c0cb2",
+        "bcd4e3e41b6ec536fd362f534a0948ab2d820bef044f7a6fb4023fed496d53df",
+        "41391bce3c7eb8649b1674c5abc0cb84af37b91cc0c530778caf59919a06b068",
+        "d2ec189a53a595eb510b12e19c800a68b5e65b42329ca08d2f182c69fca974f8",
+        "daccb356610fe2119f87510a960feb353b9a2e044a3c05df1c80df38764640aa",
+        "040e82eff05511f28ff9cdb8447b75ce23485a4a81c8a592b7f048808d6f26f7",
+        "aa20fbae1001d8bcd6ce12718ee9eaf4c0e7ab79d78c9bac5815df7f078d1daa",
+        "664a4911f012b8bcf924400fc54c2a0b3007482522f6879b69613cd00baea225",
+        "172765cdd90d748e3d9a2ec6a2fe072f1fd17bc4753ad6d5cf93a918488893d9",
+        "b34c210b0759ca6f6c0176c1bf3bcbdc2ee0d02ff5ec3708fb5697d78aeeaf94",
+        "559dbf764eba13a74fc9c2401a4b01ce8ef0369754c9ca70f970a2de54b30864"
+      ],
+      "qualifies": true
+    },
+    {
+      "simulations": 256,
+      "attempted": 20,
+      "completed": 20,
+      "mean_game_seconds": 81.40202334159986,
+      "p90_plies": 390.90000000000003,
+      "root_coverage": 0.727829176078669,
+      "dominant_fraction": 0.001696712619300106,
+      "mean_depth": 6.2120890774125135,
+      "peak_ram_mb": 172.328125,
+      "game_hashes": [
+        "4810c1865900a3e8d3b77c0e2f15cc97a56e0579b85b44be4205fa98acf7877d",
+        "3c3c4aa71bbc2711498913b80e61e3bb8bc65589900ca07924fa14445726be91",
+        "505d6f3c03c51e40793a35fd79bffc6dc62cd697b6e5d6a5ee3b4c8ca1ce9673",
+        "0b069357d3ab31ded4ceafc4d007de06d46db706a5967b942ad9fa1fffdc8488",
+        "78a299caadf9412f2f6d83cf0fb6596b8c1665d3c8910760c1ee162c1f5b43e5",
+        "8f3abb68c8eaed31a253961a96c1c7ab877cb2aec19cf6379f2e265aeb98efbf",
+        "bb2b71b5f11825e93f19a007a9aa4765cca5d8d795cf85c0f64eeac8bb7f5a71",
+        "70c2653e605e20ac7c8a24429106290d05ae8496f3b337de22919331448b4691",
+        "a231e91a9b6e9683f9ebef072bd2ace3daef0e6e387a24bd39a7d568ece2e928",
+        "72b787a6979e2d6663566be6c31ee686d12e748d92c224055c520c046811ebb4",
+        "6f8960e8e55d12e9295517ef300cf3493e93f14a54cd556061641e17583448c1",
+        "763bdf18ff9cf2dd31c2019e3e6e11e503d7ed172694cd32fcbcf0af52393d01",
+        "0dbfabfba766c38ed26878c358161b029a2f912b643a8a77a0f872c6c464acd8",
+        "bc69b2c5a23b545e04f434adfa17a0dccd102c32d76081ec3ec9615dea1eb8e1",
+        "6c49fb19f1fe8a66ccc63637bf53b643381695e65ad3793a06fe60aed8f05896",
+        "68ae45cbfb0d2aafe360ae29dae553f1380ed52b5338547fc6e081d4edc2d24f",
+        "db43bb4430b6a91d6bc24d9dc657b441de3706a23320ff58cbc8897457737642",
+        "d81c14029c8804e6ab3c6e006e15112ad2bbcd1bd40f2c8c89368f04c522d646",
+        "22890dfa1e28cb35ca9a85210016137b2638796b9d3440a2112c565c5e6a550e",
+        "92113852578651fd7b6609bdaadd4a89505183ecd9a3c35ce7a8fd567285ec29"
+      ],
+      "qualifies": true
+    },
+    {
+      "simulations": 512,
+      "attempted": 20,
+      "completed": 19,
+      "mean_game_seconds": 153.0942347458331,
+      "p90_plies": 399.20000000000005,
+      "root_coverage": 0.8394060380955118,
+      "dominant_fraction": 0.0,
+      "mean_depth": 7.194072657743786,
+      "peak_ram_mb": 172.328125,
+      "game_hashes": [
+        "4824fb4ede4188262d33cfaff4042ae5d6bb0dcf8f38ed8a5509daf8e9060d13",
+        "3e47cc2946eff06668713284aebbcf55205cd3b5e61cba73162f0fcb0e9c2477",
+        "7155ae6fbc482e98310462a48055786f1a971b769abb003261f6e3a96a396ba8",
+        "7ab11d5ac9a35c1f31cf190e23b225389995be91842653c0e96b309ecbcbd1e6",
+        "084992dc0d26ca4c7cdd91eca0b1ae2851237a32d6403b5fd3db1dc3d5641476",
+        "511c3bdf7a5ee1a367591e86a0699ec7cfe3bb366acb10acadd5f60d08a3de56",
+        "8c00207e2be5f318a0d91d81c6349ea2a7c2f4118a7f0b29969a020b5c13c3d4",
+        "3c495c0561b6fe59cef4ee96eb6aab43512fc90edff956e9c45b262a51ec3d9c",
+        "0ce61454d3ac57aaac9638ab77a1dcded83ff051ad7324b32d28efdbbd19f59f",
+        "10df769e5e598272724d1a4ac416e48eb8946e3dcaadbc5660d6cc27fe073d6e",
+        "e04bfbeb373531a03cef4bc8bc1ec942df012a8eb0d4a2bb817ed2867edafd4b",
+        "291748294b372e4e177b2f9ba0a0ffd3261249c8b39e59044b7cabf23a1d0e5b",
+        "2067a535f808333eb2b0852f70eb45b88e992d87527dbad6549cbd43d039c7ec",
+        "30729bdb19f4b237680d587957ad9e00817dbe662b5ea6ea2ee8ca1d1c83f6a6",
+        "9d13139e33e747f39380ef925e0bc49e9da81d5505a596baf37cd01e0bf842c6",
+        "400bb970a09c0a5ddf75f688e97cce8110fcca6141074225a8eaabfeb33811cd",
+        "267c7b754ff5c5ca24ec78836ccc7015d2b570c3a55022823fdf6b4e39d4d634",
+        "5b9613292169ed83b60afad7ddb5e0ddc56aa00e4ac7351bd2008ff2cae74818",
+        "71e6510aaeb4854ba568c3a04d8d140fe67c2c06a79233080f3608deffa120df",
+        "2edf4bfc6957c7f5406b389d4f9607bda2bed9a2559155eb9706a007ce0fae8c"
+      ],
+      "qualifies": true
+    }
+  ],
+  "pilot-decision": {
+    "approved": true,
+    "simulations": 512,
+    "reason": "Highest quality-gated simulation budget"
+  },
+  "forecast": {
+    "seconds": 2014643.682305997,
+    "generation_seconds": 918565.4084749985,
+    "development_games": 960,
+    "final_games": 2160,
+    "margin": 1.5,
+    "note": "Pilot-throughput estimate; deterministic match lengths can differ substantially",
+    "paid_cost_cad": 0
+  },
+  "compute": {
+    "active_seconds": 7060.214275666047,
+    "peak_ram_mb": 179.265625,
+    "paid_cost_cad": 0
+  },
+  "pilot-handoff-compute": {
+    "active_seconds": 1846.8404095838778,
+    "peak_ram_mb": 176.6875,
+    "paid_cost_cad": 0
+  },
+  "pilot-handoff": {
+    "reason": "Move the existing pilot into the durable continuation process without changing scientific settings",
+    "completed_games": {
+      "pilot-128/0009.json": "2471f863c34f1ed37925550108f34d61a3a8a7dee66b1064ad88e19bce2c0cb2",
+      "pilot-128/0013.json": "daccb356610fe2119f87510a960feb353b9a2e044a3c05df1c80df38764640aa",
+      "pilot-128/0005.json": "fd0c5bd16e725441a78d265bb13b27558a9c55b7e542c8f038642b94560a550f",
+      "pilot-128/0004.json": "11f8436b998334427d142de0981fb201450a8a407fd720874f7b7b52917801de",
+      "pilot-128/0012.json": "d2ec189a53a595eb510b12e19c800a68b5e65b42329ca08d2f182c69fca974f8",
+      "pilot-128/0008.json": "a632f2479885643449d1ea57e44cf1316dee48e600c5104d9b878eec21ede8f6",
+      "pilot-128/0015.json": "aa20fbae1001d8bcd6ce12718ee9eaf4c0e7ab79d78c9bac5815df7f078d1daa",
+      "pilot-128/0003.json": "a44b34e8cb4154f3f6570234f1054fbcecf8d84c8076de9fcd0cb16ed5a2f3c6",
+      "pilot-128/0019.json": "559dbf764eba13a74fc9c2401a4b01ce8ef0369754c9ca70f970a2de54b30864",
+      "pilot-128/0018.json": "b34c210b0759ca6f6c0176c1bf3bcbdc2ee0d02ff5ec3708fb5697d78aeeaf94",
+      "pilot-128/0002.json": "d8693528a6d378474d5d1be62f9961e8e2cdd2141b1e596c438bd6cd262b5536",
+      "pilot-128/0014.json": "040e82eff05511f28ff9cdb8447b75ce23485a4a81c8a592b7f048808d6f26f7",
+      "pilot-128/0001.json": "7e784acf866536bdb64b8d25a9fc5a127cb0ff5615eee000ca484f7d87c79bd4",
+      "pilot-128/0017.json": "172765cdd90d748e3d9a2ec6a2fe072f1fd17bc4753ad6d5cf93a918488893d9",
+      "pilot-128/0016.json": "664a4911f012b8bcf924400fc54c2a0b3007482522f6879b69613cd00baea225",
+      "pilot-128/0000.json": "fe0389a1159098346112083dfb5ed63e6350f8c5cebda96954c1d04a21ff41b8",
+      "pilot-128/0007.json": "9fc446999e1c18bf8562395fbd459d46df2dbe522d7b6b864e0b8d981856d514",
+      "pilot-128/0011.json": "41391bce3c7eb8649b1674c5abc0cb84af37b91cc0c530778caf59919a06b068",
+      "pilot-128/0010.json": "bcd4e3e41b6ec536fd362f534a0948ab2d820bef044f7a6fb4023fed496d53df",
+      "pilot-128/0006.json": "8130aa55af96b07c21bbb55c9659a8c457e832389a1f5ba7e9a4ba64497c64bc",
+      "pilot-256/0009.json": "72b787a6979e2d6663566be6c31ee686d12e748d92c224055c520c046811ebb4",
+      "pilot-256/0013.json": "bc69b2c5a23b545e04f434adfa17a0dccd102c32d76081ec3ec9615dea1eb8e1",
+      "pilot-256/0005.json": "8f3abb68c8eaed31a253961a96c1c7ab877cb2aec19cf6379f2e265aeb98efbf",
+      "pilot-256/0004.json": "78a299caadf9412f2f6d83cf0fb6596b8c1665d3c8910760c1ee162c1f5b43e5",
+      "pilot-256/0012.json": "0dbfabfba766c38ed26878c358161b029a2f912b643a8a77a0f872c6c464acd8",
+      "pilot-256/0008.json": "a231e91a9b6e9683f9ebef072bd2ace3daef0e6e387a24bd39a7d568ece2e928",
+      "pilot-256/0003.json": "0b069357d3ab31ded4ceafc4d007de06d46db706a5967b942ad9fa1fffdc8488",
+      "pilot-256/0002.json": "505d6f3c03c51e40793a35fd79bffc6dc62cd697b6e5d6a5ee3b4c8ca1ce9673",
+      "pilot-256/0001.json": "3c3c4aa71bbc2711498913b80e61e3bb8bc65589900ca07924fa14445726be91",
+      "pilot-256/0000.json": "4810c1865900a3e8d3b77c0e2f15cc97a56e0579b85b44be4205fa98acf7877d",
+      "pilot-256/0007.json": "70c2653e605e20ac7c8a24429106290d05ae8496f3b337de22919331448b4691",
+      "pilot-256/0011.json": "763bdf18ff9cf2dd31c2019e3e6e11e503d7ed172694cd32fcbcf0af52393d01",
+      "pilot-256/0010.json": "6f8960e8e55d12e9295517ef300cf3493e93f14a54cd556061641e17583448c1",
+      "pilot-256/0006.json": "bb2b71b5f11825e93f19a007a9aa4765cca5d8d795cf85c0f64eeac8bb7f5a71"
+    },
+    "scientific_protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a"
+  },
+  "openings-manifest": {
+    "signature": "921e540fff5d68efccaad13ec2b5375cd9903aec2142faeeef6a72f1477c5f4e",
+    "inputs": {
+      "artifact-5f1c2c5cf4c001f3": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635",
+      "artifact-626cf38b5c930501": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+      "configs/openings.json": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+      "artifact-4d609540c1805e10": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+      "artifact-d5fb92ced1fe12cf": "789d6699cebe0ad2cf2987cc8b924765af83879aea522ccb284fdfc437e343cb"
+    },
+    "sizes": {
+      "pilot": 20,
+      "train": 1000,
+      "development": 40,
+      "final": 200,
+      "control": 40,
+      "reference": 40
+    },
+    "sha256": "6e79744eacd9ef72fe4174eb8414bcb983be341409970424ab56d06a7bbd4bbc",
+    "scanned": 32831,
+    "canonical_overlaps": 0,
+    "source_game_overlaps": 0,
+    "provenance": {
+      "commit": "e0b25a7c21f30d747352d57d1a660b2fe250d22a",
+      "dirty": true,
+      "python": "3.10.6",
+      "platform": "macOS-15.6.1-arm64-arm-64bit"
+    }
+  },
+  "initial-seal": {
+    "sha256": "79cccfbb7fe7c4d2e7d10a7531c94d05488745d24902e3b66a77db6ee641e0c0"
+  },
+  "environment": {
+    "packages": {
+      "torch": "2.7.0",
+      "numpy": "2.2.6",
+      "chess": "1.11.2",
+      "threadpoolctl": "3.6.0"
+    },
+    "pyproject_sha256": "08a808e0bc849f507286aabe406ef96934b4a218fb9dffa5fcc5dc521d2a719b",
+    "compute": "CPU, single numerical-library thread",
+    "paid_cost_cad": 0
+  },
+  "continuation-status": {
+    "status": "interrupted"
+  },
+  "continuation-compute": {
+    "main_runner_seconds": 1623.070078541059,
+    "peak_ram_mb": 179.265625,
+    "paid_cost_cad": 0
+  },
+  "launch-estimate": {
+    "forecast_sha256": "6468db6aff8072e06a50e1aea3dd29dbf47faa139834c8984e1b4eda977f8ee7",
+    "estimated_hours": 559.6232450849992,
+    "paid_cost_cad": 0
+  },
+  "pilot_progress": {
+    "128": 20,
+    "256": 20,
+    "512": 20
+  },
+  "initialization": {
+    "supervised_value_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+    "policy_seed": 20261015,
+    "run_seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "training": {}
+}

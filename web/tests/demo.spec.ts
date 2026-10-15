@@ -41,7 +41,12 @@ async function mock(page: any) {
         nodes: 1000,
         elapsed_ms: 120,
         pv: ["e7e5", "g1f3"],
-        checkpoint_id: "s".repeat(64),
+        checkpoint_id:
+          b.model_id === "rl"
+            ? "r".repeat(64)
+            : b.model_id === "handcrafted"
+              ? "handcrafted-v1"
+              : "s".repeat(64),
         terminal: null,
         mate_score: false,
       },
@@ -76,6 +81,9 @@ test("offline research and mobile layout", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("The live engine is unavailable")).toBeVisible();
   await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page
+    .getByText("Original study: charts and saved games", { exact: true })
+    .click();
   await expect(page.getByText("Does the model learn?")).toBeVisible();
   expect(
     await page.evaluate(
@@ -131,10 +139,12 @@ test("model choice, drag move, and restart are coherent", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
   await page
-    .getByRole("button", { name: /Self-play model Learned from self-play/ })
+    .getByRole("button", {
+      name: /Earlier released self-play Learned from self-play/,
+    })
     .click();
   await expect(page.locator(".player-strip").first()).toContainText(
-    "Self-play model",
+    "Earlier released self-play",
   );
   await page
     .getByRole("button", { name: "e2 white pawn", exact: true })
@@ -168,6 +178,9 @@ test("saved-game replay works without the API", async ({ page }) => {
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page
+    .getByText("Original study: charts and saved games", { exact: true })
+    .click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "e4 white pawn", exact: true }),
@@ -178,29 +191,178 @@ test("saved-game replay works without the API", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("model pages preserve the position and enforce checkpoint identity", async ({ page }) => {
+test("legacy preview links redirect to research without substituting a released model", async ({
+  page,
+}) => {
   await mock(page);
-  await page.route("**/research/model-catalog.json", route => route.fulfill({json:{models:{
-    supervised:{checkpoint_id:"s".repeat(64),name:"Supervised",facts:["Verified seed 42"],experimental:false},
-    rl:{checkpoint_id:"different",name:"RL",facts:["Negative live-self-play result"],experimental:true}
-  }}}));
-  await page.goto("/lab/supervised?moves=e2e4,e7e5");
-  await expect(page.getByRole("heading", {name:/Supervised evaluator/,level:1})).toBeVisible();
-  await expect(page.getByText("2 plies", {exact:true})).toBeVisible();
-  await expect(page.getByRole("button",{name:"Analyze this position",exact:true})).toBeEnabled();
-  await page.locator('.model-tile').filter({hasText:'Self-play experiment'}).click();
-  await expect(page).toHaveURL(/lab\/rl.*moves=e2e4%2Ce7e5/);
-  await expect(page.getByText("2 plies", {exact:true})).toBeVisible();
-  await expect(page.getByRole("button",{name:"Analyze this position",exact:true})).toBeDisabled();
-  await expect(page.getByText("The live engine is serving a different checkpoint.", {exact:false})).toBeVisible();
+  await page.goto("/lab/move-guided?moves=e2e4,e7e5");
+  await expect(page).toHaveURL(/research.*study=move-ranking/);
+  await expect(page.locator("#study-move-ranking")).toContainText("48.75%");
+  await page.getByRole("button", { name: "Demo", exact: true }).click();
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+  await expect(page.locator(".model-tile")).toHaveCount(0);
 });
 
-test("model explanation remains readable offline on mobile", async ({ page }) => {
-  await page.setViewportSize({width:390,height:844});
-  await page.route("**/api/models", route=>route.abort());
-  await page.goto('/lab/move-guided');
-  await expect(page.getByRole('heading',{name:/Move-guided engine/,level:1})).toBeVisible();
-  await expect(page.getByText('Does learned ordering make search more efficient?',{exact:true}).last()).toBeVisible();
-  await expect(page.getByRole('button',{name:'Analyze this position',exact:true})).toBeDisabled();
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
+test("research deep links, compare refresh and browser history preserve the position", async ({
+  page,
+}) => {
+  await mock(page);
+  await page.goto("/?moves=e2e4,e7e5&mode=compare");
+  await expect(
+    page.getByRole("button", { name: "Compare models", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page
+    .getByText("Original study: charts and saved games", { exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "The research journal" }),
+  ).toBeVisible();
+  await page.goBack();
+  await expect(
+    page.getByRole("button", { name: "Compare models", exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Compare models", exact: true }),
+  ).toBeVisible();
+});
+
+test("the main navigation contains only Demo and Research and reports work offline", async ({
+  page,
+}) => {
+  await page.route("**/api/models", (route) => route.abort());
+  await page.goto("/research?study=rl-update-diagnosis");
+  await expect(
+    page
+      .getByRole("navigation", { name: "Main navigation" })
+      .getByRole("button"),
+  ).toHaveCount(2);
+  await expect(page.locator("#study-rl-update-diagnosis")).toContainText(
+    "Off-policy",
+  );
+  for (const path of [
+    "/research/move-ranking/index.html",
+    "/research/rl-improvement/index.html",
+    "/research/policy-value/index.html",
+    "/research/policy-value/release-scope.json",
+    "/research/report.pdf",
+  ]) {
+    expect((await page.request.get(path)).ok()).toBeTruthy();
+  }
+  await expect(page.locator("#study-policy-value")).toContainText(
+    "Completed feasibility pilot",
+  );
+  await expect(page.locator("#study-policy-value")).toContainText("deferred");
+  const evidence = await page.request.get(
+    "/research/policy-value/evidence.json",
+  );
+  expect((await evidence.json()).status.status).toBe("feasibility_complete");
+});
+
+test("promotion choices preserve underpromotions", async ({ page }) => {
+  await mock(page);
+  await page.unroute("**/api/analyze");
+  await page.route("**/api/analyze", (route) =>
+    route.fulfill({
+      json: {
+        best_move: null,
+        value: 0,
+        depth: 1,
+        nodes: 1,
+        elapsed_ms: 1,
+        pv: [],
+        checkpoint_id: "s".repeat(64),
+        terminal: null,
+        mate_score: false,
+      },
+    }),
+  );
+  const query = new URLSearchParams({ fen: "k7/4P3/8/8/8/8/8/7K w - - 0 1" });
+  await page.goto("/?" + query);
+  await page
+    .getByRole("button", { name: "e7 white pawn", exact: true })
+    .click();
+  await page.getByRole("button", { name: "e8", exact: true }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Choose promotion" }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Promote to knight", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "e8 white knight", exact: true }),
+  ).toBeVisible();
+});
+
+test("released checkpoint mismatch blocks a move", async ({ page }) => {
+  await mock(page);
+  await page.unroute("**/api/analyze");
+  await page.route("**/api/analyze", (route) =>
+    route.fulfill({
+      json: {
+        best_move: "e7e5",
+        value: 0,
+        depth: 1,
+        nodes: 1,
+        elapsed_ms: 1,
+        pv: [],
+        checkpoint_id: "wrong-release",
+        terminal: null,
+        mate_score: false,
+      },
+    }),
+  );
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "e2 white pawn", exact: true })
+    .click();
+  await page.getByRole("button", { name: "e4", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("checkpoint changed");
+  await expect(page.getByText("1 plies", { exact: true })).toBeVisible();
+});
+
+test("compare uses the actual shared position and Research has a compact archive", async ({
+  page,
+}, info) => {
+  await mock(page);
+  const positions: any[] = [];
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/analyze"))
+      positions.push(request.postDataJSON());
+  });
+  await page.goto("/?moves=e2e4,e7e5");
+  await page.getByRole("button", { name: "Compare", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Compare models", exact: true })
+    .click();
+  await expect(page.locator(".comparison-card")).toHaveCount(3);
+  expect(
+    positions.every((p) => p.moves.join(",") === "e2e4,e7e5"),
+  ).toBeTruthy();
+  await page.getByRole("button", { name: "Research", exact: true }).click();
+  await expect(
+    page.getByText("Does the model learn?", { exact: true }),
+  ).not.toBeVisible();
+  await page.screenshot({
+    path: info.outputPath("research.png"),
+    fullPage: true,
+  });
+});
+
+test("new game and move history survive a refresh", async ({ page }) => {
+  await mock(page);
+  await page.goto("/?moves=e2e4,e7e5");
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "New game", exact: true }).click();
+  await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "e2 white pawn", exact: true })
+    .click();
+  await page.getByRole("button", { name: "e4", exact: true }).click();
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
 });

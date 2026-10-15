@@ -15,7 +15,14 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-import { approaches, ModelGallery, ModelGuide, type Catalog, type GuideAnalysis } from "./ModelGuide";
+import {
+  approaches,
+  ModelGuide,
+  type Catalog,
+  type GuideAnalysis,
+} from "./ModelGuide";
+
+import { ResearchIndex } from "./ResearchIndex";
 
 const API = import.meta.env.VITE_API_URL || "/api";
 type Model = {
@@ -284,18 +291,36 @@ function routePosition() {
     const params = new URLSearchParams(window.location.search);
     const fen = params.get("fen") || DEFAULT_POSITION;
     const moves = (params.get("moves") || "").split(",").filter(Boolean);
-    if (moves.length > 1024 || fen.length > 100) throw new Error("Invalid position");
+    if (moves.length > 1024 || fen.length > 100)
+      throw new Error("Invalid position");
     boardFrom(fen, moves);
     return { fen, moves };
-  } catch { return { fen: DEFAULT_POSITION, moves: [] as string[] }; }
+  } catch {
+    return { fen: DEFAULT_POSITION, moves: [] as string[] };
+  }
 }
-const showcaseEnabled = import.meta.env.DEV || import.meta.env.VITE_SHOWCASE === "1";
+const showcaseEnabled = import.meta.env.VITE_SHOWCASE === "1";
+const legacyStudies: Record<string, string> = {
+  "/lab/move-guided": "move-ranking",
+  "/lab/rl": "rl-improvement",
+  "/lab/supervised": "fixed-data-improvements",
+};
 export default function App() {
-  const [path, setPath] = useState(window.location.pathname);
-  const page = showcaseEnabled ? approaches.find(a => a.path === path) : undefined;
+  const [path, setPath] = useState(
+    window.location.pathname.replace(/\/$/, "") || "/",
+  );
+  const page = showcaseEnabled
+    ? approaches.find((a) => a.path === path)
+    : undefined;
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [initialFen, setInitialFen] = useState(() => routePosition().fen);
-  const [tab, setTab] = useState<"play" | "compare" | "research">("play");
+  const [tab, setTab] = useState<"play" | "compare" | "research">(() =>
+    path === "/research" || (!showcaseEnabled && !!legacyStudies[path])
+      ? "research"
+      : new URLSearchParams(window.location.search).get("mode") === "compare"
+        ? "compare"
+        : "play",
+  );
   const [models, setModels] = useState<Model[]>([]);
   const [model, setModel] = useState("handcrafted");
   const [connection, setConnection] = useState<"loading" | "ready" | "offline">(
@@ -325,32 +350,150 @@ export default function App() {
   const game = boardFrom(initialFen, history);
   const currentModel = models.find((m) => m.id === model);
   const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
-  const identityMatches = !page || (!!currentModel && currentModel.id === page.id && (!!expectedCheckpoint && expectedCheckpoint === currentModel.checkpoint_id));
+  const identityMatches =
+    !page ||
+    (!!currentModel &&
+      currentModel.id === page.id &&
+      !!expectedCheckpoint &&
+      expectedCheckpoint === currentModel.checkpoint_id);
   const done = !!terminal || game.isGameOver();
+  useEffect(() => {
+    if (connection !== "ready") return;
+    const query = new URLSearchParams(window.location.search);
+    query.set("fen", initialFen);
+    query.set("moves", history.join(","));
+    query.set("model", model);
+    query.set("mode", tab === "compare" ? "compare" : "play");
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + "?" + query,
+    );
+  }, [initialFen, history, model, tab, connection]);
+
+  const studyId =
+    new URLSearchParams(window.location.search).get("study") ||
+    (!showcaseEnabled ? legacyStudies[path] : undefined);
+  function changeTab(next: "play" | "compare" | "research") {
+    if (busy) return;
+    const query = new URLSearchParams({
+      fen: initialFen,
+      moves: history.join(","),
+      model,
+      mode: next === "compare" ? "compare" : "play",
+    });
+    window.history.pushState(
+      null,
+      "",
+      (next === "research" ? "/research" : "/") + "?" + query,
+    );
+    setPath(window.location.pathname);
+    setTab(next);
+  }
+  useEffect(() => {
+    if (!showcaseEnabled && path.startsWith("/lab/")) {
+      const query = new URLSearchParams(window.location.search);
+      if (legacyStudies[path]) query.set("study", legacyStudies[path]);
+      if (path === "/lab/classical") query.set("model", "handcrafted");
+      const target = legacyStudies[path] ? "/research" : "/";
+      window.history.replaceState(null, "", target + "?" + query);
+      setPath(target);
+      setTab(target === "/research" ? "research" : "play");
+    }
+  }, [path]);
   function navigate(id: string) {
     if (busy) return;
-    const target = approaches.find(a => a.id === id);
-    const query = new URLSearchParams({ fen: initialFen, moves: history.join(",") });
+    const target = approaches.find((a) => a.id === id);
+    const query = new URLSearchParams({
+      fen: initialFen,
+      moves: history.join(","),
+    });
     window.history.pushState(null, "", (target?.path || "/") + "?" + query);
     setPath(window.location.pathname);
     if (target) setModel(target.id);
-    generation.current++; setAnalysis(null); setSelected(null); setPromotion(null); setError(""); setTab("play");
+    generation.current++;
+    setAnalysis(null);
+    setSelected(null);
+    setPromotion(null);
+    setError("");
+    setTab("play");
   }
   useEffect(() => {
-    const back = () => { const position = routePosition(); setInitialFen(position.fen); setHistory(position.moves); setPath(window.location.pathname); const target = approaches.find(a => a.path === window.location.pathname); if (target) setModel(target.id); generation.current++; setAnalysis(null); setSelected(null); setPromotion(null); setError(""); setTerminal(null); };
-    window.addEventListener("popstate", back); return () => window.removeEventListener("popstate", back);
-  }, []);
+    const back = () => {
+      const position = routePosition();
+      setInitialFen(position.fen);
+      setHistory(position.moves);
+      setPath(window.location.pathname);
+      setTab(
+        window.location.pathname === "/research"
+          ? "research"
+          : new URLSearchParams(window.location.search).get("mode") ===
+              "compare"
+            ? "compare"
+            : "play",
+      );
+      const target = approaches.find(
+        (a) => a.path === window.location.pathname,
+      );
+      const requested = new URLSearchParams(window.location.search).get(
+        "model",
+      );
+      if (requested && models.some((m) => m.id === requested))
+        setModel(requested);
+
+      if (target) setModel(target.id);
+      generation.current++;
+      setAnalysis(null);
+      setSelected(null);
+      setPromotion(null);
+      setError("");
+      setTerminal(null);
+    };
+    window.addEventListener("popstate", back);
+    return () => window.removeEventListener("popstate", back);
+  }, [models]);
   async function inspectPosition() {
     if (busy || !identityMatches || connection !== "ready") return;
-    setBusy(true); setError(""); const token = generation.current;
-    try { const result = await request<Analysis>("/analyze", { initial_fen: initialFen, moves: history, model_id: model, nodes: 2000, time_ms: 1500 });
-      if (page && result.checkpoint_id !== expectedCheckpoint) throw new Error("The engine checkpoint changed. Reconnect before continuing.");
-      if (token === generation.current) { setAnalysis(result); setAnalysisHistory(history); }
-    } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+    setBusy(true);
+    setError("");
+    const token = generation.current;
+    try {
+      const result = await request<Analysis>("/analyze", {
+        initial_fen: initialFen,
+        moves: history,
+        model_id: model,
+        nodes: 2000,
+        time_ms: 1500,
+      });
+      if (
+        page
+          ? result.checkpoint_id !== expectedCheckpoint
+          : currentModel && result.checkpoint_id !== currentModel.checkpoint_id
+      )
+        throw new Error(
+          "The engine checkpoint changed. Reconnect before continuing.",
+        );
+      if (token === generation.current) {
+        setAnalysis(result);
+        setAnalysisHistory(history);
+      }
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
   }
   function loadExample(index: number) {
     if (busy) return;
-    const position = examples[index]; generation.current++; setInitialFen(position.fen); setHistory(position.moves || []); setColor(boardFrom(position.fen, position.moves || []).turn()); setSelected(null); setAnalysis(null); setTerminal(null); setError("");
+    const position = examples[index];
+    generation.current++;
+    setInitialFen(position.fen);
+    setHistory(position.moves || []);
+    setColor(boardFrom(position.fen, position.moves || []).turn());
+    setSelected(null);
+    setAnalysis(null);
+    setTerminal(null);
+    setError("");
   }
   async function connect() {
     setConnection("loading");
@@ -359,7 +502,16 @@ export default function App() {
         "/models",
       );
       setModels(data.models);
-      setModel((showcaseEnabled && approaches.find(a => a.path === window.location.pathname)?.id) || data.default);
+      const requested = new URLSearchParams(window.location.search).get(
+        "model",
+      );
+      setModel(
+        (showcaseEnabled &&
+          approaches.find((a) => a.path === window.location.pathname)?.id) ||
+          (data.models.some((m) => m.id === requested)
+            ? requested!
+            : data.default),
+      );
       setConnection("ready");
     } catch {
       setConnection("offline");
@@ -367,7 +519,10 @@ export default function App() {
   }
   useEffect(() => {
     void connect();
-    fetch("/research/model-catalog.json").then(r => r.ok ? r.json() : null).then(setCatalog).catch(() => setCatalog(null));
+    fetch("/research/model-catalog.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setCatalog)
+      .catch(() => setCatalog(null));
     fetch("/research/results.json")
       .then((r) => (r.ok ? r.json() : null))
       .then(setResearch)
@@ -398,7 +553,14 @@ export default function App() {
     }
   }
   function clickSquare(sq: Square) {
-    if (busy || done || !identityMatches || game.turn() !== color || connection !== "ready") return;
+    if (
+      busy ||
+      done ||
+      !identityMatches ||
+      game.turn() !== color ||
+      connection !== "ready"
+    )
+      return;
     if (selected) {
       const options = game
         .moves({ square: selected, verbose: true })
@@ -427,7 +589,14 @@ export default function App() {
         time_ms: 1500,
       });
       if (token !== generation.current) return;
-      if (page && result.checkpoint_id !== expectedCheckpoint) throw new Error("The engine checkpoint changed. Reconnect before continuing.");
+      if (
+        page
+          ? result.checkpoint_id !== expectedCheckpoint
+          : currentModel && result.checkpoint_id !== currentModel.checkpoint_id
+      )
+        throw new Error(
+          "The engine checkpoint changed. Reconnect before continuing.",
+        );
       setAnalysis(result);
       setAnalysisHistory(history);
       setTerminal(result.terminal);
@@ -450,7 +619,17 @@ export default function App() {
       connection === "ready"
     )
       void engineMove();
-  }, [history, initialFen, color, tab, connection, busy, error, model, identityMatches]);
+  }, [
+    history,
+    initialFen,
+    color,
+    tab,
+    connection,
+    busy,
+    error,
+    model,
+    identityMatches,
+  ]);
   function undo() {
     generation.current++;
     setHistory((h) =>
@@ -467,14 +646,18 @@ export default function App() {
     setComparisons([]);
     try {
       const values = [];
-      for (const m of models.filter((m) => m.id !== "handcrafted")) {
+      for (const m of models) {
         const result = await request<Analysis>("/analyze", {
-          initial_fen: examples[example].fen,
-          moves: examples[example].moves,
+          initial_fen: initialFen,
+          moves: history,
           model_id: m.id,
           nodes: 1000,
           time_ms: 3000,
         });
+        if (result.checkpoint_id !== m.checkpoint_id)
+          throw new Error(
+            "The engine checkpoint changed. Reconnect before comparing.",
+          );
         values.push({ model: m, result });
       }
       setComparisons(values);
@@ -484,10 +667,7 @@ export default function App() {
       setBusy(false);
     }
   }
-  const exampleBoard = boardFrom(
-    examples[example].fen,
-    examples[example].moves,
-  );
+  const exampleBoard = game;
   const replayGame = new Chess();
   const selectedReplay = research?.games?.[replay];
   if (selectedReplay) {
@@ -530,20 +710,19 @@ export default function App() {
           </span>
         </a>
         <nav aria-label="Main navigation">
-          {(["play", "compare", "research"] as const).map((t) => (
+          {(["play", "research"] as const).map((t) => (
             <button
               key={t}
-              className={tab === t ? "active" : ""}
-              onClick={() => setTab(t)}
+              disabled={busy}
+              className={
+                (t === "play" ? tab !== "research" : tab === "research")
+                  ? "active"
+                  : ""
+              }
+              onClick={() => changeTab(t)}
             >
-              {t === "play" ? (
-                <Play size={14} />
-              ) : t === "compare" ? (
-                <FlaskConical size={15} />
-              ) : (
-                <BookOpen size={15} />
-              )}{" "}
-              {t[0].toUpperCase() + t.slice(1)}
+              {t === "play" ? <Play size={14} /> : <BookOpen size={15} />}{" "}
+              {t === "play" ? "Demo" : "Research"}
             </button>
           ))}
         </nav>
@@ -559,12 +738,18 @@ export default function App() {
       <main>
         <div className="eyebrow">
           <span /> FROM SUPERVISION TO SELF-PLAY{" "}
-          <span className="version">EXPERIMENT 01</span>
+          <span className="version">RESEARCH JOURNAL</span>
         </div>
         <section className={`intro ${page ? "model-intro" : ""}`}>
           <div>
             <h1>
-              {page ? <>{page.title}<br/><em>{page.subtitle}</em></> : tab === "play" ? (
+              {page ? (
+                <>
+                  {page.title}
+                  <br />
+                  <em>{page.subtitle}</em>
+                </>
+              ) : tab === "play" ? (
                 <>
                   Learning, one
                   <br />
@@ -585,25 +770,87 @@ export default function App() {
               )}
             </h1>
             <p>
-              {page ? page.description : tab === "play"
-                ? "Play against a neural chess evaluator. Explore what changes when a model learns from its own games."
-                : tab === "compare"
-                  ? "Look inside the experiment. Compare the moves and evaluations of the supervised and self-play models."
-                  : "A reproducible study of supervised learning and reinforcement learning, including the results that do not improve."}
+              {page
+                ? page.description
+                : tab === "play"
+                  ? "Play against a neural chess evaluator. Explore what changes when a model learns from its own games."
+                  : tab === "compare"
+                    ? "Look inside the experiment. Compare the moves and evaluations of the supervised and self-play models."
+                    : "A reproducible study of supervised learning and reinforcement learning, including the results that do not improve."}
             </p>
           </div>
           <div className="intro-note">
             <span className="tiny-label">THE RESEARCH QUESTION</span>
             <p>
-              {page ? page.question : <>Does learning through self-play<br />make a chess evaluator better?</>}
+              {page ? (
+                page.question
+              ) : (
+                <>
+                  Does learning through self-play
+                  <br />
+                  make a chess evaluator better?
+                </>
+              )}
             </p>
-            <button className="text-button" onClick={() => setTab("research")}>
+            <button
+              className="text-button"
+              onClick={() => changeTab("research")}
+            >
               Explore the evidence <ArrowUpRight size={16} />
             </button>
           </div>
         </section>
-        {showcaseEnabled && <ModelGallery navigate={navigate} disabled={busy} />}
-        {page && <><ModelGuide approach={page} catalog={catalog} checkpoint={currentModel?.checkpoint_id} analysis={analysis} analyze={inspectPosition} busy={busy} available={connection === "ready" && identityMatches}/><div className="curated-positions"><span className="tiny-label">TRY THE SAME POSITION ACROSS MODELS</span>{examples.map((e,i)=><button key={e.name} disabled={busy} onClick={()=>loadExample(i)}>{e.name}</button>)}</div></>}
+        {tab !== "research" && (
+          <div className="demo-modes segmented" aria-label="Demo mode">
+            <button
+              className={tab === "play" ? "chosen" : ""}
+              disabled={busy}
+              onClick={() => changeTab("play")}
+            >
+              Play
+            </button>
+            <button
+              className={tab === "compare" ? "chosen" : ""}
+              disabled={busy}
+              onClick={() => changeTab("compare")}
+            >
+              Compare
+            </button>
+          </div>
+        )}
+        {showcaseEnabled && (
+          <p className="notice">
+            Local preview collection · these checkpoints have not passed the
+            model release gate.
+          </p>
+        )}
+        {page && (
+          <>
+            <ModelGuide
+              approach={page}
+              catalog={catalog}
+              checkpoint={currentModel?.checkpoint_id}
+              analysis={analysis}
+              analyze={inspectPosition}
+              busy={busy}
+              available={connection === "ready" && identityMatches}
+            />
+            <div className="curated-positions">
+              <span className="tiny-label">
+                TRY THE SAME POSITION ACROSS MODELS
+              </span>
+              {examples.map((e, i) => (
+                <button
+                  key={e.name}
+                  disabled={busy}
+                  onClick={() => loadExample(i)}
+                >
+                  {e.name}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
         {connection !== "ready" && (
           <div className="notice">
             <Activity size={18} />
@@ -614,8 +861,8 @@ export default function App() {
                   : "The live engine is unavailable"}
               </strong>
               <p>
-                The engine may be starting or temporarily unavailable. Retry shortly.
-                Research and saved games remain available.
+                The engine may be starting or temporarily unavailable. Retry
+                shortly. Research and saved games remain available.
               </p>
             </div>
             <button
@@ -640,7 +887,11 @@ export default function App() {
                   <Cpu size={18} />
                 </div>
                 <div>
-                  <strong>{currentModel?.name || "ChessEngine"}</strong>
+                  <strong>
+                    {currentModel?.id === "rl" && !showcaseEnabled
+                      ? "Earlier released self-play"
+                      : currentModel?.name || "ChessEngine"}
+                  </strong>
                   <span>
                     {currentModel?.evidence === "pilot"
                       ? "Pilot checkpoint · research in progress"
@@ -691,18 +942,37 @@ export default function App() {
                       key={m.id}
                       className={`model-option ${model === m.id ? "chosen" : ""}`}
                       onClick={() => {
-                        if (page) navigate(m.id); else { setModel(m.id); setAnalysis(null); }
+                        if (page) navigate(m.id);
+                        else {
+                          setModel(m.id);
+                          setAnalysis(null);
+                          const query = new URLSearchParams(
+                            window.location.search,
+                          );
+                          query.set("model", m.id);
+                          window.history.replaceState(
+                            null,
+                            "",
+                            window.location.pathname + "?" + query,
+                          );
+                        }
                       }}
                     >
                       <span className="radio" />
                       <span>
-                        <strong>{m.name}</strong>
+                        <strong>
+                          {m.id === "rl" && !showcaseEnabled
+                            ? "Earlier released self-play"
+                            : m.name}
+                        </strong>
                         <small>
-                          {m.kind === "move-guided" ? "Learned root ordering + supervised value" : m.kind === "rl"
-                            ? "Learned from self-play outcomes"
-                            : m.kind === "supervised"
-                              ? "Learned from Stockfish evaluations"
-                              : "Material and piece-square heuristics"}
+                          {m.kind === "move-guided"
+                            ? "Learned root ordering + supervised value"
+                            : m.kind === "rl"
+                              ? "Learned from self-play outcomes"
+                              : m.kind === "supervised"
+                                ? "Learned from Stockfish evaluations"
+                                : "Material and piece-square heuristics"}
                         </small>
                       </span>
                       {model === m.id && (
@@ -711,6 +981,35 @@ export default function App() {
                     </button>
                   ))}
                 </div>
+                {!page && (
+                  <details className="released-explanation">
+                    <summary>How this evaluator works</summary>
+                    <p>
+                      {currentModel?.kind === "handcrafted"
+                        ? "Material and piece-square rules score the board."
+                        : "The released compact network estimates position value; alpha-beta searches legal moves. The earlier self-play checkpoint learned from completed game outcomes."}
+                    </p>
+                    <p>
+                      Positive values favour the player to move; they are not
+                      calibrated win probabilities. The model identity and
+                      evidence below apply to this exact release.
+                    </p>
+                    <button
+                      onClick={inspectPosition}
+                      disabled={
+                        busy || connection !== "ready" || !identityMatches
+                      }
+                    >
+                      Analyze this position
+                    </button>
+                    {analysis && (
+                      <p>
+                        Last analysis: {analysis.value.toFixed(3)} from the
+                        player-to-move perspective.
+                      </p>
+                    )}
+                  </details>
+                )}
                 <div className="color-row">
                   <span>Play as</span>
                   <div className="segmented">
@@ -833,7 +1132,9 @@ export default function App() {
             <section className="board-panel">
               <div className="player-strip">
                 <FlaskConical size={20} />
-                <strong>{examples[example].name}</strong>
+                <strong>
+                  Current shared position · {history.length} plies
+                </strong>
               </div>
               <Board game={exampleBoard} disabled />
             </section>
@@ -856,6 +1157,7 @@ export default function App() {
                     value={example}
                     onChange={(e) => {
                       setExample(Number(e.target.value));
+                      loadExample(Number(e.target.value));
                       setComparisons([]);
                     }}
                   >
@@ -885,8 +1187,12 @@ export default function App() {
                 )}
               </section>
               {comparisons.map(({ model: m, result: r }) => (
-                <section className="card" key={m.id}>
-                  <span className="tiny-label">{m.name}</span>
+                <section className="card comparison-card" key={m.id}>
+                  <span className="tiny-label">
+                    {m.id === "rl" && !showcaseEnabled
+                      ? "Earlier released self-play"
+                      : m.name}
+                  </span>
                   <h2>
                     {sanLine(exampleBoard, r.pv.slice(0, 1)) ||
                       "Terminal position"}
@@ -904,207 +1210,225 @@ export default function App() {
         )}
         {tab === "research" && (
           <>
-            <div className="research-banner">
-              <FlaskConical size={22} />
-              <div>
-                <strong>
-                  {research?.status || "The study is being prepared"}
-                </strong>
-                <p>
-                  {research?.aggregate
-                    ? "All three training seeds are reported. Conclusions apply to the stated data and shallow search budget."
-                    : "Pilot evidence tests the pipeline. It does not establish that reinforcement learning improves chess strength."}
-                </p>
+            <ResearchIndex selected={studyId} />
+            <details
+              className="archive-dashboard"
+              open={studyId === "original-study"}
+            >
+              <summary>Original study: charts and saved games</summary>
+              <div className="research-banner">
+                <FlaskConical size={22} />
+                <div>
+                  <strong>
+                    {research?.status || "The study is being prepared"}
+                  </strong>
+                  <p>
+                    {research?.aggregate
+                      ? "All three training seeds are reported. Conclusions apply to the stated data and shallow search budget."
+                      : "Pilot evidence tests the pipeline. It does not establish that reinforcement learning improves chess strength."}
+                  </p>
+                </div>
+                <a
+                  href="/research/report.html"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Read the report <ArrowUpRight size={16} />
+                </a>
               </div>
-              <a href="/research/report.html" target="_blank" rel="noreferrer">
-                Read the report <ArrowUpRight size={16} />
-              </a>
-            </div>
-            <div className="research-grid">
-              <section className="card">
-                <span className="tiny-label">01 / FITTING THE EVALUATOR</span>
-                <h2>Does the model learn?</h2><p className="notice">Archive: these charts and saved games describe the original local study. The four model pages show evidence for their own checkpoint versions.</p>
-                {research?.supervised ? (
-                  <Chart data={research.supervised.history} />
-                ) : (
-                  <p className="muted">
-                    Training curves will appear here after a measured run. No
-                    synthetic results are displayed.
-                  </p>
-                )}
-                <p className="micro">
-                  Mean squared error against teacher WDL targets. Lower error is
-                  not necessarily stronger play.
-                </p>
-              </section>
-              <section className="card">
-                <span className="tiny-label">02 / PLAYING STRENGTH</span>
-                <h2>
-                  {research?.summary
-                    ? `${(research.summary.score * 100).toFixed(1)}%`
-                    : "Awaiting matches"}
-                  <small> {research?.summary ? "match score" : ""}</small>
-                </h2>
-                {research?.summary && (
-                  <>
-                    <p>
-                      {research.summary.games} games · 95% paired interval{" "}
-                      {research.summary.ci95
-                        .map((v) => (v * 100).toFixed(1) + "%")
-                        .join(" – ")}
-                    </p>
-                    <span className="result-label">
-                      {research.summary.conclusion}
-                    </span>
-                    <p className="micro">
-                      {research.summary.capped_games} games reached the move
-                      cap. See the report for sensitivity analysis.
-                    </p>
-                  </>
-                )}
-                <p className="muted">
-                  Colors are swapped for each opening. Search budgets are held
-                  constant.
-                </p>
-              </section>
-            </div>
-            {research?.aggregate && (
-              <section className="card seed-results">
-                <span className="tiny-label">
-                  ROBUSTNESS / ALL TRAINING SEEDS
-                </span>
-                <h2>One result is not the whole experiment.</h2>
-                <p className="muted">
-                  The headline above is seed {research.aggregate.representative}
-                  , selected using development matches. Each row below uses 400
-                  held-out games. Training-seed variation is separate from match
-                  uncertainty.
-                </p>
-                <div className="table-scroll">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Seed</th>
-                        <th>Score</th>
-                        <th>95% paired interval</th>
-                        <th>Conclusion</th>
-                        <th>Records</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {research.aggregate.runs.map((r) => (
-                        <tr key={r.seed}>
-                          <td>{r.seed}</td>
-                          <td>{(r.summary.score * 100).toFixed(1)}%</td>
-                          <td>
-                            {r.summary.ci95
-                              .map((x) => (x * 100).toFixed(1) + "%")
-                              .join(" – ")}
-                          </td>
-                          <td>{r.summary.conclusion}</td>
-                          <td>
-                            <a
-                              href={`/research/games-seed-${r.seed}.json`}
-                              download
-                            >
-                              Download games
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <img
-                  className="strength-chart"
-                  src="/research/strength.png"
-                  alt="Development playing performance by training games and compute for each seed"
-                />
-              </section>
-            )}
-            <div className="workspace replay">
-              <section className="board-panel">
-                <div className="player-strip">
-                  <BookOpen size={18} />
-                  <strong>Inside an experiment game</strong>
-                </div>
-                <Board game={replayGame} disabled lastMove={undefined} />
-              </section>
-              <aside>
+              <div className="research-grid">
                 <section className="card">
-                  <span className="tiny-label">03 / REPLAY THE EVIDENCE</span>
-                  <h2>Every result has a game.</h2>
-                  <p className="muted">
-                    Inspect the decisions behind a score, including draws and
-                    regressions.
+                  <span className="tiny-label">01 / FITTING THE EVALUATOR</span>
+                  <h2>Does the model learn?</h2>
+                  <p className="notice">
+                    Archive: these charts and saved games describe the original
+                    local study and its released checkpoints. Later studies are
+                    listed separately above.
                   </p>
-                  <label className="field">
-                    Recorded game
-                    <select
-                      value={replay}
-                      onChange={(e) => {
-                        setReplay(Number(e.target.value));
-                        setReplayPly(0);
-                      }}
-                    >
-                      {research?.games?.map((g, i) => (
-                        <option value={i} key={i}>
-                          Game {i + 1} · {g.opening_id} · {g.candidate_color}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <div className="actions">
-                    <button
-                      disabled={!selectedReplay || replayPly === 0}
-                      onClick={() => setReplayPly((p) => Math.max(0, p - 1))}
-                    >
-                      <ArrowLeft size={16} /> Back
-                    </button>
-                    <button
-                      disabled={
-                        !selectedReplay ||
-                        (() => {
-                          try {
-                            const g = new Chess();
-                            g.loadPgn(selectedReplay.pgn);
-                            return replayPly >= g.history().length;
-                          } catch {
-                            return true;
-                          }
-                        })()
-                      }
-                      onClick={() => setReplayPly((p) => p + 1)}
-                    >
-                      Next <ArrowRight size={16} />
-                    </button>
-                    <span className="micro">Ply {replayPly}</span>
-                  </div>
-                  {selectedReplay && (
-                    <button
-                      className="text-button"
-                      onClick={() =>
-                        download("experiment-game.pgn", selectedReplay.pgn)
-                      }
-                    >
-                      Download this game <Download size={14} />
-                    </button>
+                  {research?.supervised ? (
+                    <Chart data={research.supervised.history} />
+                  ) : (
+                    <p className="muted">
+                      Training curves will appear here after a measured run. No
+                      synthetic results are displayed.
+                    </p>
                   )}
+                  <p className="micro">
+                    Mean squared error against teacher WDL targets. Lower error
+                    is not necessarily stronger play.
+                  </p>
                 </section>
                 <section className="card">
-                  <span className="tiny-label">READ THIS RESULT CAREFULLY</span>
-                  <ul className="limitations">
-                    {(
-                      research?.limitations || [
-                        "Experiments have not yet been published.",
-                      ]
-                    ).map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
+                  <span className="tiny-label">02 / PLAYING STRENGTH</span>
+                  <h2>
+                    {research?.summary
+                      ? `${(research.summary.score * 100).toFixed(1)}%`
+                      : "Awaiting matches"}
+                    <small> {research?.summary ? "match score" : ""}</small>
+                  </h2>
+                  {research?.summary && (
+                    <>
+                      <p>
+                        {research.summary.games} games · 95% paired interval{" "}
+                        {research.summary.ci95
+                          .map((v) => (v * 100).toFixed(1) + "%")
+                          .join(" – ")}
+                      </p>
+                      <span className="result-label">
+                        {research.summary.conclusion}
+                      </span>
+                      <p className="micro">
+                        {research.summary.capped_games} games reached the move
+                        cap. See the report for sensitivity analysis.
+                      </p>
+                    </>
+                  )}
+                  <p className="muted">
+                    Colors are swapped for each opening. Search budgets are held
+                    constant.
+                  </p>
                 </section>
-              </aside>
-            </div>
+              </div>
+              {research?.aggregate && (
+                <section className="card seed-results">
+                  <span className="tiny-label">
+                    ROBUSTNESS / ALL TRAINING SEEDS
+                  </span>
+                  <h2>One result is not the whole experiment.</h2>
+                  <p className="muted">
+                    The headline above is seed{" "}
+                    {research.aggregate.representative}, selected using
+                    development matches. Each row below uses 400 held-out games.
+                    Training-seed variation is separate from match uncertainty.
+                  </p>
+                  <div className="table-scroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Seed</th>
+                          <th>Score</th>
+                          <th>95% paired interval</th>
+                          <th>Conclusion</th>
+                          <th>Records</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {research.aggregate.runs.map((r) => (
+                          <tr key={r.seed}>
+                            <td>{r.seed}</td>
+                            <td>{(r.summary.score * 100).toFixed(1)}%</td>
+                            <td>
+                              {r.summary.ci95
+                                .map((x) => (x * 100).toFixed(1) + "%")
+                                .join(" – ")}
+                            </td>
+                            <td>{r.summary.conclusion}</td>
+                            <td>
+                              <a
+                                href={`/research/games-seed-${r.seed}.json`}
+                                download
+                              >
+                                Download games
+                              </a>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <img
+                    className="strength-chart"
+                    src="/research/strength.png"
+                    alt="Development playing performance by training games and compute for each seed"
+                  />
+                </section>
+              )}
+              <div className="workspace replay">
+                <section className="board-panel">
+                  <div className="player-strip">
+                    <BookOpen size={18} />
+                    <strong>Inside an experiment game</strong>
+                  </div>
+                  <Board game={replayGame} disabled lastMove={undefined} />
+                </section>
+                <aside>
+                  <section className="card">
+                    <span className="tiny-label">03 / REPLAY THE EVIDENCE</span>
+                    <h2>Every result has a game.</h2>
+                    <p className="muted">
+                      Inspect the decisions behind a score, including draws and
+                      regressions.
+                    </p>
+                    <label className="field">
+                      Recorded game
+                      <select
+                        value={replay}
+                        onChange={(e) => {
+                          setReplay(Number(e.target.value));
+                          setReplayPly(0);
+                        }}
+                      >
+                        {research?.games?.map((g, i) => (
+                          <option value={i} key={i}>
+                            Game {i + 1} · {g.opening_id} · {g.candidate_color}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <div className="actions">
+                      <button
+                        disabled={!selectedReplay || replayPly === 0}
+                        onClick={() => setReplayPly((p) => Math.max(0, p - 1))}
+                      >
+                        <ArrowLeft size={16} /> Back
+                      </button>
+                      <button
+                        disabled={
+                          !selectedReplay ||
+                          (() => {
+                            try {
+                              const g = new Chess();
+                              g.loadPgn(selectedReplay.pgn);
+                              return replayPly >= g.history().length;
+                            } catch {
+                              return true;
+                            }
+                          })()
+                        }
+                        onClick={() => setReplayPly((p) => p + 1)}
+                      >
+                        Next <ArrowRight size={16} />
+                      </button>
+                      <span className="micro">Ply {replayPly}</span>
+                    </div>
+                    {selectedReplay && (
+                      <button
+                        className="text-button"
+                        onClick={() =>
+                          download("experiment-game.pgn", selectedReplay.pgn)
+                        }
+                      >
+                        Download this game <Download size={14} />
+                      </button>
+                    )}
+                  </section>
+                  <section className="card">
+                    <span className="tiny-label">
+                      READ THIS RESULT CAREFULLY
+                    </span>
+                    <ul className="limitations">
+                      {(
+                        research?.limitations || [
+                          "Experiments have not yet been published.",
+                        ]
+                      ).map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  </section>
+                </aside>
+              </div>
+            </details>
           </>
         )}
         <section className="method-strip">

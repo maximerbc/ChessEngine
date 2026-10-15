@@ -1,0 +1,89 @@
+{
+  "identity": {
+    "config": {
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "policy_seed": 20261015,
+      "pilot_seed": 20261016,
+      "sampling_seed": 20261017,
+      "train_openings": 1000,
+      "pilot_games": 20,
+      "pilot_simulations": [
+        128,
+        256,
+        512
+      ],
+      "pilot_min_completion": 0.8,
+      "pilot_min_root_coverage": 0.5,
+      "pilot_max_dominant_fraction": 0.9,
+      "pilot_max_ram_mb": 4096,
+      "batches": 10,
+      "games_per_batch": 100,
+      "minimum_completed_per_batch": 80,
+      "positions_per_game": 32,
+      "update_epochs": 1,
+      "batch_size": 256,
+      "learning_rate": 0.0001,
+      "weight_decay": 0.0,
+      "anchor_weights": {
+        "baseline": 0.0,
+        "anchored": 0.1
+      },
+      "c_puct": 1.5,
+      "noise_fraction": 0.25,
+      "noise_mass": 10.0,
+      "exploration_plies": 20,
+      "target_temperature": 1.0,
+      "max_plies": 512,
+      "development_batches": [
+        5,
+        10
+      ],
+      "development_pairs": 40,
+      "final_pairs": 200,
+      "control_pairs": 40,
+      "reference_pairs": 40,
+      "equal_time_ms": 100,
+      "reference_nodes": 1000000000,
+      "bootstrap_resamples": 10000,
+      "bootstrap_seed": 2026
+    },
+    "inputs": {
+      "artifact-447c94f87ae99554": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+      "artifact-626cf38b5c930501": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+      "artifact-5f1c2c5cf4c001f3": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635",
+      "configs/openings.json": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+      "artifact-4d609540c1805e10": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+      "artifact-d5fb92ced1fe12cf": "789d6699cebe0ad2cf2987cc8b924765af83879aea522ccb284fdfc437e343cb",
+      "artifacts/models/manifest.json": "39e8edba79ff4f36881fa805bdb493bd2bb58c769512200b5e8587d0b06ca6c1"
+    },
+    "code": {
+      "pv_study": "96691b2f128ecd0e7b633c06f82c370428be5cac10cc5d2f0641d8d7a0eade43",
+      "pv_audit": "2bc28929363c58a1be623507f12fa232f8fa3dd1abce4930225defc3a7d2edd0",
+      "pv_data": "bc1d86f302600cba40a019a16b915fb0ec2f83ef755cf4994cc6acb3e14a8744",
+      "pv_train": "c2892c01b5a14a05c45b56058b032e1bc3f547c8c402bb1fa201d0a7b6a2d6b0",
+      "pv_games": "a62433a3eb65237dde1a3500feed08c74eb305c15ce984a3e5e3994d861901f9",
+      "puct": "dad65fe8b4b1727ef62e42a87c9c7eab32af09b348bbe9abd62d05a095353e43",
+      "policy_value": "3ad7a88be7904e217819b127d32c0207c1e8db9ef692a91652a7241c9df9cf05",
+      "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+      "ranking": "facce7f6ed301ea81deb7e815446e31ff1247181ed9e8e5a183464713f505d55",
+      "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+      "engine": "c2602a16550500aad8246530b3a2fac1a23c6b2a69ddc3538316012921a3c929",
+      "evaluate": "31b1477529c4ee7c42cb6e394d4016cf39faf4cc67b0d1a4f9bd5df41f26a28a",
+      "rl_improvement": "d721c9cb4f0829e156483e8fc1a8d5b83ac1fc2ec5f84b017c96d6d272e2f0ab",
+      "train": "00b512b53402f015eb6c11e1886ac075c08f55f9419ea5fe18fdb0c3fae87cfb",
+      "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a",
+      "data": "8577aee898a8a56844d7170f7f3626fa5c6b9652a00f52ecff222e69e8870c5f"
+    },
+    "protocol_sha256": "1831d3bc0a6fed8e7ace713a605f203a1fcb4ad87b3cafef43805b967c21553c"
+  },
+  "provenance": {
+    "commit": "e0b25a7c21f30d747352d57d1a660b2fe250d22a",
+    "dirty": true,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  }
+}

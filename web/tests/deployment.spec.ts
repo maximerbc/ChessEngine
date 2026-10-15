@@ -12,7 +12,7 @@ test.describe("production containers", () => {
     ).toBeVisible();
     for (const name of [
       /Supervised model Learned from Stockfish/,
-      /Self-play model Learned from self-play/,
+      /Earlier released self-play Learned from self-play/,
     ]) {
       await page.getByRole("button", { name }).click();
       await page
@@ -50,6 +50,9 @@ test.describe("production containers", () => {
       page.getByText("The live engine is unavailable"),
     ).toBeVisible();
     await page.getByRole("button", { name: "Research", exact: true }).click();
+    await page
+      .getByText("Original study: charts and saved games", { exact: true })
+      .click();
     await expect(page.locator(".seed-results tbody tr")).toHaveCount(3);
     const pdf = await page.request.get("/research/report.pdf");
     expect(pdf.headers()["content-type"]).toContain("pdf");
