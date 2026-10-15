@@ -1,0 +1,30 @@
+[
+  {
+    "depth": 2,
+    "engine": "ordinary",
+    "completed": 40,
+    "total": 40,
+    "mean_nodes_completed": 423.7
+  },
+  {
+    "depth": 2,
+    "engine": "guided",
+    "completed": 40,
+    "total": 40,
+    "mean_nodes_completed": 387.3
+  },
+  {
+    "depth": 3,
+    "engine": "ordinary",
+    "completed": 40,
+    "total": 40,
+    "mean_nodes_completed": 2779.6
+  },
+  {
+    "depth": 3,
+    "engine": "guided",
+    "completed": 40,
+    "total": 40,
+    "mean_nodes_completed": 2752.4
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "complete": true,
+  "games": 960,
+  "comparisons": [
+    {
+      "comparison": "development-42-nodes",
+      "games": 80,
+      "score": 0.53125,
+      "sha256": "852ea72e9579f1dfee366aeafc1877adf98f4f8670ca9311186c9b57e3eeee67"
+    },
+    {
+      "comparison": "development-42-time",
+      "games": 80,
+      "score": 0.51875,
+      "sha256": "c5ad645a45a34b0c4a2388b4f8e4bd7f37122b95d49d480b121208c30a39a078"
+    },
+    {
+      "comparison": "development-43-nodes",
+      "games": 80,
+      "score": 0.51875,
+      "sha256": "094b58818caba1246ca1cb328e6228b89c7605f0e05833f20c69a38b9a91ad35"
+    },
+    {
+      "comparison": "development-43-time",
+      "games": 80,
+      "score": 0.525,
+      "sha256": "6a232dd545e932436d0ee990415d67aafd3238aa7a357bac010ad9322c6e3f4f"
+    },
+    {
+      "comparison": "development-44-nodes",
+      "games": 80,
+      "score": 0.525,
+      "sha256": "d249100b950dfa2f8e1aab4bac589af045fe9dcb783dcf696876abcf00c23fd4"
+    },
+    {
+      "comparison": "development-44-time",
+      "games": 80,
+      "score": 0.5125,
+      "sha256": "6a7eb2892694167563c322838a147eff7027b26ced0fbe5e4ed8315425fee871"
+    },
+    {
+      "comparison": "final-42-time",
+      "games": 400,
+      "score": 0.4875,
+      "sha256": "469f622d0b7d1eac93406c82b9dcecc82b3ce489f468bd7d72b94382d162c5f4"
+    },
+    {
+      "comparison": "release-check",
+      "games": 80,
+      "score": 0.4625,
+      "sha256": "df21ae692f6c654b81291050fee3a63816c68ef047852deb671312e5cd9df5bc"
+    }
+  ],
+  "release_eligible": false
+}

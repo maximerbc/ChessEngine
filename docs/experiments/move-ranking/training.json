@@ -1,5 +1,5 @@
 {
-  "status": "training complete; match evaluation pending",
+  "status": "training and match evaluation complete",
   "labeling": {
     "positions": 55006,
     "total": 55006,
