@@ -61,9 +61,16 @@ def main():
     p = sub.add_parser("export")
     p.add_argument("checkpoint")
     p.add_argument("output")
+    p = sub.add_parser("policy-value", help="Research-only policy/value pilot, study and report")
+    p.add_argument("--config", default="configs/policy-value.json")
+    p.add_argument("--stage", choices=["benchmark", "prepare", "pilot", "all", "report"], default="pilot")
     args = parser.parse_args()
     with threadpool_limits(limits=1):
-        if args.command == "prepare":
+        if args.command == "policy-value":
+            from .pv_study import benchmark, run, report
+            cfg = read_json(args.config)
+            result = benchmark(cfg) if args.stage == "benchmark" else report(cfg) if args.stage == "report" else run(cfg, args.stage)
+        elif args.command == "prepare":
             from .data import prepare
 
             result = prepare(args.source, args.output, args.limit, args.seed, args.reserved)

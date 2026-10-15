@@ -97,3 +97,33 @@ The [fixed-data study protocol](docs/fixed-data-improvements.md) compares optimi
 [Averaging study](docs/experiments/supervised-averaging/index.html): prediction averaging improves MSE at higher inference cost; weight averaging misses the predefined adoption threshold. [Protocol and RL handoff](docs/supervised-averaging.md).
 
 [Stronger RL study](docs/experiments/rl-improvement/index.html): 3,000 self-play games and 1,200 final comparison games. RL scored 44.13% against its supervised initializer (95% paired interval 41.54–46.58%), supporting regression under this protocol. Released models remain unchanged. [Methods and limitations](docs/rl-improvement.md).
+
+## Demo and research journal
+
+The website has two main destinations: **Demo** (Play and Compare share the current position/history) and **Research** (all completed studies plus the ongoing policy/value experiment). The historical interactive charts and game viewer remain in an expandable original-study archive. `/lab/*` links resolve to the matching research entry or classical demo; they do not substitute an unreleased checkpoint for a released one. `VITE_SHOWCASE=1` still enables explicitly staged, identity-checked local preview routes with matching preview assets.
+
+Publish only the explicit report allowlist, independently of any model-promotion gate:
+
+```sh
+.venv/bin/python -m chessengine.research_catalog
+npm --prefix web run build
+```
+
+This does not copy checkpoints or change the released manifest/default. The newer move-guided candidate remains a local preview after its failed release gate. The older released self-play checkpoint is a distinct model from the later negative v3 RL study.
+
+## Local policy/value research
+
+See `docs/policy-value-preregistration.md` and `configs/policy-value.json`. This adapted AlphaZero-inspired path uses the existing v3 supervised initializer, a fresh legal-move policy head, and history-preserving PUCT. Exactly two treatments compare visit-policy/outcome learning with a detached 0.1 prediction anchor. It never enters the production API automatically.
+
+```sh
+# Disposable timing benchmark; report the estimate before the pilot.
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m chessengine.pv_study configs/policy-value.json --stage benchmark
+# Freeze inputs/code and run the independent quality-gated pilot.
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_study configs/policy-value.json --stage pilot
+# Only after a passing pilot and communicating its measured full-study forecast:
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_study configs/policy-value.json --stage all
+# Regenerate the public research index/report from actual evidence.
+.venv/bin/python -m chessengine.research_catalog
+```
+
+All stages resume from verified inputs and completed games. CPU updates resume at minibatch boundaries; interrupted simulation-budget games replay from deterministic seeds. Wall-clock match trajectories are not promised bitwise reproducible. Do not change scientific code/configuration to bypass a frozen identity mismatch. Historical studies and negative results remain intact; no paid resources or remote pushes are part of this workflow.

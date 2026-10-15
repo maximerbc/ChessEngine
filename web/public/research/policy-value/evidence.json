@@ -1,0 +1,101 @@
+{
+  "status": {
+    "status": "pilot_in_progress"
+  },
+  "paid_cost_cad": 0,
+  "model_promotion": false,
+  "protocol_sha256": "09d90a3e427b516f2cd069212844b6ad220b9ff537d38cd02eb58153e8908c8a",
+  "pilot-summary": [
+    {
+      "simulations": 128,
+      "attempted": 20,
+      "completed": 20,
+      "mean_game_seconds": 31.919427324901335,
+      "p90_plies": 325.70000000000005,
+      "root_coverage": 0.6298115976415329,
+      "dominant_fraction": 0.061812851209381875,
+      "mean_depth": 5.488639139995113,
+      "peak_ram_mb": 176.6875,
+      "game_hashes": [
+        "fe0389a1159098346112083dfb5ed63e6350f8c5cebda96954c1d04a21ff41b8",
+        "7e784acf866536bdb64b8d25a9fc5a127cb0ff5615eee000ca484f7d87c79bd4",
+        "d8693528a6d378474d5d1be62f9961e8e2cdd2141b1e596c438bd6cd262b5536",
+        "a44b34e8cb4154f3f6570234f1054fbcecf8d84c8076de9fcd0cb16ed5a2f3c6",
+        "11f8436b998334427d142de0981fb201450a8a407fd720874f7b7b52917801de",
+        "fd0c5bd16e725441a78d265bb13b27558a9c55b7e542c8f038642b94560a550f",
+        "8130aa55af96b07c21bbb55c9659a8c457e832389a1f5ba7e9a4ba64497c64bc",
+        "9fc446999e1c18bf8562395fbd459d46df2dbe522d7b6b864e0b8d981856d514",
+        "a632f2479885643449d1ea57e44cf1316dee48e600c5104d9b878eec21ede8f6",
+        "2471f863c34f1ed37925550108f34d61a3a8a7dee66b1064ad88e19bce2c0cb2",
+        "bcd4e3e41b6ec536fd362f534a0948ab2d820bef044f7a6fb4023fed496d53df",
+        "41391bce3c7eb8649b1674c5abc0cb84af37b91cc0c530778caf59919a06b068",
+        "d2ec189a53a595eb510b12e19c800a68b5e65b42329ca08d2f182c69fca974f8",
+        "daccb356610fe2119f87510a960feb353b9a2e044a3c05df1c80df38764640aa",
+        "040e82eff05511f28ff9cdb8447b75ce23485a4a81c8a592b7f048808d6f26f7",
+        "aa20fbae1001d8bcd6ce12718ee9eaf4c0e7ab79d78c9bac5815df7f078d1daa",
+        "664a4911f012b8bcf924400fc54c2a0b3007482522f6879b69613cd00baea225",
+        "172765cdd90d748e3d9a2ec6a2fe072f1fd17bc4753ad6d5cf93a918488893d9",
+        "b34c210b0759ca6f6c0176c1bf3bcbdc2ee0d02ff5ec3708fb5697d78aeeaf94",
+        "559dbf764eba13a74fc9c2401a4b01ce8ef0369754c9ca70f970a2de54b30864"
+      ],
+      "qualifies": true
+    }
+  ],
+  "openings-manifest": {
+    "signature": "921e540fff5d68efccaad13ec2b5375cd9903aec2142faeeef6a72f1477c5f4e",
+    "inputs": {
+      "artifact-5f1c2c5cf4c001f3": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635",
+      "artifact-626cf38b5c930501": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+      "configs/openings.json": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+      "artifact-4d609540c1805e10": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+      "artifact-d5fb92ced1fe12cf": "789d6699cebe0ad2cf2987cc8b924765af83879aea522ccb284fdfc437e343cb"
+    },
+    "sizes": {
+      "pilot": 20,
+      "train": 1000,
+      "development": 40,
+      "final": 200,
+      "control": 40,
+      "reference": 40
+    },
+    "sha256": "6e79744eacd9ef72fe4174eb8414bcb983be341409970424ab56d06a7bbd4bbc",
+    "scanned": 32831,
+    "canonical_overlaps": 0,
+    "source_game_overlaps": 0,
+    "provenance": {
+      "commit": "e0b25a7c21f30d747352d57d1a660b2fe250d22a",
+      "dirty": true,
+      "python": "3.10.6",
+      "platform": "macOS-15.6.1-arm64-arm-64bit"
+    }
+  },
+  "initial-seal": {
+    "sha256": "79cccfbb7fe7c4d2e7d10a7531c94d05488745d24902e3b66a77db6ee641e0c0"
+  },
+  "environment": {
+    "packages": {
+      "torch": "2.7.0",
+      "numpy": "2.2.6",
+      "chess": "1.11.2",
+      "threadpoolctl": "3.6.0"
+    },
+    "pyproject_sha256": "08a808e0bc849f507286aabe406ef96934b4a218fb9dffa5fcc5dc521d2a719b",
+    "compute": "CPU, single numerical-library thread",
+    "paid_cost_cad": 0
+  },
+  "pilot_progress": {
+    "128": 20,
+    "256": 4,
+    "512": 0
+  },
+  "initialization": {
+    "supervised_value_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+    "policy_seed": 20261015,
+    "run_seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "training": {}
+}

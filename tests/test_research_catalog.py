@@ -1,0 +1,80 @@
+from html.parser import HTMLParser
+from pathlib import Path
+import json
+import pytest
+from chessengine.common import digest
+from chessengine.research_catalog import publish, sanitize
+
+
+class Links(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.targets = []
+
+    def handle_starttag(self, tag, attrs):
+        self.targets.extend(value for key, value in attrs if key in ("href", "src"))
+
+
+def test_report_publication_is_independent_of_failed_model_gate(tmp_path):
+    original = {
+        str(p): digest(p)
+        for directory in ["artifacts/models", "web/public/models"]
+        for p in Path(directory).glob("*")
+        if p.is_file()
+    }
+    rows = publish(tmp_path / "research")
+    assert len(rows) == 9
+    rank = next(r for r in rows if r["id"] == "move-ranking")
+    assert rank["result"] == "inconclusive" and rank["availability"] == "local preview"
+    assert json.load(open("docs/experiments/move-ranking/final-audit.json"))["release_eligible"] is False
+    for p, sha in original.items():
+        assert digest(p) == sha
+    for document in (tmp_path / "research").glob("*/index.html"):
+        text = document.read_text()
+        assert "/Users/" not in text and "runs/" not in text and "data/" not in text
+        links = Links()
+        links.feed(text)
+        for link in links.targets:
+            if link.startswith(("https://", "#", "/research")):
+                continue
+            assert (document.parent / link).is_file(), link
+
+
+def test_private_links_are_removed_and_unlisted_images_rejected():
+    doc = sanitize('<a href="../../runs/private.json">Evidence</a><img src="curves.png">', {"curves.png"})
+    assert "../../runs/" not in doc and "Evidence" in doc
+    with pytest.raises(ValueError, match="non-allowlisted"):
+        sanitize('<img src="../../runs/private.png">', set())
+
+
+def test_public_evidence_keeps_distinct_artifact_hashes_and_omits_paths(tmp_path):
+    from chessengine.pv_reporting import public, build
+
+    raw = {"runs/a/one.npz": "a" * 64, "runs/b/two.npz": "b" * 64}
+    clean = public(raw)
+    assert len(clean) == 2 and set(clean.values()) == set(raw.values())
+    root = tmp_path / "run"
+    root.mkdir()
+    from chessengine.common import write_json
+
+    write_json(
+        root / "protocol.json",
+        {
+            "identity": {
+                "inputs": {"runs/private.npz": "f" * 64},
+                "config": {
+                    "pilot_simulations": [128, 256, 512],
+                    "anchor_weights": {"baseline": 0.0, "anchored": 0.1},
+                    "seeds": [42, 43, 44],
+                    "initializer": "runs/private.npz",
+                    "policy_seed": 20261015,
+                },
+            }
+        },
+    )
+    evidence = build(root, tmp_path / "report")
+    assert evidence["status"]["status"] == "pilot_in_progress"
+    text = (tmp_path / "report/index.html").read_text()
+    assert "No completed final comparison is claimed" in text
+    assert "<svg" not in text
+    assert "runs/" not in (tmp_path / "report/protocol.json").read_text()

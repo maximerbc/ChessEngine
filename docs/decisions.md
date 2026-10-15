@@ -63,3 +63,11 @@ The user requested investigation and remediation of the completed negative RL re
 ## 2026-10-14 — Supervised move ranking and four model pages
 
 The user approved four dedicated model pages and supervised root move ordering, extending the original no-policy-network boundary. A separate copied 128/64 board encoder plus a move scorer learns Stockfish first-PV targets; the existing value network remains frozen. Root-only ordering limits inference overhead and never filters legal moves. Compare classification, fixed-depth work and equal-time strength separately. Use source-game-separated 50k/5k target subsets, three fixed seeds, preselected seed-42 demo and fresh final openings. The RL page uses a real live-self-play checkpoint with its negative evidence; the anchored replay result remains diagnostic research. The latest supervised default requires a development release check against the old default. No additional live RL run is authorized by this batch.
+
+## 2026-10-15 — Research consolidation and policy/value exception
+
+The user authorized the bounded policy/value plan after PRs #9/#10 merged. The inspected local tree is identical to merged main (GitHub comparison: zero changed files); the implementation branch starts from that tree because remote CLI authentication is unavailable. Preserve the merge baseline identity in provenance; user-managed pushes remain mandatory.
+
+Consolidate the merged website into Demo and Research, retaining its board, comparison mode, historical report and exact release identities. Publish an explicit report-asset allowlist independently of the failed checkpoint release gate. The existing released RL default belongs to the original local study; do not attach later v3 regression evidence to it.
+
+Permit a named local research PUCT strategy with one shared policy/value trunk and legal-move scorer. It is separate from released alpha-beta search, uses NumPy inference, history-preserving rule draws and normalized terminal outcomes, and has no transposition merging or tree reuse. Freeze actors per batch. Compare outcome/visit learning with an otherwise identical 0.1 detached prediction anchor. Use common initial parameters, three paired seeds and prospective quality gates; no ranker weights or teacher labels. No release or paid compute is authorized by this experiment.

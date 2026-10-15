@@ -10,6 +10,8 @@ server {
         try_files $uri =404;
         expires 1y;
     }
+    location = /research/ { return 308 /research$is_args$args; }
+    location = /research { try_files /index.html =404; }
     location /research/ { try_files $uri =404; }
     location /models/ { try_files $uri =404; }
     location ~ /\. { return 404; }
