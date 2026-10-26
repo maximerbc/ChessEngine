@@ -1,12 +1,17 @@
 FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
-    MODEL_MANIFEST=/app/artifacts/models/manifest.json REQUIRE_MODELS=1
+    MODEL_MANIFEST=/app/artifacts/models/manifest.json REQUIRE_MODELS=1 \
+    STOCKFISH_PATH=/opt/stockfish/stockfish
 WORKDIR /app
 COPY requirements-runtime.txt pyproject.toml README.md LICENSE ./
 COPY src/chessengine ./src/chessengine
+COPY configs/comparison.json ./configs/comparison.json
+COPY scripts/install_stockfish.py /tmp/install_stockfish.py
+RUN python /tmp/install_stockfish.py /opt/stockfish && rm /tmp/install_stockfish.py
 RUN pip install --no-cache-dir -r requirements-runtime.txt && pip install --no-cache-dir --no-deps . \
     && useradd --uid 10001 --create-home engine
-COPY artifacts/models/manifest.json artifacts/models/*.npz ./artifacts/models/
+COPY artifacts/models/ ./artifacts/models/
+RUN python -c "import json,pathlib; p=pathlib.Path('artifacts/models'); m=json.loads((p/'manifest.json').read_text()); allowed={r['file'] for r in m['models']}; actual={f.name for f in p.glob('*.npz')}; assert actual == allowed, f'Packaged model files {sorted(actual)} do not match release manifest {sorted(allowed)}'"
 USER 10001
 CMD ["sh", "-c", "exec uvicorn chessengine.api:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1"]

@@ -8,11 +8,17 @@
 !src/
 !src/chessengine/
 !src/chessengine/*.py
+!configs/
+!configs/comparison.json
+!scripts/
+!scripts/install_stockfish.py
 !artifacts/
 !artifacts/models/
+# Re-exclude the contents: allowing the parent directory also allows its files.
+artifacts/models/*
 !artifacts/models/manifest.json
 !artifacts/models/supervised.npz
-!artifacts/models/rl.npz
+!artifacts/models/evolutionary.npz
 !web/
 !web/package.json
 !web/package-lock.json
@@ -26,5 +32,3 @@
 !web/public/models/**
 !web/public/research/
 !web/public/research/**
-
-!artifacts/models/ranker.npz

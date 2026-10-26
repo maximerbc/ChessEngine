@@ -12,7 +12,7 @@ test.describe("production containers", () => {
     ).toBeVisible();
     for (const name of [
       /^Supervised A neural network learns/,
-      /^Self-play Starting from the supervised/,
+      /^Classical Handcrafted/,
     ]) {
       await page.getByRole("button", { name }).click();
       await page
@@ -20,7 +20,31 @@ test.describe("production containers", () => {
         .click();
       await page.getByRole("button", { name: "e4", exact: true }).click();
       await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
-      await expect(page.locator(".analysis-card .hash")).toContainText("Checkpoint");
+      await expect(page.locator(".analysis-card .hash")).toContainText(
+        "Checkpoint",
+      );
+      const comparison = page.getByRole("region", {
+        name: "Stockfish comparison",
+        exact: true,
+      });
+      await comparison
+        .getByRole("button", { name: "Compare with Stockfish", exact: true })
+        .click();
+      await expect(comparison.getByRole("table")).toBeVisible({
+        timeout: 20000,
+      });
+      await expect(comparison.getByRole("alert")).toHaveCount(0);
+      await expect(
+        comparison.getByRole("row", { name: /Position evaluation/ }),
+      ).toBeVisible();
+      await expect(
+        comparison.getByRole("row", { name: /After search/ }),
+      ).toBeVisible();
+      await comparison
+        .getByText("Search details and model version", { exact: true })
+        .click();
+      await expect(comparison).toContainText("Stockfish 19");
+      await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
       const download = page.waitForEvent("download");
       await page
         .getByRole("button", { name: "Export PGN", exact: true })

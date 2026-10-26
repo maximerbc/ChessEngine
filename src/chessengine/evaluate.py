@@ -18,7 +18,8 @@ def evaluator_for(spec):
         from .ranking import load_guided
 
         return load_guided(str(spec).removeprefix("guided:"))
-    return Handcrafted() if spec == "handcrafted" else NumpyEvaluator(spec)
+    from .evolution_model import load_evaluator
+    return Handcrafted() if spec == "handcrafted" else load_evaluator(spec)
 
 
 def identity(spec):

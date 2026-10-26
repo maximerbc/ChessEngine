@@ -83,3 +83,12 @@ Gracefully stop the local continuation, preserve its eight partial-main-run game
 Present Classical, Supervised and Self-play within the single Demo, retaining Research as the other main destination. All use existing released evaluators and shared alpha-beta search. Preserve the manifest-selected default, artifacts, API identities and four-model local-preview compatibility. The public approach definitions are separate from experimental preview descriptions.
 
 Explain evaluation, search and evidence together, with expandable mathematics/checkpoint details. Supervision learns Stockfish assessments, not moves; gameplay does not train models. Match released neural checkpoints against original-study identities before showing its evidence. The original self-play result is inconclusive; later RL regression and policy/value feasibility have separate identities and scope. Show unavailable opponents explicitly without substituting a fallback. Compare available released opponents in the same order with identical position history and budgets.
+
+
+## 2026-10-26 — Evolutionary evaluation and retiring live self-play
+
+The user authorized an independently initialized, teacher-free CMA-ES evaluator and full quality-gated local study. All evaluation weights, including material effects, are learned; 63 human-designed summaries are explicitly disclosed. The prospective playable representative is seed 42. The frozen protocol specifies pilot, source separation, selection, qualification, fresh confirmation, cap sensitivity and release conditions. A failed pilot stops this study without automatic retries.
+
+Retire RL from public/preview play and analysis, keeping private reproducibility artifacts and a prominent research archive. The original local study was inconclusive; the separate larger study regressed. Historical checkpoint identities are immutable and separate from active release identities. Public cards become Classical, Supervised and Evolutionary; the latter stays disabled until qualified and Supervised remains default. Manifest v3 explicitly declares required models. The old requirement to deploy both Supervised and RL is superseded.
+
+Candidate tournament caps retain unfinished rule results, with neutral tournament fitness reported separately; there is no fabricated position outcome target. Confirmatory final results may block promotion under a preregistered rule, never select a different model. No paid compute, remote pushes, deployment or closed policy/value continuation is authorized.

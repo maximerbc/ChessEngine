@@ -24,16 +24,16 @@ export const releasedApproaches = [
     formula: "L = mean((vθ(s) − yStockfish)²)",
   },
   {
-    id: "rl",
-    name: "Self-play",
+    id: "evolutionary",
+    name: "Evolutionary",
     description:
-      "Starting from the supervised network, this experimental evaluator learns from completed self-play game outcomes. The same alpha-beta search chooses its moves.",
+      "A small neural evaluator evolves through tournament results. All evaluation weights start randomly; alpha-beta search chooses its moves.",
     evaluation:
-      "The supervised evaluator is updated using wins, draws and losses from completed self-play games, with a frozen actor for each batch. Truncated games are excluded from training.",
+      "CMA-ES tests competing neural evaluators against fixed opponents and earlier generations. Human-designed features describe the board; every evaluation weight is learned without Stockfish labels or a fixed material score.",
     evidence:
-      "The original three-seed local study found inconclusive evidence of improvement. This released checkpoint is separate from the later negative RL study and the policy/value feasibility pilot.",
+      "Availability requires a completed three-seed study and passing qualification and fresh-final gates. See the evolutionary research entry for the measured results and limitations.",
     formula:
-      "z ∈ {−1, 0, +1}; L = mean((vθ(s) − z)²), with equal game weighting",
+      "vθ(s) = tanh(u · ReLU(Wx + b) + w · x + c); 324 learned parameters",
   },
 ] as const;
 
@@ -73,7 +73,8 @@ export function ReleasedExplanation({
   const approach = releasedApproach(id);
   if (!approach) return null;
   const original = index?.studies?.find(
-    (study) => study.id === "original-study",
+    (study) =>
+      study.id === (id === "evolutionary" ? "evolutionary" : "original-study"),
   );
   const matches =
     id === "handcrafted"
@@ -98,7 +99,7 @@ export function ReleasedExplanation({
       </p>
       {matches && id !== "handcrafted" && (
         <a
-          href="/research?study=original-study"
+          href={`/research?study=${id === "evolutionary" ? "evolutionary" : "original-study"}`}
           onClick={(event) => {
             if (
               event.button === 0 &&
@@ -108,14 +109,18 @@ export function ReleasedExplanation({
               !event.altKey
             ) {
               event.preventDefault();
-              openResearch("original-study");
+              openResearch(
+                id === "evolutionary" ? "evolutionary" : "original-study",
+              );
             }
           }}
         >
-          Original local-study methods and results ↗
+          {id === "evolutionary"
+            ? "Evolutionary methods and results ↗"
+            : "Original local-study methods and results ↗"}
         </a>
       )}
-      {id === "rl" && (
+      {id === "supervised" && (
         <p className="research-followups">
           Separate research:{" "}
           <a

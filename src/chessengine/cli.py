@@ -64,9 +64,15 @@ def main():
     p = sub.add_parser("policy-value", help="Research-only policy/value pilot, study and report")
     p.add_argument("--config", default="configs/policy-value.json")
     p.add_argument("--stage", choices=["benchmark", "prepare", "pilot", "all", "report"], default="pilot")
+    p = sub.add_parser("evolutionary", help="Teacher-free evolutionary study and research archive")
+    p.add_argument("--config", default="configs/evolutionary.json")
+    p.add_argument("--stage", choices=["prepare", "benchmark", "pilot", "train", "evaluate", "report", "release", "all"], default="all")
     args = parser.parse_args()
     with threadpool_limits(limits=1):
-        if args.command == "policy-value":
+        if args.command == "evolutionary":
+            from .evolution_study import run
+            result = run(read_json(args.config), args.stage)
+        elif args.command == "policy-value":
             from .pv_study import benchmark, run, report
             cfg = read_json(args.config)
             result = benchmark(cfg) if args.stage == "benchmark" else report(cfg) if args.stage == "report" else run(cfg, args.stage)

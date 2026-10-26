@@ -23,7 +23,7 @@ def test_report_publication_is_independent_of_failed_model_gate(tmp_path):
         if p.is_file()
     }
     rows = publish(tmp_path / "research")
-    assert len(rows) == 9
+    assert len(rows) == 11
     rank = next(r for r in rows if r["id"] == "move-ranking")
     assert rank["result"] == "inconclusive" and rank["availability"] == "local preview"
     assert json.load(open("docs/experiments/move-ranking/final-audit.json"))["release_eligible"] is False

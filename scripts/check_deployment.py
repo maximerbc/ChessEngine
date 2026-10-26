@@ -16,10 +16,17 @@ def get(url):
 
 def main():
     api, web = "http://127.0.0.1:8000", "http://127.0.0.1:8080"
-    assert json.loads(get(api + "/health")[0])["models"] >= 3
+    assert json.loads(get(api + "/health")[0])["models"] >= 2
     models = {row["id"]: row for row in json.loads(get(api + "/models")[0])["models"]}
     with open("artifacts/models/manifest.json") as source:
         manifest = json.load(source)
+    assert "rl" not in models
+    try:
+        get(web + "/models/rl.npz")
+    except urllib.error.HTTPError as error:
+        assert error.code == 404
+    else:
+        raise AssertionError("Retired weights remain publicly downloadable")
     for row in manifest["models"]:
         assert models[row["id"]]["checkpoint_id"] == row["sha256"]
         weights, headers = get(web + "/models/" + row.get("file", row.get("ranker_file")))
@@ -42,6 +49,20 @@ def main():
         board = chess.Board()
         board.push_uci("e2e4")
         assert chess.Move.from_uci(result["best_move"]) in board.legal_moves
+    for model_id in models:
+        request = urllib.request.Request(
+            api + "/evaluate-comparison",
+            data=json.dumps({"model_id": model_id, "moves": ["e2e4"]}).encode(),
+            headers={"Content-Type": "application/json", "Origin": web},
+        )
+        with urllib.request.urlopen(request, timeout=20) as response:
+            comparison = json.load(response)
+        assert comparison["perspective"] == "white"
+        assert comparison["moves"] == ["e2e4"]
+        assert comparison["checkpoint_id"] == models[model_id]["checkpoint_id"]
+        assert comparison["stockfish"]["status"] == "ok"
+        assert comparison["stockfish"]["version"] == "Stockfish 19"
+        assert comparison["search"]["nodes"] <= 10000
     for path, content_type in [
         ("/", "text/html"),
         ("/health", "text/plain"),

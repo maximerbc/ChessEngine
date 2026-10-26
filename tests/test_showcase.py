@@ -73,7 +73,7 @@ def test_guided_bundle_and_api_identity(tmp_path, monkeypatch):
         )
     )
     write_json(manifest, {"showcase_version": 2, "default": "supervised", "models": rows})
-    monkeypatch.setenv("REQUIRE_MODELS", "1")
+    monkeypatch.setenv("REQUIRE_MODELS", "0")
     with TestClient(create_app(manifest)) as client:
         result = client.post("/analyze", json={"model_id": "move-guided", "nodes": 100}).json()
         assert result["checkpoint_id"] == guided.checkpoint_id
@@ -89,7 +89,8 @@ def test_guided_bundle_and_api_identity(tmp_path, monkeypatch):
             < 1e-7
         )
     write_json(manifest, {"showcase_version": 2, "default": "supervised", "models": rows[:2]})
-    with pytest.raises(ValueError, match="move-guided"):
+    monkeypatch.setenv("REQUIRE_MODELS", "1")
+    with pytest.raises(ValueError, match="v3 manifest"):
         create_app(manifest)
     rank.write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="checksum"):

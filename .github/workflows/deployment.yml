@@ -20,7 +20,7 @@ jobs:
           docker build -f deploy/Dockerfile.web --build-arg VITE_API_URL=http://127.0.0.1:8000 -t chess-web .
       - name: Verify container boundaries and fail-closed startup
         run: |
-          docker run --rm --entrypoint sh chess-api -c 'test "$(id -u)" != 0 && test ! -d /app/runs && test ! -d /app/data && python -c "import importlib.util; assert importlib.util.find_spec(\"torch\") is None"'
+          docker run --rm --entrypoint sh chess-api -c 'test "$(id -u)" != 0 && test ! -d /app/runs && test ! -d /app/data && test ! -f /app/artifacts/models/rl.npz && python -c "import importlib.util; assert importlib.util.find_spec(\"torch\") is None"'
           docker run --rm --entrypoint sh chess-web -c 'test "$(id -u)" != 0 && test ! -d /usr/share/nginx/html/src && test ! -d /usr/share/nginx/html/node_modules'
           if docker run --rm -e MODEL_MANIFEST=/missing.json --entrypoint python chess-api -c 'import chessengine.api'; then exit 1; fi
           mkdir -p /tmp/bad-models

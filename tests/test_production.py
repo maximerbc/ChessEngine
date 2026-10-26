@@ -7,13 +7,13 @@ from fastapi.testclient import TestClient
 from chessengine.api import create_app
 
 
-def test_production_requires_manifest_and_both_models(monkeypatch, tmp_path):
+def test_production_requires_versioned_explicit_manifest(monkeypatch, tmp_path):
     monkeypatch.setenv("REQUIRE_MODELS", "1")
     manifest = tmp_path / "manifest.json"
     with pytest.raises(ValueError, match="manifest is missing"):
         create_app(manifest)
     manifest.write_text(json.dumps({"models": []}))
-    with pytest.raises(ValueError, match="requires supervised and RL"):
+    with pytest.raises(ValueError, match="v3 manifest"):
         create_app(manifest)
 
 

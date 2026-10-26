@@ -23,6 +23,7 @@ import {
 } from "./ModelGuide";
 
 import { ResearchIndex } from "./ResearchIndex";
+import { PositionComparison, type ComparisonResult } from "./PositionComparison";
 import {
   releasedApproaches,
   releasedApproach,
@@ -308,7 +309,7 @@ function routePosition() {
 const showcaseEnabled = import.meta.env.VITE_SHOWCASE === "1";
 const legacyStudies: Record<string, string> = {
   "/lab/move-guided": "move-ranking",
-  "/lab/rl": "rl-improvement",
+  "/lab/rl": "self-play-archive",
   "/lab/supervised": "fixed-data-improvements",
 };
 export default function App() {
@@ -343,8 +344,10 @@ export default function App() {
   const [analysisHistory, setAnalysisHistory] = useState<string[]>([]);
   const [terminal, setTerminal] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [referenceBusy, setReferenceBusy] = useState(false);
   const [error, setError] = useState("");
   const [research, setResearch] = useState<Research | null>(null);
+  const [evolutionStatus, setEvolutionStatus] = useState("planned");
   const [example, setExample] = useState(0);
   const [comparisons, setComparisons] = useState<
     { model: Model; result: Analysis }[]
@@ -415,11 +418,17 @@ export default function App() {
     setTab(next);
   }
   useEffect(() => {
-    if (!showcaseEnabled && path.startsWith("/lab/")) {
+    const retired =
+      path === "/lab/rl" ||
+      new URLSearchParams(window.location.search).get("model") === "rl";
+    if (retired || (!showcaseEnabled && path.startsWith("/lab/"))) {
       const query = new URLSearchParams(window.location.search);
-      if (legacyStudies[path]) query.set("study", legacyStudies[path]);
+      if (retired) {
+        query.set("study", "self-play-archive");
+        query.set("model", "supervised");
+      } else if (legacyStudies[path]) query.set("study", legacyStudies[path]);
       if (path === "/lab/classical") query.set("model", "handcrafted");
-      const target = legacyStudies[path] ? "/research" : "/";
+      const target = retired || legacyStudies[path] ? "/research" : "/";
       window.history.replaceState(null, "", target + "?" + query);
       setPath(target);
       setTab(target === "/research" ? "research" : "play");
@@ -485,7 +494,7 @@ export default function App() {
         initial_fen: initialFen,
         moves: history,
         model_id: model,
-        nodes: 2000,
+        nodes: 10000,
         time_ms: 1500,
       });
       if (
@@ -524,14 +533,14 @@ export default function App() {
       const data = await request<{ models: Model[]; default: string }>(
         "/models",
       );
-      setModels(data.models);
+      setModels(data.models.filter((m) => m.id !== "rl"));
       const requested = new URLSearchParams(window.location.search).get(
         "model",
       );
       setModel(
         (showcaseEnabled &&
           approaches.find((a) => a.path === window.location.pathname)?.id) ||
-          (requested ? requested : data.default),
+          (requested && requested !== "rl" ? requested : "supervised"),
       );
       setConnection("ready");
     } catch {
@@ -540,6 +549,18 @@ export default function App() {
   }
   useEffect(() => {
     void connect();
+    fetch("/research/evolutionary/evidence.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) =>
+        setEvolutionStatus(
+          data?.qualified
+            ? "qualified"
+            : ["pilot_failed", "complete"].includes(data?.status)
+              ? "failed"
+              : "planned",
+        ),
+      )
+      .catch(() => setEvolutionStatus("planned"));
     fetch("/research/model-catalog.json")
       .then((r) => (r.ok ? r.json() : null))
       .then(setCatalog)
@@ -606,7 +627,7 @@ export default function App() {
         initial_fen: initialFen,
         moves: history,
         model_id: model,
-        nodes: 2000,
+        nodes: 10000,
         time_ms: 1500,
       });
       if (token !== generation.current) return;
@@ -672,8 +693,8 @@ export default function App() {
           initial_fen: initialFen,
           moves: history,
           model_id: m.id,
-          nodes: 1000,
-          time_ms: 3000,
+          nodes: 10000,
+          time_ms: 1500,
         });
         if (result.checkpoint_id !== m.checkpoint_id)
           throw new Error(
@@ -710,7 +731,7 @@ export default function App() {
       : game.isDraw()
         ? "Draw"
         : busy
-          ? "Engine is thinking"
+          ? referenceBusy ? "Comparing position" : "Engine is thinking"
           : game.turn() === color
             ? "Your move"
             : "Engine to move";
@@ -794,9 +815,9 @@ export default function App() {
               {page
                 ? page.description
                 : tab === "play"
-                  ? "Play against Classical, Supervised and Self-play opponents. Discover three ways to evaluate a chess position, using the same search."
+                  ? "Play against Classical, Supervised and Evolutionary opponents. Discover three ways to evaluate a chess position, using the same search."
                   : tab === "compare"
-                    ? "Compare Classical, Supervised and Self-play evaluations and moves on the same position, under equal search limits."
+                    ? "Compare Classical, Supervised and Evolutionary evaluations and moves on the same position, under equal search limits."
                     : "A reproducible study of supervised learning and reinforcement learning, including the results that do not improve."}
             </p>
           </div>
@@ -947,6 +968,18 @@ export default function App() {
               </div>
             </section>
             <aside>
+              <PositionComparison
+                initialFen={initialFen}
+                moves={history}
+                modelId={model}
+                modelName={displayName(model, currentModel?.name)}
+                checkpoint={currentModel?.checkpoint_id}
+                revision={generation.current}
+                available={connection === "ready" && identityMatches}
+                busy={busy}
+                evaluate={(body) => request<ComparisonResult>("/evaluate-comparison", body)}
+                onBusy={(next) => { setReferenceBusy(next); setBusy(next); }}
+              />
               <section className="card">
                 <div className="section-heading">
                   <span className="tiny-label">01 / YOUR OPPONENT</span>
@@ -1001,18 +1034,49 @@ export default function App() {
                         </small>
                       </span>
                       <span className="selected-label">
-                        {connection === "loading"
-                          ? "LOADING"
-                          : connection !== "ready" ||
-                              !models.some((installed) => installed.id === m.id)
-                            ? "UNAVAILABLE"
-                            : model === m.id
-                              ? "SELECTED"
-                              : "AVAILABLE"}
+                        {m.id === "evolutionary" &&
+                        evolutionStatus !== "qualified" &&
+                        !models.some((installed) => installed.id === m.id)
+                          ? evolutionStatus === "failed"
+                            ? "DID NOT QUALIFY"
+                            : "IN RESEARCH"
+                          : connection === "loading"
+                            ? "LOADING"
+                            : connection !== "ready" ||
+                                !models.some(
+                                  (installed) => installed.id === m.id,
+                                )
+                              ? "UNAVAILABLE"
+                              : model === m.id
+                                ? "SELECTED"
+                                : "AVAILABLE"}
                       </span>
                     </button>
                   ))}
                 </div>
+                {!showcaseEnabled && (
+                  <p className="micro">
+                    <a
+                      href="/research?study=evolutionary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        changeTab("research", "evolutionary");
+                      }}
+                    >
+                      Evolutionary methods and results ↗
+                    </a>
+                    {" · "}
+                    <a
+                      href="/research?study=self-play-archive"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        changeTab("research", "self-play-archive");
+                      }}
+                    >
+                      Self-play: results and lessons ↗
+                    </a>
+                  </p>
+                )}
                 {history.length > 0 && (
                   <p className="micro">Start a new game to change opponents.</p>
                 )}
@@ -1172,8 +1236,9 @@ export default function App() {
                   keep the position.
                 </h2>
                 <p className="muted">
-                  All compared opponents use a 1,000-node ceiling and a 3-second
-                  time limit. Actual completed depth and node counts are shown.
+                  All compared opponents use a 10,000-node ceiling and a
+                  1.5-second time limit. Actual completed depth and node counts
+                  are shown.
                 </p>
                 <label className="field">
                   Position
@@ -1484,9 +1549,18 @@ export default function App() {
             Supervised weights
           </a>{" "}
           ·{" "}
-          <a href="/models/rl.npz" download>
-            RL weights
+          <a href="/research?study=self-play-archive">
+            Self-play research archive
           </a>
+          {models.some((m) => m.id === "evolutionary") && (
+            <>
+              {" "}
+              ·{" "}
+              <a href="/models/evolutionary.npz" download>
+                Evolutionary weights
+              </a>
+            </>
+          )}
         </span>
       </footer>
       {promotion && (

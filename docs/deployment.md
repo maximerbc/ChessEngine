@@ -4,6 +4,10 @@ Deploy the showcase and Railway PRs before following this handoff. The user push
 
 ## Two-service setup
 
+The API image also packages checksum-verified Stockfish 19 for the on-demand
+[current-position comparison](position-comparison.md). It runs as a bounded
+reference subprocess, not as a playing opponent or an additional service.
+
 Authorize Railway's GitHub integration for **only ChessEngine**. Create one project with two repository-backed services, both tracking `main` with repository root `/`. Use Dockerfile builds and set `RAILWAY_DOCKERFILE_PATH` to the path below. Do not override the image start command.
 
 | Setting | chessengine-demo | chessengine-api |

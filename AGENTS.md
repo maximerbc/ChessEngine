@@ -1,7 +1,7 @@
 # ChessEngine project contract
 
 ## Purpose and workflow
-- Demonstrate supervised learning, self-play reinforcement learning, careful experiments, and a polished chess demo for master's applications. Playing strength and positive RL results are not promised.
+- Demonstrate supervised learning, evolutionary learning, archived self-play research, careful experiments, and a polished chess demo for master's applications. Playing strength and positive RL results are not promised.
 - The repository stays private. The user handles remote pushes; never push or change visibility. Prepare three substantial review batches: foundation/supervised, RL/evidence, showcase/release. Use focused local commits where Git permissions allow. Do not block independent local work on a push.
 - Implement autonomously, explain mathematics and evidence at milestones, and minimize questions. Ask only for consequential scope changes, identity/account access, or costs outside authorization.
 - Total paid spend ceiling is C$50 equivalent; reserve 20% contingency. Prefer free Railway credits; paid hosting requires explicit approval. Local Apple Silicon/8 GB development, optional paid Colab. Never assume free Colab permits chess training. No paid resources are provisioned implicitly.
@@ -35,7 +35,7 @@
 
 ## Railway deployment contract
 - A fourth deployment PR follows showcase. User-managed pushes and private visibility remain mandatory.
-- Production requires both released neural models and valid checksums; missing artifacts fail startup. One API replica, one Uvicorn worker, no persistent volume or training dependencies.
+- Production requires a version-3 manifest declaring Supervised and any qualified Evolutionary model, with valid checksums; missing declared artifacts fail startup. One API replica, one Uvicorn worker, no persistent volume or training dependencies.
 - Dockerfiles and dashboard instructions define deployment. No paid activation or automatic PR environments. Track hosting costs within the C$50 ceiling.
 
 ## Supervised diagnostics
@@ -75,3 +75,13 @@
 - The public Demo presents Classical (`handcrafted`), Supervised (`supervised`), and Self-play (`rl`) in that order, using existing released evaluators and shared alpha-beta search. Keep the manifest-selected default and model artifacts unchanged.
 - Explain Stockfish position assessments separately from move imitation. Gameplay does not train models. Tie neural evidence to the original local-study release identities; unmatched identities show unavailable evidence.
 - The released self-play evidence is inconclusive. Later negative RL, move ranking, and policy/value feasibility remain separate Research entries; preserve optional four-model local previews. No new training or model promotion is implied.
+
+## Evolutionary engine and self-play retirement (2026-10-26)
+- This amendment supersedes playable self-play and its old default requirements. Public Demo cards are Classical, Supervised, Evolutionary; Supervised stays default. Evolutionary remains disabled until the preregistered gates pass. No RL play, live analysis, preview selection or public weight downloads; historical reports, replay and private checkpoints remain.
+- Freeze original-study identities independently of the active manifest. Do not relabel original inconclusive evidence as the later regression.
+- Train every one of 324 evaluation weights randomly with CMA-ES tournaments and compact versioned features. No fixed material score, imported weights, teacher labels, gradients, learned ordering or production MCTS. This is a hybrid with human-designed input features, not invented research or tabula-rasa rule discovery.
+- Use the fixed protocol in docs/evolutionary-preregistration.md and configs/evolutionary.json. Freeze scientific sources before measurement. Pilot failure closes the study without changing architecture, thresholds or seeds. Full local computation is authorized after passing pilot gates, with measured forecasts, elapsed-time accounting, two workers maximum and no CPU wall-time cap. No paid compute is authorized.
+- Evolutionary tournaments use complete legal histories and automatic draws. Capped tournament matches retain '*' rule outcomes and a separately named neutral fitness adjudication; no position-level outcome labels are generated. This does not change the exclusion of truncated games from historical Monte Carlo RL training.
+- Select all checkpoints on development before qualification/finals; representative seed 42 is fixed. Fresh final confirmation can only block promotion, never choose another checkpoint. Gates use conservative cap sensitivity and require beating Classical and near-parity with Supervised. All seed outcomes are published.
+- Runtime uses the separately versioned NumPy evolutionary evaluator and unchanged shared alpha-beta. Active-release manifest v3 declares required model IDs; checksums/kinds/schema are validated. Play and Compare use 10,000 nodes/1,500 ms/qdepth four for every released approach.
+- Implement in local review batches. No remote push, deployment, paid resources or restart of the closed policy/value experiment.

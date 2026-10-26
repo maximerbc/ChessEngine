@@ -27,3 +27,4 @@ artifacts/models/*
 web/*.tsbuildinfo
 
 !artifacts/models/ranker.npz
+!artifacts/models/evolutionary.npz

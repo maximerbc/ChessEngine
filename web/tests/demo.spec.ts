@@ -8,8 +8,14 @@ async function mock(page: any) {
       supervised: "s".repeat(64),
       rl: "r".repeat(64),
     };
+    data.studies.find((s: any) => s.id === "evolutionary").checkpoint_ids = {
+      evolutionary: "e".repeat(64),
+    };
     await route.fulfill({ json: data });
   });
+  await page.route("**/research/evolutionary/evidence.json", (route: any) =>
+    route.fulfill({ json: { qualified: true, status: "complete" } }),
+  );
   await page.route("**/api/models", async (route: any) =>
     route.fulfill({
       json: {
@@ -23,11 +29,11 @@ async function mock(page: any) {
             checkpoint_id: "s".repeat(64),
           },
           {
-            id: "rl",
-            name: "Self-play model",
-            kind: "rl",
+            id: "evolutionary",
+            name: "Evolutionary model",
+            kind: "evolutionary",
             evidence: "pilot",
-            checkpoint_id: "r".repeat(64),
+            checkpoint_id: "e".repeat(64),
           },
           {
             id: "handcrafted",
@@ -52,12 +58,12 @@ async function mock(page: any) {
               : "g8f6",
         value: 0.12,
         depth: 2,
-        nodes: 1000,
+        nodes: 10000,
         elapsed_ms: 120,
         pv: ["e7e5", "g1f3"],
         checkpoint_id:
-          b.model_id === "rl"
-            ? "r".repeat(64)
+          b.model_id === "evolutionary"
+            ? "e".repeat(64)
             : b.model_id === "handcrafted"
               ? "handcrafted-v1"
               : "s".repeat(64),
@@ -87,7 +93,7 @@ test("play, reply, undo, restart, export and compare", async ({ page }) => {
   await page
     .getByRole("button", { name: "Compare models", exact: true })
     .click();
-  await expect(page.locator("aside")).toContainText("1000 nodes");
+  await expect(page.locator("aside")).toContainText("10000 nodes");
 });
 test("offline research and mobile layout", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -154,11 +160,11 @@ test("model choice, drag move, and restart are coherent", async ({ page }) => {
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
   await page
     .getByRole("button", {
-      name: /^Self-play Starting from the supervised/,
+      name: /^Evolutionary A small neural evaluator/,
     })
     .click();
   await expect(page.locator(".player-strip").first()).toContainText(
-    "Self-play",
+    "Evolutionary",
   );
   await page
     .getByRole("button", { name: "e2 white pawn", exact: true })
@@ -354,14 +360,14 @@ test("compare uses the actual shared position and Research has a compact archive
   expect(positions.map((p) => p.model_id)).toEqual([
     "handcrafted",
     "supervised",
-    "rl",
+    "evolutionary",
   ]);
   expect(
     positions.every(
       (p) =>
         p.moves.join(",") === "e2e4,e7e5" &&
-        p.nodes === 1000 &&
-        p.time_ms === 3000,
+        p.nodes === 10000 &&
+        p.time_ms === 1500,
     ),
   ).toBeTruthy();
   await page.getByRole("button", { name: "Research", exact: true }).click();
@@ -394,7 +400,7 @@ test("new game and move history survive a refresh", async ({ page }) => {
 for (const [id, name] of [
   ["handcrafted", "Classical"],
   ["supervised", "Supervised"],
-  ["rl", "Self-play"],
+  ["evolutionary", "Evolutionary"],
 ]) {
   for (const color of ["White", "Black"]) {
     test(`${name} plays with the user as ${color} and keeps its identity`, async ({
@@ -412,7 +418,7 @@ for (const [id, name] of [
       await expect(cards.locator("strong")).toHaveText([
         "Classical",
         "Supervised",
-        "Self-play",
+        "Evolutionary",
       ]);
       await page.getByRole("button", { name: new RegExp(`^${name} `) }).click();
       await expect(
@@ -433,7 +439,7 @@ for (const [id, name] of [
       await expect(page.locator(".analysis-card .hash")).toContainText(
         id === "handcrafted"
           ? "handcrafted-"
-          : (id === "rl" ? "r" : "s").repeat(12),
+          : (id === "evolutionary" ? "e" : "s").repeat(12),
       );
       await expect(
         page.getByText("Start a new game to change opponents."),
@@ -450,16 +456,16 @@ test("released evidence is matched to checkpoint identity", async ({
   page,
 }) => {
   await mock(page);
-  await page.goto("/?model=rl");
-  const explanation = page.getByRole("region", { name: "Self-play explained" });
+  await page.goto("/?model=evolutionary");
+  const explanation = page.getByRole("region", {
+    name: "Evolutionary explained",
+  });
   await expect(explanation).toContainText(
-    "inconclusive evidence of improvement",
+    "passing qualification and fresh-final gates",
   );
   await expect(
-    explanation.getByRole("link", { name: /Original local-study/ }),
-  ).toHaveAttribute("href", "/research?study=original-study");
-  await expect(explanation).toContainText("different checkpoints");
-  await expect(explanation).toContainText("full comparison deferred");
+    explanation.getByRole("link", { name: /Evolutionary methods/ }),
+  ).toHaveAttribute("href", "/research?study=evolutionary");
   await page.getByRole("button", { name: /^Supervised A neural/ }).click();
   await expect(
     page.getByRole("region", { name: "Supervised explained" }),
@@ -512,15 +518,15 @@ test("unavailable requested opponent stays selected without fallback; two oppone
     if (request.url().endsWith("/api/analyze"))
       requests.push(request.postDataJSON());
   });
-  await page.goto("/?model=rl");
+  await page.goto("/?model=evolutionary");
   await expect(
     page.getByText("The requested opponent is unavailable.", { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /^Self-play Starting/ }),
+    page.getByRole("button", { name: /^Evolutionary A small neural evaluator/ }),
   ).toBeDisabled();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
-    "Self-play",
+    "Evolutionary",
   );
   await expect(
     page.getByRole("button", { name: "e2 white pawn", exact: true }),
@@ -537,7 +543,7 @@ test("unavailable requested opponent stays selected without fallback; two oppone
   ]);
   expect(
     requests.every(
-      (r) => r.nodes === 1000 && r.time_ms === 3000 && r.moves.length === 0,
+      (r) => r.nodes === 10000 && r.time_ms === 1500 && r.moves.length === 0,
     ),
   ).toBeTruthy();
 });
@@ -590,22 +596,22 @@ test("explanation research links preserve the game and selected opponent", async
   page,
 }, info) => {
   await mock(page);
-  await page.goto("/?model=rl&moves=e2e4,e7e5");
-  const explanation = page.getByRole("region", { name: "Self-play explained" });
+  await page.goto("/?model=evolutionary&moves=e2e4,e7e5");
+  const explanation = page.getByRole("region", {
+    name: "Evolutionary explained",
+  });
   await expect(explanation).toContainText(
-    "inconclusive evidence of improvement",
+    "passing qualification and fresh-final gates",
   );
   await page.screenshot({
     path: info.outputPath("three-approaches-desktop.png"),
     fullPage: true,
   });
-  await explanation
-    .getByRole("link", { name: /Original local-study methods/ })
-    .click();
-  await expect(page).toHaveURL(/research.*study=original-study/);
+  await explanation.getByRole("link", { name: /Evolutionary methods/ }).click();
+  await expect(page).toHaveURL(/research.*study=evolutionary/);
   await page.getByRole("button", { name: "Demo", exact: true }).click();
   await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
-    "Self-play",
+    "Evolutionary",
   );
 });
