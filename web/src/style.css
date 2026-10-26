@@ -1072,3 +1072,14 @@ select {
 @media(max-width:700px) { .study-grid { grid-template-columns: 1fr; } .study-index .section-heading { display: block; } }
 .archive-dashboard { margin: 32px 0; }
 .archive-dashboard > summary { cursor: pointer; font-size: 20px; padding: 20px 0; font-weight: 600; border-top: 1px solid #cbd7d0; }
+
+.released-explanation h3 { font-size: 13px; margin: 18px 0 5px; }
+.released-explanation p { font-size: 12px; margin: 6px 0 12px; }
+.released-explanation a { color: var(--accent); }
+.released-explanation details { margin: 16px 0; }
+.released-explanation summary { cursor: pointer; }
+.released-explanation .hash { overflow-wrap: anywhere; }
+.model-option > span:nth-child(2) { min-width: 0; flex: 1; }
+.model-option .selected-label { flex-shrink: 0; }
+.model-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.model-option:disabled { opacity: 1; cursor: default; }

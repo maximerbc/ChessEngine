@@ -11,8 +11,8 @@ test.describe("production containers", () => {
       page.getByText("Engine online", { exact: true }),
     ).toBeVisible();
     for (const name of [
-      /Supervised model Learned from Stockfish/,
-      /Earlier released self-play Learned from self-play/,
+      /^Supervised A neural network learns/,
+      /^Self-play Starting from the supervised/,
     ]) {
       await page.getByRole("button", { name }).click();
       await page
@@ -20,7 +20,7 @@ test.describe("production containers", () => {
         .click();
       await page.getByRole("button", { name: "e4", exact: true }).click();
       await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
-      await expect(page.locator(".hash")).toContainText("Checkpoint");
+      await expect(page.locator(".analysis-card .hash")).toContainText("Checkpoint");
       const download = page.waitForEvent("download");
       await page
         .getByRole("button", { name: "Export PGN", exact: true })

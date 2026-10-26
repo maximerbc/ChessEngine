@@ -23,6 +23,11 @@ import {
 } from "./ModelGuide";
 
 import { ResearchIndex } from "./ResearchIndex";
+import {
+  releasedApproaches,
+  releasedApproach,
+  ReleasedExplanation,
+} from "./ReleasedApproaches";
 
 const API = import.meta.env.VITE_API_URL || "/api";
 type Model = {
@@ -186,6 +191,7 @@ function Board({
           return (
             <button
               key={sq}
+              aria-disabled={disabled}
               aria-label={`${sq}${piece ? " " + (piece.color === "w" ? "white" : "black") + " " + { p: "pawn", n: "knight", b: "bishop", r: "rook", q: "queen", k: "king" }[piece.type] : ""}`}
               className={`square ${(rank + file) % 2 ? "light" : "dark"} ${selected === sq ? "selected" : ""} ${highlighted ? "last" : ""}`}
               onClick={() => !disabled && onSquare?.(sq)}
@@ -349,10 +355,27 @@ export default function App() {
   const activeRequest = useRef(false);
   const game = boardFrom(initialFen, history);
   const currentModel = models.find((m) => m.id === model);
+  const opponentOptions = showcaseEnabled
+    ? models
+    : releasedApproaches.map((a) => ({
+        id: a.id,
+        name: a.name,
+        kind: a.id,
+        description: a.description,
+      }));
+  const comparisonModels = showcaseEnabled
+    ? models
+    : releasedApproaches.flatMap((a) => {
+        const installed = models.find((m) => m.id === a.id);
+        return installed ? [installed] : [];
+      });
+  const displayName = (id: string, fallback?: string) =>
+    (!showcaseEnabled && releasedApproach(id)?.name) || fallback || id;
   const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
   const identityMatches =
-    !page ||
-    (!!currentModel &&
+    (!page && !!currentModel) ||
+    (!!page &&
+      !!currentModel &&
       currentModel.id === page.id &&
       !!expectedCheckpoint &&
       expectedCheckpoint === currentModel.checkpoint_id);
@@ -374,7 +397,7 @@ export default function App() {
   const studyId =
     new URLSearchParams(window.location.search).get("study") ||
     (!showcaseEnabled ? legacyStudies[path] : undefined);
-  function changeTab(next: "play" | "compare" | "research") {
+  function changeTab(next: "play" | "compare" | "research", study?: string) {
     if (busy) return;
     const query = new URLSearchParams({
       fen: initialFen,
@@ -382,6 +405,7 @@ export default function App() {
       model,
       mode: next === "compare" ? "compare" : "play",
     });
+    if (study) query.set("study", study);
     window.history.pushState(
       null,
       "",
@@ -438,8 +462,7 @@ export default function App() {
       const requested = new URLSearchParams(window.location.search).get(
         "model",
       );
-      if (requested && models.some((m) => m.id === requested))
-        setModel(requested);
+      if (requested) setModel(requested);
 
       if (target) setModel(target.id);
       generation.current++;
@@ -508,9 +531,7 @@ export default function App() {
       setModel(
         (showcaseEnabled &&
           approaches.find((a) => a.path === window.location.pathname)?.id) ||
-          (data.models.some((m) => m.id === requested)
-            ? requested!
-            : data.default),
+          (requested ? requested : data.default),
       );
       setConnection("ready");
     } catch {
@@ -646,7 +667,7 @@ export default function App() {
     setComparisons([]);
     try {
       const values = [];
-      for (const m of models) {
+      for (const m of comparisonModels) {
         const result = await request<Analysis>("/analyze", {
           initial_fen: initialFen,
           moves: history,
@@ -773,9 +794,9 @@ export default function App() {
               {page
                 ? page.description
                 : tab === "play"
-                  ? "Play against a neural chess evaluator. Explore what changes when a model learns from its own games."
+                  ? "Play against Classical, Supervised and Self-play opponents. Discover three ways to evaluate a chess position, using the same search."
                   : tab === "compare"
-                    ? "Look inside the experiment. Compare the moves and evaluations of the supervised and self-play models."
+                    ? "Compare Classical, Supervised and Self-play evaluations and moves on the same position, under equal search limits."
                     : "A reproducible study of supervised learning and reinforcement learning, including the results that do not improve."}
             </p>
           </div>
@@ -887,15 +908,13 @@ export default function App() {
                   <Cpu size={18} />
                 </div>
                 <div>
-                  <strong>
-                    {currentModel?.id === "rl" && !showcaseEnabled
-                      ? "Earlier released self-play"
-                      : currentModel?.name || "ChessEngine"}
-                  </strong>
+                  <strong>{displayName(model, currentModel?.name)}</strong>
                   <span>
-                    {currentModel?.evidence === "pilot"
-                      ? "Pilot checkpoint · research in progress"
-                      : "Shared search engine"}
+                    {!showcaseEnabled
+                      ? "Shared alpha-beta search"
+                      : currentModel?.evidence === "pilot"
+                        ? "Pilot checkpoint · research in progress"
+                        : "Shared search engine"}
                   </span>
                 </div>
                 <span className="chip">
@@ -907,7 +926,9 @@ export default function App() {
                 flip={color === "b"}
                 selected={selected}
                 onSquare={clickSquare}
-                disabled={busy || done || !identityMatches}
+                disabled={
+                  busy || done || !identityMatches || connection !== "ready"
+                }
                 lastMove={history.at(-1)}
               />
               <div className="player-strip bottom">
@@ -931,14 +952,20 @@ export default function App() {
                   <span className="tiny-label">01 / YOUR OPPONENT</span>
                   <Cpu size={17} />
                 </div>
-                <h2>Choose an evaluator</h2>
+                <h2>Choose an opponent</h2>
                 <p className="muted">
                   One search engine. Different ways to understand the board.
                 </p>
                 <div className="model-options">
-                  {models.map((m) => (
+                  {opponentOptions.map((m) => (
                     <button
-                      disabled={busy || history.length > 0}
+                      disabled={
+                        busy ||
+                        history.length > 0 ||
+                        connection !== "ready" ||
+                        !models.some((installed) => installed.id === m.id)
+                      }
+                      aria-pressed={model === m.id}
                       key={m.id}
                       className={`model-option ${model === m.id ? "chosen" : ""}`}
                       onClick={() => {
@@ -960,56 +987,43 @@ export default function App() {
                     >
                       <span className="radio" />
                       <span>
-                        <strong>
-                          {m.id === "rl" && !showcaseEnabled
-                            ? "Earlier released self-play"
-                            : m.name}
-                        </strong>
+                        <strong>{displayName(m.id, m.name)}</strong>
                         <small>
-                          {m.kind === "move-guided"
-                            ? "Learned root ordering + supervised value"
-                            : m.kind === "rl"
-                              ? "Learned from self-play outcomes"
-                              : m.kind === "supervised"
-                                ? "Learned from Stockfish evaluations"
-                                : "Material and piece-square heuristics"}
+                          {!showcaseEnabled
+                            ? releasedApproach(m.id)?.description
+                            : m.kind === "move-guided"
+                              ? "Learned root ordering + supervised value"
+                              : m.kind === "rl"
+                                ? "Learned from self-play outcomes"
+                                : m.kind === "supervised"
+                                  ? "Learned from Stockfish evaluations"
+                                  : "Material and piece-square heuristics"}
                         </small>
                       </span>
-                      {model === m.id && (
-                        <span className="selected-label">SELECTED</span>
-                      )}
+                      <span className="selected-label">
+                        {connection === "loading"
+                          ? "LOADING"
+                          : connection !== "ready" ||
+                              !models.some((installed) => installed.id === m.id)
+                            ? "UNAVAILABLE"
+                            : model === m.id
+                              ? "SELECTED"
+                              : "AVAILABLE"}
+                      </span>
                     </button>
                   ))}
                 </div>
-                {!page && (
-                  <details className="released-explanation">
-                    <summary>How this evaluator works</summary>
-                    <p>
-                      {currentModel?.kind === "handcrafted"
-                        ? "Material and piece-square rules score the board."
-                        : "The released compact network estimates position value; alpha-beta searches legal moves. The earlier self-play checkpoint learned from completed game outcomes."}
-                    </p>
-                    <p>
-                      Positive values favour the player to move; they are not
-                      calibrated win probabilities. The model identity and
-                      evidence below apply to this exact release.
-                    </p>
-                    <button
-                      onClick={inspectPosition}
-                      disabled={
-                        busy || connection !== "ready" || !identityMatches
-                      }
-                    >
-                      Analyze this position
-                    </button>
-                    {analysis && (
-                      <p>
-                        Last analysis: {analysis.value.toFixed(3)} from the
-                        player-to-move perspective.
-                      </p>
-                    )}
-                  </details>
+                {history.length > 0 && (
+                  <p className="micro">Start a new game to change opponents.</p>
                 )}
+                {!showcaseEnabled &&
+                  connection === "ready" &&
+                  !currentModel && (
+                    <p role="status">
+                      The requested opponent is unavailable. Choose an available
+                      opponent to play.
+                    </p>
+                  )}
                 <div className="color-row">
                   <span>Play as</span>
                   <div className="segmented">
@@ -1044,6 +1058,17 @@ export default function App() {
                     <Download size={15} />
                   </button>
                 </div>
+                {!showcaseEnabled && (
+                  <ReleasedExplanation
+                    id={model}
+                    checkpoint={currentModel?.checkpoint_id}
+                    available={connection === "ready" && identityMatches}
+                    busy={busy}
+                    analyze={inspectPosition}
+                    openResearch={(study) => changeTab("research", study)}
+                    value={analysis?.value}
+                  />
+                )}
               </section>
               <section className="card analysis-card">
                 <div className="section-heading">
@@ -1147,8 +1172,8 @@ export default function App() {
                   keep the position.
                 </h2>
                 <p className="muted">
-                  Both searches use a 1,000-node ceiling. Actual completed depth
-                  and node counts are shown.
+                  All compared opponents use a 1,000-node ceiling and a 3-second
+                  time limit. Actual completed depth and node counts are shown.
                 </p>
                 <label className="field">
                   Position
@@ -1173,25 +1198,23 @@ export default function App() {
                   disabled={
                     busy ||
                     connection !== "ready" ||
-                    models.filter((m) => m.id !== "handcrafted").length < 2
+                    comparisonModels.length < 2
                   }
                   onClick={() => void compare()}
                 >
                   {busy ? "Analyzing…" : "Compare models"}
                   <ArrowRight size={16} />
                 </button>
-                {models.filter((m) => m.id !== "handcrafted").length < 2 && (
+                {comparisonModels.length < 2 && (
                   <p className="micro">
-                    Two trained checkpoints must be installed to compare models.
+                    At least two opponents must be available to compare models.
                   </p>
                 )}
               </section>
               {comparisons.map(({ model: m, result: r }) => (
                 <section className="card comparison-card" key={m.id}>
                   <span className="tiny-label">
-                    {m.id === "rl" && !showcaseEnabled
-                      ? "Earlier released self-play"
-                      : m.name}
+                    {displayName(m.id, m.name)}
                   </span>
                   <h2>
                     {sanLine(exampleBoard, r.pv.slice(0, 1)) ||

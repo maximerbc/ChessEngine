@@ -4,6 +4,16 @@ Implementation branch: `codex/policy-value-research`. Local implementation commi
 
 PRs #9 and #10 are already merged. This branch starts from their verified equivalent file tree; do not reopen those completed studies or push the deleted historical branches.
 
+## Three-opponent Demo update — 2026-10-25
+
+The public Demo now presents **Classical**, **Supervised**, and **Self-play** in that order. Each card explains its evaluator; the selected opponent explains evaluation, shared alpha-beta search and evidence. The existing released self-play checkpoint carries its original inconclusive evidence, not the later v3 regression result. Evidence links preserve the board/history and selected opponent. Mathematics and checkpoint details are expandable.
+
+All three cards remain visible during loading/outages. Missing requested opponents stay unavailable without fallback. Opponent selection stays locked during a game, with New game guidance; comparison accepts any two available released opponents and uses identical position history, node and time limits. Existing four-model local previews and legacy research redirects remain supported.
+
+Validation: **93 Python tests**, lint, CLI help and frontend build passed. **24 local browser flows passed**, including six opponent/color combinations, keyboard/mobile states, release-identity evidence, unavailable models, history-preserving research links, comparison and a real released-backend flow. The **four-model preview browser flow passed separately** against its existing local artifacts. Two production-container flows were skipped; remote CI, Docker and Railway deployment are not verified by this update. The first browser attempts lacked the browser executable and then hit macOS sandbox launch restrictions; after installing temporary test browsers and allowing the local Chromium launch, the applicable suite passed.
+
+Both released model checksums were verified, and the release manifest is unchanged. No training, checkpoint promotion, remote push or deployment was performed. Push this branch using the command below; the focused local update commit is identified in the chat handoff.
+
 ## Scope and verification
 
 - Demo and Research navigation; Play/Compare share the current board/history. Existing model explanations and archived game replay remain accessible. Old model links resolve to the corresponding study without substituting checkpoints.
