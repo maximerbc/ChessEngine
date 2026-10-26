@@ -523,7 +523,9 @@ test("unavailable requested opponent stays selected without fallback; two oppone
     page.getByText("The requested opponent is unavailable.", { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /^Evolutionary A small neural evaluator/ }),
+    page.getByRole("button", {
+      name: /^Evolutionary A small neural evaluator/,
+    }),
   ).toBeDisabled();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
     "Evolutionary",

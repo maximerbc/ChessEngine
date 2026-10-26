@@ -1,4 +1,6 @@
-# Evolutionary study and current demoThe active Demo is Classical, Supervised and Evolutionary, with Supervised as the
+# Evolutionary study and current demo
+
+The active Demo is Classical, Supervised and Evolutionary, with Supervised as the
 default. Evolutionary stays disabled until its frozen quality and strength gates
 pass. Self-play is retired from live play; its reports and recorded games remain
 in **Research → Self-play: results and lessons**. Original inconclusive evidence

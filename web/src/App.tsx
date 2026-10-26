@@ -23,7 +23,10 @@ import {
 } from "./ModelGuide";
 
 import { ResearchIndex } from "./ResearchIndex";
-import { PositionComparison, type ComparisonResult } from "./PositionComparison";
+import {
+  PositionComparison,
+  type ComparisonResult,
+} from "./PositionComparison";
 import {
   releasedApproaches,
   releasedApproach,
@@ -731,7 +734,9 @@ export default function App() {
       : game.isDraw()
         ? "Draw"
         : busy
-          ? referenceBusy ? "Comparing position" : "Engine is thinking"
+          ? referenceBusy
+            ? "Comparing position"
+            : "Engine is thinking"
           : game.turn() === color
             ? "Your move"
             : "Engine to move";
@@ -779,7 +784,7 @@ export default function App() {
       </header>
       <main>
         <div className="eyebrow">
-          <span /> FROM SUPERVISION TO SELF-PLAY{" "}
+          <span /> RULES, SUPERVISION AND EVOLUTION{" "}
           <span className="version">RESEARCH JOURNAL</span>
         </div>
         <section className={`intro ${page ? "model-intro" : ""}`}>
@@ -815,10 +820,10 @@ export default function App() {
               {page
                 ? page.description
                 : tab === "play"
-                  ? "Play against Classical, Supervised and Evolutionary opponents. Discover three ways to evaluate a chess position, using the same search."
+                  ? "Explore Classical, Supervised and Evolutionary chess. Play available opponents and discover three ways to evaluate a position using the same search."
                   : tab === "compare"
                     ? "Compare Classical, Supervised and Evolutionary evaluations and moves on the same position, under equal search limits."
-                    : "A reproducible study of supervised learning and reinforcement learning, including the results that do not improve."}
+                    : "Reproducible studies of supervised, evolutionary and self-play learning, including the results that do not improve."}
             </p>
           </div>
           <div className="intro-note">
@@ -828,9 +833,9 @@ export default function App() {
                 page.question
               ) : (
                 <>
-                  Does learning through self-play
+                  How do different learning approaches
                   <br />
-                  make a chess evaluator better?
+                  change a chess evaluator?
                 </>
               )}
             </p>
@@ -977,8 +982,13 @@ export default function App() {
                 revision={generation.current}
                 available={connection === "ready" && identityMatches}
                 busy={busy}
-                evaluate={(body) => request<ComparisonResult>("/evaluate-comparison", body)}
-                onBusy={(next) => { setReferenceBusy(next); setBusy(next); }}
+                evaluate={(body) =>
+                  request<ComparisonResult>("/evaluate-comparison", body)
+                }
+                onBusy={(next) => {
+                  setReferenceBusy(next);
+                  setBusy(next);
+                }}
               />
               <section className="card">
                 <div className="section-heading">
@@ -1522,20 +1532,20 @@ export default function App() {
         <section className="method-strip">
           <div>
             <span>01</span>
-            <h3>Learn from a teacher</h3>
-            <p>Fit position values to engine-generated targets.</p>
+            <h3>Write chess knowledge</h3>
+            <p>Classical rules provide a baseline without training.</p>
           </div>
           <ChevronRight />
           <div>
             <span>02</span>
-            <h3>Learn through play</h3>
-            <p>Update the evaluator from self-play outcomes.</p>
+            <h3>Learn from a teacher</h3>
+            <p>Fit supervised position values to engine assessments.</p>
           </div>
           <ChevronRight />
           <div>
             <span>03</span>
-            <h3>Test the difference</h3>
-            <p>Compare frozen models under equal budgets.</p>
+            <h3>Evolve through competition</h3>
+            <p>Test competing evaluators and evolve their weights.</p>
           </div>
         </section>
       </main>

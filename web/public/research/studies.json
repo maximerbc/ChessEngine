@@ -23,7 +23,7 @@
       "id": "evolutionary",
       "title": "Evolutionary chess",
       "level": "Teacher-free evolutionary study",
-      "result": "pilot",
+      "result": "diagnostic",
       "availability": "in research",
       "question": "Can tournament-driven evolution learn a useful evaluator from scratch?",
       "takeaway": "All 324 evaluation parameters start randomly; no teacher labels or fixed material score. See the measured gates and evidence.",
@@ -169,8 +169,8 @@
     "policy-value/evidence.json": "e04ada459d3ff3a0e22eecee1cef6324c608ddbeb055051d65439e59af3ab43d",
     "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866",
     "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
-    "evolutionary/evidence.json": "a60f369313e23f784eee937f15e3be7701422bc9954c5ee9fc31954680e3cc0e",
-    "evolutionary/index.html": "d1f44ae67b6c88f4b01f5a010cd03f06b00c5521b1e103a50f5d71e66bca0055",
-    "evolutionary/protocol.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed"
+    "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
+    "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
+    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3"
   }
 }

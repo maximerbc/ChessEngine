@@ -4,6 +4,7 @@ import chess
 import numpy as np
 from chessengine.common import digest
 from chessengine.model import NumpyEvaluator
+from chessengine.evolution_model import load_evaluator
 from chessengine.evaluate import paired_summary
 
 
@@ -27,7 +28,7 @@ def test_release_models_and_recorded_results_are_consistent():
         path = manifest_path.parent / entry["file"]
         assert digest(path) == entry["sha256"]
         assert digest(root / "web/public/models" / entry["file"]) == entry["sha256"]
-        assert np.isfinite(NumpyEvaluator(path)(chess.Board()))
+        assert np.isfinite(load_evaluator(path)(chess.Board()))
     report = json.loads((root / "web/public/research/results.json").read_text())
     for row in report["aggregate"]["runs"]:
         games = json.loads((root / f"web/public/research/games-seed-{row['seed']}.json").read_text())["games"]
