@@ -16,10 +16,17 @@ def get(url):
 
 def main():
     api, web = "http://127.0.0.1:8000", "http://127.0.0.1:8080"
-    assert json.loads(get(api + "/health")[0])["models"] >= 3
+    assert json.loads(get(api + "/health")[0])["models"] >= 2
     models = {row["id"]: row for row in json.loads(get(api + "/models")[0])["models"]}
     with open("artifacts/models/manifest.json") as source:
         manifest = json.load(source)
+    assert "rl" not in models
+    try:
+        get(web + "/models/rl.npz")
+    except urllib.error.HTTPError as error:
+        assert error.code == 404
+    else:
+        raise AssertionError("Retired weights remain publicly downloadable")
     for row in manifest["models"]:
         assert models[row["id"]]["checkpoint_id"] == row["sha256"]
         weights, headers = get(web + "/models/" + row.get("file", row.get("ranker_file")))

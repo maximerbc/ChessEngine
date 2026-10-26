@@ -1,3 +1,17 @@
+# Evolutionary study and current demoThe active Demo is Classical, Supervised and Evolutionary, with Supervised as the
+default. Evolutionary stays disabled until its frozen quality and strength gates
+pass. Self-play is retired from live play; its reports and recorded games remain
+in **Research → Self-play: results and lessons**. Original inconclusive evidence
+and the later regression remain separate historical studies.
+
+The [evolutionary protocol](docs/evolutionary-preregistration.md) specifies a
+teacher-free, randomly initialized 324-parameter evaluator optimized by CMA-ES.
+Run `.venv/bin/python -m chessengine evolutionary --stage all`; the runner reports
+measured forecasts and stops without full training if pilot gates fail. Paid
+compute, automatic pushes and deployment are not authorized. Older release and
+four-model workflow descriptions below are historical; the v3 active manifest is
+the authority for playable models.
+
 # ChessEngine Lab
 
 **Can a chess evaluator improve by learning from its own games?**

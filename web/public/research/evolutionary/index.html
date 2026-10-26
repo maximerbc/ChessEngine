@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evolutionary chess — methods and results</title><style>body{max-width:950px;margin:3rem auto;padding:0 1rem;font:17px/1.6 system-ui;background:#10151c;color:#e8edf4}a{color:#8fd7cb}img{max-width:100%}pre{overflow:auto;font-size:13px}section{margin:2rem 0}</style>
+<nav><a href="/research?study=evolutionary">Research journal</a></nav><h1>Evolutionary chess</h1>
+<p><strong>planned</strong> · Research only</p><p>No completed strength comparison is available. The model is not playable.</p>
+<section><h2>What learns</h2><p>A 63-input neural evaluator has 324 learned parameters: four ReLU units, a learned linear connection and a bounded scalar output. Counts, pawn structure, king safety and attack coverage are human-designed inputs. All evaluation weights start randomly; no fixed material score, Stockfish labels, pretrained weights or gradient updates enter training. Our alpha-beta search chooses moves.</p></section>
+<section><h2>How it learns</h2><p>CMA-ES evaluates populations against Classical, the released Supervised evaluator and archived evolutionary opponents. Every candidate receives the same color-swapped positions and playing budgets within a generation. Historical opponents and changing curriculum make tournament fitness a development measure, not a stable strength rating.</p></section>
+<section><h2>Evidence and limits</h2><p>0 recorded matches; paid compute C$0. No Elo or calibrated win-probability claim. Capped games retain unfinished rule results and are reported separately. Opening-pair uncertainty and variation between training seeds are different quantities.</p><pre>{
+  &quot;pilot&quot;: null,
+  &quot;results&quot;: null,
+  &quot;forecasts&quot;: {
+    &quot;pilot&quot;: null,
+    &quot;main&quot;: null
+  }
+}</pre></section>
+<section><h2>Reproducible records</h2><p><a href="protocol.json">Frozen protocol</a> · <a href="evidence.json">Measured evidence</a></p></section></html>

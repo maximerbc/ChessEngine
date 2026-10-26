@@ -1,17 +1,41 @@
 {
   "version": 1,
-  "default_model": "rl",
+  "default_model": "supervised",
   "released_models": {
-    "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
-    "rl": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc"
+    "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b"
   },
   "studies": [
+    {
+      "id": "self-play-archive",
+      "title": "Self-play: results and lessons",
+      "level": "Archived research",
+      "result": "inconclusive",
+      "availability": "research only",
+      "question": "What did the unsuccessful self-play experiments teach us?",
+      "takeaway": "Self-play did not establish an improvement; the larger follow-up regressed. Reports, diagnoses and recorded matches remain available; live play is retired.",
+      "report": "/research/self-play-archive/index.html",
+      "checkpoint_ids": {
+        "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+        "rl": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc"
+      }
+    },
+    {
+      "id": "evolutionary",
+      "title": "Evolutionary chess",
+      "level": "Teacher-free evolutionary study",
+      "result": "pilot",
+      "availability": "in research",
+      "question": "Can tournament-driven evolution learn a useful evaluator from scratch?",
+      "takeaway": "All 324 evaluation parameters start randomly; no teacher labels or fixed material score. See the measured gates and evidence.",
+      "report": "/research/evolutionary/index.html",
+      "checkpoint_ids": {}
+    },
     {
       "id": "original-study",
       "title": "Original local study",
       "level": "Completed local study",
       "result": "inconclusive",
-      "availability": "released",
+      "availability": "historical study",
       "question": "From supervision to self-play",
       "takeaway": "Historical three-seed evidence for the original released collection; later studies use different checkpoints.",
       "report": "/research/report.html",
@@ -123,6 +147,7 @@
     }
   ],
   "assets": {
+    "self-play-archive/index.html": "befa836ef2718f7d91843f75cff1f7af754bab94ea476a1515596222dab24abd",
     "supervised-diagnostics/index.html": "ed77ac9a23cf19f3482a3b24318522e0b79cae28a88254e3c5d01a3006eb5ced",
     "supervised-diagnostics/data-size.png": "4510432089807cdf84e7523853ec4cf49804ad98c9fc44a54ec738eedaefd73a",
     "supervised-diagnostics/training-curves.png": "8b6de96858a1ff35ca04e15c5462002818c5e7100fc965dc6f281d454d89e999",
@@ -143,6 +168,9 @@
     "policy-value/index.html": "6b3aa8455ee6dc895415618145cda5ad8c650bcabb9e8cd201219a30123573a2",
     "policy-value/evidence.json": "e04ada459d3ff3a0e22eecee1cef6324c608ddbeb055051d65439e59af3ab43d",
     "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866",
-    "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d"
+    "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
+    "evolutionary/evidence.json": "a60f369313e23f784eee937f15e3be7701422bc9954c5ee9fc31954680e3cc0e",
+    "evolutionary/index.html": "d1f44ae67b6c88f4b01f5a010cd03f06b00c5521b1e103a50f5d71e66bca0055",
+    "evolutionary/protocol.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed"
   }
 }

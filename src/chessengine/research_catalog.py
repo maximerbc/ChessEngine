@@ -96,20 +96,31 @@ def publish(destination="web/public/research"):
     out.mkdir(parents=True, exist_ok=True)
     released = read_json("artifacts/models/manifest.json")
     models = {m["id"]: m["sha256"] for m in released["models"]}
+    original = read_json('artifacts/research/original-release.json')
+    original_models = {m['id']: m['sha256'] for m in original['models']}
     rows = [
+        dict(id='self-play-archive', title='Self-play: results and lessons',
+             level='Archived research', result='inconclusive', availability='research only',
+             question='What did the unsuccessful self-play experiments teach us?',
+             takeaway='Self-play did not establish an improvement; the larger follow-up regressed. Reports, diagnoses and recorded matches remain available; live play is retired.',
+             report='/research/self-play-archive/index.html', checkpoint_ids=original_models),
         dict(
             id="original-study",
             title="Original local study",
             level="Completed local study",
             result="inconclusive",
-            availability="released",
+            availability="historical study",
             question="From supervision to self-play",
             takeaway="Historical three-seed evidence for the original released collection; later studies use different checkpoints.",
             report="/research/report.html",
-            checkpoint_ids=models,
+            checkpoint_ids=original_models,
         )
     ]
     assets = {}
+    archive = out/'self-play-archive'
+    archive.mkdir(exist_ok=True)
+    (archive/'index.html').write_text('''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Self-play: results and lessons</title><style>body{max-width:800px;margin:3rem auto;padding:1rem;font:18px/1.7 system-ui}li{margin:1rem 0}</style><nav><a href="/research">Research journal</a></nav><h1>Self-play: results and lessons</h1><p>Self-play did not establish an improvement; the larger follow-up regressed. These models are retired from live play. This archive preserves what we tried, measured and learned.</p><ul><li><a href="/research?study=original-study">Original local study</a>: inconclusive improvement across three seeds. Charts and recorded-match replay remain in the original-study archive; recorded replay does not invoke a live engine.</li><li><a href="/research/rl-improvement/index.html">Larger live self-play follow-up</a>: 44.125% mean final score against its initializer; a regression, using different checkpoints.</li><li><a href="/research/rl-update-diagnosis/index.html">Fixed-trajectory diagnosis</a>: prediction anchoring passed a development screen. This was offline replay, not successful live reinforcement learning.</li><li><a href="/research/policy-value/index.html">Policy/value feasibility</a>: a completed 60-attempt pilot; the full comparison was deferred and provides no strength conclusion.</li></ul><h2>What changed next</h2><p>Shallow-play returns and prediction drift motivated a separately preregistered evolutionary experiment. We preserve the negative evidence rather than calling it a successful model.</p><a href="/research?study=evolutionary">Evolutionary research</a></html>''')
+    assets['self-play-archive/index.html'] = digest(archive/'index.html')
     for slug, title, level, result, question, takeaway, names in STUDIES:
         source = Path("docs/experiments") / slug
         target = out / slug
@@ -195,6 +206,17 @@ def publish(destination="web/public/research"):
             report="/research/policy-value/index.html" if state else None,
         )
     )
+    from .evolution_report import report as evolutionary_report
+    evolution = evolutionary_report(read_json('configs/evolutionary.json'), out/'evolutionary')
+    for path in (out/'evolutionary').iterdir():
+        if path.name in {'index.html', 'evidence.json', 'protocol.json', 'learning.png'}:
+            assets[f'evolutionary/{path.name}'] = digest(path)
+    rows.insert(1, dict(id='evolutionary', title='Evolutionary chess', level='Teacher-free evolutionary study',
+                       result='pilot' if evolution['status'] == 'planned' else 'diagnostic' if not evolution['qualified'] else 'improvement',
+                       availability='available' if 'evolutionary' in models else 'did not qualify' if evolution['status'] in ('pilot_failed', 'complete') else 'in research',
+                       question='Can tournament-driven evolution learn a useful evaluator from scratch?',
+                       takeaway='All 324 evaluation parameters start randomly; no teacher labels or fixed material score. See the measured gates and evidence.',
+                       report='/research/evolutionary/index.html', checkpoint_ids={'evolutionary': models['evolutionary']} if 'evolutionary' in models else {}))
     write_json(
         out / "studies.json",
         dict(
