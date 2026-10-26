@@ -10,6 +10,43 @@
   --border: #2d3933;
   --panel: #17211e;
 }
+.position-comparison table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+.position-comparison th, .position-comparison td {
+  text-align: center;
+  padding: 12px 4px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+}
+.position-comparison th:first-child { width: 38%; text-align: left; }
+.position-comparison thead th { color: var(--muted); font-size: 12px; }
+.position-comparison thead small { font-weight: 400; font-size: 10px; }
+.position-comparison td { color: var(--accent); font-variant-numeric: tabular-nums; }
+.position-comparison .comparison-gap th, .position-comparison .comparison-gap td {
+  padding: 5px 4px 12px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.position-comparison .actions { flex-wrap: wrap; }
+.position-comparison details { margin-top: 16px; font-size: 12px; }
+.position-comparison details summary { cursor: pointer; }
+.position-comparison .hash { overflow-wrap: anywhere; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 * {
   box-sizing: border-box;
 }

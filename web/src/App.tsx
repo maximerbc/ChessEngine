@@ -968,6 +968,18 @@ export default function App() {
               </div>
             </section>
             <aside>
+              <PositionComparison
+                initialFen={initialFen}
+                moves={history}
+                modelId={model}
+                modelName={displayName(model, currentModel?.name)}
+                checkpoint={currentModel?.checkpoint_id}
+                revision={generation.current}
+                available={connection === "ready" && identityMatches}
+                busy={busy}
+                evaluate={(body) => request<ComparisonResult>("/evaluate-comparison", body)}
+                onBusy={(next) => { setReferenceBusy(next); setBusy(next); }}
+              />
               <section className="card">
                 <div className="section-heading">
                   <span className="tiny-label">01 / YOUR OPPONENT</span>
@@ -1122,17 +1134,6 @@ export default function App() {
                   />
                 )}
               </section>
-              <PositionComparison
-                initialFen={initialFen}
-                moves={history}
-                modelId={model}
-                modelName={displayName(model, currentModel?.name)}
-                checkpoint={currentModel?.checkpoint_id}
-                available={connection === "ready" && identityMatches}
-                busy={busy}
-                evaluate={(body) => request<ComparisonResult>("/evaluate-comparison", body)}
-                onBusy={(next) => { setReferenceBusy(next); setBusy(next); }}
-              />
               <section className="card analysis-card">
                 <div className="section-heading">
                   <span className="tiny-label">02 / ENGINE INSIGHT</span>

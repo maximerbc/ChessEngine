@@ -23,6 +23,28 @@ test.describe("production containers", () => {
       await expect(page.locator(".analysis-card .hash")).toContainText(
         "Checkpoint",
       );
+      const comparison = page.getByRole("region", {
+        name: "Stockfish comparison",
+        exact: true,
+      });
+      await comparison
+        .getByRole("button", { name: "Compare with Stockfish", exact: true })
+        .click();
+      await expect(comparison.getByRole("table")).toBeVisible({
+        timeout: 20000,
+      });
+      await expect(comparison.getByRole("alert")).toHaveCount(0);
+      await expect(
+        comparison.getByRole("row", { name: /Position evaluation/ }),
+      ).toBeVisible();
+      await expect(
+        comparison.getByRole("row", { name: /After search/ }),
+      ).toBeVisible();
+      await comparison
+        .getByText("Search details and model version", { exact: true })
+        .click();
+      await expect(comparison).toContainText("Stockfish 19");
+      await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
       const download = page.waitForEvent("download");
       await page
         .getByRole("button", { name: "Export PGN", exact: true })
