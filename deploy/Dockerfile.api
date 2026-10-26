@@ -12,6 +12,6 @@ RUN python /tmp/install_stockfish.py /opt/stockfish && rm /tmp/install_stockfish
 RUN pip install --no-cache-dir -r requirements-runtime.txt && pip install --no-cache-dir --no-deps . \
     && useradd --uid 10001 --create-home engine
 COPY artifacts/models/ ./artifacts/models/
-RUN python -c "import json,pathlib; p=pathlib.Path('artifacts/models'); m=json.loads((p/'manifest.json').read_text()); allowed={r['file'] for r in m['models']}; assert {f.name for f in p.glob('*.npz')} == allowed"
+RUN python -c "import json,pathlib; p=pathlib.Path('artifacts/models'); m=json.loads((p/'manifest.json').read_text()); allowed={r['file'] for r in m['models']}; actual={f.name for f in p.glob('*.npz')}; assert actual == allowed, f'Packaged model files {sorted(actual)} do not match release manifest {sorted(allowed)}'"
 USER 10001
 CMD ["sh", "-c", "exec uvicorn chessengine.api:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1"]

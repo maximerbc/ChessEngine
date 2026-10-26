@@ -103,3 +103,22 @@ RUN_LIVE_TESTS=1 npm --prefix web run test:e2e
 For production containers, follow `docs/deployment.md`; both the HTTP smoke
 script and production browser test now require successful real Stockfish
 comparisons. Remote pushes and deployments remain user-managed.
+
+### PR #13 CI packaging correction
+
+The first [production-container run](https://github.com/maximerbc/ChessEngine/actions/runs/40281150721)
+successfully installed Stockfish but failed the API image's model-file assertion.
+Docker's directory exceptions in `.dockerignore` re-included the archived
+`artifacts/models/rl.npz`, despite the active manifest declaring only Supervised.
+The archive remains private research evidence and must not enter the image.
+
+Re-excluding the model directory's contents before the explicit allowed filenames
+fixes the build context. The manifest equality check remains in place, now with
+actual/expected filename diagnostics, and CI explicitly checks that retired RL
+weights are absent from the API image. Docker SDK build-context matching
+reproduced the old two-file mismatch and verified that the corrected context
+contains only `supervised.npz` plus the required comparison code/configuration.
+The focused production/release/comparison tests passed **17 tests** and the full
+Ruff check passed. The PR's Browser demo job passed; its Python lint and test steps
+also passed. A new full container build awaits the user's push because Docker
+remains unavailable locally; the remote fix has not yet been run.
