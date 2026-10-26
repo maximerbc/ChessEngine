@@ -11,7 +11,7 @@ test("live backend and released study render together", async ({
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: /Supervised model Learned from Stockfish/,
+      name: /^Supervised A neural network learns/,
     }),
   ).toBeVisible();
   await page
@@ -21,7 +21,7 @@ test("live backend and released study render together", async ({
   await expect(page.getByText("2 plies", { exact: true })).toBeVisible({
     timeout: 10000,
   });
-  await expect(page.locator(".hash")).toContainText("Checkpoint");
+  await expect(page.locator(".analysis-card .hash")).toContainText("Checkpoint");
   await page.screenshot({
     path: testInfo.outputPath("demo-preview.jpg"),
     fullPage: true,

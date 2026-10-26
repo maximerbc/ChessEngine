@@ -70,3 +70,8 @@
 - The user explicitly reduced scope to an immediately pushable product after the 559.6-hour main-study forecast. The release includes the consolidated website, existing released models, tested policy/value research infrastructure and the completed 60-attempt feasibility pilot. The full baseline-versus-anchor comparison is deferred, not completed or a release blocker.
 - Stop the long run gracefully and preserve its partial generation and frozen original protocol. Record the scope amendment and independent pilot audit in `docs/experiments/policy-value/release-scope.json`; do not rewrite the preregistration or call pilot results strength evidence. No model promotion or new deployment is authorized.
 - No study continuation runs for this release. A future full study needs new explicit user authorization; preserve its original quality and evidence requirements. Commit the verified final release assets locally and hand the branch to the user for pushing.
+
+## Three released playable approaches (2026-10-25)
+- The public Demo presents Classical (`handcrafted`), Supervised (`supervised`), and Self-play (`rl`) in that order, using existing released evaluators and shared alpha-beta search. Keep the manifest-selected default and model artifacts unchanged.
+- Explain Stockfish position assessments separately from move imitation. Gameplay does not train models. Tie neural evidence to the original local-study release identities; unmatched identities show unavailable evidence.
+- The released self-play evidence is inconclusive. Later negative RL, move ranking, and policy/value feasibility remain separate Research entries; preserve optional four-model local previews. No new training or model promotion is implied.
