@@ -49,19 +49,11 @@ type StudyIndex = {
 export function ReleasedExplanation({
   id,
   checkpoint,
-  available,
-  busy,
-  analyze,
   openResearch,
-  value,
 }: {
   id: string;
   checkpoint?: string;
-  available: boolean;
-  busy: boolean;
-  analyze: () => void;
   openResearch: (study: string) => void;
-  value?: number;
 }) {
   const [index, setIndex] = useState<StudyIndex | null>(null);
   useEffect(() => {
@@ -171,14 +163,6 @@ export function ReleasedExplanation({
         </p>
         <p className="hash">Checkpoint: {checkpoint || "unavailable"}</p>
       </details>
-      <button onClick={analyze} disabled={busy || !available}>
-        Analyze this position
-      </button>
-      {value !== undefined && (
-        <p>
-          Last analysis: {value.toFixed(3)} from the player-to-move perspective.
-        </p>
-      )}
     </section>
   );
 }

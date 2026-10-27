@@ -68,10 +68,7 @@ for (const [status, label] of [
     await expect(card).toBeDisabled();
     await expect(card).toContainText(label);
     await page
-      .getByRole("link", {
-        name: "Evolutionary methods and results ↗",
-        exact: true,
-      })
+      .getByRole("button", { name: "Explore the evidence", exact: true })
       .click();
     await expect(page).toHaveURL(/research.*study=evolutionary/);
     await expect(page.locator("#study-evolutionary")).toBeVisible();

@@ -106,23 +106,9 @@ header {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
   font-weight: 750;
   font-size: 15px;
   letter-spacing: 2.3px;
-}
-.brand-mark {
-  font-family: Georgia, serif;
-  font-size: 43px;
-  color: var(--accent);
-  line-height: 1;
-}
-.brand-sub {
-  display: block;
-  color: var(--muted);
-  font-size: 8px;
-  letter-spacing: 2px;
-  margin-top: 6px;
 }
 nav {
   display: flex;
@@ -199,6 +185,16 @@ main {
   justify-content: space-between;
   align-items: flex-end;
   margin: 22px 0 36px;
+  gap: 32px;
+}
+.intro > div {
+  min-width: 0;
+}
+.intro.demo-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: center;
+  margin: 0 0 20px;
 }
 .intro h1 {
   font-family: Manrope, sans-serif;
@@ -220,6 +216,7 @@ main {
   margin: 0;
 }
 .intro-note {
+  max-width: 360px;
   padding: 0 16px 6px 30px;
   border-left: 1px solid #334236;
 }
@@ -620,26 +617,9 @@ p {
   margin-top: 46px;
   border-top: 1px solid var(--border);
   padding: 30px 0 34px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 28px;
 }
 .method-strip > div {
-  flex: 1;
-  position: relative;
-  padding-left: 32px;
-}
-.method-strip > svg {
-  width: 14px;
-  color: #5d7658;
-}
-.method-strip > div > span {
-  position: absolute;
-  top: 4px;
-  left: 0;
-  font-size: 10px;
-  color: #809775;
+  max-width: 460px;
 }
 .method-strip h3 {
   font-size: 12px;
@@ -858,7 +838,7 @@ select {
     padding: 32px 24px 0;
   }
   .intro-note {
-    display: none;
+    padding-left: 20px;
   }
   .workspace {
     grid-template-columns: 1fr;
@@ -873,25 +853,14 @@ select {
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
+  .workspace > aside {
+    grid-template-columns: 1fr;
+  }
   .moves-card {
     grid-column: 1/-1;
   }
   .intro h1 {
     font-size: 42px;
-  }
-  .method-strip {
-    gap: 10px;
-  }
-  .method-strip > svg {
-    display: none;
-  }
-  .method-strip > div {
-    padding-left: 0;
-  }
-  .method-strip > div > span {
-    position: static;
-    display: block;
-    margin-bottom: 10px;
   }
   .research-banner {
     align-items: flex-start;
@@ -927,12 +896,6 @@ select {
     font-size: 11px;
     letter-spacing: 1.8px;
   }
-  .brand-mark {
-    font-size: 33px;
-  }
-  .brand-sub {
-    font-size: 7px;
-  }
   .brand {
     width: 100%;
   }
@@ -956,8 +919,18 @@ select {
     font-size: 6px;
     margin-left: auto;
   }
-  .intro {
-    margin: 20px 0 25px;
+  .intro,
+  .intro.demo-intro {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin: 0 0 20px;
+  }
+  .intro-note {
+    max-width: none;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding: 14px 0 0;
   }
   .intro h1 {
     font-size: 35px;
@@ -985,8 +958,7 @@ select {
     display: block;
   }
   .method-strip {
-    align-items: flex-start;
-    gap: 16px;
+    margin-top: 24px;
     padding: 23px 0;
   }
   .method-strip h3 {
@@ -994,9 +966,6 @@ select {
     line-height: 1.6;
   }
   .method-strip p {
-    font-size: 9px;
-  }
-  .method-strip > div > span {
     font-size: 9px;
   }
   footer {
