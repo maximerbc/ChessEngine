@@ -445,7 +445,7 @@ for (const [id, name] of [
       ]);
       await page.getByRole("button", { name: new RegExp(`^${name} `) }).click();
       await expect(
-        page.getByRole("region", { name: `${name} explained` }),
+        page.getByRole("region", { name: `${name} research summary` }),
       ).toContainText("Playing here does not train the models.");
       if (color === "Black") {
         await page.getByRole("button", { name: "Black", exact: true }).click();
@@ -481,17 +481,17 @@ test("released evidence is matched to checkpoint identity", async ({
   await mock(page);
   await page.goto("/?model=evolutionary");
   const explanation = page.getByRole("region", {
-    name: "Evolutionary explained",
+    name: "Evolutionary research summary",
   });
   await expect(explanation).toContainText(
     "passing qualification and fresh-final gates",
   );
   await expect(
-    explanation.getByRole("link", { name: /Evolutionary methods/ }),
+    explanation.getByRole("link", { name: "Read the research ↗", exact: true }),
   ).toHaveAttribute("href", "/research?study=evolutionary");
   await page.getByRole("button", { name: /^Supervised A neural/ }).click();
   await expect(
-    page.getByRole("region", { name: "Supervised explained" }),
+    page.getByRole("region", { name: "Supervised research summary" }),
   ).toContainText("not Stockfish moves");
   await page.route("**/research/studies.json", (route) =>
     route.fulfill({
@@ -504,11 +504,13 @@ test("released evidence is matched to checkpoint identity", async ({
   );
   await page.reload();
   await expect(
-    page.getByRole("region", { name: "Supervised explained" }),
+    page.getByRole("region", { name: "Supervised research summary" }),
   ).toContainText("Evidence unavailable for this version");
   await expect(
-    page.getByRole("link", { name: /Original local-study methods/ }),
-  ).toHaveCount(0);
+    page
+      .getByRole("region", { name: "Supervised research summary" })
+      .getByRole("link", { name: "Read the research ↗", exact: true }),
+  ).toHaveAttribute("href", "/research");
 });
 
 test("unavailable requested opponent stays selected without fallback and requires explicit selection", async ({
@@ -620,7 +622,7 @@ test("explanation research links preserve the game and selected opponent", async
   await mock(page);
   await page.goto("/?model=evolutionary&moves=e2e4,e7e5");
   const explanation = page.getByRole("region", {
-    name: "Evolutionary explained",
+    name: "Evolutionary research summary",
   });
   await expect(explanation).toContainText(
     "passing qualification and fresh-final gates",
@@ -629,7 +631,9 @@ test("explanation research links preserve the game and selected opponent", async
     path: info.outputPath("three-approaches-desktop.png"),
     fullPage: true,
   });
-  await explanation.getByRole("link", { name: /Evolutionary methods/ }).click();
+  await explanation
+    .getByRole("link", { name: "Read the research ↗", exact: true })
+    .click();
   await expect(page).toHaveURL(/research.*study=evolutionary/);
   await page.getByRole("button", { name: "Demo", exact: true }).click();
   await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
@@ -638,7 +642,30 @@ test("explanation research links preserve the game and selected opponent", async
   );
 });
 
-for (const width of [1366, 890, 390]) {
+test("footer Research link preserves the current game and selected opponent", async ({
+  page,
+}) => {
+  await mock(page);
+  await page.goto("/?model=handcrafted&moves=e2e4,e7e5,g1f3,b8c6");
+  await expect(page.getByText("4 plies", { exact: true })).toBeVisible();
+  const position = new URL(page.url()).searchParams.get("fen");
+  await page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "Research", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/research\?/);
+  const query = new URL(page.url()).searchParams;
+  expect(query.get("fen")).toBe(position);
+  expect(query.get("moves")).toBe("e2e4,e7e5,g1f3,b8c6");
+  expect(query.get("model")).toBe("handcrafted");
+  await page.getByRole("button", { name: "Demo", exact: true }).click();
+  await expect(page.getByText("4 plies", { exact: true })).toBeVisible();
+  await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
+    "Classical",
+  );
+});
+
+for (const width of [1366, 890, 734, 390]) {
   test(`annotated demo and Research stay clear at ${width}px`, async ({
     page,
   }, info) => {
@@ -683,21 +710,31 @@ for (const width of [1366, 890, 390]) {
     ).toHaveCount(0);
     await expect(page.locator(".model-option")).toHaveCount(3);
     await expect(
-      page.getByRole("region", { name: "Supervised explained" }),
-    ).toContainText("How it evaluates");
+      page.getByRole("region", { name: "Supervised research summary" }),
+    ).toContainText("Research summary");
     await expect(page.locator(".analysis-card")).toContainText(
       "ENGINE INSIGHT",
     );
     await expect(page.locator(".moves-card")).toBeVisible();
-    await expect(page.locator(".method-strip")).toHaveText(
-      "Test the differenceCompare frozen models under equal budgets.",
-    );
+    await expect(page.locator(".method-strip")).toHaveCount(0);
     await expect(
-      page.locator(".method-strip > svg, .method-strip > div > span"),
+      page.getByText("Test the difference", { exact: true }),
     ).toHaveCount(0);
+    const summary = page.getByRole("region", {
+      name: "Supervised research summary",
+    });
+    await expect(summary.getByRole("heading")).toHaveText("Research summary");
+    await expect(summary.getByRole("link")).toHaveCount(1);
+    await expect(summary.getByRole("link")).toHaveText("Read the research ↗");
     await expect(
-      page.getByRole("link", { name: "Supervised weights", exact: true }),
-    ).toBeVisible();
+      page.getByText("Mathematics and checkpoint", { exact: true }),
+    ).toHaveCount(0);
+    const footer = page.getByRole("contentinfo");
+    await expect(footer).toHaveText("CHESSENGINEResearch");
+    await expect(footer.getByRole("link")).toHaveCount(1);
+    await expect(
+      footer.getByRole("link", { name: "Research", exact: true }),
+    ).toHaveAttribute("href", "/research");
     await expect(page.locator(".intro-note")).toContainText(
       "Can evolution through tournament play produce a competitive chess evaluator?",
     );

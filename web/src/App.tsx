@@ -29,7 +29,7 @@ import {
 import {
   releasedApproaches,
   releasedApproach,
-  ReleasedExplanation,
+  ResearchSummary,
 } from "./ReleasedApproaches";
 
 const API = import.meta.env.VITE_API_URL || "/api";
@@ -1055,7 +1055,7 @@ export default function App() {
                   </button>
                 </div>
                 {!showcaseEnabled && (
-                  <ReleasedExplanation
+                  <ResearchSummary
                     id={model}
                     checkpoint={currentModel?.checkpoint_id}
                     openResearch={(study) => changeTab("research", study)}
@@ -1367,38 +1367,26 @@ export default function App() {
             </details>
           </>
         )}
-        {tab === "play" && (
-          <section className="method-strip" aria-label="Evaluation approach">
-            <div>
-              <h3>Test the difference</h3>
-              <p>Compare frozen models under equal budgets.</p>
-            </div>
-          </section>
-        )}
       </main>
       <footer>
-        <span>
-          CHESSENGINE <span className="footer-dot">/</span> An experiment in
-          learning
-        </span>
-        <span>
-          <a href="/models/supervised.npz" download>
-            Supervised weights
-          </a>{" "}
-          ·{" "}
-          <a href="/research?study=self-play-archive">
-            Self-play research archive
-          </a>
-          {models.some((m) => m.id === "evolutionary") && (
-            <>
-              {" "}
-              ·{" "}
-              <a href="/models/evolutionary.npz" download>
-                Evolutionary weights
-              </a>
-            </>
-          )}
-        </span>
+        <span>CHESSENGINE</span>
+        <a
+          href="/research"
+          onClick={(event) => {
+            if (
+              event.button === 0 &&
+              !event.metaKey &&
+              !event.ctrlKey &&
+              !event.shiftKey &&
+              !event.altKey
+            ) {
+              event.preventDefault();
+              changeTab("research");
+            }
+          }}
+        >
+          Research
+        </a>
       </footer>
       {promotion && (
         <div className="modal-backdrop">

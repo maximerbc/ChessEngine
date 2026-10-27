@@ -613,35 +613,14 @@ p {
 .move-list p {
   margin-bottom: 0;
 }
-.method-strip {
-  margin-top: 46px;
-  border-top: 1px solid var(--border);
-  padding: 30px 0 34px;
-}
-.method-strip > div {
-  max-width: 460px;
-}
-.method-strip h3 {
-  font-size: 12px;
-  font-weight: 500;
-  margin: 0 0 6px;
-}
-.method-strip p {
-  font-size: 10px;
-  color: #869781;
-  margin: 0;
-}
 footer {
+  margin-top: 32px;
   border-top: 1px solid var(--border);
   padding: 25px max(48px, calc((100vw - 1256px) / 2));
   display: flex;
   justify-content: space-between;
   font-size: 9px;
   color: #82917f;
-}
-.footer-dot {
-  padding: 0 10px;
-  color: #50634b;
 }
 .notice {
   display: flex;
@@ -957,26 +936,11 @@ select {
   .selected-label {
     display: block;
   }
-  .method-strip {
-    margin-top: 24px;
-    padding: 23px 0;
-  }
-  .method-strip h3 {
-    font-size: 10px;
-    line-height: 1.6;
-  }
-  .method-strip p {
-    font-size: 9px;
-  }
   footer {
     font-size: 8px;
     padding: 20px 16px;
     gap: 16px;
     line-height: 1.7;
-  }
-  footer span:last-child {
-    max-width: 115px;
-    text-align: right;
   }
   .notice {
     padding: 13px;
@@ -1074,17 +1038,14 @@ select {
 .study-badges { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .study-permalink { display: block; margin-top: 12px; font-size: 12px; }
 .study-selected { outline: 2px solid var(--accent, #24705b); }
-.released-explanation { margin: 18px 0; line-height: 1.6; }
+.research-summary { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.6; }
 @media(max-width:700px) { .study-grid { grid-template-columns: 1fr; } .study-index .section-heading { display: block; } }
 .archive-dashboard { margin: 32px 0; }
 .archive-dashboard > summary { cursor: pointer; font-size: 20px; padding: 20px 0; font-weight: 600; border-top: 1px solid #cbd7d0; }
 
-.released-explanation h3 { font-size: 13px; margin: 18px 0 5px; }
-.released-explanation p { font-size: 12px; margin: 6px 0 12px; }
-.released-explanation a { color: var(--accent); }
-.released-explanation details { margin: 16px 0; }
-.released-explanation summary { cursor: pointer; }
-.released-explanation .hash { overflow-wrap: anywhere; }
+.research-summary h3 { font-size: 13px; margin: 0 0 8px; }
+.research-summary p { font-size: 12px; margin: 0 0 10px; }
+.research-summary a { color: var(--accent); font-size: 12px; }
 .model-option > span:nth-child(2) { min-width: 0; flex: 1; }
 .model-option .selected-label { flex-shrink: 0; }
 .model-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

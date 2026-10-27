@@ -90,3 +90,4 @@
 - Public Demo has one Play mode. Retire the multi-model Compare workflow; normalize old `mode=compare` URLs to `mode=play` without losing position history or opponent identity, including offline and browser history navigation.
 - Retain current-position Stockfish comparison, automatic gameplay analysis and Engine Insight. Manual position inspection remains only in optional local research previews; shared API endpoints and search budgets remain unchanged.
 - Keep Demo and Research navigation, focus introductory questions on evolutionary learning, and preserve historical study identities, reports, model artifacts and release gates.
+- Follow-up UI annotations retire the remaining method strip and public footer downloads/archive links. Public opponent explanations are a compact Research summary with one Research link; the footer contains only CHESSENGINE and Research. Detailed mathematics, versions and historical evidence remain in Research reports and local previews.
