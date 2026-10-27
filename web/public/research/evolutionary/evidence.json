@@ -1,20 +1,924 @@
 {
-  "status": "planned",
+  "status": "benchmark_complete",
   "qualified": false,
   "representative_seed": 42,
   "pilot": null,
   "results": null,
   "histories": {},
-  "benchmark": null,
+  "execution": {},
+  "benchmark": {
+    "passed": true,
+    "nodes": 2048,
+    "budgets": [
+      {
+        "nodes": 512,
+        "depth_one": 1.0,
+        "depth_two": 0.3333333333333333,
+        "rows": [
+          {
+            "model": "classical",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.12631687501561828
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.1401670000050217
+          },
+          {
+            "model": "random",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.15021504199830815
+          },
+          {
+            "model": "classical",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.1222178750031162
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.13942849999875762
+          },
+          {
+            "model": "random",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.13125237499480136
+          },
+          {
+            "model": "classical",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.11027154099429026
+          },
+          {
+            "model": "supervised",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.12058474999503233
+          },
+          {
+            "model": "random",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.12014412501594052
+          },
+          {
+            "model": "classical",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.11706995801068842
+          },
+          {
+            "model": "supervised",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.12653541698819026
+          },
+          {
+            "model": "random",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.14018254200345837
+          },
+          {
+            "model": "classical",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.13599658300518058
+          },
+          {
+            "model": "supervised",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.15271912500611506
+          },
+          {
+            "model": "random",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.1993162499857135
+          },
+          {
+            "model": "classical",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.14888520899694413
+          },
+          {
+            "model": "supervised",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.162115957995411
+          },
+          {
+            "model": "random",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.2037750000017695
+          },
+          {
+            "model": "classical",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.14832662499975413
+          },
+          {
+            "model": "supervised",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.15651304100174457
+          },
+          {
+            "model": "random",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.20797383299213834
+          },
+          {
+            "model": "classical",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.14248616600525565
+          },
+          {
+            "model": "supervised",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.1630989999976009
+          },
+          {
+            "model": "random",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.19129925000015646
+          },
+          {
+            "model": "classical",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.15596937501686625
+          },
+          {
+            "model": "supervised",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.166293707996374
+          },
+          {
+            "model": "random",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.23796170801506378
+          },
+          {
+            "model": "classical",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.15297945801285096
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.16489724998245947
+          },
+          {
+            "model": "random",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.2123192090075463
+          },
+          {
+            "model": "classical",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.1506249999802094
+          },
+          {
+            "model": "supervised",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.15770833397982642
+          },
+          {
+            "model": "random",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 512,
+            "seconds": 0.22848516699741594
+          },
+          {
+            "model": "classical",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.1386555839853827
+          },
+          {
+            "model": "supervised",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.15265908400760964
+          },
+          {
+            "model": "random",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 1,
+            "nodes": 512,
+            "seconds": 0.19988520801416598
+          }
+        ]
+      },
+      {
+        "nodes": 2048,
+        "depth_one": 1.0,
+        "depth_two": 0.9583333333333334,
+        "rows": [
+          {
+            "model": "classical",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.5024125000054482
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.5912280000047758
+          },
+          {
+            "model": "random",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.6434810830105562
+          },
+          {
+            "model": "classical",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.5914220839913469
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.6688500829914119
+          },
+          {
+            "model": "random",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.7538153330096975
+          },
+          {
+            "model": "classical",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.4852461660047993
+          },
+          {
+            "model": "supervised",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.5500381249876227
+          },
+          {
+            "model": "random",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.5347117500205059
+          },
+          {
+            "model": "classical",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.5720093749987427
+          },
+          {
+            "model": "supervised",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.5893144170113374
+          },
+          {
+            "model": "random",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.6890382080164272
+          },
+          {
+            "model": "classical",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 1,
+            "nodes": 2048,
+            "seconds": 0.5624404170084745
+          },
+          {
+            "model": "supervised",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.6627435830014292
+          },
+          {
+            "model": "random",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.8579478749888949
+          },
+          {
+            "model": "classical",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.585379332973389
+          },
+          {
+            "model": "supervised",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.642727999977069
+          },
+          {
+            "model": "random",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.8563522499753162
+          },
+          {
+            "model": "classical",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.6087769999867305
+          },
+          {
+            "model": "supervised",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.7164133329933975
+          },
+          {
+            "model": "random",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.890159834001679
+          },
+          {
+            "model": "classical",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.7418560830119532
+          },
+          {
+            "model": "supervised",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.9049863749823999
+          },
+          {
+            "model": "random",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 1.0178936250158586
+          },
+          {
+            "model": "classical",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.781997499987483
+          },
+          {
+            "model": "supervised",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.7838141669926699
+          },
+          {
+            "model": "random",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 1.001889166975161
+          },
+          {
+            "model": "classical",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.6329846669977996
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.6595542499853764
+          },
+          {
+            "model": "random",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.9116692910029087
+          },
+          {
+            "model": "classical",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.6146146660030354
+          },
+          {
+            "model": "supervised",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 2048,
+            "seconds": 0.822046916000545
+          },
+          {
+            "model": "random",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.9140128330036532
+          },
+          {
+            "model": "classical",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.7031278749927878
+          },
+          {
+            "model": "supervised",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.7445469590020366
+          },
+          {
+            "model": "random",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 2048,
+            "seconds": 0.8700364580145106
+          }
+        ]
+      },
+      {
+        "nodes": 8192,
+        "depth_one": 1.0,
+        "depth_two": 1.0,
+        "rows": [
+          {
+            "model": "classical",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 4,
+            "nodes": 8192,
+            "seconds": 2.114911457989365
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 4,
+            "nodes": 8192,
+            "seconds": 2.3662914160231594
+          },
+          {
+            "model": "random",
+            "opening_id": "2b7f2c1898ab3f82",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.6500137919792905
+          },
+          {
+            "model": "classical",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.3631615420163143
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 4,
+            "nodes": 8192,
+            "seconds": 2.3925094160076696
+          },
+          {
+            "model": "random",
+            "opening_id": "2bac13ef0908eab0",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.323577708011726
+          },
+          {
+            "model": "classical",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 4,
+            "nodes": 8192,
+            "seconds": 1.9582362080109306
+          },
+          {
+            "model": "supervised",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 4,
+            "nodes": 8192,
+            "seconds": 2.1260495419846848
+          },
+          {
+            "model": "random",
+            "opening_id": "8cd4595345e157ac",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.401016041985713
+          },
+          {
+            "model": "classical",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 4,
+            "nodes": 8192,
+            "seconds": 2.0498992089997046
+          },
+          {
+            "model": "supervised",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.9734971669968218
+          },
+          {
+            "model": "random",
+            "opening_id": "d6c3f2ba961078c5",
+            "stratum": "endgame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.91462062500068
+          },
+          {
+            "model": "classical",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 2,
+            "nodes": 8192,
+            "seconds": 3.126013041997794
+          },
+          {
+            "model": "supervised",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.2248914589872584
+          },
+          {
+            "model": "random",
+            "opening_id": "9f7bb74f22a768e9",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 4.0704236250021495
+          },
+          {
+            "model": "classical",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.9748887500027195
+          },
+          {
+            "model": "supervised",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.2549826659960672
+          },
+          {
+            "model": "random",
+            "opening_id": "0a5b8f2c320fbbe0",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.5934827080054674
+          },
+          {
+            "model": "classical",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.0562309160013683
+          },
+          {
+            "model": "supervised",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.9781482920225244
+          },
+          {
+            "model": "random",
+            "opening_id": "ae50ee4131ce77e5",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 4.70106137500261
+          },
+          {
+            "model": "classical",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.2237048749811947
+          },
+          {
+            "model": "supervised",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.1839722500008065
+          },
+          {
+            "model": "random",
+            "opening_id": "7263f0f229a503b3",
+            "stratum": "middlegame",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.4586701249936596
+          },
+          {
+            "model": "classical",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.260293583996827
+          },
+          {
+            "model": "supervised",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.140113708010176
+          },
+          {
+            "model": "random",
+            "opening_id": "f4697d11698d2c4d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 4.074532165977871
+          },
+          {
+            "model": "classical",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.086532665998675
+          },
+          {
+            "model": "supervised",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.866222624987131
+          },
+          {
+            "model": "random",
+            "opening_id": "2f85593c8e775701",
+            "stratum": "opening",
+            "depth": 2,
+            "nodes": 8192,
+            "seconds": 3.26353375002509
+          },
+          {
+            "model": "classical",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.7012715410091914
+          },
+          {
+            "model": "supervised",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.627974250004627
+          },
+          {
+            "model": "random",
+            "opening_id": "c6ed0181df437a2d",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.723816749989055
+          },
+          {
+            "model": "classical",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.4570903749845456
+          },
+          {
+            "model": "supervised",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 2.751240375015186
+          },
+          {
+            "model": "random",
+            "opening_id": "f2d2008b05a383e2",
+            "stratum": "opening",
+            "depth": 3,
+            "nodes": 8192,
+            "seconds": 3.5048199169978034
+          }
+        ]
+      }
+    ]
+  },
   "forecasts": {
-    "pilot": null,
+    "pilot": {
+      "stage": "pilot",
+      "measured_p90_node_game_seconds": 39.677953483408785,
+      "measured_p90_production_game_seconds": 65.01390408402077,
+      "pilot_hours": 17.193779842810475,
+      "main_hours": 287.21044359110994,
+      "safety_multiplier": 1.5,
+      "main_matches": 31680,
+      "paid_cost_cad": 0,
+      "note": "Measured forecast, not a CPU time cap; two workers and no paid compute."
+    },
     "main": null
   },
-  "measured_active_seconds": 0.0,
-  "tournament_active_seconds": 0,
-  "matches": 0,
-  "peak_combined_bytes": 0,
-  "match_ledger_sha256": {},
+  "measured_active_seconds": 221.87970099999802,
+  "tournament_active_seconds": 405.005576125026,
+  "matches": 16,
+  "peak_combined_bytes": 128663552,
+  "match_ledger_sha256": {
+    "forecast-matches.json": "91fd11ce885457803223cf56255df1d68bcb4bebc7c74f058ba6075dd771496c",
+    "forecast-production-matches.json": "c4cc7571c754ab2766471cc57d2cd4ffbd8dc89a21de1944f0c24a642df56c93"
+  },
   "paid_cost_cad": 0,
   "limitation": "Pilot evidence is not strength evidence. All weights are learned; input features are human-designed."
 }

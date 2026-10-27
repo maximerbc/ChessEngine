@@ -1,4 +1,6 @@
-# Evolutionary study and current demoThe active Demo is Classical, Supervised and Evolutionary, with Supervised as the
+# Evolutionary study and current demo
+
+The active Demo is Classical, Supervised and Evolutionary, with Supervised as the
 default. Evolutionary stays disabled until its frozen quality and strength gates
 pass. Self-play is retired from live play; its reports and recorded games remain
 in **Research → Self-play: results and lessons**. Original inconclusive evidence
@@ -48,7 +50,7 @@ Open **http://127.0.0.1:5173**. The backend listens on port 8000. Supplied relea
 - PyTorch MLP regression, early stopping, exact CPU resume, schema-checked NumPy inference exports.
 - Frozen-actor self-play, completed-outcome returns, equal game weighting, resumable RL, and explicit truncation records.
 - Frozen match protocols, color-swapped openings, paired-bootstrap intervals, development-only checkpoint selection, and runtime/phase diagnostics.
-- React Play/Compare/Research views, PGN export/replay, accessible click/drag board, promotion, undo, wake-up and failure states.
+- React Demo/Research views with current-position Stockfish comparison, PGN export/replay, accessible click/drag board, promotion, undo, wake-up and failure states.
 - HTML/PDF reporting, production Railway containers, and Python/browser CI.
 
 ## Reproduce an experiment
@@ -114,7 +116,7 @@ The [fixed-data study protocol](docs/fixed-data-improvements.md) compares optimi
 
 ## Demo and research journal
 
-The website has two main destinations: **Demo** and **Research**. Demo offers three released opponents in order: **Classical** (handcrafted evaluation), **Supervised** (learned Stockfish position assessments), and **Self-play** (the released outcome-learning experiment). All use the same alpha-beta search; playing does not train them. Play and Compare share the current position/history. Explanations cover evaluation, move choice and checkpoint-matched original-study evidence; the released self-play study is inconclusive. Research preserves every study, including later RL regression and the completed policy/value feasibility pilot with its full comparison deferred. The historical interactive charts and game viewer remain in an expandable original-study archive. `/lab/*` links resolve to the matching research entry or classical demo; they do not substitute an unreleased checkpoint for a released one. `VITE_SHOWCASE=1` still enables explicitly staged, identity-checked local preview routes with matching preview assets.
+The website has two main destinations: **Demo** and **Research**. Demo presents **Classical** (handcrafted evaluation), **Supervised** (learned Stockfish position assessments), and **Evolutionary** (tournament-evolved evaluation, disabled until qualified). Available opponents use the same alpha-beta search; playing does not train them. Demo has one Play mode, with a current-position Stockfish comparison panel. Legacy Compare links open Play with the position and history preserved. Compact research summaries cover evaluation, shared search and checkpoint-matched evidence, with a link to Research; the released self-play study is inconclusive. Research preserves every study, including later RL regression and the completed policy/value feasibility pilot with its full comparison deferred. The historical interactive charts and game viewer remain in an expandable original-study archive. `/lab/*` links resolve to the matching research entry or classical demo; they do not substitute an unreleased checkpoint for a released one. `VITE_SHOWCASE=1` still enables explicitly staged, identity-checked local preview routes with matching preview assets.
 
 Publish only the explicit report allowlist, independently of any model-promotion gate:
 

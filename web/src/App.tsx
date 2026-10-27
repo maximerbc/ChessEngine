@@ -4,7 +4,6 @@ import {
   ArrowUpRight,
   ArrowLeft,
   ArrowRight,
-  ChevronRight,
   RotateCcw,
   Download,
   FlaskConical,
@@ -23,11 +22,14 @@ import {
 } from "./ModelGuide";
 
 import { ResearchIndex } from "./ResearchIndex";
-import { PositionComparison, type ComparisonResult } from "./PositionComparison";
+import {
+  PositionComparison,
+  type ComparisonResult,
+} from "./PositionComparison";
 import {
   releasedApproaches,
   releasedApproach,
-  ReleasedExplanation,
+  ResearchSummary,
 } from "./ReleasedApproaches";
 
 const API = import.meta.env.VITE_API_URL || "/api";
@@ -293,6 +295,17 @@ function Chart({
   );
 }
 
+function normalizeLegacyMode() {
+  const query = new URLSearchParams(window.location.search);
+  if (query.get("mode") !== "compare") return;
+  query.set("mode", "play");
+  window.history.replaceState(
+    null,
+    "",
+    window.location.pathname + "?" + query + window.location.hash,
+  );
+}
+
 function routePosition() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -321,15 +334,18 @@ export default function App() {
     : undefined;
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [initialFen, setInitialFen] = useState(() => routePosition().fen);
-  const [tab, setTab] = useState<"play" | "compare" | "research">(() =>
+  const [tab, setTab] = useState<"play" | "research">(() =>
     path === "/research" || (!showcaseEnabled && !!legacyStudies[path])
       ? "research"
-      : new URLSearchParams(window.location.search).get("mode") === "compare"
-        ? "compare"
-        : "play",
+      : "play",
   );
   const [models, setModels] = useState<Model[]>([]);
-  const [model, setModel] = useState("handcrafted");
+  const [model, setModel] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get("model");
+    return (
+      page?.id || (requested && requested !== "rl" ? requested : "supervised")
+    );
+  });
   const [connection, setConnection] = useState<"loading" | "ready" | "offline">(
     "loading",
   );
@@ -348,10 +364,6 @@ export default function App() {
   const [error, setError] = useState("");
   const [research, setResearch] = useState<Research | null>(null);
   const [evolutionStatus, setEvolutionStatus] = useState("planned");
-  const [example, setExample] = useState(0);
-  const [comparisons, setComparisons] = useState<
-    { model: Model; result: Analysis }[]
-  >([]);
   const [replay, setReplay] = useState(0);
   const [replayPly, setReplayPly] = useState(0);
   const generation = useRef(0);
@@ -366,12 +378,6 @@ export default function App() {
         kind: a.id,
         description: a.description,
       }));
-  const comparisonModels = showcaseEnabled
-    ? models
-    : releasedApproaches.flatMap((a) => {
-        const installed = models.find((m) => m.id === a.id);
-        return installed ? [installed] : [];
-      });
   const displayName = (id: string, fallback?: string) =>
     (!showcaseEnabled && releasedApproach(id)?.name) || fallback || id;
   const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
@@ -384,12 +390,13 @@ export default function App() {
       expectedCheckpoint === currentModel.checkpoint_id);
   const done = !!terminal || game.isGameOver();
   useEffect(() => {
+    normalizeLegacyMode();
     if (connection !== "ready") return;
     const query = new URLSearchParams(window.location.search);
     query.set("fen", initialFen);
     query.set("moves", history.join(","));
     query.set("model", model);
-    query.set("mode", tab === "compare" ? "compare" : "play");
+    query.set("mode", "play");
     window.history.replaceState(
       null,
       "",
@@ -400,13 +407,13 @@ export default function App() {
   const studyId =
     new URLSearchParams(window.location.search).get("study") ||
     (!showcaseEnabled ? legacyStudies[path] : undefined);
-  function changeTab(next: "play" | "compare" | "research", study?: string) {
+  function changeTab(next: "play" | "research", study?: string) {
     if (busy) return;
     const query = new URLSearchParams({
       fen: initialFen,
       moves: history.join(","),
       model,
-      mode: next === "compare" ? "compare" : "play",
+      mode: "play",
     });
     if (study) query.set("study", study);
     window.history.pushState(
@@ -453,18 +460,12 @@ export default function App() {
   }
   useEffect(() => {
     const back = () => {
+      normalizeLegacyMode();
       const position = routePosition();
       setInitialFen(position.fen);
       setHistory(position.moves);
       setPath(window.location.pathname);
-      setTab(
-        window.location.pathname === "/research"
-          ? "research"
-          : new URLSearchParams(window.location.search).get("mode") ===
-              "compare"
-            ? "compare"
-            : "play",
-      );
+      setTab(window.location.pathname === "/research" ? "research" : "play");
       const target = approaches.find(
         (a) => a.path === window.location.pathname,
       );
@@ -682,34 +683,6 @@ export default function App() {
     setSelected(null);
     setError("");
   }
-  async function compare() {
-    setBusy(true);
-    setError("");
-    setComparisons([]);
-    try {
-      const values = [];
-      for (const m of comparisonModels) {
-        const result = await request<Analysis>("/analyze", {
-          initial_fen: initialFen,
-          moves: history,
-          model_id: m.id,
-          nodes: 10000,
-          time_ms: 1500,
-        });
-        if (result.checkpoint_id !== m.checkpoint_id)
-          throw new Error(
-            "The engine checkpoint changed. Reconnect before comparing.",
-          );
-        values.push({ model: m, result });
-      }
-      setComparisons(values);
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }
-  const exampleBoard = game;
   const replayGame = new Chess();
   const selectedReplay = research?.games?.[replay];
   if (selectedReplay) {
@@ -731,7 +704,9 @@ export default function App() {
       : game.isDraw()
         ? "Draw"
         : busy
-          ? referenceBusy ? "Comparing position" : "Engine is thinking"
+          ? referenceBusy
+            ? "Comparing position"
+            : "Engine is thinking"
           : game.turn() === color
             ? "Your move"
             : "Engine to move";
@@ -746,10 +721,7 @@ export default function App() {
             navigate("overview");
           }}
         >
-          <span className="brand-mark">♞</span>
-          <span>
-            CHESSENGINE<span className="brand-sub">A MACHINE LEARNING LAB</span>
-          </span>
+          CHESSENGINE
         </a>
         <nav aria-label="Main navigation">
           {(["play", "research"] as const).map((t) => (
@@ -778,85 +750,66 @@ export default function App() {
         </div>
       </header>
       <main>
-        <div className="eyebrow">
-          <span /> FROM SUPERVISION TO SELF-PLAY{" "}
-          <span className="version">RESEARCH JOURNAL</span>
-        </div>
-        <section className={`intro ${page ? "model-intro" : ""}`}>
+        {tab === "research" && (
+          <div className="eyebrow">
+            <span /> FROM SUPERVISION TO EVOLUTION
+            <span className="version">RESEARCH JOURNAL</span>
+          </div>
+        )}
+        <section
+          className={`intro ${page ? "model-intro" : tab === "play" ? "demo-intro" : ""}`}
+        >
           <div>
-            <h1>
-              {page ? (
-                <>
+            {page ? (
+              <>
+                <h1>
                   {page.title}
                   <br />
                   <em>{page.subtitle}</em>
-                </>
-              ) : tab === "play" ? (
-                <>
-                  Learning, one
-                  <br />
-                  <em>position at a time.</em>
-                </>
-              ) : tab === "compare" ? (
-                <>
-                  Same position.
-                  <br />
-                  <em>Different experience.</em>
-                </>
-              ) : (
-                <>
-                  Evidence over
-                  <br />
-                  <em>assumptions.</em>
-                </>
-              )}
-            </h1>
-            <p>
-              {page
-                ? page.description
-                : tab === "play"
-                  ? "Play against Classical, Supervised and Evolutionary opponents. Discover three ways to evaluate a chess position, using the same search."
-                  : tab === "compare"
-                    ? "Compare Classical, Supervised and Evolutionary evaluations and moves on the same position, under equal search limits."
-                    : "A reproducible study of supervised learning and reinforcement learning, including the results that do not improve."}
-            </p>
+                </h1>
+                <p>{page.description}</p>
+              </>
+            ) : tab === "play" ? (
+              <>
+                <h1 className="sr-only">Play chess</h1>
+                <p>
+                  Explore Classical, Supervised and Evolutionary chess. Play
+                  available opponents and discover three ways to evaluate a
+                  position using the same search.
+                </p>
+              </>
+            ) : (
+              <h1>
+                Evidence over
+                <br />
+                <em>assumptions.</em>
+              </h1>
+            )}
           </div>
           <div className="intro-note">
             <span className="tiny-label">THE RESEARCH QUESTION</span>
             <p>
-              {page ? (
-                page.question
-              ) : (
-                <>
-                  Does learning through self-play
-                  <br />
-                  make a chess evaluator better?
-                </>
-              )}
+              {page
+                ? page.question
+                : "Can evolution through tournament play produce a competitive chess evaluator?"}
             </p>
             <button
               className="text-button"
-              onClick={() => changeTab("research")}
+              onClick={() => changeTab("research", "evolutionary")}
             >
               Explore the evidence <ArrowUpRight size={16} />
             </button>
           </div>
         </section>
-        {tab !== "research" && (
+        {tab === "play" && (
           <div className="demo-modes segmented" aria-label="Demo mode">
             <button
-              className={tab === "play" ? "chosen" : ""}
+              className="chosen"
+              aria-pressed="true"
               disabled={busy}
               onClick={() => changeTab("play")}
             >
               Play
-            </button>
-            <button
-              className={tab === "compare" ? "chosen" : ""}
-              disabled={busy}
-              onClick={() => changeTab("compare")}
-            >
-              Compare
             </button>
           </div>
         )}
@@ -977,8 +930,13 @@ export default function App() {
                 revision={generation.current}
                 available={connection === "ready" && identityMatches}
                 busy={busy}
-                evaluate={(body) => request<ComparisonResult>("/evaluate-comparison", body)}
-                onBusy={(next) => { setReferenceBusy(next); setBusy(next); }}
+                evaluate={(body) =>
+                  request<ComparisonResult>("/evaluate-comparison", body)
+                }
+                onBusy={(next) => {
+                  setReferenceBusy(next);
+                  setBusy(next);
+                }}
               />
               <section className="card">
                 <div className="section-heading">
@@ -986,9 +944,6 @@ export default function App() {
                   <Cpu size={17} />
                 </div>
                 <h2>Choose an opponent</h2>
-                <p className="muted">
-                  One search engine. Different ways to understand the board.
-                </p>
                 <div className="model-options">
                   {opponentOptions.map((m) => (
                     <button
@@ -1054,29 +1009,6 @@ export default function App() {
                     </button>
                   ))}
                 </div>
-                {!showcaseEnabled && (
-                  <p className="micro">
-                    <a
-                      href="/research?study=evolutionary"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        changeTab("research", "evolutionary");
-                      }}
-                    >
-                      Evolutionary methods and results ↗
-                    </a>
-                    {" · "}
-                    <a
-                      href="/research?study=self-play-archive"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        changeTab("research", "self-play-archive");
-                      }}
-                    >
-                      Self-play: results and lessons ↗
-                    </a>
-                  </p>
-                )}
                 {history.length > 0 && (
                   <p className="micro">Start a new game to change opponents.</p>
                 )}
@@ -1123,14 +1055,10 @@ export default function App() {
                   </button>
                 </div>
                 {!showcaseEnabled && (
-                  <ReleasedExplanation
+                  <ResearchSummary
                     id={model}
                     checkpoint={currentModel?.checkpoint_id}
-                    available={connection === "ready" && identityMatches}
-                    busy={busy}
-                    analyze={inspectPosition}
                     openResearch={(study) => changeTab("research", study)}
-                    value={analysis?.value}
                   />
                 )}
               </section>
@@ -1213,86 +1141,6 @@ export default function App() {
                   )}
                 </div>
               </section>
-            </aside>
-          </div>
-        )}
-        {tab === "compare" && (
-          <div className="workspace">
-            <section className="board-panel">
-              <div className="player-strip">
-                <FlaskConical size={20} />
-                <strong>
-                  Current shared position · {history.length} plies
-                </strong>
-              </div>
-              <Board game={exampleBoard} disabled />
-            </section>
-            <aside>
-              <section className="card">
-                <span className="tiny-label">A CONTROLLED COMPARISON</span>
-                <h2>
-                  Change the model,
-                  <br />
-                  keep the position.
-                </h2>
-                <p className="muted">
-                  All compared opponents use a 10,000-node ceiling and a
-                  1.5-second time limit. Actual completed depth and node counts
-                  are shown.
-                </p>
-                <label className="field">
-                  Position
-                  <select
-                    disabled={busy}
-                    value={example}
-                    onChange={(e) => {
-                      setExample(Number(e.target.value));
-                      loadExample(Number(e.target.value));
-                      setComparisons([]);
-                    }}
-                  >
-                    {examples.map((p, i) => (
-                      <option key={p.name} value={i}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <button
-                  className="primary"
-                  disabled={
-                    busy ||
-                    connection !== "ready" ||
-                    comparisonModels.length < 2
-                  }
-                  onClick={() => void compare()}
-                >
-                  {busy ? "Analyzing…" : "Compare models"}
-                  <ArrowRight size={16} />
-                </button>
-                {comparisonModels.length < 2 && (
-                  <p className="micro">
-                    At least two opponents must be available to compare models.
-                  </p>
-                )}
-              </section>
-              {comparisons.map(({ model: m, result: r }) => (
-                <section className="card comparison-card" key={m.id}>
-                  <span className="tiny-label">
-                    {displayName(m.id, m.name)}
-                  </span>
-                  <h2>
-                    {sanLine(exampleBoard, r.pv.slice(0, 1)) ||
-                      "Terminal position"}
-                  </h2>
-                  <p>
-                    Value {r.value.toFixed(3)} · Depth {r.depth} · {r.nodes}{" "}
-                    nodes
-                  </p>
-                  <p className="pv">{sanLine(exampleBoard, r.pv)}</p>
-                  <code className="hash">{r.checkpoint_id.slice(0, 16)}</code>
-                </section>
-              ))}
             </aside>
           </div>
         )}
@@ -1519,49 +1367,26 @@ export default function App() {
             </details>
           </>
         )}
-        <section className="method-strip">
-          <div>
-            <span>01</span>
-            <h3>Learn from a teacher</h3>
-            <p>Fit position values to engine-generated targets.</p>
-          </div>
-          <ChevronRight />
-          <div>
-            <span>02</span>
-            <h3>Learn through play</h3>
-            <p>Update the evaluator from self-play outcomes.</p>
-          </div>
-          <ChevronRight />
-          <div>
-            <span>03</span>
-            <h3>Test the difference</h3>
-            <p>Compare frozen models under equal budgets.</p>
-          </div>
-        </section>
       </main>
       <footer>
-        <span>
-          CHESSENGINE <span className="footer-dot">/</span> An experiment in
-          learning
-        </span>
-        <span>
-          <a href="/models/supervised.npz" download>
-            Supervised weights
-          </a>{" "}
-          ·{" "}
-          <a href="/research?study=self-play-archive">
-            Self-play research archive
-          </a>
-          {models.some((m) => m.id === "evolutionary") && (
-            <>
-              {" "}
-              ·{" "}
-              <a href="/models/evolutionary.npz" download>
-                Evolutionary weights
-              </a>
-            </>
-          )}
-        </span>
+        <span>CHESSENGINE</span>
+        <a
+          href="/research"
+          onClick={(event) => {
+            if (
+              event.button === 0 &&
+              !event.metaKey &&
+              !event.ctrlKey &&
+              !event.shiftKey &&
+              !event.altKey
+            ) {
+              event.preventDefault();
+              changeTab("research");
+            }
+          }}
+        >
+          Research
+        </a>
       </footer>
       {promotion && (
         <div className="modal-backdrop">

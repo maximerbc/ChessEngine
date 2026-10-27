@@ -29,9 +29,12 @@ def report(config, public_destination='web/public/research/evolutionary'):
     destination.mkdir(parents=True, exist_ok=True)
     pilot = read_optional(root/'pilot-decision.json')
     results = read_optional(root/'results.json')
+    execution = read_optional(root/'execution.json') or {}
     status = ('complete' if results else 'pilot_failed' if pilot and not pilot['passed']
               else 'training' if pilot else 'benchmark_complete' if (root/'benchmark.json').exists() else 'planned')
     qualified = bool(results and results['release_eligible'])
+    if execution.get('status') in ('error', 'interrupted') and status not in ('complete', 'pilot_failed'):
+        status = 'execution_'+execution['status']
     histories = {}
     for name in ['pilot', *[f'seed-{s}' for s in config['seeds']]]:
         history = read_optional(root/name/'history.json')
@@ -46,6 +49,7 @@ def report(config, public_destination='web/public/research/evolutionary'):
     elapsed = read_optional(root/'elapsed.json') or {}
     evidence = dict(status=status, qualified=qualified, representative_seed=config['representative_seed'],
                     pilot=pilot, results=results, histories=histories,
+                    execution={k: execution[k] for k in ('status', 'stage', 'active_seconds', 'updated_utc') if k in execution},
                     benchmark=read_optional(root/'benchmark.json'),
                     forecasts={s: read_optional(root/f'forecast-{s}.json') for s in ('pilot', 'main')},
                     measured_active_seconds=elapsed.get('active_seconds', 0.),

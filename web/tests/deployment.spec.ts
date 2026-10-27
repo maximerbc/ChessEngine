@@ -52,11 +52,12 @@ test.describe("production containers", () => {
       expect((await download).suggestedFilename()).toBe("chessengine-game.pgn");
       await page.getByRole("button", { name: "New game", exact: true }).click();
     }
-    await page.getByRole("button", { name: "Compare", exact: true }).click();
-    await page
-      .getByRole("button", { name: "Compare models", exact: true })
-      .click();
-    await expect(page.locator("aside")).toContainText("nodes");
+    await expect(
+      page.getByRole("button", { name: "Compare", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("button", { name: "Analyze this position", exact: true }),
+    ).toHaveCount(0);
     await page.screenshot({
       path: testInfo.outputPath("production.png"),
       fullPage: true,

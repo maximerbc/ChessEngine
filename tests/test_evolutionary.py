@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from chessengine.common import read_json, write_json
 from chessengine.evolution_model import features, prediction, export, EvolutionEvaluator, load_evaluator
-from chessengine.evolution_games import tasks_for, run_tasks
+from chessengine.evolution_games import audit_ledger, tasks_for, run_tasks
 from chessengine.evolution_study import generation_starts, fitness, evolve, release_gate
 from chessengine.features import record_board
 
@@ -65,6 +65,11 @@ def test_match_resume_truthful_caps_and_checksum_guard(tmp_path):
     assert len(result['games']) == 2
     assert {g['candidate_color'] for g in result['games']} == {'white', 'black'}
     assert all(g['capped'] and g['score'] == .5 and g['result'] == '*' for g in result['games'])
+    assert audit_ledger(result)['matches'] == 2
+    tampered = copy.deepcopy(result)
+    tampered['games'][0]['score'] = 1.
+    with pytest.raises(ValueError, match='outcome'):
+        audit_ledger(tampered)
     assert run_tasks(tasks, ledger, workers=1) == result
     export(np.ones(324)*.01, candidate)
     with pytest.raises(ValueError, match='changed'):
@@ -146,9 +151,11 @@ def test_retirement_manifest_and_reports(monkeypatch, tmp_path):
     with TestClient(create_app()) as client:
         data = client.get('/models').json()
         assert data['default'] == 'supervised'
-        assert {m['id'] for m in data['models']} == {'handcrafted', 'supervised'}
+        manifest = read_json('artifacts/models/manifest.json')
+        assert {m['id'] for m in data['models']} == {'handcrafted', *[r['id'] for r in manifest['models']]}
         assert client.post('/analyze', json={'model_id': 'rl'}).status_code == 410
-        assert client.post('/analyze', json={'model_id': 'evolutionary'}).status_code == 404
+        expected = 200 if 'evolutionary' in manifest['required_model_ids'] else 404
+        assert client.post('/analyze', json={'model_id': 'evolutionary', 'nodes': 8}).status_code == expected
     assert not Path('web/public/models/rl.npz').exists()
     old = read_json('artifacts/research/original-release.json')
     assert any(r['id'] == 'rl' for r in old['models'])

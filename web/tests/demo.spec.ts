@@ -73,7 +73,7 @@ async function mock(page: any) {
     });
   });
 }
-test("play, reply, undo, restart, export and compare", async ({ page }) => {
+test("play, reply, undo, restart and export", async ({ page }) => {
   await mock(page);
   await page.goto("/");
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
@@ -89,11 +89,8 @@ test("play, reply, undo, restart, export and compare", async ({ page }) => {
   expect((await dl).suggestedFilename()).toBe("chessengine-game.pgn");
   await page.getByRole("button", { name: "Undo", exact: true }).click();
   await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Compare", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Compare models", exact: true })
-    .click();
-  await expect(page.locator("aside")).toContainText("10000 nodes");
+  await page.getByRole("button", { name: "New game", exact: true }).click();
+  await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
 });
 test("offline research and mobile layout", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -223,30 +220,77 @@ test("legacy preview links redirect to research without substituting a released 
   await expect(page.locator(".model-tile")).toHaveCount(0);
 });
 
-test("research deep links, compare refresh and browser history preserve the position", async ({
-  page,
-}) => {
-  await mock(page);
-  await page.goto("/?moves=e2e4,e7e5&mode=compare");
-  await expect(
-    page.getByRole("button", { name: "Compare models", exact: true }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Research", exact: true }).click();
-  await page
-    .getByText("Original study: charts and saved games", { exact: true })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "The research journal" }),
-  ).toBeVisible();
-  await page.goBack();
-  await expect(
-    page.getByRole("button", { name: "Compare models", exact: true }),
-  ).toBeVisible();
-  await page.reload();
-  await expect(
-    page.getByRole("button", { name: "Compare models", exact: true }),
-  ).toBeVisible();
-});
+for (const offline of [false, true]) {
+  test(`legacy Compare links preserve position and opponent through refresh and history (${offline ? "offline" : "online"})`, async ({
+    page,
+  }) => {
+    await mock(page);
+    if (offline) await page.route("**/api/models", (route) => route.abort());
+    const fen = "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2";
+    const moves = "g1f3,g8f6";
+    const query = new URLSearchParams({
+      fen,
+      moves,
+      model: "handcrafted",
+      mode: "compare",
+    });
+    const requests: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().endsWith("/api/analyze")) requests.push(request.url());
+    });
+    await page.goto(`/?${query}`);
+    const preserved = async () => {
+      await expect(page).toHaveURL(/mode=play/);
+      const current = new URL(page.url()).searchParams;
+      expect(current.get("fen")).toBe(fen);
+      expect(current.get("moves")).toBe(moves);
+      expect(current.get("model")).toBe("handcrafted");
+      await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+      await expect(
+        page.locator(".model-option[aria-pressed=true]"),
+      ).toContainText("Classical");
+      await expect(
+        page.getByRole("button", { name: "f3 white knight", exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Compare", exact: true }),
+      ).toHaveCount(0);
+      await expect(
+        page.getByRole("button", { name: "Compare models", exact: true }),
+      ).toHaveCount(0);
+    };
+    await preserved();
+    if (offline)
+      await expect(
+        page.getByText("The live engine is unavailable"),
+      ).toBeVisible();
+    else
+      await expect(
+        page.getByText("Engine online", { exact: true }),
+      ).toBeVisible();
+    await page.reload();
+    await preserved();
+    // Simulate a legacy entry remaining in the browser's session history.
+    await page.evaluate(() => {
+      const url = new URL(location.href);
+      url.searchParams.set("mode", "compare");
+      history.replaceState(null, "", url);
+    });
+    await page.getByRole("button", { name: "Research", exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: "The research journal" }),
+    ).toBeVisible();
+    await page.goBack();
+    await preserved();
+    await page.goForward();
+    await expect(
+      page.getByRole("heading", { name: "The research journal" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Demo", exact: true }).click();
+    await preserved();
+    expect(requests).toHaveLength(0);
+  });
+}
 
 test("the main navigation contains only Demo and Research and reports work offline", async ({
   page,
@@ -342,34 +386,11 @@ test("released checkpoint mismatch blocks a move", async ({ page }) => {
   await expect(page.getByText("1 plies", { exact: true })).toBeVisible();
 });
 
-test("compare uses the actual shared position and Research has a compact archive", async ({
+test("Research preserves the shared position and has a compact archive", async ({
   page,
 }, info) => {
   await mock(page);
-  const positions: any[] = [];
-  page.on("request", (request) => {
-    if (request.url().endsWith("/api/analyze"))
-      positions.push(request.postDataJSON());
-  });
   await page.goto("/?moves=e2e4,e7e5");
-  await page.getByRole("button", { name: "Compare", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Compare models", exact: true })
-    .click();
-  await expect(page.locator(".comparison-card")).toHaveCount(3);
-  expect(positions.map((p) => p.model_id)).toEqual([
-    "handcrafted",
-    "supervised",
-    "evolutionary",
-  ]);
-  expect(
-    positions.every(
-      (p) =>
-        p.moves.join(",") === "e2e4,e7e5" &&
-        p.nodes === 10000 &&
-        p.time_ms === 1500,
-    ),
-  ).toBeTruthy();
   await page.getByRole("button", { name: "Research", exact: true }).click();
   await expect(
     page.getByText("Does the model learn?", { exact: true }),
@@ -378,6 +399,8 @@ test("compare uses the actual shared position and Research has a compact archive
     path: info.outputPath("research.png"),
     fullPage: true,
   });
+  await page.getByRole("button", { name: "Demo", exact: true }).click();
+  await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
 });
 
 test("new game and move history survive a refresh", async ({ page }) => {
@@ -422,7 +445,7 @@ for (const [id, name] of [
       ]);
       await page.getByRole("button", { name: new RegExp(`^${name} `) }).click();
       await expect(
-        page.getByRole("region", { name: `${name} explained` }),
+        page.getByRole("region", { name: `${name} research summary` }),
       ).toContainText("Playing here does not train the models.");
       if (color === "Black") {
         await page.getByRole("button", { name: "Black", exact: true }).click();
@@ -458,17 +481,17 @@ test("released evidence is matched to checkpoint identity", async ({
   await mock(page);
   await page.goto("/?model=evolutionary");
   const explanation = page.getByRole("region", {
-    name: "Evolutionary explained",
+    name: "Evolutionary research summary",
   });
   await expect(explanation).toContainText(
     "passing qualification and fresh-final gates",
   );
   await expect(
-    explanation.getByRole("link", { name: /Evolutionary methods/ }),
+    explanation.getByRole("link", { name: "Read the research ↗", exact: true }),
   ).toHaveAttribute("href", "/research?study=evolutionary");
   await page.getByRole("button", { name: /^Supervised A neural/ }).click();
   await expect(
-    page.getByRole("region", { name: "Supervised explained" }),
+    page.getByRole("region", { name: "Supervised research summary" }),
   ).toContainText("not Stockfish moves");
   await page.route("**/research/studies.json", (route) =>
     route.fulfill({
@@ -481,14 +504,16 @@ test("released evidence is matched to checkpoint identity", async ({
   );
   await page.reload();
   await expect(
-    page.getByRole("region", { name: "Supervised explained" }),
+    page.getByRole("region", { name: "Supervised research summary" }),
   ).toContainText("Evidence unavailable for this version");
   await expect(
-    page.getByRole("link", { name: /Original local-study methods/ }),
-  ).toHaveCount(0);
+    page
+      .getByRole("region", { name: "Supervised research summary" })
+      .getByRole("link", { name: "Read the research ↗", exact: true }),
+  ).toHaveAttribute("href", "/research");
 });
 
-test("unavailable requested opponent stays selected without fallback; two opponents can compare", async ({
+test("unavailable requested opponent stays selected without fallback and requires explicit selection", async ({
   page,
 }) => {
   await mock(page);
@@ -523,7 +548,9 @@ test("unavailable requested opponent stays selected without fallback; two oppone
     page.getByText("The requested opponent is unavailable.", { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /^Evolutionary A small neural evaluator/ }),
+    page.getByRole("button", {
+      name: /^Evolutionary A small neural evaluator/,
+    }),
   ).toBeDisabled();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
     "Evolutionary",
@@ -532,20 +559,17 @@ test("unavailable requested opponent stays selected without fallback; two oppone
     page.getByRole("button", { name: "e2 white pawn", exact: true }),
   ).toBeDisabled();
   expect(requests).toHaveLength(0);
-  await page.getByRole("button", { name: "Compare", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Compare models", exact: true })
-    .click();
-  await expect(page.locator(".comparison-card")).toHaveCount(2);
-  expect(requests.map((r) => r.model_id)).toEqual([
-    "handcrafted",
-    "supervised",
-  ]);
-  expect(
-    requests.every(
-      (r) => r.nodes === 10000 && r.time_ms === 1500 && r.moves.length === 0,
-    ),
-  ).toBeTruthy();
+  await expect(
+    page.getByRole("button", { name: "Compare with Stockfish", exact: true }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: /^Classical Handcrafted/ }).click();
+  await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
+    "Classical",
+  );
+  await expect(
+    page.getByRole("button", { name: "Compare with Stockfish", exact: true }),
+  ).toBeEnabled();
+  expect(requests).toHaveLength(0);
 });
 
 test("loading and offline cards stay visible and keyboard selection works on mobile", async ({
@@ -598,7 +622,7 @@ test("explanation research links preserve the game and selected opponent", async
   await mock(page);
   await page.goto("/?model=evolutionary&moves=e2e4,e7e5");
   const explanation = page.getByRole("region", {
-    name: "Evolutionary explained",
+    name: "Evolutionary research summary",
   });
   await expect(explanation).toContainText(
     "passing qualification and fresh-final gates",
@@ -607,7 +631,9 @@ test("explanation research links preserve the game and selected opponent", async
     path: info.outputPath("three-approaches-desktop.png"),
     fullPage: true,
   });
-  await explanation.getByRole("link", { name: /Evolutionary methods/ }).click();
+  await explanation
+    .getByRole("link", { name: "Read the research ↗", exact: true })
+    .click();
   await expect(page).toHaveURL(/research.*study=evolutionary/);
   await page.getByRole("button", { name: "Demo", exact: true }).click();
   await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
@@ -615,3 +641,137 @@ test("explanation research links preserve the game and selected opponent", async
     "Evolutionary",
   );
 });
+
+test("footer Research link preserves the current game and selected opponent", async ({
+  page,
+}) => {
+  await mock(page);
+  await page.goto("/?model=handcrafted&moves=e2e4,e7e5,g1f3,b8c6");
+  await expect(page.getByText("4 plies", { exact: true })).toBeVisible();
+  const position = new URL(page.url()).searchParams.get("fen");
+  await page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "Research", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/research\?/);
+  const query = new URL(page.url()).searchParams;
+  expect(query.get("fen")).toBe(position);
+  expect(query.get("moves")).toBe("e2e4,e7e5,g1f3,b8c6");
+  expect(query.get("model")).toBe("handcrafted");
+  await page.getByRole("button", { name: "Demo", exact: true }).click();
+  await expect(page.getByText("4 plies", { exact: true })).toBeVisible();
+  await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
+    "Classical",
+  );
+});
+
+for (const width of [1366, 890, 734, 390]) {
+  test(`annotated demo and Research stay clear at ${width}px`, async ({
+    page,
+  }, info) => {
+    await mock(page);
+    await page.setViewportSize({ width, height: 973 });
+    await page.goto("/");
+    await expect(page.locator(".brand")).toHaveText("CHESSENGINE");
+    await expect(page.locator(".brand-mark, .brand-sub")).toHaveCount(0);
+    await expect(page.locator(".eyebrow")).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", { name: "Play chess", exact: true }),
+    ).toHaveClass("sr-only");
+    await expect(page.getByText("Learning, one", { exact: false })).toHaveCount(
+      0,
+    );
+    await expect(page.locator(".demo-intro")).toContainText(
+      "Explore Classical, Supervised and Evolutionary chess.",
+    );
+    await expect(
+      page.getByRole("button", { name: "Play", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("region", { name: "Stockfish comparison" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Analyze this position", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByText("Last analysis:", { exact: false }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByText(
+        "One search engine. Different ways to understand the board.",
+        { exact: true },
+      ),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("link", {
+        name: "Self-play: results and lessons ↗",
+        exact: true,
+      }),
+    ).toHaveCount(0);
+    await expect(page.locator(".model-option")).toHaveCount(3);
+    await expect(
+      page.getByRole("region", { name: "Supervised research summary" }),
+    ).toContainText("Research summary");
+    await expect(page.locator(".analysis-card")).toContainText(
+      "ENGINE INSIGHT",
+    );
+    await expect(page.locator(".moves-card")).toBeVisible();
+    await expect(page.locator(".method-strip")).toHaveCount(0);
+    await expect(
+      page.getByText("Test the difference", { exact: true }),
+    ).toHaveCount(0);
+    const summary = page.getByRole("region", {
+      name: "Supervised research summary",
+    });
+    await expect(summary.getByRole("heading")).toHaveText("Research summary");
+    await expect(summary.getByRole("link")).toHaveCount(1);
+    await expect(summary.getByRole("link")).toHaveText("Read the research ↗");
+    await expect(
+      page.getByText("Mathematics and checkpoint", { exact: true }),
+    ).toHaveCount(0);
+    const footer = page.getByRole("contentinfo");
+    await expect(footer).toHaveText("CHESSENGINEResearch");
+    await expect(footer.getByRole("link")).toHaveCount(1);
+    await expect(
+      footer.getByRole("link", { name: "Research", exact: true }),
+    ).toHaveAttribute("href", "/research");
+    await expect(page.locator(".intro-note")).toContainText(
+      "Can evolution through tournament play produce a competitive chess evaluator?",
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBeTruthy();
+    await page.screenshot({
+      path: info.outputPath(`demo-${width}.png`),
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Explore the evidence", exact: true })
+      .click();
+    await expect(page).toHaveURL(/research.*study=evolutionary/);
+    await expect(page.locator("#study-evolutionary")).toBeVisible();
+    await expect(page.locator(".eyebrow")).toContainText(
+      "FROM SUPERVISION TO EVOLUTION",
+    );
+    await expect(
+      page.getByRole("heading", { name: "Evidence over assumptions." }),
+    ).toBeVisible();
+    await expect(page.locator(".intro > div:first-child > p")).toHaveCount(0);
+    await expect(page.locator(".method-strip")).toHaveCount(0);
+    await expect(page.locator("#study-self-play-archive")).toHaveCount(1);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBeTruthy();
+    await page
+      .getByRole("heading", { name: "Evidence over assumptions." })
+      .scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: info.outputPath(`research-${width}.png`),
+      fullPage: true,
+    });
+  });
+}
