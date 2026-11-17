@@ -91,3 +91,8 @@
 - Retain current-position Stockfish comparison, automatic gameplay analysis and Engine Insight. Manual position inspection remains only in optional local research previews; shared API endpoints and search budgets remain unchanged.
 - Keep Demo and Research navigation, focus introductory questions on evolutionary learning, and preserve historical study identities, reports, model artifacts and release gates.
 - Follow-up UI annotations retire the remaining method strip and public footer downloads/archive links. Public opponent explanations are a compact Research summary with one Research link; the footer contains only CHESSENGINE and Research. Detailed mathematics, versions and historical evidence remain in Research reports and local previews.
+
+## Supervised 180k release request (2026-11-17)
+- The user requested a PR promoting the existing seed-42 feature-v1 evaluator trained on 180,302 positions, conditional on latest main still declaring the 80,299-position model. Use the frozen development screen in `docs/supervised-180k-release.md`; keep the old release if it fails. This is distinct from the later feature-v3 candidate that failed its own gate.
+- Keep source checkpoints, original-study identities and historical results unchanged. The new active model's evidence must match its exact release checksum. No stronger-play claim follows from validation MSE or a passing point-score development screen.
+- No new training, evolutionary continuation, paid provisioning, merge or deployment is part of this PR. Existing scientific protocols retain their old baseline hashes and must not silently resume with the new active model.

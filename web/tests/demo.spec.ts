@@ -513,6 +513,26 @@ test("released evidence is matched to checkpoint identity", async ({
   ).toHaveAttribute("href", "/research");
 });
 
+test("new supervised release links its own evidence instead of the original study", async ({ page }) => {
+  await mock(page);
+  await page.route("**/research/studies.json", (route) =>
+    route.fulfill({
+      json: {
+        studies: [
+          { id: "self-play-archive", checkpoint_ids: { supervised: "s".repeat(64) } },
+          { id: "original-study", checkpoint_ids: { supervised: "old" } },
+          { id: "supervised-180k-release", checkpoint_ids: { supervised: "s".repeat(64) } },
+        ],
+      },
+    }),
+  );
+  await page.goto("/?model=supervised");
+  const summary = page.getByRole("region", { name: "Supervised research summary" });
+  await expect(summary).not.toContainText("Evidence unavailable");
+  await expect(summary.getByRole("link", { name: "Read the research ↗", exact: true }))
+    .toHaveAttribute("href", "/research?study=supervised-180k-release");
+});
+
 test("unavailable requested opponent stays selected without fallback and requires explicit selection", async ({
   page,
 }) => {
