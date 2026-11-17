@@ -123,3 +123,15 @@ Keep both active manifests and weights unchanged, retain the candidate as a
 private-repository inference bundle, and preserve the failed screen in a draft
 PR. Do not turn this inconclusive result into a regression or stronger-play
 claim, try another seed, or relax the threshold after measurement.
+
+## 2026-11-17 — authorize remote review branches
+
+The user explicitly authorized changing the contract to allow agents to push
+review branches, because the user will review pull requests before merging.
+This supersedes earlier user-managed-only push restrictions. Agents may push
+branches and open or update PRs for authorized work; direct pushes to main,
+force-pushes, visibility changes, merges and deployments require separate
+explicit authorization. Keep the repository private and leave PR merging to
+the user. This workflow amendment does not authorize spending, new experiments
+or relaxing model-release gates. Publish the prepared 180k candidate review as
+a draft PR while retaining the released 80k evaluator after the failed screen.

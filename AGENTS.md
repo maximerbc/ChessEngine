@@ -2,7 +2,7 @@
 
 ## Purpose and workflow
 - Demonstrate supervised learning, evolutionary learning, archived self-play research, careful experiments, and a polished chess demo for master's applications. Playing strength and positive RL results are not promised.
-- The repository stays private. The user handles remote pushes; never push or change visibility. Prepare three substantial review batches: foundation/supervised, RL/evidence, showcase/release. Use focused local commits where Git permissions allow. Do not block independent local work on a push.
+- The repository stays private. Agents may push review branches and open or update pull requests for authorized work. The user reviews and merges PRs; direct pushes to main, force-pushes, visibility changes, merges and deployments require separate explicit authorization. Prepare three substantial review batches: foundation/supervised, RL/evidence, showcase/release. Use focused local commits where Git permissions allow.
 - Implement autonomously, explain mathematics and evidence at milestones, and minimize questions. Ask only for consequential scope changes, identity/account access, or costs outside authorization.
 - Total paid spend ceiling is C$50 equivalent; reserve 20% contingency. Prefer free Railway credits; paid hosting requires explicit approval. Local Apple Silicon/8 GB development, optional paid Colab. Never assume free Colab permits chess training. No paid resources are provisioned implicitly.
 
@@ -34,7 +34,7 @@
 - Select the representative RL checkpoint and demo default using development results only. Publish all seed-level final scores, and keep seed variability separate from opening-pair uncertainty. The default stays supervised unless the selected RL model's development score exceeds 50%.
 
 ## Railway deployment contract
-- A fourth deployment PR follows showcase. User-managed pushes and private visibility remain mandatory.
+- A fourth deployment PR follows showcase. Review-branch pushes follow the current workflow authorization; private visibility remains mandatory.
 - Production requires a version-3 manifest declaring Supervised and any qualified Evolutionary model, with valid checksums; missing declared artifacts fail startup. One API replica, one Uvicorn worker, no persistent volume or training dependencies.
 - Dockerfiles and dashboard instructions define deployment. No paid activation or automatic PR environments. Track hosting costs within the C$50 ceiling.
 
@@ -69,7 +69,7 @@
 ## Immediate feasibility release (2026-10-15)
 - The user explicitly reduced scope to an immediately pushable product after the 559.6-hour main-study forecast. The release includes the consolidated website, existing released models, tested policy/value research infrastructure and the completed 60-attempt feasibility pilot. The full baseline-versus-anchor comparison is deferred, not completed or a release blocker.
 - Stop the long run gracefully and preserve its partial generation and frozen original protocol. Record the scope amendment and independent pilot audit in `docs/experiments/policy-value/release-scope.json`; do not rewrite the preregistration or call pilot results strength evidence. No model promotion or new deployment is authorized.
-- No study continuation runs for this release. A future full study needs new explicit user authorization; preserve its original quality and evidence requirements. Commit the verified final release assets locally and hand the branch to the user for pushing.
+- No study continuation runs for this release. A future full study needs new explicit user authorization; preserve its original quality and evidence requirements. Commit the verified final release assets and use a review branch and PR under the current workflow authorization.
 
 ## Three released playable approaches (2026-10-25)
 - The public Demo presents Classical (`handcrafted`), Supervised (`supervised`), and Self-play (`rl`) in that order, using existing released evaluators and shared alpha-beta search. Keep the manifest-selected default and model artifacts unchanged.
@@ -84,7 +84,7 @@
 - Evolutionary tournaments use complete legal histories and automatic draws. Capped tournament matches retain '*' rule outcomes and a separately named neutral fitness adjudication; no position-level outcome labels are generated. This does not change the exclusion of truncated games from historical Monte Carlo RL training.
 - Select all checkpoints on development before qualification/finals; representative seed 42 is fixed. Fresh final confirmation can only block promotion, never choose another checkpoint. Gates use conservative cap sensitivity and require beating Classical and near-parity with Supervised. All seed outcomes are published.
 - Runtime uses the separately versioned NumPy evolutionary evaluator and unchanged shared alpha-beta. Active-release manifest v3 declares required model IDs; checksums/kinds/schema are validated. Gameplay and current-position Stockfish comparison use 10,000 nodes/1,500 ms/qdepth four for every released approach.
-- Implement in local review batches. No remote push, deployment, paid resources or restart of the closed policy/value experiment.
+- Implement in review batches. Review-branch pushes follow the current workflow authorization. No deployment, paid resources or restart of the closed policy/value experiment.
 
 ## Demo simplification (2026-10-27)
 - Public Demo has one Play mode. Retire the multi-model Compare workflow; normalize old `mode=compare` URLs to `mode=play` without losing position history or opponent identity, including offline and browser history navigation.
@@ -96,3 +96,6 @@
 - The user requested a PR promoting the existing seed-42 feature-v1 evaluator trained on 180,302 positions, conditional on latest main still declaring the 80,299-position model. Use the frozen development screen in `docs/supervised-180k-release.md`; keep the old release if it fails. This is distinct from the later feature-v3 candidate that failed its own gate.
 - Keep source checkpoints, original-study identities and historical results unchanged. The new active model's evidence must match its exact release checksum. No stronger-play claim follows from validation MSE or a passing point-score development screen.
 - No new training, evolutionary continuation, paid provisioning, merge or deployment is part of this PR. Existing scientific protocols retain their old baseline hashes and must not silently resume with the new active model.
+
+## Remote PR workflow authorization (2026-11-17)
+- The user explicitly authorized agent-managed remote pushes so changes can be reviewed in pull requests before merging. This supersedes earlier user-managed-only push restrictions, including historical handoff instructions. Push authorized work to review branches and open or update PRs; leave merging to the user. Preserve private visibility, scientific release gates and separate authorization for deployment or paid resources.
