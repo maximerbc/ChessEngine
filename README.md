@@ -96,6 +96,7 @@ Tests include tiny CPU training runs; they are not scientific experiment results
 - [Study protocol](docs/study.md): reproducibility, data, checkpoints, costs and limitations.
 - [Supervised diagnostics](docs/experiments/supervised-diagnostics/index.html): frozen-model audit and 21 completed development runs; [reproduction guide](docs/supervised-diagnostics.md).
 - [200k data extension](docs/experiments/supervised-200k/index.html): three expanded-data fits reduced mean validation MSE by 9.2%; [protocol and reproduction](docs/expansion-200k.md).
+- [Supervised 180k release check](docs/experiments/supervised-180k-release/index.html): the existing seed-42 feature-v1 evaluator trained on 180,302 positions scored 48.75% in a direct 40-pair development screen and missed the 50% release gate. The 80,299-position model remains active. [Release protocol](docs/supervised-180k-release.md). Lower teacher error does not establish stronger chess play.
 - [Deployment](docs/deployment.md): private GitHub access and public Railway services.
 - [GitHub handoff](docs/github.md): three substantial review batches and push instructions.
 - [Demo walkthrough](docs/demo.md): a short project presentation.

@@ -23,7 +23,21 @@ def test_report_publication_is_independent_of_failed_model_gate(tmp_path):
         if p.is_file()
     }
     rows = publish(tmp_path / "research")
-    assert len(rows) == 11
+    has_release = Path('docs/experiments/supervised-180k-release/evidence.json').exists()
+    assert len(rows) == 11 + int(has_release)
+    if has_release:
+        release = next(r for r in rows if r['id'] == 'supervised-180k-release')
+        manifest = json.load(open('artifacts/models/manifest.json'))
+        current = next(m for m in manifest['models'] if m['id'] == 'supervised')
+        evidence = json.load(open('docs/experiments/supervised-180k-release/evidence.json'))
+        assert release['checkpoint_ids']['supervised'] == evidence['checkpoint_sha256']
+        original_study = next(r for r in rows if r['id'] == 'original-study')
+        if evidence['release_eligible']:
+            assert release['checkpoint_ids']['supervised'] == current['sha256']
+            assert original_study['checkpoint_ids']['supervised'] != current['sha256']
+        else:
+            assert release['availability'] == 'did not qualify'
+            assert original_study['checkpoint_ids']['supervised'] == current['sha256']
     rank = next(r for r in rows if r["id"] == "move-ranking")
     assert rank["result"] == "inconclusive" and rank["availability"] == "local preview"
     assert json.load(open("docs/experiments/move-ranking/final-audit.json"))["release_eligible"] is False

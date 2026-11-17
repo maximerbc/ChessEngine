@@ -102,3 +102,36 @@ Normalize legacy `mode=compare` links to Play while retaining the starting FEN, 
 ### Follow-up annotations — compact research summary and footer
 
 The user removed the remaining “Test the difference” note and requested a shorter opponent explanation and current footer. Replace the public explanation headings, mathematics disclosure and multiple research links with a compact Research summary covering evaluation, shared search and checkpoint-matched evidence, ending in one link to the relevant study (or the Research index when evidence is unavailable). Keep full technical and historical details in the Research reports and optional local previews. The footer now contains only CHESSENGINE and a Research link, preserving the current game when followed. Remove public weight-download links from the footer without changing model artifacts or their release status. Continue on `codex/evolutionary-engine`; the user will push the committed HEAD to a new remote branch and open the PR.
+
+## 2026-11-17 — requested supervised 180k promotion
+
+The user requested verification of latest main, a new branch, and a PR replacing
+the 80,299-position released evaluator with the existing 180,302-position
+seed-42 feature-v1 candidate. Main at `ba08f18` still declares the original
+checkpoint. The expanded-data experiment was development-only; the later failed
+feature-v3 gate belongs to a different candidate. Freeze a direct development
+screen before measurement as described in `supervised-180k-release.md`, retain
+the release on failure, and publish exact checkpoint-matched evidence on success.
+Validation error and a passing point-score gate do not establish stronger play.
+Preserve historical identities and the existing evolutionary protocol's baseline
+hash; a future cloud experiment requires its own explicit inputs. This request
+does not authorize merging, deployment, paid provisioning or new training.
+
+The completed screen scored 48.75% (27 wins, 24 draws, 29 losses; paired 95%
+interval 40.0–58.125%; no caps). It did not pass the frozen 50% threshold.
+Keep both active manifests and weights unchanged, retain the candidate as a
+private-repository inference bundle, and preserve the failed screen in a draft
+PR. Do not turn this inconclusive result into a regression or stronger-play
+claim, try another seed, or relax the threshold after measurement.
+
+## 2026-11-17 — authorize remote review branches
+
+The user explicitly authorized changing the contract to allow agents to push
+review branches, because the user will review pull requests before merging.
+This supersedes earlier user-managed-only push restrictions. Agents may push
+branches and open or update PRs for authorized work; direct pushes to main,
+force-pushes, visibility changes, merges and deployments require separate
+explicit authorization. Keep the repository private and leave PR merging to
+the user. This workflow amendment does not authorize spending, new experiments
+or relaxing model-release gates. Publish the prepared 180k candidate review as
+a draft PR while retaining the released 80k evaluator after the failed screen.

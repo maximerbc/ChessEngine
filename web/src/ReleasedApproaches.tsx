@@ -59,18 +59,21 @@ export function ResearchSummary({
   }, []);
   const approach = releasedApproach(id);
   if (!approach) return null;
-  const original = index?.studies?.find(
-    (study) =>
-      study.id === (id === "evolutionary" ? "evolutionary" : "original-study"),
-  );
+  const matchingStudy = checkpoint
+    ? index?.studies?.find(
+        (study) =>
+          (study.id === "original-study" ||
+            study.id === "evolutionary" ||
+            study.id.startsWith("supervised-")) &&
+          study.checkpoint_ids?.[id] === checkpoint,
+      )
+    : undefined;
   const matches =
     id === "handcrafted"
       ? checkpoint === "handcrafted-v1"
-      : !!checkpoint && original?.checkpoint_ids?.[id] === checkpoint;
+      : !!matchingStudy;
   const study = matches
-    ? id === "evolutionary"
-      ? "evolutionary"
-      : "original-study"
+    ? matchingStudy?.id || "original-study"
     : undefined;
   return (
     <section

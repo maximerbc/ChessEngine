@@ -217,6 +217,7 @@ def publish(destination="web/public/research"):
                        question='Can tournament-driven evolution learn a useful evaluator from scratch?',
                        takeaway='All 324 evaluation parameters start randomly; no teacher labels or fixed material score. See the measured gates and evidence.',
                        report='/research/evolutionary/index.html', checkpoint_ids={'evolutionary': models['evolutionary']} if 'evolutionary' in models else {}))
+    publish_supervised_release(out, models, rows, assets)
     write_json(
         out / "studies.json",
         dict(
@@ -224,6 +225,41 @@ def publish(destination="web/public/research"):
         ),
     )
     return rows
+
+
+def publish_supervised_release(out, models, rows, assets):
+    """Add only this release's allowlisted evidence, preserving other studies."""
+    release_source = Path('docs/experiments/supervised-180k-release')
+    if not (release_source / 'evidence.json').exists():
+        return
+    evidence = read_json(release_source / 'evidence.json')
+    target = Path(out) / 'supervised-180k-release'
+    target.mkdir(exist_ok=True)
+    names = {'index.html', 'evidence.json', 'protocol.json', 'games.json'}
+    for name in sorted(names):
+        source = release_source / name
+        if name.endswith('.html'):
+            (target / name).write_text(sanitize(source.read_text(), names))
+        else:
+            shutil.copyfile(source, target / name)
+        assets[f'supervised-180k-release/{name}'] = digest(target / name)
+    rows[:] = [r for r in rows if r['id'] != 'supervised-180k-release']
+    rows.insert(2, dict(
+        id='supervised-180k-release', title='Supervised: 180k release check',
+        level='Completed development release screen', result=evidence['summary']['conclusion'],
+        availability=('available' if models.get('supervised') == evidence['checkpoint_sha256'] else 'historical release')
+                     if evidence['release_eligible'] else 'did not qualify',
+        question='Should more training data replace the demo evaluator?',
+        takeaway=('Seed 42 trained on 180,302 positions passed the bounded development release screen. '
+                  if evidence['release_eligible'] else
+                  f"Seed 42 trained on 180,302 positions scored {evidence['summary']['score']:.2%} "
+                  'and did not pass the 50% development gate. '
+                  'The original 80k release remains active. ')
+                 + 'Lower teacher error does not establish stronger chess play.',
+        report='/research/supervised-180k-release/index.html',
+        checkpoint_ids={'supervised': evidence['checkpoint_sha256']},
+        source_evidence_sha256=digest(release_source / 'evidence.json'),
+    ))
 
 
 if __name__ == "__main__":

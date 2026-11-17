@@ -31,6 +31,20 @@
       "checkpoint_ids": {}
     },
     {
+      "id": "supervised-180k-release",
+      "title": "Supervised: 180k release check",
+      "level": "Completed development release screen",
+      "result": "inconclusive",
+      "availability": "did not qualify",
+      "question": "Should more training data replace the demo evaluator?",
+      "takeaway": "Seed 42 trained on 180,302 positions scored 48.75% and did not pass the 50% development gate. The original 80k release remains active. Lower teacher error does not establish stronger chess play.",
+      "report": "/research/supervised-180k-release/index.html",
+      "checkpoint_ids": {
+        "supervised": "f59145dcb350703f9f0a05ea95e3a3a9036ae4ec0f3c32eed88c8f721c4faa17"
+      },
+      "source_evidence_sha256": "b6920d2b738e4091acc4a8c0f74cf0ec538224cb93d72913ad4b6ff2a7857bb6"
+    },
+    {
       "id": "original-study",
       "title": "Original local study",
       "level": "Completed local study",
@@ -171,6 +185,10 @@
     "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
     "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
     "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
-    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3"
+    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
+    "supervised-180k-release/evidence.json": "b6920d2b738e4091acc4a8c0f74cf0ec538224cb93d72913ad4b6ff2a7857bb6",
+    "supervised-180k-release/games.json": "0b5980cc4a20c0c8b1c84e59c0528d9b5637998825bc8095628b307c599af44c",
+    "supervised-180k-release/index.html": "c8fff9ef0e53aedbbea7a87f765b8431cae30e69982552435319fa839df9532b",
+    "supervised-180k-release/protocol.json": "d606f21af2369c77ed7b382224ae9dce5b679cc759e845227d22aed0b4e268fa"
   }
 }
