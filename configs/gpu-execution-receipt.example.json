@@ -1,0 +1,11 @@
+{
+  "stage": "benchmark",
+  "protocol_sha256": null,
+  "provider": null,
+  "budget_cad": null,
+  "authorized_by_user": false,
+  "forecast_sha256": null,
+  "forecast_path": null,
+  "hourly_rate_cad": null,
+  "note": "Template only. A human provider/budget decision is required; this file authorizes no spending."
+}

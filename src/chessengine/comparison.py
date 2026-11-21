@@ -12,6 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from .common import digest
 from .engine import MATE, Search
+from .puct_serving import ValueSearch, STRATEGY
 
 log = logging.getLogger(__name__)
 
@@ -32,14 +33,18 @@ def winner(value):
     return "white" if value > 0 else "black"
 
 
-def model_assessments(board, evaluator, settings):
+def model_assessments(board, evaluator, settings, strategy='alpha-beta', simulations=64):
     sign = 1 if board.turn == chess.WHITE else -1
     position_value = float(evaluator(board)) * sign
-    result = Search(evaluator, settings.model_nodes, settings.model_time_ms).run(board)
+    search = (ValueSearch(evaluator, simulations, settings.model_time_ms) if strategy == STRATEGY
+              else Search(evaluator, settings.model_nodes, settings.model_time_ms))
+    result = search.run(board)
     is_mate = abs(result.value) > MATE - 1000
     return {
         "position_value": position_value,
         "search": {
+            "strategy": strategy,
+            "simulations": getattr(result, 'simulations', None),
             "value": None if is_mate else result.value * sign,
             "mate_winner": winner(result.value * sign) if is_mate else None,
             "terminal": result.terminal,
@@ -47,7 +52,8 @@ def model_assessments(board, evaluator, settings):
             "nodes": result.nodes,
             "elapsed_ms": result.elapsed_ms,
             "pv": result.pv,
-            "limits": {"nodes": settings.model_nodes, "time_ms": settings.model_time_ms},
+            "limits": ({"simulations": simulations, "time_ms": settings.model_time_ms} if strategy == STRATEGY
+                       else {"nodes": settings.model_nodes, "time_ms": settings.model_time_ms}),
         },
     }
 

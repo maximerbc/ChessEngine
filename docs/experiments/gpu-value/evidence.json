@@ -1,0 +1,45 @@
+{
+  "study": "gpu-value-v1",
+  "status": "infrastructure-only",
+  "supervised_positions": {
+    "train": 800000,
+    "validation": 100000,
+    "test": 100000
+  },
+  "planned_evolutionary_training_games": 368640,
+  "pilot_training_games": 30720,
+  "budget": "unset pending measured forecast and user decision",
+  "evidence": {
+    "status": "infrastructure-only",
+    "nvidia_verified": false,
+    "training_executed": false,
+    "paid_spend_cad": 0,
+    "verification": {
+      "python": {
+        "passed": 127,
+        "skipped": 2
+      },
+      "jax_cpu": {
+        "passed": 17
+      },
+      "browser": {
+        "passed": 44,
+        "skipped": 6
+      },
+      "ruff": "passed",
+      "website_build": "passed",
+      "cli": "passed",
+      "archive_restored_files": 1578,
+      "serving_training_modules_loaded": [],
+      "nvidia": "not executed; benchmark budget/provider not selected",
+      "full_study": "not executed"
+    }
+  },
+  "limitations": [
+    "No NVIDIA throughput or strength claim without measured execution.",
+    "One million total positions include 800,000 training positions.",
+    "Teacher agreement and playing strength are separate assessments.",
+    "184,320, 368,640 and 737,280 games are scenarios, not proven sufficiency thresholds.",
+    "Historical negative and inconclusive results remain unchanged."
+  ]
+}

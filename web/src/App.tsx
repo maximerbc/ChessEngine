@@ -39,12 +39,15 @@ type Model = {
   evidence: string;
   checkpoint_id: string;
   kind: string;
+  strategy?: string;
 };
 type Analysis = GuideAnalysis & {
   best_move: string | null;
   value: number;
   depth: number;
   nodes: number;
+  strategy?: string;
+  simulations?: number;
   elapsed_ms: number;
   pv: string[];
   checkpoint_id: string;
@@ -363,7 +366,6 @@ export default function App() {
   const [referenceBusy, setReferenceBusy] = useState(false);
   const [error, setError] = useState("");
   const [research, setResearch] = useState<Research | null>(null);
-  const [evolutionStatus, setEvolutionStatus] = useState("planned");
   const [replay, setReplay] = useState(0);
   const [replayPly, setReplayPly] = useState(0);
   const generation = useRef(0);
@@ -550,18 +552,6 @@ export default function App() {
   }
   useEffect(() => {
     void connect();
-    fetch("/research/evolutionary/evidence.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) =>
-        setEvolutionStatus(
-          data?.qualified
-            ? "qualified"
-            : ["pilot_failed", "complete"].includes(data?.status)
-              ? "failed"
-              : "planned",
-        ),
-      )
-      .catch(() => setEvolutionStatus("planned"));
     fetch("/research/model-catalog.json")
       .then((r) => (r.ok ? r.json() : null))
       .then(setCatalog)
@@ -773,7 +763,7 @@ export default function App() {
               <>
                 <h1 className="sr-only">Play chess</h1>
                 <p>
-                  Explore Classical, Supervised and Evolutionary chess. Play
+                  Explore Classical, current Supervised and two new GPU learning studies. Play
                   available opponents and discover three ways to evaluate a
                   position using the same search.
                 </p>
@@ -795,7 +785,7 @@ export default function App() {
             </p>
             <button
               className="text-button"
-              onClick={() => changeTab("research", "evolutionary")}
+              onClick={() => changeTab("research", "gpu-value")}
             >
               Explore the evidence <ArrowUpRight size={16} />
             </button>
@@ -885,7 +875,7 @@ export default function App() {
                   <strong>{displayName(model, currentModel?.name)}</strong>
                   <span>
                     {!showcaseEnabled
-                      ? "Shared alpha-beta search"
+                      ? currentModel?.strategy === "puct-uniform-v1" ? "CPU PUCT search" : "Shared alpha-beta search"
                       : currentModel?.evidence === "pilot"
                         ? "Pilot checkpoint · research in progress"
                         : "Shared search engine"}
@@ -989,12 +979,9 @@ export default function App() {
                         </small>
                       </span>
                       <span className="selected-label">
-                        {m.id === "evolutionary" &&
-                        evolutionStatus !== "qualified" &&
+                        {connection === "ready" && (m.id === "evolutionary-gpu" || m.id === "supervised-1m") &&
                         !models.some((installed) => installed.id === m.id)
-                          ? evolutionStatus === "failed"
-                            ? "DID NOT QUALIFY"
-                            : "IN RESEARCH"
+                          ? "IN RESEARCH"
                           : connection === "loading"
                             ? "LOADING"
                             : connection !== "ready" ||
@@ -1092,8 +1079,8 @@ export default function App() {
                     <span>DEPTH</span>
                   </div>
                   <div>
-                    <strong>{analysis?.nodes.toLocaleString() ?? "—"}</strong>
-                    <span>NODES</span>
+                    <strong>{(analysis?.strategy === "puct-uniform-v1" ? analysis.simulations : analysis?.nodes)?.toLocaleString() ?? "—"}</strong>
+                    <span>{analysis?.strategy === "puct-uniform-v1" ? "SIMULATIONS" : "NODES"}</span>
                   </div>
                   <div>
                     <strong>

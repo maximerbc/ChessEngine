@@ -1,0 +1,20 @@
+{
+  "python": {
+    "passed": 127,
+    "skipped": 2
+  },
+  "jax_cpu": {
+    "passed": 17
+  },
+  "browser": {
+    "passed": 44,
+    "skipped": 6
+  },
+  "ruff": "passed",
+  "website_build": "passed",
+  "cli": "passed",
+  "archive_restored_files": 1578,
+  "serving_training_modules_loaded": [],
+  "nvidia": "not executed; benchmark budget/provider not selected",
+  "full_study": "not executed"
+}

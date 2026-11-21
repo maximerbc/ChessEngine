@@ -1,5 +1,7 @@
 # Policy/value execution and handoff
 
+**Historical, closed study.** The release/default and workflow statements below describe that experiment's original handoff. Current GPU work is separate, preserves all historical results and does not authorize restarting this study. Use [GPU operations](gpu-operations.md) and the current `AGENTS.md` amendment.
+
 ## Baseline and release boundary
 
 Implementation branch: `codex/policy-value-research`. Its starting tree at `e0b25a7` was verified identical to main after PRs #9/#10 merged (`1f6318b`); GitHub comparison showed two merge commits and zero changed files. CLI authentication could not fetch those merge objects. No user-managed push or account setting was changed.

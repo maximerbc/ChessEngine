@@ -1,5 +1,7 @@
 # Local evolutionary execution
 
+**Historical protocol.** The two-worker forecasts and 324-parameter architecture below belong to the original study. The new separately named GPU study has scalable concurrency, different architecture/search, preserved legacy artifacts and an unset budget. Use [GPU operations](gpu-operations.md) for current work; do not resume or overwrite this historical run.
+
 The initial measured forecast is **17.2 hours for the learning pilot** and
 **287.2 hours for the main study**, including a 50% margin and two workers.
 These are forecasts, not caps or promises. The main forecast is recomputed after

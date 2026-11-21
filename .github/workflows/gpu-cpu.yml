@@ -1,0 +1,16 @@
+name: GPU study CPU checks
+on: [push, pull_request]
+jobs:
+  cpu-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: training/requirements.lock
+      - run: python -m pip install --require-hashes -r training/requirements.lock
+      - run: PYTHONPATH=src python -m chessengine.gpu doctor
+      - run: PYTHONPATH=src python -m pytest -q tests/gpu
+      # No full data labeling, learning study or paid NVIDIA runner in CI.

@@ -20,6 +20,17 @@
       }
     },
     {
+      "id": "gpu-value",
+      "title": "GPU value learning studies",
+      "level": "GPU studies: infrastructure-only",
+      "result": "planned",
+      "availability": "research only",
+      "question": "Can broader supervision and GPU tournaments improve the value evaluator?",
+      "takeaway": "One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.",
+      "report": "/research/gpu-value/index.html",
+      "checkpoint_ids": {}
+    },
+    {
       "id": "evolutionary",
       "title": "Evolutionary chess",
       "level": "Teacher-free evolutionary study",
@@ -171,6 +182,8 @@
     "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
     "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
     "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
-    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3"
+    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
+    "gpu-value/index.html": "da6f26acdd3ac4f8a25a9c72df8ec73f792931960b519423524f2c4a24d351fa",
+    "gpu-value/evidence.json": "e44b5a4a4a235bc62a366534603ed2f73698b8fa9a1246effe2cae2312b25245"
   }
 }

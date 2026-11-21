@@ -1,6 +1,8 @@
 # Railway deployment from the private repository
 
-Deploy the showcase and Railway PRs before following this handoff. The user pushes; repository visibility stays private. No public deployment or paid activation is implied by these files.
+Agents may push private review branches and open PRs; the user decides merges and deployments. Repository visibility stays private. No public deployment or paid activation is implied by these files.
+
+The current GPU amendment keeps serving on CPU, with one API replica/one Uvicorn worker and no training dependencies. Existing manifest v3 remains supported. Future qualified `supervised-1m` and `evolutionary-gpu` artifacts use staged manifest v4 with explicit architecture, feature, search, checksums and evidence. Classical/current Supervised retain alpha-beta and exact release identities; current Supervised stays default. New models use CPU PUCT, report simulations separately from nodes, and retain the default 1,500-ms allowance. See [GPU operations](gpu-operations.md); do not deploy staged artifacts without the user's separate decision.
 
 ## Two-service setup
 

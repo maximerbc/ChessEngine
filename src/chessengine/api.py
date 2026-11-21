@@ -14,6 +14,9 @@ from .engine import Search, Handcrafted, MATE
 from .evolution_model import load_evaluator
 from .ranking import NumpyRanker, GuidedEvaluator
 from .comparison import ComparisonSettings, model_assessments, stockfish_assessment
+from .puct_serving import ValueSearch, STRATEGY
+from .gpu.release import validate_entry
+from .gpu.protocol import MODEL_IDS, LEGACY_SHA
 
 
 class PositionRequest(BaseModel):
@@ -25,6 +28,7 @@ class PositionRequest(BaseModel):
 class AnalysisRequest(PositionRequest):
     nodes: int = Field(default=10000, ge=1, le=10000)
     time_ms: int = Field(default=1500, ge=10, le=3000)
+    simulations: int | None = Field(default=None, ge=1, le=128)
 
 
 def create_app(manifest_path=None, comparison_settings=None):
@@ -38,6 +42,7 @@ def create_app(manifest_path=None, comparison_settings=None):
             "evidence": "baseline",
             "checkpoint_id": "handcrafted-v1",
             "evaluator": Handcrafted(),
+            "strategy": "alpha-beta",
         }
     }
     manifest_path = Path(manifest_path or os.getenv("MODEL_MANIFEST", "artifacts/models/manifest.json"))
@@ -47,24 +52,45 @@ def create_app(manifest_path=None, comparison_settings=None):
     default_model = "handcrafted"
     if manifest_path.exists():
         manifest = read_json(manifest_path)
+        if manifest.get('release_version') == 4 and manifest.get('default') != 'supervised':
+            raise ValueError('Manifest v4 must preserve the current Supervised default')
+        if len({r['id'] for r in manifest['models']}) != len(manifest['models']):
+            raise ValueError('Duplicate model identity in manifest')
         if require_models:
             required = manifest.get('required_model_ids')
-            if (manifest.get('release_version') != 3 or not isinstance(required, list)
+            if (manifest.get('release_version') not in {3, 4} or not isinstance(required, list)
                     or 'supervised' not in required or len(set(required)) != len(required)
-                    or not set(required).issubset({'supervised', 'evolutionary'})
+                    or not set(required).issubset({'supervised', 'evolutionary', *MODEL_IDS})
                     or {r['id'] for r in manifest['models']} != set(required)):
-                raise ValueError('Production requires a v3 manifest with explicit required models')
+                raise ValueError('Production requires a v3 manifest or v4 manifest with explicit required models')
         for row in manifest["models"]:
             if row['id'] == 'rl' or row.get("kind") == "move-guided":
                 continue
             if Path(row['file']).name != row['file']:
                 raise ValueError('Model file must be inside the manifest directory')
             evaluator = load_evaluator(manifest_path.parent / row["file"])
-            expected_kind = {'supervised': 'supervised', 'evolutionary': 'evolutionary'}.get(row['id'])
+            expected_kind = {'supervised': 'supervised', 'evolutionary': 'evolutionary', **MODEL_IDS}.get(row['id'])
             if expected_kind is None or evaluator.metadata['kind'] != expected_kind:
                 raise ValueError('Model kind does not match its playable identity')
             if evaluator.checkpoint_id != row["sha256"]:
                 raise ValueError("Model manifest checksum mismatch")
+            if row['id'] not in MODEL_IDS and row.get('search',{'strategy':'alpha-beta'}) != {'strategy':'alpha-beta'}:
+                raise ValueError('Existing model identities must preserve alpha-beta search')
+            if manifest.get('release_version') == 4 and row['id']=='supervised' and row['sha256'] != LEGACY_SHA:
+                raise ValueError('Manifest v4 must preserve the released 80k Supervised identity')
+            if row['id'] in MODEL_IDS:
+                if manifest.get('release_version') != 4:
+                    raise ValueError('GPU study models require manifest v4')
+                validate_entry(row, evaluator)
+            if manifest.get('release_version') == 4:
+                architecture = [853 if evaluator.feature_version == 3 else 841,
+                                *evaluator.metadata['hidden'], 1]
+                if (row.get('architecture') != architecture
+                        or row.get('feature_version') != evaluator.feature_version
+                        or not row.get('evidence_id') or not row.get('search')):
+                    raise ValueError('Manifest architecture, feature, search or evidence identity mismatch')
+                if row['id'] not in MODEL_IDS and row['search'] != {'strategy': 'alpha-beta'}:
+                    raise ValueError('Existing released search must remain alpha-beta')
             models[row["id"]] = {
                 "name": row["name"],
                 "kind": evaluator.metadata["kind"],
@@ -74,6 +100,9 @@ def create_app(manifest_path=None, comparison_settings=None):
                 "documentation_path": row.get("documentation_path"),
                 "experimental": row.get("experimental", row["id"] == "rl"),
                 "components": {"value": evaluator.checkpoint_id},
+                "strategy": row.get('search', {}).get('strategy', 'alpha-beta'),
+                "search": row.get('search', {'strategy': 'alpha-beta'}),
+                "evidence_id": row.get('evidence_id'),
             }
         for row in manifest["models"]:
             if row.get("kind") != "move-guided":
@@ -169,7 +198,9 @@ def create_app(manifest_path=None, comparison_settings=None):
                 "checkpoint_id": selected["checkpoint_id"],
                 "components": selected.get("components", {}),
                 "terminal": board.result(claim_draw=True) if board.is_game_over(claim_draw=True) else None,
-                **model_assessments(board, selected["evaluator"], comparison_settings),
+                **model_assessments(board, selected["evaluator"], comparison_settings,
+                                    selected.get('strategy', 'alpha-beta'),
+                                    selected.get('search', {}).get('simulations', 64)),
                 "stockfish": stockfish_assessment(board, comparison_settings),
             }
 
@@ -188,8 +219,13 @@ def create_app(manifest_path=None, comparison_settings=None):
 
         async def work():
             try:
+                selected = models[request.model_id]
+                strategy = selected.get('strategy', 'alpha-beta')
+                simulations = min(request.simulations or 128, selected.get('search', {}).get('simulations', 64))
+                search = (ValueSearch(selected['evaluator'], simulations, request.time_ms)
+                          if strategy == STRATEGY else Search(selected['evaluator'], request.nodes, request.time_ms))
                 return await asyncio.to_thread(
-                    Search(models[request.model_id]["evaluator"], request.nodes, request.time_ms).run, board
+                    search.run, board
                 )
             finally:
                 lock.release()
@@ -211,6 +247,7 @@ def create_app(manifest_path=None, comparison_settings=None):
             "model_id": request.model_id,
             "checkpoint_id": models[request.model_id]["checkpoint_id"],
             "components": models[request.model_id].get("components", {}),
+            "strategy": models[request.model_id].get('strategy', 'alpha-beta'),
             "explanation": {
                 "handcrafted": Handcrafted().explain(board) if request.model_id == "handcrafted" else None,
                 "feature_version": getattr(models[request.model_id]["evaluator"], "feature_version", None),
