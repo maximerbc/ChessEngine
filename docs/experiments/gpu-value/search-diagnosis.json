@@ -1,0 +1,50 @@
+{
+  "status": "diagnosis-complete",
+  "evidence_level": "off-policy development diagnostic",
+  "findings": [
+    "The current 128-simulation PUCT configuration used roughly one ninth of the reference engines total search time.",
+    "The new value model has useful teacher-label signal on the fixed 2048-position validation diagnostic; this is not playing-strength proof.",
+    "With identical new weights, PUCT-128 repeated all 34 observed avoidable mate-in-one blunders, full-time PUCT repeated 26, and alpha-beta repeated zero.",
+    "These selected tactical positions establish a search weakness, not a fresh match win rate or a diagnosis of every lost game."
+  ],
+  "validation": {
+    "n": 2048,
+    "target_mean": 0.06340185546875,
+    "target_std": 0.8084629158261303,
+    "zero_baseline_mse": 0.6576320815429687,
+    "mean_baseline_mse": 0.6536122862660886,
+    "new_mse": 0.22151916740319944,
+    "old_mse_on_same_sample": 0.3244920823144113,
+    "negated_new_mse": 2.047175092846898,
+    "new_correlation": 0.8138917093551076,
+    "old_correlation": 0.7114434919457271,
+    "new_prediction_std": 0.6869726181030273,
+    "predicted_mean": 0.06916454434394836,
+    "final_test_assessed": false
+  },
+  "tactical_controls": {
+    "new-value-puct-128": {
+      "positions": 34,
+      "immediate_mates_allowed": 34,
+      "mean_search_ms": 106.24101104023045,
+      "mean_depth": 4.088235294117647
+    },
+    "new-value-puct-8192-ceiling-1500ms": {
+      "positions": 34,
+      "immediate_mates_allowed": 26,
+      "mean_search_ms": 1500.531031856286,
+      "mean_depth": 7.176470588235294
+    },
+    "new-value-alpha-beta-1500ms": {
+      "positions": 34,
+      "immediate_mates_allowed": 0,
+      "mean_search_ms": 1401.1237463324933,
+      "mean_depth": 3.6176470588235294
+    }
+  },
+  "recommended_next_step": "Freeze a separate same-search comparison using the original alpha-beta for both neural evaluators before any additional paid training.",
+  "serving_changed": false,
+  "models_retrained": false,
+  "final_tests_opened": false,
+  "paid_cost_cad": 0
+}

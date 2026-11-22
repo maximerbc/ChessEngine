@@ -28,7 +28,8 @@ def summarize(ledger):
         wins=sum(r['score'] == 1 for r in games),
         rules_draws=sum(not r['capped'] and r['score'] == .5 for r in games),
         losses=sum(r['score'] == 0 for r in games), caps=sum(r['capped'] for r in games),
-        coverage_fraction=hits/max(moves, 1), games=len(games))
+        coverage_fraction=hits/max(moves, 1) if ledger['config']['strategy'] == 'puct-uniform-v1' else None,
+        games=len(games))
 
 
 def run(openings_path, output, candidate, legacy, workers=4):

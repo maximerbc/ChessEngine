@@ -20,12 +20,17 @@ def _pair_job(arguments):
 
 @threadpool_limits.wrap(limits=1, user_api='blas')
 def cpu_matches(candidate, opponent, openings, output, time_ms=1500, simulations=64, max_plies=512,
-                opponent_strategy='alpha-beta', workers=1):
+                opponent_strategy='alpha-beta', workers=1, candidate_strategy=STRATEGY):
     if workers < 1:
         raise ValueError('Positive CPU evaluation concurrency required')
+    if candidate_strategy not in {'alpha-beta', STRATEGY} or opponent_strategy not in {'alpha-beta', STRATEGY}:
+        raise ValueError('Unknown match search strategy')
+    uses_puct = STRATEGY in {candidate_strategy, opponent_strategy}
+    if uses_puct and (not isinstance(simulations, (int, np.integer)) or simulations < 1):
+        raise ValueError('PUCT participants require a positive simulation budget')
     config = dict(candidate_sha256=sha(candidate), opponent_sha256='handcrafted-v1' if opponent == 'handcrafted'
-                  else sha(opponent), openings=openings, time_ms=time_ms, simulations=simulations,
-                  max_plies=max_plies, strategy=STRATEGY, opponent_strategy=opponent_strategy, search_metrics_version=1)
+                  else sha(opponent), openings=openings, time_ms=time_ms, simulations=simulations if uses_puct else None,
+                  max_plies=max_plies, strategy=candidate_strategy, opponent_strategy=opponent_strategy, search_metrics_version=2)
     protocol = identity(config)
     path = Path(output)
     ledger = json.loads(path.read_text()) if path.exists() else dict(protocol_id=protocol, config=config, games=[],active_seconds=0.)
@@ -38,7 +43,7 @@ def cpu_matches(candidate, opponent, openings, output, time_ms=1500, simulations
         order = {row['id']:i for i,row in enumerate(openings)}
         with ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('spawn')) as pool:
             futures = [pool.submit(_pair_job,(candidate,opponent,[row],directory/f'{row["id"]}.json',
-                       time_ms,simulations,max_plies,opponent_strategy,1)) for row in remaining]
+                       time_ms,simulations,max_plies,opponent_strategy,1,candidate_strategy)) for row in remaining]
             for future in as_completed(futures):
                 result = future.result()
                 returned_ids = {row['opening_id'] for row in result['games']}
@@ -59,22 +64,27 @@ def cpu_matches(candidate, opponent, openings, output, time_ms=1500, simulations
             started = time.perf_counter()
             plies = 0
             metrics = dict(candidate_moves=0, candidate_coverage_hits=0, candidate_simulations=0,
-                           candidate_search_seconds=0., reference_search_seconds=0.)
+                           candidate_search_seconds=0., reference_search_seconds=0.,
+                           candidate_nodes=0, candidate_depth_sum=0, reference_nodes=0, reference_moves=0)
             progress_path = path.with_name(path.stem + '-progress.json')
             while not board.is_game_over(claim_draw=True) and plies < max_plies:
                 candidate_turn = board.turn == (color == 'white')
                 evaluator = candidate_model if candidate_turn else reference
-                strategy = STRATEGY if candidate_turn else opponent_strategy
+                strategy = candidate_strategy if candidate_turn else opponent_strategy
                 result = search_for(evaluator, strategy, 2**31 - 1, time_ms, simulations).run(board)
                 if result.move is None:
                     raise ValueError('Nonterminal search returned no move')
                 if candidate_turn:
                     metrics['candidate_moves'] += 1
-                    metrics['candidate_coverage_hits'] += int(result.root_coverage >= .8)
-                    metrics['candidate_simulations'] += result.simulations
+                    metrics['candidate_coverage_hits'] += int(getattr(result, 'root_coverage', 0.) >= .8)
+                    metrics['candidate_simulations'] += getattr(result, 'simulations', 0)
                     metrics['candidate_search_seconds'] += result.elapsed_ms / 1000
+                    metrics['candidate_nodes'] += result.nodes
+                    metrics['candidate_depth_sum'] += result.depth
                 else:
                     metrics['reference_search_seconds'] += result.elapsed_ms / 1000
+                    metrics['reference_nodes'] += result.nodes
+                    metrics['reference_moves'] += 1
                 board.push_uci(result.move)
                 plies += 1
                 if plies == 1 or plies % 10 == 0:

@@ -61,10 +61,32 @@
         }
       ],
       &quot;development_screen&quot;: {
-        &quot;status&quot;: &quot;started&quot;,
-        &quot;qualification&quot;: false,
+        &quot;status&quot;: &quot;complete&quot;,
+        &quot;wins&quot;: 0,
+        &quot;draws&quot;: 0,
+        &quot;losses&quot;: 80,
+        &quot;caps&quot;: 0,
         &quot;protocol_id&quot;: &quot;65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f&quot;,
-        &quot;paid_cost_cad&quot;: 0
+        &quot;qualification&quot;: false,
+        &quot;limitation&quot;: &quot;PUCT-128 versus alpha-beta; this does not isolate evaluator quality&quot;
+      },
+      &quot;same_search_ablation&quot;: {
+        &quot;status&quot;: &quot;started&quot;,
+        &quot;seed&quot;: 42,
+        &quot;candidate_strategy&quot;: &quot;alpha-beta&quot;,
+        &quot;opponent_strategy&quot;: &quot;alpha-beta&quot;,
+        &quot;time_ms&quot;: 1500,
+        &quot;qualification&quot;: false,
+        &quot;reused_development_openings&quot;: true,
+        &quot;paid_cost_cad&quot;: 0,
+        &quot;protocol_id&quot;: &quot;2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4&quot;
+      },
+      &quot;tactical_diagnostic&quot;: {
+        &quot;legal_mate_in_one_defence_available&quot;: true,
+        &quot;puct128_blunders&quot;: 34,
+        &quot;full_time_puct_blunders&quot;: 26,
+        &quot;alpha_beta_blunders&quot;: 0,
+        &quot;evidence_level&quot;: &quot;off-policy development diagnostic; not a match win rate&quot;
       }
     },
     &quot;hardware&quot;: &quot;NVIDIA A40 for completed training; NumPy CPU inference during play&quot;,
