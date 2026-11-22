@@ -1,5 +1,13 @@
 # Decision log
 
+## 2026-11-22 — Augmented-supervised fitting completed and preserved
+
+All one million positions were labeled locally with the pinned Mac teacher in 7,000.68 seconds. The A40 pipeline then completed full feature preparation, three independent fits, validation selection sealing and NumPy export parity in 1,192.49 seconds. Summed fit active timers were 426.45 seconds. Seeds 42/43/44 stopped after 15/14/16 epochs under the frozen patience-six rule; best epochs were 9/8/10. Their validation MSEs were 0.2145383/0.2155261/0.2142254 (mean 0.2147633, sample seed SD 0.0006789). Different historical validation pools preclude direct old/new MSE comparisons, and no playing-strength claim follows. Seed42 remains representative.
+
+The complete training state, source/runtime/data identities, source archives and logs passed an independent 204-file local restoration. Preservation identity is in `docs/preservation/gpu-supervised-20261122.json`; large private files remain ignored locally. All optimizer states reload as complete and all three inference schemas/checksums validate. Commit only the small private Research inference bundles and compact evidence. Final position tests and playing matches remain sealed/unexecuted. Keep the released80k default and public assets unchanged.
+
+Following the setup's approved cleanup condition, remove this conversation's four temporary Pods and 20GB volume after verified backup. Provider read-back confirms no Pods or network volumes remain. Available prepaid credits were US$9.16658 from initial US$10; observed credit decrease is not a final tax/FX-inclusive invoice and posted billing is incomplete. The supervised C$25 approval does not authorize evolutionary computation or model promotion.
+
 ## 2026-11-21 — Approved supervised execution and local labeling
 
 The user chose Runpod with a C$25 total supervised setup/training ceiling including storage, taxes and conversion, C$5 contingency, and up to C$3 initial hardware checks. This is not evolutionary-compute authorization. The approved instance is one A40 at US$0.59/hour with a 20 GB HIGH_PERFORMANCE volume at US$2.80/month prorated. Keep prepaid credits separate from consumption and actual invoice figures. Review-branch merging, deployment and model promotion remain separate decisions.

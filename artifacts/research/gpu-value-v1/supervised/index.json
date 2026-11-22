@@ -1,0 +1,26 @@
+{
+  "id": "supervised-1m",
+  "status": "research-only-trained",
+  "qualified": false,
+  "production_default_changed": false,
+  "representative_seed": 42,
+  "models": [
+    {
+      "seed": 42,
+      "file": "seed-42.npz",
+      "sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
+    },
+    {
+      "seed": 43,
+      "file": "seed-43.npz",
+      "sha256": "d7c61fd273da0db3d03d47b583798ef6f796d4cab93b35b8dd3beb3980f8315a"
+    },
+    {
+      "seed": 44,
+      "file": "seed-44.npz",
+      "sha256": "14d9f56fc09eb537d35b8d8a67cc36517c2998ef7e00f9c5bfe942aaca842a65"
+    }
+  ],
+  "evidence": "docs/experiments/gpu-value/supervised-training.json",
+  "note": "Private research inference bundle. Not a release manifest; no serving or promotion authorization."
+}

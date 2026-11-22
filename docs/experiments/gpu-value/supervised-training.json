@@ -1,0 +1,126 @@
+{
+  "status": "supervised-training-complete",
+  "models": [
+    {
+      "seed": 42,
+      "epochs": 15,
+      "best_epoch": 9,
+      "validation_mse": 0.2145383036171156,
+      "fit_active_seconds": 140.11944550625049,
+      "checkpoint_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "optimizer_complete": true,
+      "numpy_schema_validated": true,
+      "representative": true,
+      "inference_file": "artifacts/research/gpu-value-v1/supervised/seed-42.npz"
+    },
+    {
+      "seed": 43,
+      "epochs": 14,
+      "best_epoch": 8,
+      "validation_mse": 0.2155260762707081,
+      "fit_active_seconds": 135.7257823078544,
+      "checkpoint_sha256": "d7c61fd273da0db3d03d47b583798ef6f796d4cab93b35b8dd3beb3980f8315a",
+      "optimizer_complete": true,
+      "numpy_schema_validated": true,
+      "representative": false,
+      "inference_file": "artifacts/research/gpu-value-v1/supervised/seed-43.npz"
+    },
+    {
+      "seed": 44,
+      "epochs": 16,
+      "best_epoch": 10,
+      "validation_mse": 0.21422540575195756,
+      "fit_active_seconds": 150.60458544583526,
+      "checkpoint_sha256": "14d9f56fc09eb537d35b8d8a67cc36517c2998ef7e00f9c5bfe942aaca842a65",
+      "optimizer_complete": true,
+      "numpy_schema_validated": true,
+      "representative": false,
+      "inference_file": "artifacts/research/gpu-value-v1/supervised/seed-44.npz"
+    }
+  ],
+  "validation_mse_mean": 0.2147632618799271,
+  "validation_mse_seed_sd": 0.0006788892506087256,
+  "pipeline_elapsed_seconds": 1192.4946732521057,
+  "summed_fit_active_seconds": 426.44981325994013,
+  "inference_parity": [
+    {
+      "seed": 42,
+      "max_gpu_numpy_difference": 5.513429641723633e-07,
+      "checkpoint_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
+    },
+    {
+      "seed": 43,
+      "max_gpu_numpy_difference": 4.7497451305389404e-07,
+      "checkpoint_sha256": "d7c61fd273da0db3d03d47b583798ef6f796d4cab93b35b8dd3beb3980f8315a"
+    },
+    {
+      "seed": 44,
+      "max_gpu_numpy_difference": 5.178153514862061e-07,
+      "checkpoint_sha256": "14d9f56fc09eb537d35b8d8a67cc36517c2998ef7e00f9c5bfe942aaca842a65"
+    }
+  ],
+  "counts": {
+    "train": 800000,
+    "validation": 100000,
+    "test": 100000
+  },
+  "final_test_opened": false,
+  "playing_strength_assessed": false,
+  "qualified": false,
+  "release_changed": false,
+  "results_archive_sha256": "24f09c00d73b481a37b514842069779f14d7b2acdcb625e5a3c3b07fefa40e5d",
+  "local_restore_verified": true,
+  "study": "gpu-value-v1",
+  "model_id": "supervised-1m",
+  "architecture": [
+    853,
+    128,
+    64,
+    1
+  ],
+  "feature_version": 3,
+  "training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "representative_seed": 42,
+  "source_review_commit": "ae19f74828de43fb2e4f277a17daddd593dfba5b",
+  "checkpoint_selection": "minimum validation MSE; patience6; all seeds frozen together",
+  "teacher": {
+    "name": "Stockfish19",
+    "binary_sha256": "8eed61129d1493c5d1f2fd9323f0c54c47ac49319911fbde18c6b9c87e8b13c5",
+    "nnue_sha256": "1a298aa575a085434d29027978dc36867fe9c5bcea9376654b7a8eba1e52dfc2",
+    "nodes": 10000,
+    "threads": 1,
+    "hash_mib": 32
+  },
+  "dataset": {
+    "positions": 1000000,
+    "training": 800000,
+    "validation": 100000,
+    "test": 100000,
+    "retained_training_positions": 180302,
+    "positions_sha256": "124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9",
+    "labels_sha256": "4f756fdcf3f44256bd09c470076d2c237e8354ae7a17b20e90476a1707c5208e",
+    "all_positions_labeled_consistently": true,
+    "local_label_seconds": 7000.679121017456
+  },
+  "limitations": [
+    "Validation pools differ from historical studies; these MSE values are not a direct historical-model comparison.",
+    "Teacher agreement is not playing strength; qualification and final position/match assessments remain unexecuted.",
+    "Seed42 is representative by protocol, not the seed with lowest validation error.",
+    "GPU determinism across devices is not assumed."
+  ],
+  "cloud": {
+    "provider": "Runpod",
+    "gpu": "NVIDIA A40",
+    "hourly_usd": 0.59,
+    "temporary_pods_and_volume_removed": true,
+    "prepaid_credit_balance_usd_at_cleanup": 9.1665798999,
+    "observed_credit_decrease_usd": 0.8334201001,
+    "final_invoice_cost": null,
+    "billing_posting_incomplete": true,
+    "all_in_budget_cad": 25
+  }
+}
