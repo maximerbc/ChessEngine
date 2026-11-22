@@ -766,9 +766,8 @@ export default function App() {
                 <h1 className="sr-only">Play chess</h1>
                 <p>
                   Play Classical, Supervised (80k), or Augmented Supervised
-                  (one-million-position dataset). Play available opponents and
-                  discover three ways to evaluate a position using the same
-                  search.
+                  (one-million-position dataset). Compare how each model
+                  evaluates the board and chooses moves.
                 </p>
               </>
             ) : (
