@@ -290,3 +290,38 @@ def test_parallel_cpu_matches_have_the_same_fixed_budget_games(tmp_path):
         (r['fen'],r['score'],r['result']) for r in serial['games']]
     assert len(cpu_matches(str(model),'handcrafted',starts,tmp_path/'parallel.json',simulations=2,
                           max_plies=1,opponent_strategy='puct-uniform-v1',workers=2)['games']) == 4
+
+
+@pytest.mark.parametrize('network_count', [1, 2])
+def test_teacher_pins_exactly_declared_nnue_files(tmp_path, monkeypatch, network_count):
+    from types import SimpleNamespace
+    from chessengine.gpu.dataset import pin_teacher
+    names = ['EvalFile', 'EvalFileSmall'][:network_count]
+    class Engine:
+        id = {'name': 'Stockfish 19', 'author': 'fixture'}
+        options = {name: SimpleNamespace(default=name + '.nnue') for name in names}
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def configure(self, values):
+            assert set(values) == set(names)
+    monkeypatch.setattr(chess.engine.SimpleEngine, 'popen_uci', lambda binary: Engine())
+    binary = tmp_path / 'stockfish'
+    binary.write_bytes(b'pinned teacher fixture')
+    nets = []
+    for name in names:
+        path = tmp_path / (name + '.nnue')
+        path.write_bytes(name.encode())
+        nets.append(path)
+    teacher = pin_teacher(binary, nets, tmp_path / 'teacher.json')
+    assert set(teacher['eval_files']) == set(names)
+    assert teacher['nnue'] == {str(p.resolve()): sha(p) for p in nets}
+    assert teacher['binary_sha256'] == sha(binary)
+    assert teacher['nodes'] == 10000 and teacher['threads'] == 1 and teacher['hash_mb'] == 32
+    wrong = nets + [nets[0]] if network_count == 1 else nets[:1]
+    with pytest.raises(ValueError, match='exactly'):
+        pin_teacher(binary, wrong, tmp_path / 'invalid.json')
+    if network_count == 2:
+        with pytest.raises(ValueError, match='distinct'):
+            pin_teacher(binary, [nets[0], nets[0]], tmp_path / 'duplicate.json')

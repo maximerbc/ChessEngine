@@ -31,7 +31,7 @@ def main():
     p = sub.add_parser('pin-teacher')
     p.add_argument('--binary', required=True)
     p.add_argument('--eval-file', required=True)
-    p.add_argument('--eval-file-small', required=True)
+    p.add_argument('--eval-file-small', help='Required only when Stockfish declares EvalFileSmall')
     p.add_argument('--output', default='data/gpu-value-v1/teacher.json')
     p = sub.add_parser('label')
     p.add_argument('--directory', default='data/gpu-value-v1')
@@ -159,7 +159,7 @@ def main():
         result = prepare(config['supervised'], args.sources, args.directory)
     elif command == 'pin-teacher':
         from .dataset import pin_teacher
-        result = pin_teacher(args.binary, [args.eval_file,args.eval_file_small], args.output)
+        result = pin_teacher(args.binary, [args.eval_file] + ([args.eval_file_small] if args.eval_file_small else []), args.output)
     elif command == 'label':
         require_execution(config,args.approval)
         from .dataset import label

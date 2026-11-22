@@ -228,14 +228,18 @@ def audit_positions(path, quotas):
 
 def pin_teacher(binary, nnue_files, output):
     """Explicit NNUE identities; embedded-default inference is not guessed."""
-    if len(nnue_files) != 2:
-        raise ValueError('Pin both explicit Stockfish EvalFile and EvalFileSmall NNUE files')
     with chess.engine.SimpleEngine.popen_uci(binary) as engine:
         if not engine.id.get('name','').startswith('Stockfish '):
             raise ValueError('The pinned teacher must identify itself as Stockfish')
+        options = [name for name in ('EvalFile', 'EvalFileSmall') if name in engine.options]
+        if 'EvalFile' not in options or len(nnue_files) != len(options):
+            raise ValueError('Pin exactly the NNUE files declared by Stockfish: ' + ', '.join(options))
+        paths = [str(Path(p).resolve()) for p in nnue_files]
+        if len(set(paths)) != len(paths):
+            raise ValueError('Each declared NNUE option requires a distinct file')
         teacher = {'binary_sha256': sha(binary), 'teacher': engine.id, 'nodes': 10000,
                    'threads': 1, 'hash_mb': 32, 'nnue': {str(Path(p).resolve()): sha(p) for p in nnue_files},
-                   'eval_files': dict(zip(['EvalFile', 'EvalFileSmall'], [str(Path(p).resolve()) for p in nnue_files]))}
+                   'eval_files': dict(zip(options, paths))}
         engine.configure(teacher['eval_files'])
         for option in ('EvalFile', 'EvalFileSmall'):
             if option in engine.options:

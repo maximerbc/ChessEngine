@@ -1,5 +1,9 @@
 # Decision log
 
+## 2026-11-21 — Teacher network identity during Runpod setup
+
+The official Stockfish 19 Linux release declares EvalFile only. Teacher pinning must inspect the pinned executable’s UCI options and require exactly its declared NNUE files, including EvalFileSmall only when that option exists. Every declared file retains an explicit hash and path. This corrects the previous two-file setup assumption without changing label nodes, threads, hash, perspective, data splits or learning protocol. No study labels or training runs preceded the correction.
+
 ## 2026-11-21 — GPU value studies and preserved legacy release
 
 The user approved a new study architecture and review branch from verified main `ba08f1822285676c33f3dd7c98bf664ab1105896`. This supersedes earlier prohibitions on agent-managed private review pushes and GPU/PUCT production candidates. Agents may push review branches and open PRs; merging, direct-main pushes, visibility changes, paid provisioning and deployment remain separate decisions. Historical protocols, including the two-worker 324-weight experiment, are unchanged.

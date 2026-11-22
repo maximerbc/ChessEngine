@@ -33,11 +33,10 @@ PYTHONPATH=src .venv-gpu/bin/python -m chessengine.gpu prepare-data
 PYTHONPATH=src .venv-gpu/bin/python -m chessengine.gpu openings
 PYTHONPATH=src .venv-gpu/bin/python -m chessengine.gpu pin-teacher \
   --binary tools/stockfish/PINNED-BINARY \
-  --eval-file tools/stockfish/PINNED-BIG.nnue \
-  --eval-file-small tools/stockfish/PINNED-SMALL.nnue
+  --eval-file tools/stockfish/PINNED.nnue
 ```
 
-Preparation fails if exact quotas cannot be reached from the frozen sources. Do not reuse old labels, loosen exclusions or silently add archives. The teacher command requires both explicit NNUE files, and labels pin their hashes alongside the executable identity.
+Preparation fails if exact quotas cannot be reached from the frozen sources. Do not reuse old labels, loosen exclusions or silently add archives. The teacher command requires exactly the NNUE files declared by the executable. Stockfish 19 declares EvalFile only; add `--eval-file-small PATH` only for a pinned teacher that also declares EvalFileSmall. Labels pin every file hash alongside the executable identity.
 
 ## Authorize and measure a benchmark
 
