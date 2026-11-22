@@ -24,11 +24,11 @@ export const releasedApproaches = [
     id: "supervised-1m",
     name: "Augmented Supervised",
     description:
-      "Trained on a one-million-position dataset, with 800,000 positions used for training. A different search method chooses moves. Playing strength is not yet established.",
+      "Trained on a one-million-position dataset, with 800,000 positions used for training. Alpha-beta search chooses moves. The model remains experimental.",
     evaluation:
-      "The dataset contains 800,000 training, 100,000 validation and 100,000 test positions. The seed-42 value network learned Stockfish assessments from scratch on a GPU and uses CPU PUCT during play.",
+      "The dataset contains 800,000 training, 100,000 validation and 100,000 test positions. The seed-42 value network learned Stockfish assessments from scratch on a GPU and uses CPU alpha-beta during play.",
     evidence:
-      "Experimental playable model. Validation MSE was 0.21454; playing strength is not yet established. Different validation pools prevent a direct error comparison with the 80k model.",
+      "Experimental playable model. An 80-game development comparison favored it over the 80k model; broader playing strength remains unconfirmed. Results and limitations are in Research.",
   },
   {
     id: "evolutionary-gpu",
@@ -93,9 +93,9 @@ export function ResearchSummary({
       <h3>Research summary</h3>
       <p>{approach.evaluation}</p>
       <p>
-        {id === "supervised-1m" || id === "evolutionary-gpu"
+        {id === "evolutionary-gpu"
           ? "This approach uses a value network with CPU PUCT search. "
-          : "Classical and current Supervised use the same alpha-beta search. "}
+          : "All three playable models use CPU alpha-beta search with different evaluators. "}
         Playing here does not train the models.
       </p>
       <p>

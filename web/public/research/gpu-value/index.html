@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><title>GPU learning studies</title><style>body{max-width:900px;margin:40px auto;padding:20px;font:17px system-ui}pre{white-space:pre-wrap}</style><nav><a href="/research">← All research</a></nav><h1>GPU learning studies</h1><p>Augmented Supervised is an experimental playable model. Training is complete; playing strength is not yet established. Evolutionary training has not started.</p><pre>{
+<!doctype html><html lang="en"><meta charset="utf-8"><title>GPU learning studies</title><style>body{max-width:900px;margin:40px auto;padding:20px;font:17px system-ui}pre{white-space:pre-wrap}</style><nav><a href="/research">← All research</a></nav><h1>GPU learning studies</h1><p>Augmented Supervised uses CPU alpha-beta in the experimental demo. An 80-game development comparison scored 68.75% against the 80k model and 43.75% against Classical. It used reused openings and a different node limit from the demo; qualification remains pending. The previous PUCT screen lost all 80 games and remains preserved. Evolutionary training has not started.</p><pre>{
   &quot;study&quot;: &quot;gpu-value-v1&quot;,
   &quot;status&quot;: &quot;supervised-training-complete&quot;,
   &quot;supervised_positions&quot;: {
@@ -25,7 +25,14 @@
       &quot;model&quot;: &quot;supervised-1m&quot;,
       &quot;seed&quot;: 42,
       &quot;qualified&quot;: false,
-      &quot;strength_status&quot;: &quot;not-established&quot;
+      &quot;strength_status&quot;: &quot;not-established&quot;,
+      &quot;search&quot;: {
+        &quot;strategy&quot;: &quot;alpha-beta&quot;,
+        &quot;nodes&quot;: 10000,
+        &quot;time_ms&quot;: 1500,
+        &quot;qdepth&quot;: 4
+      },
+      &quot;search_authorization_id&quot;: &quot;user-20261122-augmented-alpha-beta&quot;
     },
     &quot;summary&quot;: {
       &quot;dataset_counts&quot;: {
@@ -61,17 +68,117 @@
         }
       ],
       &quot;development_screen&quot;: {
-        &quot;status&quot;: &quot;started&quot;,
-        &quot;qualification&quot;: false,
+        &quot;status&quot;: &quot;complete&quot;,
+        &quot;wins&quot;: 0,
+        &quot;draws&quot;: 0,
+        &quot;losses&quot;: 80,
+        &quot;caps&quot;: 0,
         &quot;protocol_id&quot;: &quot;65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f&quot;,
-        &quot;paid_cost_cad&quot;: 0
+        &quot;qualification&quot;: false,
+        &quot;limitation&quot;: &quot;Historical PUCT-128 versus alpha-beta screen; it does not isolate evaluator quality.&quot;
+      },
+      &quot;same_search_ablation&quot;: {
+        &quot;status&quot;: &quot;complete&quot;,
+        &quot;seed&quot;: 42,
+        &quot;candidate_strategy&quot;: &quot;alpha-beta&quot;,
+        &quot;opponent_strategy&quot;: &quot;alpha-beta&quot;,
+        &quot;time_ms&quot;: 1500,
+        &quot;node_ceiling&quot;: 2147483647,
+        &quot;opening_pairs_per_opponent&quot;: 20,
+        &quot;total_games&quot;: 80,
+        &quot;qdepth&quot;: 4,
+        &quot;opponents&quot;: {
+          &quot;classical&quot;: {
+            &quot;conservative&quot;: {
+              &quot;score&quot;: 0.4375,
+              &quot;ci95&quot;: [
+                0.3,
+                0.575
+              ],
+              &quot;seed_sd&quot;: 0.0,
+              &quot;pairs&quot;: 20,
+              &quot;cap_fraction&quot;: 0.0
+            },
+            &quot;neutral_cap_score&quot;: 0.4375,
+            &quot;neutral_cap_ci95&quot;: [
+              0.3,
+              0.575
+            ],
+            &quot;wins&quot;: 16,
+            &quot;rules_draws&quot;: 3,
+            &quot;losses&quot;: 21,
+            &quot;caps&quot;: 0,
+            &quot;coverage_fraction&quot;: null,
+            &quot;games&quot;: 40,
+            &quot;candidate_search_work&quot;: {
+              &quot;moves&quot;: 1265,
+              &quot;nodes&quot;: 4204315,
+              &quot;search_seconds&quot;: 1817.6301786219701,
+              &quot;mean_search_ms&quot;: 1436.8618012821898
+            },
+            &quot;reference_search_work&quot;: {
+              &quot;moves&quot;: 1267,
+              &quot;nodes&quot;: 5151692,
+              &quot;search_seconds&quot;: 1815.092136823805,
+              &quot;mean_search_ms&quot;: 1432.5904789453868
+            }
+          },
+          &quot;supervised&quot;: {
+            &quot;conservative&quot;: {
+              &quot;score&quot;: 0.6875,
+              &quot;ci95&quot;: [
+                0.55,
+                0.8125
+              ],
+              &quot;seed_sd&quot;: 0.0,
+              &quot;pairs&quot;: 20,
+              &quot;cap_fraction&quot;: 0.0
+            },
+            &quot;neutral_cap_score&quot;: 0.6875,
+            &quot;neutral_cap_ci95&quot;: [
+              0.55,
+              0.8125
+            ],
+            &quot;wins&quot;: 26,
+            &quot;rules_draws&quot;: 3,
+            &quot;losses&quot;: 11,
+            &quot;caps&quot;: 0,
+            &quot;coverage_fraction&quot;: null,
+            &quot;games&quot;: 40,
+            &quot;candidate_search_work&quot;: {
+              &quot;moves&quot;: 1707,
+              &quot;nodes&quot;: 5791214,
+              &quot;search_seconds&quot;: 2471.6233648303896,
+              &quot;mean_search_ms&quot;: 1447.9340157178615
+            },
+            &quot;reference_search_work&quot;: {
+              &quot;moves&quot;: 1699,
+              &quot;nodes&quot;: 6297104,
+              &quot;search_seconds&quot;: 2462.163010589662,
+              &quot;mean_search_ms&quot;: 1449.183643666664
+            }
+          }
+        },
+        &quot;session_elapsed_seconds&quot;: 2492.8911310830154,
+        &quot;qualification&quot;: false,
+        &quot;reused_development_openings&quot;: true,
+        &quot;paid_cost_cad&quot;: 0,
+        &quot;protocol_id&quot;: &quot;2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4&quot;,
+        &quot;limitations&quot;: [
+          &quot;One fixed training seed and twenty already used opening pairs.&quot;,
+          &quot;This controls search; it is not independent final confirmation or qualification.&quot;,
+          &quot;Equal move-time allowances use a nonbinding node ceiling, not the serving node cap.&quot;,
+          &quot;No model selection, promotion, further training or larger evaluation follows automatically.&quot;
+        ],
+        &quot;takeaway&quot;: &quot;Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned.&quot;
       }
     },
     &quot;hardware&quot;: &quot;NVIDIA A40 for completed training; NumPy CPU inference during play&quot;,
     &quot;limitations&quot;: [
       &quot;Fresh validation pools differ from the historical 80k model; raw MSE is not a controlled comparison.&quot;,
-      &quot;No playing-strength evidence is available yet. The smaller screen is exploratory, not qualification.&quot;,
-      &quot;Final position labels remain sealed.&quot;
+      &quot;The completed alpha-beta comparison is development evidence from one seed and 20 reused opening pairs per opponent, not qualification.&quot;,
+      &quot;Its nonbinding node ceiling differs from the demo limit of 10,000 nodes; match scores do not measure the exact serving configuration.&quot;,
+      &quot;Final position labels and qualification/final opening pools remain sealed.&quot;
     ]
   },
   &quot;limitations&quot;: [

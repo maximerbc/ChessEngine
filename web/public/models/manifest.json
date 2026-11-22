@@ -38,10 +38,7 @@
       ],
       "feature_version": 3,
       "search": {
-        "strategy": "puct-uniform-v1",
-        "c_puct": 1.5,
-        "priors": "uniform-legal",
-        "simulations": 128
+        "strategy": "alpha-beta"
       },
       "evidence_id": "gpu-value-v1-supervised-20261122",
       "experimental": true,
@@ -51,7 +48,8 @@
       "strength_status": "not-established",
       "qualification_sha256": null,
       "final_sha256": null,
-      "documentation_path": "/research?study=gpu-value"
+      "documentation_path": "/research?study=gpu-value",
+      "search_authorization_id": "user-20261122-augmented-alpha-beta"
     }
   ]
 }

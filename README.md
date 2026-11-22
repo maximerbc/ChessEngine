@@ -1,8 +1,8 @@
 # GPU learning studies and preserved demo
 
-The new `gpu-value-v1` pipeline plans one million total positions (800k training / 100k validation / 100k test) and 368,640 evolutionary main-training games. Classical and the current 80k Supervised release are preserved; Supervised stays default. The four-model interface adds Augmented Supervised and GPU-trained Evolutionary with CPU PUCT, unavailable until qualified. No new model has been trained or promoted by this implementation.
+The augmented supervised study completed GPU training on a one-million-position dataset (800k training / 100k validation / 100k test). Classical, the unchanged 80k Supervised default and experimental Augmented Supervised are playable with CPU alpha-beta. A completed development comparison supports the augmented search change but does not establish qualification or the exact bounded demo strength. The separately planned GPU evolutionary study remains untrained; historical evidence is preserved. See `docs/gpu-operations.md` for measured results and limits.
 
-Read [study design](docs/gpu-study.md), [staged operations](docs/gpu-operations.md), [locked training environment](training/README.md) and [preservation inventory](docs/preservation/legacy-20261121.json). New training budget/provider are unset pending a measured forecast and user decision. Agents may push private review branches and open PRs; merging, deployment and paid provisioning remain separate decisions.
+Read [study design](docs/gpu-study.md), [staged operations](docs/gpu-operations.md), [locked training environment](training/README.md) and [preservation inventory](docs/preservation/legacy-20261121.json). Augmented-supervised training is complete; the evolutionary compute budget/provider remain unset pending a measured forecast and user decision. Agents may push private review branches and open PRs; merging, deployment and paid provisioning remain separate decisions.
 
 ## Historical evolutionary study and demo
 
