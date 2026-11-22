@@ -1,6 +1,12 @@
-# Evolutionary study and current demo
+# GPU learning studies and preserved demo
 
-The active Demo is Classical, Supervised and Evolutionary, with Supervised as the
+The new `gpu-value-v1` pipeline plans one million total positions (800k training / 100k validation / 100k test) and 368,640 evolutionary main-training games. Classical and the current 80k Supervised release are preserved; Supervised stays default. The four-model interface adds Augmented Supervised and GPU-trained Evolutionary with CPU PUCT, unavailable until qualified. No new model has been trained or promoted by this implementation.
+
+Read [study design](docs/gpu-study.md), [staged operations](docs/gpu-operations.md), [locked training environment](training/README.md) and [preservation inventory](docs/preservation/legacy-20261121.json). New training budget/provider are unset pending a measured forecast and user decision. Agents may push private review branches and open PRs; merging, deployment and paid provisioning remain separate decisions.
+
+## Historical evolutionary study and demo
+
+The prior Demo was Classical, Supervised and Evolutionary, with Supervised as the
 default. Evolutionary stays disabled until its frozen quality and strength gates
 pass. Self-play is retired from live play; its reports and recorded games remain
 in **Research → Self-play: results and lessons**. Original inconclusive evidence

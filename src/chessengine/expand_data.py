@@ -105,6 +105,8 @@ def prepare_extension(config):
 def label_chunk(rows, destination, binary, teacher):
     identity = {'rows_sha256': json_hash(rows), 'binary_sha256': teacher['binary_sha256'],
                 'nodes': teacher['nodes'], 'threads': teacher['threads'], 'hash_mb': teacher['hash_mb']}
+    if teacher.get('nnue'):
+        identity['nnue'] = teacher['nnue']
     metadata = destination.with_suffix('.json')
     if metadata.exists():
         result = read_json(metadata)
@@ -114,6 +116,8 @@ def label_chunk(rows, destination, binary, teacher):
     started = time.perf_counter()
     with chess.engine.SimpleEngine.popen_uci(binary) as engine:
         engine.configure({'Threads': teacher['threads'], 'Hash': teacher['hash_mb'], 'UCI_ShowWDL': True})
+        if teacher.get('eval_files'):
+            engine.configure(teacher['eval_files'])
         if engine.id != teacher['teacher']:
             raise ValueError('Teacher identity mismatch')
         temporary = destination.with_suffix('.tmp')

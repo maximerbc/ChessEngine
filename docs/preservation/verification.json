@@ -1,0 +1,44 @@
+{
+  "archive_members_verified": 1578,
+  "actual_restoration_verified": true,
+  "archive_sha256": "085913e019ba4ccdbb15ee922c10861cae132f9a849e8994fb9676f0f6e7d7ef",
+  "released_supervised_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+  "public_supervised_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+  "legacy_180k_inference_bundles": [
+    {
+      "seed": 42,
+      "source_sha256": "05d37bdb0ecd6717c719608e66c21fd30b19e6dd6ce27d72763d6d982d848ba5",
+      "file": "artifacts/research/supervised-180k/seed-42.npz",
+      "sha256": "86959c86b4e7399d5dae44af624f7dd52d46d6d4c71d5f1a7125f4f659d01398",
+      "feature_version": 1,
+      "hidden": [
+        128,
+        64
+      ]
+    },
+    {
+      "seed": 43,
+      "source_sha256": "a6bc05ee02509c97390b2a5337100b20ad0284a6225f49c6dbfe4609f1fb6715",
+      "file": "artifacts/research/supervised-180k/seed-43.npz",
+      "sha256": "f1e804a6c4cf25123897307d590593b762606a4d84562151159586d978917ed1",
+      "feature_version": 1,
+      "hidden": [
+        128,
+        64
+      ]
+    },
+    {
+      "seed": 44,
+      "source_sha256": "287ca3ab72e20c5861e7787314835e88192b4471b2b41b8628091aeaf0661e31",
+      "file": "artifacts/research/supervised-180k/seed-44.npz",
+      "sha256": "3a541e5f7bc193cdc0aedf81451a38b26f1958b1a84e54c3d9b2aab49736a70f",
+      "feature_version": 1,
+      "hidden": [
+        128,
+        64
+      ]
+    }
+  ],
+  "primary_uncommitted_changes_preserved": true,
+  "pr15_unchanged": true
+}

@@ -1,0 +1,142 @@
+{
+  "study": "gpu-value-v1",
+  "schema_version": 1,
+  "architecture": [
+    853,
+    128,
+    64,
+    1
+  ],
+  "feature_version": 3,
+  "budget_cad": null,
+  "provider": null,
+  "production_inference": "numpy-cpu",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "search": {
+    "strategy": "puct-uniform-v1",
+    "c_puct": 1.5,
+    "priors": "uniform-legal",
+    "noise_fraction": 0,
+    "simulation_candidates": [
+      32,
+      64,
+      128
+    ],
+    "selected_simulations": null,
+    "coverage_root_fraction": 0.8,
+    "coverage_move_fraction": 0.9,
+    "benchmark_pairs": 8,
+    "benchmark_candidates": 4
+  },
+  "supervised": {
+    "counts": {
+      "train": 800000,
+      "validation": 100000,
+      "test": 100000
+    },
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "sources": [
+      "https://database.lichess.org/standard/lichess_db_standard_rated_2013-01.pgn.zst",
+      "https://database.lichess.org/standard/lichess_db_standard_rated_2013-02.pgn.zst",
+      "https://database.lichess.org/standard/lichess_db_standard_rated_2013-03.pgn.zst",
+      "https://database.lichess.org/standard/lichess_db_standard_rated_2013-04.pgn.zst",
+      "https://database.lichess.org/standard/lichess_db_standard_rated_2013-05.pgn.zst",
+      "https://database.lichess.org/standard/lichess_db_standard_rated_2013-06.pgn.zst"
+    ],
+    "retain_training": "data/expanded-200k-labeled.jsonl",
+    "historical_datasets": [
+      "data/main-labeled.jsonl",
+      "data/expanded-200k-labeled.jsonl",
+      "data/pilot-labeled.jsonl",
+      "data/main-positions.jsonl",
+      "data/pilot-positions.jsonl"
+    ],
+    "historical_research_roots": [
+      "runs/evolutionary",
+      "runs/gpu-feasibility-20261121",
+      "runs/local-study",
+      "runs/main-large",
+      "runs/move-ranking",
+      "runs/pilot-development",
+      "runs/pilot-large",
+      "runs/pilot-rl",
+      "runs/policy-value",
+      "runs/retired-release",
+      "runs/rl-improvement",
+      "runs/rl-update-diagnosis",
+      "runs/showcase-preview"
+    ],
+    "reserved": [
+      "configs/openings.json",
+      "runs/rl-improvement/openings.json",
+      "runs/move-ranking/openings.json",
+      "runs/policy-value/openings.json",
+      "runs/evolutionary/openings.json"
+    ],
+    "sampling_seed": 42,
+    "label_chunk_size": 1000,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 2048,
+    "epochs": 40,
+    "patience": 6,
+    "reserved_puzzle_csv": [
+      "data/puzzles.csv"
+    ]
+  },
+  "evolution": {
+    "population": 64,
+    "generations": 40,
+    "development_checkpoints": [
+      10,
+      20,
+      40
+    ],
+    "games_per_candidate": 48,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "pilot_seed": 20261121,
+    "pilot_generations": 10,
+    "sigma": 0.05,
+    "simulations": null,
+    "max_plies": 512,
+    "pilot_decision": "runs/gpu-value-v1/pilot/decision.json",
+    "opponent_weights": {
+      "classical": 0.5,
+      "supervised": 0.25,
+      "archive": 0.25
+    },
+    "opening_pairs": {
+      "train": 1000,
+      "development": 40,
+      "qualification": 200,
+      "final": 200,
+      "pilot": 40,
+      "pilot_train": 600
+    },
+    "pilot_gates": {
+      "max_cap_fraction": 0.2,
+      "min_decisive_fraction": 0.1,
+      "min_conservative_gain": 0.05
+    },
+    "release_gates": {
+      "max_cap_fraction": 0.05,
+      "classical_lower95_strictly_above": 0.5,
+      "supervised_lower95_at_least": 0.45
+    },
+    "cpu_match_time_ms": 1500,
+    "bootstrap_resamples": 10000,
+    "representative_seed": 42
+  }
+}

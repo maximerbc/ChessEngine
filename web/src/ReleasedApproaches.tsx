@@ -14,19 +14,29 @@ export const releasedApproaches = [
     id: "supervised",
     name: "Supervised",
     description:
-      "A neural network learns position assessments from Stockfish. The same alpha-beta search uses those assessments to choose a move.",
+      "A neural network trained on about 80,000 positions learns assessments from Stockfish. Alpha-beta search uses those assessments to choose a move.",
     evaluation:
       "A neural network learns Stockfish position assessments, not Stockfish moves.",
     evidence:
       "Agreement with Stockfish does not establish stronger play or a calibrated win probability.",
   },
   {
-    id: "evolutionary",
-    name: "Evolutionary",
+    id: "supervised-1m",
+    name: "Augmented Supervised",
     description:
-      "A small neural evaluator evolves through tournament results. All evaluation weights start randomly; alpha-beta search chooses its moves.",
+      "Trained on a one-million-position dataset, with 800,000 positions used for training. A different search method chooses moves. Playing strength is not yet established.",
     evaluation:
-      "CMA-ES evolves all 324 evaluation weights from random initialization through tournaments, using human-designed features without Stockfish labels or a fixed material score.",
+      "The dataset contains 800,000 training, 100,000 validation and 100,000 test positions. The seed-42 value network learned Stockfish assessments from scratch on a GPU and uses CPU PUCT during play.",
+    evidence:
+      "Experimental playable model. Validation MSE was 0.21454; playing strength is not yet established. Different validation pools prevent a direct error comparison with the 80k model.",
+  },
+  {
+    id: "evolutionary-gpu",
+    name: "GPU-trained Evolutionary",
+    description:
+      "A new value network evolves through GPU tournaments from random initialization. CPU PUCT chooses moves after qualification.",
+    evaluation:
+      "Separable CMA-ES evolves the same value-network architecture through tournament results, without teacher labels, imported supervised weights or gradients. The planned main study contains 368,640 training games.",
     evidence:
       "Play requires a completed three-seed study and passing qualification and fresh-final gates.",
   },
@@ -61,15 +71,18 @@ export function ResearchSummary({
   if (!approach) return null;
   const original = index?.studies?.find(
     (study) =>
-      study.id === (id === "evolutionary" ? "evolutionary" : "original-study"),
+      study.id ===
+      (id === "supervised-1m" || id === "evolutionary-gpu"
+        ? "gpu-value"
+        : "original-study"),
   );
   const matches =
     id === "handcrafted"
       ? checkpoint === "handcrafted-v1"
       : !!checkpoint && original?.checkpoint_ids?.[id] === checkpoint;
   const study = matches
-    ? id === "evolutionary"
-      ? "evolutionary"
+    ? id === "supervised-1m" || id === "evolutionary-gpu"
+      ? "gpu-value"
       : "original-study"
     : undefined;
   return (
@@ -80,8 +93,10 @@ export function ResearchSummary({
       <h3>Research summary</h3>
       <p>{approach.evaluation}</p>
       <p>
-        All opponents use the same alpha-beta search. Playing here does not
-        train the models.
+        {id === "supervised-1m" || id === "evolutionary-gpu"
+          ? "This approach uses a value network with CPU PUCT search. "
+          : "Classical and current Supervised use the same alpha-beta search. "}
+        Playing here does not train the models.
       </p>
       <p>
         {matches ? approach.evidence : "Evidence unavailable for this version"}

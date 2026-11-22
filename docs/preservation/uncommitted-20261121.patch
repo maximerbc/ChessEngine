@@ -1,0 +1,135 @@
+diff --git a/docs/experiments/evolutionary/evidence.json b/docs/experiments/evolutionary/evidence.json
+index f3c46b9..af08d41 100644
+--- a/docs/experiments/evolutionary/evidence.json
++++ b/docs/experiments/evolutionary/evidence.json
+@@ -1,11 +1,16 @@
+ {
+-  "status": "benchmark_complete",
++  "status": "execution_interrupted",
+   "qualified": false,
+   "representative_seed": 42,
+   "pilot": null,
+   "results": null,
+   "histories": {},
+-  "execution": {},
++  "execution": {
++    "status": "interrupted",
++    "stage": "resume from saved state",
++    "active_seconds": 952.8277315420218,
++    "updated_utc": "2026-10-26T07:11:24.782013+00:00"
++  },
+   "benchmark": {
+     "passed": true,
+     "nodes": 2048,
+@@ -911,13 +916,14 @@
+     },
+     "main": null
+   },
+-  "measured_active_seconds": 221.87970099999802,
+-  "tournament_active_seconds": 405.005576125026,
+-  "matches": 16,
+-  "peak_combined_bytes": 128663552,
++  "measured_active_seconds": 946.3084961250133,
++  "tournament_active_seconds": 1115.9731880420004,
++  "matches": 35,
++  "peak_combined_bytes": 199098368,
+   "match_ledger_sha256": {
+     "forecast-matches.json": "91fd11ce885457803223cf56255df1d68bcb4bebc7c74f058ba6075dd771496c",
+-    "forecast-production-matches.json": "c4cc7571c754ab2766471cc57d2cd4ffbd8dc89a21de1944f0c24a642df56c93"
++    "forecast-production-matches.json": "c4cc7571c754ab2766471cc57d2cd4ffbd8dc89a21de1944f0c24a642df56c93",
++    "pilot/generation-001/matches.json": "4b75d3bce765e1b8a212da0607997dddc6c2307ce0260818105c90250d2c5744"
+   },
+   "paid_cost_cad": 0,
+   "limitation": "Pilot evidence is not strength evidence. All weights are learned; input features are human-designed."
+diff --git a/docs/experiments/evolutionary/index.html b/docs/experiments/evolutionary/index.html
+index 9f36dbc..dd90f6c 100644
+--- a/docs/experiments/evolutionary/index.html
++++ b/docs/experiments/evolutionary/index.html
+@@ -1,10 +1,10 @@
+ <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Evolutionary chess — methods and results</title><style>body{max-width:950px;margin:3rem auto;padding:0 1rem;font:17px/1.6 system-ui;background:#10151c;color:#e8edf4}a{color:#8fd7cb}img{max-width:100%}pre{overflow:auto;font-size:13px}section{margin:2rem 0}</style>
+ <nav><a href="/research?study=evolutionary">Research journal</a></nav><h1>Evolutionary chess</h1>
+-<p><strong>benchmark complete</strong> · Research only</p><p>No completed strength comparison is available. The model is not playable.</p>
++<p><strong>execution interrupted</strong> · Research only</p><p>No completed strength comparison is available. The model is not playable.</p>
+ <section><h2>What learns</h2><p>A 63-input neural evaluator has 324 learned parameters: four ReLU units, a learned linear connection and a bounded scalar output. Counts, pawn structure, king safety and attack coverage are human-designed inputs. All evaluation weights start randomly; no fixed material score, Stockfish labels, pretrained weights or gradient updates enter training. Our alpha-beta search chooses moves.</p></section>
+ <section><h2>How it learns</h2><p>CMA-ES evaluates populations against Classical, the released Supervised evaluator and archived evolutionary opponents. Every candidate receives the same color-swapped positions and playing budgets within a generation. Historical opponents and changing curriculum make tournament fitness a development measure, not a stable strength rating.</p></section>
+-<section><h2>Evidence and limits</h2><p>16 recorded matches; paid compute C$0. No Elo or calibrated win-probability claim. Capped games retain unfinished rule results and are reported separately. Opening-pair uncertainty and variation between training seeds are different quantities.</p><pre>{
++<section><h2>Evidence and limits</h2><p>35 recorded matches; paid compute C$0. No Elo or calibrated win-probability claim. Capped games retain unfinished rule results and are reported separately. Opening-pair uncertainty and variation between training seeds are different quantities.</p><pre>{
+   &quot;pilot&quot;: null,
+   &quot;results&quot;: null,
+   &quot;forecasts&quot;: {
+diff --git a/web/public/research/evolutionary/evidence.json b/web/public/research/evolutionary/evidence.json
+index f3c46b9..af08d41 100644
+--- a/web/public/research/evolutionary/evidence.json
++++ b/web/public/research/evolutionary/evidence.json
+@@ -1,11 +1,16 @@
+ {
+-  "status": "benchmark_complete",
++  "status": "execution_interrupted",
+   "qualified": false,
+   "representative_seed": 42,
+   "pilot": null,
+   "results": null,
+   "histories": {},
+-  "execution": {},
++  "execution": {
++    "status": "interrupted",
++    "stage": "resume from saved state",
++    "active_seconds": 952.8277315420218,
++    "updated_utc": "2026-10-26T07:11:24.782013+00:00"
++  },
+   "benchmark": {
+     "passed": true,
+     "nodes": 2048,
+@@ -911,13 +916,14 @@
+     },
+     "main": null
+   },
+-  "measured_active_seconds": 221.87970099999802,
+-  "tournament_active_seconds": 405.005576125026,
+-  "matches": 16,
+-  "peak_combined_bytes": 128663552,
++  "measured_active_seconds": 946.3084961250133,
++  "tournament_active_seconds": 1115.9731880420004,
++  "matches": 35,
++  "peak_combined_bytes": 199098368,
+   "match_ledger_sha256": {
+     "forecast-matches.json": "91fd11ce885457803223cf56255df1d68bcb4bebc7c74f058ba6075dd771496c",
+-    "forecast-production-matches.json": "c4cc7571c754ab2766471cc57d2cd4ffbd8dc89a21de1944f0c24a642df56c93"
++    "forecast-production-matches.json": "c4cc7571c754ab2766471cc57d2cd4ffbd8dc89a21de1944f0c24a642df56c93",
++    "pilot/generation-001/matches.json": "4b75d3bce765e1b8a212da0607997dddc6c2307ce0260818105c90250d2c5744"
+   },
+   "paid_cost_cad": 0,
+   "limitation": "Pilot evidence is not strength evidence. All weights are learned; input features are human-designed."
+diff --git a/web/public/research/evolutionary/index.html b/web/public/research/evolutionary/index.html
+index 9f36dbc..dd90f6c 100644
+--- a/web/public/research/evolutionary/index.html
++++ b/web/public/research/evolutionary/index.html
+@@ -1,10 +1,10 @@
+ <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Evolutionary chess — methods and results</title><style>body{max-width:950px;margin:3rem auto;padding:0 1rem;font:17px/1.6 system-ui;background:#10151c;color:#e8edf4}a{color:#8fd7cb}img{max-width:100%}pre{overflow:auto;font-size:13px}section{margin:2rem 0}</style>
+ <nav><a href="/research?study=evolutionary">Research journal</a></nav><h1>Evolutionary chess</h1>
+-<p><strong>benchmark complete</strong> · Research only</p><p>No completed strength comparison is available. The model is not playable.</p>
++<p><strong>execution interrupted</strong> · Research only</p><p>No completed strength comparison is available. The model is not playable.</p>
+ <section><h2>What learns</h2><p>A 63-input neural evaluator has 324 learned parameters: four ReLU units, a learned linear connection and a bounded scalar output. Counts, pawn structure, king safety and attack coverage are human-designed inputs. All evaluation weights start randomly; no fixed material score, Stockfish labels, pretrained weights or gradient updates enter training. Our alpha-beta search chooses moves.</p></section>
+ <section><h2>How it learns</h2><p>CMA-ES evaluates populations against Classical, the released Supervised evaluator and archived evolutionary opponents. Every candidate receives the same color-swapped positions and playing budgets within a generation. Historical opponents and changing curriculum make tournament fitness a development measure, not a stable strength rating.</p></section>
+-<section><h2>Evidence and limits</h2><p>16 recorded matches; paid compute C$0. No Elo or calibrated win-probability claim. Capped games retain unfinished rule results and are reported separately. Opening-pair uncertainty and variation between training seeds are different quantities.</p><pre>{
++<section><h2>Evidence and limits</h2><p>35 recorded matches; paid compute C$0. No Elo or calibrated win-probability claim. Capped games retain unfinished rule results and are reported separately. Opening-pair uncertainty and variation between training seeds are different quantities.</p><pre>{
+   &quot;pilot&quot;: null,
+   &quot;results&quot;: null,
+   &quot;forecasts&quot;: {
+diff --git a/web/public/research/studies.json b/web/public/research/studies.json
+index aea4746..a59127e 100644
+--- a/web/public/research/studies.json
++++ b/web/public/research/studies.json
+@@ -169,8 +169,8 @@
+     "policy-value/evidence.json": "e04ada459d3ff3a0e22eecee1cef6324c608ddbeb055051d65439e59af3ab43d",
+     "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866",
+     "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
+-    "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
+-    "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
++    "evolutionary/evidence.json": "0badf61ce4b278837130abae3cfd8e4cd6443536d4e4c20473064ab84e9be2ec",
++    "evolutionary/index.html": "afbfd7b589a3a9787070fd51e991f0f7c8530925f9be4f8016c016d37c44c251",
+     "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3"
+   }
+ }

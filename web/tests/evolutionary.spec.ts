@@ -44,7 +44,7 @@ for (const url of ["/lab/rl?moves=e2e4,e7e5", "/?model=rl&moves=e2e4,e7e5"]) {
     await expect(page.locator(".model-option strong")).toHaveText([
       "Classical",
       "Supervised",
-      "Evolutionary",
+      "Augmented Supervised",
     ]);
     await expect(
       page.getByRole("link", { name: "RL weights", exact: true }),
@@ -52,11 +52,11 @@ for (const url of ["/lab/rl?moves=e2e4,e7e5", "/?model=rl&moves=e2e4,e7e5"]) {
   });
 }
 
-for (const [status, label] of [
+for (const [status] of [
   ["planned", "IN RESEARCH"],
-  ["pilot_failed", "DID NOT QUALIFY"],
+  ["pilot_failed", "IN RESEARCH"],
 ]) {
-  test(`unqualified evolutionary card stays disabled: ${status}`, async ({
+  test(`unqualified evolution remains in Research: ${status}`, async ({
     page,
   }) => {
     await models(page);
@@ -64,13 +64,15 @@ for (const [status, label] of [
       route.fulfill({ json: { status, qualified: false } }),
     );
     await page.goto("/");
-    const card = page.getByRole("button", { name: /^Evolutionary A small/ });
-    await expect(card).toBeDisabled();
-    await expect(card).toContainText(label);
+    const card = page.getByRole("button", {
+      name: /^GPU-trained Evolutionary A new/,
+    });
+    await expect(card).toHaveCount(0);
+    await expect(page.locator(".model-option")).toHaveCount(3);
     await page
       .getByRole("button", { name: "Explore the evidence", exact: true })
       .click();
-    await expect(page).toHaveURL(/research.*study=evolutionary/);
-    await expect(page.locator("#study-evolutionary")).toBeVisible();
+    await expect(page).toHaveURL(/research.*study=gpu-value/);
+    await expect(page.locator("#study-gpu-value")).toBeVisible();
   });
 }

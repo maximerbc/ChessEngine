@@ -11,7 +11,7 @@ test.describe("production containers", () => {
       page.getByText("Engine online", { exact: true }),
     ).toBeVisible();
     for (const name of [
-      /^Supervised A neural network learns/,
+      /^Supervised A neural network/,
       /^Classical Handcrafted/,
     ]) {
       await page.getByRole("button", { name }).click();

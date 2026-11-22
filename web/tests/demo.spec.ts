@@ -8,8 +8,9 @@ async function mock(page: any) {
       supervised: "s".repeat(64),
       rl: "r".repeat(64),
     };
-    data.studies.find((s: any) => s.id === "evolutionary").checkpoint_ids = {
-      evolutionary: "e".repeat(64),
+    data.studies.find((s: any) => s.id === "gpu-value").checkpoint_ids = {
+      "evolutionary-gpu": "e".repeat(64),
+      "supervised-1m": "a".repeat(64),
     };
     await route.fulfill({ json: data });
   });
@@ -29,11 +30,20 @@ async function mock(page: any) {
             checkpoint_id: "s".repeat(64),
           },
           {
-            id: "evolutionary",
-            name: "Evolutionary model",
+            id: "evolutionary-gpu",
+            strategy: "puct-uniform-v1",
+            name: "GPU-trained Evolutionary",
             kind: "evolutionary",
             evidence: "pilot",
             checkpoint_id: "e".repeat(64),
+          },
+          {
+            id: "supervised-1m",
+            name: "Augmented Supervised",
+            kind: "supervised",
+            evidence: "test-qualified",
+            checkpoint_id: "a".repeat(64),
+            strategy: "puct-uniform-v1",
           },
           {
             id: "handcrafted",
@@ -58,15 +68,23 @@ async function mock(page: any) {
               : "g8f6",
         value: 0.12,
         depth: 2,
-        nodes: 10000,
+        nodes: ["evolutionary-gpu", "supervised-1m"].includes(b.model_id)
+          ? 0
+          : 10000,
+        strategy: ["evolutionary-gpu", "supervised-1m"].includes(b.model_id)
+          ? "puct-uniform-v1"
+          : "alpha-beta",
+        simulations: 64,
         elapsed_ms: 120,
         pv: ["e7e5", "g1f3"],
         checkpoint_id:
-          b.model_id === "evolutionary"
+          b.model_id === "evolutionary-gpu"
             ? "e".repeat(64)
             : b.model_id === "handcrafted"
               ? "handcrafted-v1"
-              : "s".repeat(64),
+              : b.model_id === "supervised-1m"
+                ? "a".repeat(64)
+                : "s".repeat(64),
         terminal: null,
         mate_score: false,
       },
@@ -157,11 +175,11 @@ test("model choice, drag move, and restart are coherent", async ({ page }) => {
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
   await page
     .getByRole("button", {
-      name: /^Evolutionary A small neural evaluator/,
+      name: /^Augmented Supervised Trained on/,
     })
     .click();
   await expect(page.locator(".player-strip").first()).toContainText(
-    "Evolutionary",
+    "Augmented Supervised",
   );
   await page
     .getByRole("button", { name: "e2 white pawn", exact: true })
@@ -423,7 +441,7 @@ test("new game and move history survive a refresh", async ({ page }) => {
 for (const [id, name] of [
   ["handcrafted", "Classical"],
   ["supervised", "Supervised"],
-  ["evolutionary", "Evolutionary"],
+  ["supervised-1m", "Augmented Supervised"],
 ]) {
   for (const color of ["White", "Black"]) {
     test(`${name} plays with the user as ${color} and keeps its identity`, async ({
@@ -441,7 +459,7 @@ for (const [id, name] of [
       await expect(cards.locator("strong")).toHaveText([
         "Classical",
         "Supervised",
-        "Evolutionary",
+        "Augmented Supervised",
       ]);
       await page.getByRole("button", { name: new RegExp(`^${name} `) }).click();
       await expect(
@@ -462,7 +480,7 @@ for (const [id, name] of [
       await expect(page.locator(".analysis-card .hash")).toContainText(
         id === "handcrafted"
           ? "handcrafted-"
-          : (id === "evolutionary" ? "e" : "s").repeat(12),
+          : (id === "supervised-1m" ? "a" : "s").repeat(12),
       );
       await expect(
         page.getByText("Start a new game to change opponents."),
@@ -479,16 +497,16 @@ test("released evidence is matched to checkpoint identity", async ({
   page,
 }) => {
   await mock(page);
-  await page.goto("/?model=evolutionary");
+  await page.goto("/?model=supervised-1m");
   const explanation = page.getByRole("region", {
-    name: "Evolutionary research summary",
+    name: "Augmented Supervised research summary",
   });
   await expect(explanation).toContainText(
-    "passing qualification and fresh-final gates",
+    "playing strength is not yet established",
   );
   await expect(
     explanation.getByRole("link", { name: "Read the research ↗", exact: true }),
-  ).toHaveAttribute("href", "/research?study=evolutionary");
+  ).toHaveAttribute("href", "/research?study=gpu-value");
   await page.getByRole("button", { name: /^Supervised A neural/ }).click();
   await expect(
     page.getByRole("region", { name: "Supervised research summary" }),
@@ -543,17 +561,17 @@ test("unavailable requested opponent stays selected without fallback and require
     if (request.url().endsWith("/api/analyze"))
       requests.push(request.postDataJSON());
   });
-  await page.goto("/?model=evolutionary");
+  await page.goto("/?model=supervised-1m");
   await expect(
     page.getByText("The requested opponent is unavailable.", { exact: false }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: /^Evolutionary A small neural evaluator/,
+      name: /^Augmented Supervised Trained on/,
     }),
   ).toBeDisabled();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
-    "Evolutionary",
+    "Augmented Supervised",
   );
   await expect(
     page.getByRole("button", { name: "e2 white pawn", exact: true }),
@@ -620,12 +638,12 @@ test("explanation research links preserve the game and selected opponent", async
   page,
 }, info) => {
   await mock(page);
-  await page.goto("/?model=evolutionary&moves=e2e4,e7e5");
+  await page.goto("/?model=supervised-1m&moves=e2e4,e7e5");
   const explanation = page.getByRole("region", {
-    name: "Evolutionary research summary",
+    name: "Augmented Supervised research summary",
   });
   await expect(explanation).toContainText(
-    "passing qualification and fresh-final gates",
+    "playing strength is not yet established",
   );
   await page.screenshot({
     path: info.outputPath("three-approaches-desktop.png"),
@@ -634,11 +652,11 @@ test("explanation research links preserve the game and selected opponent", async
   await explanation
     .getByRole("link", { name: "Read the research ↗", exact: true })
     .click();
-  await expect(page).toHaveURL(/research.*study=evolutionary/);
+  await expect(page).toHaveURL(/research.*study=gpu-value/);
   await page.getByRole("button", { name: "Demo", exact: true }).click();
   await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
-    "Evolutionary",
+    "Augmented Supervised",
   );
 });
 
@@ -682,7 +700,7 @@ for (const width of [1366, 890, 734, 390]) {
       0,
     );
     await expect(page.locator(".demo-intro")).toContainText(
-      "Explore Classical, Supervised and Evolutionary chess.",
+      "Play Classical, Supervised (80k), or Augmented Supervised (one-million-position dataset).",
     );
     await expect(
       page.getByRole("button", { name: "Play", exact: true }),
@@ -750,7 +768,7 @@ for (const width of [1366, 890, 734, 390]) {
     await page
       .getByRole("button", { name: "Explore the evidence", exact: true })
       .click();
-    await expect(page).toHaveURL(/research.*study=evolutionary/);
+    await expect(page).toHaveURL(/research.*study=gpu-value/);
     await expect(page.locator("#study-evolutionary")).toBeVisible();
     await expect(page.locator(".eyebrow")).toContainText(
       "FROM SUPERVISION TO EVOLUTION",

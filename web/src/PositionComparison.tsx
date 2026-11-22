@@ -6,8 +6,10 @@ type SearchAssessment = {
   terminal: string | null;
   depth: number;
   nodes: number;
+  strategy?: string;
+  simulations?: number;
   elapsed_ms: number;
-  limits: { nodes: number; time_ms: number };
+  limits: { nodes?: number; simulations?: number; time_ms: number };
 };
 export type ComparisonResult = {
   initial_fen: string;
@@ -265,12 +267,16 @@ export function PositionComparison({
                 <summary>Search details and model version</summary>
                 <p>
                   {modelName}: {result.search.depth} depth ·{" "}
-                  {result.search.nodes.toLocaleString()} nodes ·{" "}
+                  {result.search.strategy === "puct-uniform-v1"
+                    ? `${result.search.simulations?.toLocaleString()} simulations`
+                    : `${result.search.nodes.toLocaleString()} nodes`} ·{" "}
                   {(result.search.elapsed_ms / 1000).toFixed(2)}s
                 </p>
                 <p>
                   Selected engine limits:{" "}
-                  {result.search.limits.nodes.toLocaleString()} nodes /{" "}
+                  {result.search.strategy === "puct-uniform-v1"
+                    ? `${result.search.limits.simulations?.toLocaleString()} simulations`
+                    : `${result.search.limits.nodes?.toLocaleString()} nodes`} /{" "}
                   {(result.search.limits.time_ms / 1000).toFixed(1)}s.
                 </p>
                 <p>
@@ -279,7 +285,7 @@ export function PositionComparison({
                   nodes · {((reference?.elapsed_ms || 0) / 1000).toFixed(2)}s
                 </p>
                 <p>
-                  Stockfish limits: {reference?.limits.nodes.toLocaleString()}{" "}
+                  Stockfish limits: {reference?.limits.nodes?.toLocaleString()}{" "}
                   nodes / {((reference?.limits.time_ms || 0) / 1000).toFixed(1)}
                   s. Node counts reflect each engine’s own search; this is not a
                   strength test.

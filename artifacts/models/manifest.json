@@ -1,8 +1,9 @@
 {
-  "release_version": 3,
+  "release_version": 4,
   "default": "supervised",
   "required_model_ids": [
-    "supervised"
+    "supervised",
+    "supervised-1m"
   ],
   "models": [
     {
@@ -10,7 +11,47 @@
       "file": "supervised.npz",
       "name": "Supervised model",
       "sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
-      "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1"
+      "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "evidence_id": "original-study"
+    },
+    {
+      "id": "supervised-1m",
+      "file": "supervised-1m.npz",
+      "name": "Augmented Supervised",
+      "kind": "supervised",
+      "sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "architecture": [
+        853,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 3,
+      "search": {
+        "strategy": "puct-uniform-v1",
+        "c_puct": 1.5,
+        "priors": "uniform-legal",
+        "simulations": 128
+      },
+      "evidence_id": "gpu-value-v1-supervised-20261122",
+      "experimental": true,
+      "qualified": false,
+      "release_status": "experimental-playable",
+      "authorization_id": "user-20261122-augmented-play",
+      "strength_status": "not-established",
+      "qualification_sha256": null,
+      "final_sha256": null,
+      "documentation_path": "/research?study=gpu-value"
     }
   ]
 }

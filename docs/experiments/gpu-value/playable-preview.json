@@ -1,0 +1,28 @@
+{
+  "authorization_id": "user-20261122-augmented-play",
+  "model_id": "supervised-1m",
+  "checkpoint_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+  "representative_seed": 42,
+  "release_status": "experimental-playable",
+  "qualified": false,
+  "strength_status": "not-established",
+  "dataset_positions": 1000000,
+  "training_positions": 800000,
+  "validation_positions": 100000,
+  "test_positions": 100000,
+  "final_position_test_opened": false,
+  "development_screen": {
+    "opening_pairs": 20,
+    "games_per_opponent": 40,
+    "opponents": ["classical", "released-supervised-80k"],
+    "total_games": 80,
+    "seed": 42,
+    "time_ms": 1500,
+    "simulations": 128,
+    "max_plies": 512,
+    "simulation_status": "provisional-screen-ceiling-not-evolutionary-resolution",
+    "evidence_level": "exploratory-development",
+    "qualification": false,
+    "larger_runs": "deferred-no-automatic-launch"
+  }
+}

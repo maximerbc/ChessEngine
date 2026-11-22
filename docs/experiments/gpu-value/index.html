@@ -1,0 +1,84 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>GPU learning studies</title><style>body{max-width:900px;margin:40px auto;padding:20px;font:17px system-ui}pre{white-space:pre-wrap}</style><h1>GPU learning studies</h1><p>Augmented Supervised is an experimental playable model. Training is complete; playing strength is not yet established. Evolutionary training has not started.</p><pre>{
+  &quot;study&quot;: &quot;gpu-value-v1&quot;,
+  &quot;status&quot;: &quot;supervised-training-complete&quot;,
+  &quot;supervised_positions&quot;: {
+    &quot;train&quot;: 800000,
+    &quot;validation&quot;: 100000,
+    &quot;test&quot;: 100000
+  },
+  &quot;planned_evolutionary_training_games&quot;: 368640,
+  &quot;pilot_training_games&quot;: 30720,
+  &quot;budget&quot;: &quot;Supervised setup/training authorized within C$25; evolutionary budget unset&quot;,
+  &quot;evidence&quot;: {
+    &quot;status&quot;: &quot;supervised-training-complete&quot;,
+    &quot;conclusion&quot;: &quot;inconclusive&quot;,
+    &quot;nvidia_verified&quot;: true,
+    &quot;training_executed&quot;: true,
+    &quot;qualification&quot;: {
+      &quot;executed&quot;: false,
+      &quot;passed&quot;: false
+    },
+    &quot;final&quot;: {
+      &quot;executed&quot;: false
+    },
+    &quot;playable_preview&quot;: {
+      &quot;model&quot;: &quot;supervised-1m&quot;,
+      &quot;seed&quot;: 42,
+      &quot;qualified&quot;: false,
+      &quot;strength_status&quot;: &quot;not-established&quot;
+    },
+    &quot;summary&quot;: {
+      &quot;dataset_counts&quot;: {
+        &quot;train&quot;: 800000,
+        &quot;validation&quot;: 100000,
+        &quot;test&quot;: 100000
+      },
+      &quot;validation_mse_mean&quot;: 0.2147632618799271,
+      &quot;seeds&quot;: [
+        {
+          &quot;seed&quot;: 42,
+          &quot;epochs&quot;: 15,
+          &quot;best_epoch&quot;: 9,
+          &quot;validation_mse&quot;: 0.2145383036171156,
+          &quot;checkpoint_sha256&quot;: &quot;1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2&quot;,
+          &quot;representative&quot;: true
+        },
+        {
+          &quot;seed&quot;: 43,
+          &quot;epochs&quot;: 14,
+          &quot;best_epoch&quot;: 8,
+          &quot;validation_mse&quot;: 0.2155260762707081,
+          &quot;checkpoint_sha256&quot;: &quot;d7c61fd273da0db3d03d47b583798ef6f796d4cab93b35b8dd3beb3980f8315a&quot;,
+          &quot;representative&quot;: false
+        },
+        {
+          &quot;seed&quot;: 44,
+          &quot;epochs&quot;: 16,
+          &quot;best_epoch&quot;: 10,
+          &quot;validation_mse&quot;: 0.21422540575195756,
+          &quot;checkpoint_sha256&quot;: &quot;14d9f56fc09eb537d35b8d8a67cc36517c2998ef7e00f9c5bfe942aaca842a65&quot;,
+          &quot;representative&quot;: false
+        }
+      ],
+      &quot;development_screen&quot;: {
+        &quot;status&quot;: &quot;started&quot;,
+        &quot;qualification&quot;: false,
+        &quot;protocol_id&quot;: &quot;65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f&quot;,
+        &quot;paid_cost_cad&quot;: 0
+      }
+    },
+    &quot;hardware&quot;: &quot;NVIDIA A40 for completed training; NumPy CPU inference during play&quot;,
+    &quot;limitations&quot;: [
+      &quot;Fresh validation pools differ from the historical 80k model; raw MSE is not a controlled comparison.&quot;,
+      &quot;No playing-strength evidence is available yet. The smaller screen is exploratory, not qualification.&quot;,
+      &quot;Final position labels remain sealed.&quot;
+    ]
+  },
+  &quot;limitations&quot;: [
+    &quot;No NVIDIA throughput or strength claim without measured execution.&quot;,
+    &quot;One million total positions include 800,000 training positions.&quot;,
+    &quot;Teacher agreement and playing strength are separate assessments.&quot;,
+    &quot;184,320, 368,640 and 737,280 games are scenarios, not proven sufficiency thresholds.&quot;,
+    &quot;Historical negative and inconclusive results remain unchanged.&quot;
+  ]
+}</pre></html>

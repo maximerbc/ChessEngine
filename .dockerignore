@@ -7,7 +7,7 @@
 !LICENSE
 !src/
 !src/chessengine/
-!src/chessengine/*.py
+!src/chessengine/**
 !configs/
 !configs/comparison.json
 !scripts/
@@ -18,6 +18,7 @@
 artifacts/models/*
 !artifacts/models/manifest.json
 !artifacts/models/supervised.npz
+!artifacts/models/supervised-1m.npz
 !artifacts/models/evolutionary.npz
 !web/
 !web/package.json

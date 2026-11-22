@@ -1,0 +1,29 @@
+{
+  "status": "awaiting-authorized-NVIDIA-benchmark",
+  "training_budget_cad": null,
+  "provider": null,
+  "paid_resources_provisioned": false,
+  "scenarios": [
+    {
+      "main_training_games": 184320,
+      "pilot_training_games": 30720,
+      "measured_hours": null,
+      "measured_cost": null
+    },
+    {
+      "main_training_games": 368640,
+      "pilot_training_games": 30720,
+      "measured_hours": null,
+      "measured_cost": null
+    },
+    {
+      "main_training_games": 737280,
+      "pilot_training_games": 30720,
+      "measured_hours": null,
+      "measured_cost": null
+    }
+  ],
+  "planned_default": 368640,
+  "contingency_fraction": 0.2,
+  "reason": "CPU parity checks do not supply NVIDIA game throughput; measure complete games and all cost phases after selecting a benchmark budget."
+}

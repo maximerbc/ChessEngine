@@ -1,0 +1,46 @@
+{
+  "frozen_before_measurement": true,
+  "study": "gpu-value-v1",
+  "retrieved_date": "2026-11-21",
+  "papers": [
+    {
+      "title": "A Simple Modification in CMA-ES Achieving Linear Time and Space Complexity",
+      "authors": "Raymond Ros and Nikolaus Hansen",
+      "year": 2008,
+      "url": "https://doi.org/10.1007/978-3-540-87700-4_30",
+      "scope": "Diagonal covariance Sep-CMA-ES; no guarantee of chess learning efficiency."
+    },
+    {
+      "title": "Pgx: Hardware-Accelerated Parallel Game Simulators for Reinforcement Learning",
+      "year": 2023,
+      "url": "https://arxiv.org/abs/2303.17503",
+      "scope": "Accelerator-native simulation; published hardware speedups are not forecasts for this pipeline."
+    }
+  ],
+  "implementation_sources": [
+    {
+      "package": "pgx",
+      "version": "2.6.0",
+      "file": "pgx/_src/games/chess.py",
+      "sha256": "2770bf1ba2aae5d8cf6f2c8b4bab24f1e4f820d8aee2ed063b1891d7ae0f6323"
+    },
+    {
+      "package": "mctx",
+      "version": "0.0.5",
+      "file": "mctx/_src/search.py",
+      "sha256": "82884a9350e63e6268232597a9c0349a4bae62c38227fc66456e9e7c02552c4b"
+    },
+    {
+      "package": "evosax",
+      "version": "0.2.0",
+      "file": "evosax/algorithms/distribution_based/sep_cma_es.py",
+      "sha256": "60959d8030d483ee9eb9906b66b767fe2bbab918bd33511d3af66f783cbc0689"
+    }
+  ],
+  "lock_files": [
+    "training/requirements.lock",
+    "training/requirements-cuda.lock"
+  ],
+  "search_definition": "docs/gpu-study.md; custom deterministic uniform-prior PUCT, no library-default exploration noise or Q normalization",
+  "inference_precision": "float32; highest matmul precision; CPU/NVIDIA tolerances must pass on actual hardware"
+}

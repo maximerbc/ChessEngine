@@ -163,7 +163,9 @@ def publish(destination="web/public/research"):
         )
     from .pv_reporting import build as policy_value_report
 
-    policy_value_report()
+    # Completed historical reports are immutable inputs to publication.
+    if not Path('docs/experiments/policy-value/evidence.json').exists():
+        policy_value_report()
     pv = Path("docs/experiments/policy-value")
     state = read_json(pv / "evidence.json") if (pv / "evidence.json").exists() else None
     status = state["status"]["status"] if state else "planned"
@@ -207,7 +209,15 @@ def publish(destination="web/public/research"):
         )
     )
     from .evolution_report import report as evolutionary_report
-    evolution = evolutionary_report(read_json('configs/evolutionary.json'), out/'evolutionary')
+    legacy_evolution = Path('docs/experiments/evolutionary')
+    if (legacy_evolution / 'evidence.json').exists():
+        evolution = read_json(legacy_evolution / 'evidence.json')
+        (out / 'evolutionary').mkdir(exist_ok=True)
+        for name in ['index.html', 'evidence.json', 'protocol.json', 'learning.png']:
+            if (legacy_evolution / name).exists():
+                shutil.copyfile(legacy_evolution / name, out / 'evolutionary' / name)
+    else:
+        evolution = evolutionary_report(read_json('configs/evolutionary.json'), out/'evolutionary')
     for path in (out/'evolutionary').iterdir():
         if path.name in {'index.html', 'evidence.json', 'protocol.json', 'learning.png'}:
             assets[f'evolutionary/{path.name}'] = digest(path)
@@ -217,6 +227,31 @@ def publish(destination="web/public/research"):
                        question='Can tournament-driven evolution learn a useful evaluator from scratch?',
                        takeaway='All 324 evaluation parameters start randomly; no teacher labels or fixed material score. See the measured gates and evidence.',
                        report='/research/evolutionary/index.html', checkpoint_ids={'evolutionary': models['evolutionary']} if 'evolutionary' in models else {}))
+    gpu_source = Path('docs/experiments/gpu-value')
+    if (gpu_source / 'evidence.json').exists():
+        target = out / 'gpu-value'
+        target.mkdir(exist_ok=True)
+        from .pv_reporting import public
+        for name in ['index.html', 'evidence.json']:
+            if name.endswith('.html'):
+                (target / name).write_text(sanitize((gpu_source / name).read_text(), {'index.html', 'evidence.json'}))
+            else:
+                write_json(target / name, public(read_json(gpu_source / name)))
+            assets[f'gpu-value/{name}'] = digest(target / name)
+        gpu_evidence = read_json(gpu_source / 'evidence.json')
+        conclusion = gpu_evidence.get('evidence',{}).get('conclusion','planned')
+        if conclusion not in {'planned','pilot','negative','inconclusive','regression','improvement'}:
+            conclusion = 'inconclusive'
+        gpu_ids = {'supervised-1m','evolutionary-gpu'}
+        rows.insert(1, dict(id='gpu-value', title='GPU value learning studies',
+            level='GPU studies: '+gpu_evidence['status'], result=conclusion,
+            availability='available' if gpu_ids & set(models) else 'research only',
+            question='Can broader supervision and GPU tournaments improve the value evaluator?',
+            takeaway=('Augmented Supervised completed GPU training on 800,000 positions from a one-million-position dataset. It is playable experimentally; playing strength is not established. Evolutionary training remains planned.'
+                if gpu_evidence.get('evidence',{}).get('training_executed') else
+                'One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.'),
+            report='/research/gpu-value/index.html',
+            checkpoint_ids={key:models[key] for key in gpu_ids if key in models}))
     write_json(
         out / "studies.json",
         dict(

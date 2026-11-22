@@ -39,12 +39,15 @@ type Model = {
   evidence: string;
   checkpoint_id: string;
   kind: string;
+  strategy?: string;
 };
 type Analysis = GuideAnalysis & {
   best_move: string | null;
   value: number;
   depth: number;
   nodes: number;
+  strategy?: string;
+  simulations?: number;
   elapsed_ms: number;
   pv: string[];
   checkpoint_id: string;
@@ -363,7 +366,6 @@ export default function App() {
   const [referenceBusy, setReferenceBusy] = useState(false);
   const [error, setError] = useState("");
   const [research, setResearch] = useState<Research | null>(null);
-  const [evolutionStatus, setEvolutionStatus] = useState("planned");
   const [replay, setReplay] = useState(0);
   const [replayPly, setReplayPly] = useState(0);
   const generation = useRef(0);
@@ -372,12 +374,14 @@ export default function App() {
   const currentModel = models.find((m) => m.id === model);
   const opponentOptions = showcaseEnabled
     ? models
-    : releasedApproaches.map((a) => ({
-        id: a.id,
-        name: a.name,
-        kind: a.id,
-        description: a.description,
-      }));
+    : releasedApproaches
+        .filter((a) => a.id !== "evolutionary-gpu")
+        .map((a) => ({
+          id: a.id,
+          name: a.name,
+          kind: a.id,
+          description: a.description,
+        }));
   const displayName = (id: string, fallback?: string) =>
     (!showcaseEnabled && releasedApproach(id)?.name) || fallback || id;
   const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
@@ -550,18 +554,6 @@ export default function App() {
   }
   useEffect(() => {
     void connect();
-    fetch("/research/evolutionary/evidence.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) =>
-        setEvolutionStatus(
-          data?.qualified
-            ? "qualified"
-            : ["pilot_failed", "complete"].includes(data?.status)
-              ? "failed"
-              : "planned",
-        ),
-      )
-      .catch(() => setEvolutionStatus("planned"));
     fetch("/research/model-catalog.json")
       .then((r) => (r.ok ? r.json() : null))
       .then(setCatalog)
@@ -773,9 +765,9 @@ export default function App() {
               <>
                 <h1 className="sr-only">Play chess</h1>
                 <p>
-                  Explore Classical, Supervised and Evolutionary chess. Play
-                  available opponents and discover three ways to evaluate a
-                  position using the same search.
+                  Play Classical, Supervised (80k), or Augmented Supervised
+                  (one-million-position dataset). Compare how each model
+                  evaluates the board and chooses moves.
                 </p>
               </>
             ) : (
@@ -795,7 +787,7 @@ export default function App() {
             </p>
             <button
               className="text-button"
-              onClick={() => changeTab("research", "evolutionary")}
+              onClick={() => changeTab("research", "gpu-value")}
             >
               Explore the evidence <ArrowUpRight size={16} />
             </button>
@@ -885,7 +877,9 @@ export default function App() {
                   <strong>{displayName(model, currentModel?.name)}</strong>
                   <span>
                     {!showcaseEnabled
-                      ? "Shared alpha-beta search"
+                      ? currentModel?.strategy === "puct-uniform-v1"
+                        ? "CPU PUCT search"
+                        : "Shared alpha-beta search"
                       : currentModel?.evidence === "pilot"
                         ? "Pilot checkpoint · research in progress"
                         : "Shared search engine"}
@@ -989,12 +983,11 @@ export default function App() {
                         </small>
                       </span>
                       <span className="selected-label">
-                        {m.id === "evolutionary" &&
-                        evolutionStatus !== "qualified" &&
+                        {connection === "ready" &&
+                        (m.id === "evolutionary-gpu" ||
+                          m.id === "supervised-1m") &&
                         !models.some((installed) => installed.id === m.id)
-                          ? evolutionStatus === "failed"
-                            ? "DID NOT QUALIFY"
-                            : "IN RESEARCH"
+                          ? "IN RESEARCH"
                           : connection === "loading"
                             ? "LOADING"
                             : connection !== "ready" ||
@@ -1055,11 +1048,19 @@ export default function App() {
                   </button>
                 </div>
                 {!showcaseEnabled && (
-                  <ResearchSummary
-                    id={model}
-                    checkpoint={currentModel?.checkpoint_id}
-                    openResearch={(study) => changeTab("research", study)}
-                  />
+                  <>
+                    {model === "supervised-1m" && (
+                      <p className="notice" role="status">
+                        Experimental model · playing strength is not yet
+                        established.
+                      </p>
+                    )}
+                    <ResearchSummary
+                      id={model}
+                      checkpoint={currentModel?.checkpoint_id}
+                      openResearch={(study) => changeTab("research", study)}
+                    />
+                  </>
                 )}
               </section>
               <section className="card analysis-card">
@@ -1092,8 +1093,17 @@ export default function App() {
                     <span>DEPTH</span>
                   </div>
                   <div>
-                    <strong>{analysis?.nodes.toLocaleString() ?? "—"}</strong>
-                    <span>NODES</span>
+                    <strong>
+                      {(analysis?.strategy === "puct-uniform-v1"
+                        ? analysis.simulations
+                        : analysis?.nodes
+                      )?.toLocaleString() ?? "—"}
+                    </strong>
+                    <span>
+                      {analysis?.strategy === "puct-uniform-v1"
+                        ? "SIMULATIONS"
+                        : "NODES"}
+                    </span>
                   </div>
                   <div>
                     <strong>
