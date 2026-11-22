@@ -1,0 +1,141 @@
+{
+  "status": "complete",
+  "evidence_level": "development-search-ablation",
+  "seed": 42,
+  "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4",
+  "opponents": {
+    "classical": {
+      "conservative": {
+        "score": 0.4375,
+        "ci95": [
+          0.3,
+          0.575
+        ],
+        "seed_sd": 0.0,
+        "pairs": 20,
+        "cap_fraction": 0.0
+      },
+      "neutral_cap_score": 0.4375,
+      "neutral_cap_ci95": [
+        0.3,
+        0.575
+      ],
+      "wins": 16,
+      "rules_draws": 3,
+      "losses": 21,
+      "caps": 0,
+      "coverage_fraction": null,
+      "games": 40,
+      "candidate_search_work": {
+        "moves": 1265,
+        "nodes": 4204315,
+        "search_seconds": 1817.6301786219701,
+        "mean_search_ms": 1436.8618012821898
+      },
+      "reference_search_work": {
+        "moves": 1267,
+        "nodes": 5151692,
+        "search_seconds": 1815.092136823805,
+        "mean_search_ms": 1432.5904789453868
+      }
+    },
+    "supervised": {
+      "conservative": {
+        "score": 0.6875,
+        "ci95": [
+          0.55,
+          0.8125
+        ],
+        "seed_sd": 0.0,
+        "pairs": 20,
+        "cap_fraction": 0.0
+      },
+      "neutral_cap_score": 0.6875,
+      "neutral_cap_ci95": [
+        0.55,
+        0.8125
+      ],
+      "wins": 26,
+      "rules_draws": 3,
+      "losses": 11,
+      "caps": 0,
+      "coverage_fraction": null,
+      "games": 40,
+      "candidate_search_work": {
+        "moves": 1707,
+        "nodes": 5791214,
+        "search_seconds": 2471.6233648303896,
+        "mean_search_ms": 1447.9340157178615
+      },
+      "reference_search_work": {
+        "moves": 1699,
+        "nodes": 6297104,
+        "search_seconds": 2462.163010589662,
+        "mean_search_ms": 1449.183643666664
+      }
+    }
+  },
+  "session_elapsed_seconds": 2492.8911310830154,
+  "reused_development_openings": true,
+  "qualification": false,
+  "final_tests_opened": false,
+  "website_changed": false,
+  "paid_cost_cad": 0,
+  "limitations": [
+    "One fixed training seed and twenty already used opening pairs.",
+    "This controls search; it is not independent final confirmation or qualification.",
+    "Equal move-time allowances use a nonbinding node ceiling, not the serving node cap.",
+    "No model selection, promotion, further training or larger evaluation follows automatically."
+  ],
+  "config": {
+    "config": {
+      "study": "gpu-value-v1-supervised-alpha-beta-screen-v1",
+      "evidence_level": "development-search-ablation",
+      "seed": 42,
+      "opening_pool": "development",
+      "opening_offset": 0,
+      "opening_pairs": 20,
+      "opponents": [
+        "classical",
+        "supervised"
+      ],
+      "total_games": 80,
+      "candidate_strategy": "alpha-beta",
+      "opponent_strategy": "alpha-beta",
+      "time_ms": 1500,
+      "node_ceiling": 2147483647,
+      "qdepth": 4,
+      "max_plies": 512,
+      "bootstrap_resamples": 10000,
+      "opening_manifest_sha256": "6fffd948d59a88cff4771a970f2733818cd0caf367e33860c4631c2074f92165",
+      "reused_development_openings": true,
+      "qualification": false,
+      "final_tests_opened": false,
+      "paid_cost_cad": 0,
+      "automatic_model_promotion": false,
+      "automatic_larger_runs": false
+    },
+    "workers": 4,
+    "hardware": "macOS-15.6.1-arm64-arm-64bit"
+  },
+  "checkpoint_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+  "legacy_checkpoint_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+  "source_commit": "b636d0c9e36e179a9723c86a0b6158d9988208b4",
+  "summary_sha256": "7e285650073ea1cde0145cdf3ac4410d042b43cc7c445a825f5d8fdc1ebab6a1",
+  "replay_audit": {
+    "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4",
+    "summary_sha256": "7e285650073ea1cde0145cdf3ac4410d042b43cc7c445a825f5d8fdc1ebab6a1",
+    "opponents": {
+      "classical": {
+        "games": 40,
+        "legal_history_and_result_verified": true,
+        "score_verified": true
+      },
+      "supervised": {
+        "games": 40,
+        "legal_history_and_result_verified": true,
+        "score_verified": true
+      }
+    }
+  }
+}

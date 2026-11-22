@@ -25,7 +25,14 @@
       "model": "supervised-1m",
       "seed": 42,
       "qualified": false,
-      "strength_status": "not-established"
+      "strength_status": "not-established",
+      "search": {
+        "strategy": "alpha-beta",
+        "nodes": 10000,
+        "time_ms": 1500,
+        "qdepth": 4
+      },
+      "search_authorization_id": "user-20261122-augmented-alpha-beta"
     },
     "summary": {
       "dataset_counts": {
@@ -68,10 +75,10 @@
         "caps": 0,
         "protocol_id": "65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f",
         "qualification": false,
-        "limitation": "PUCT-128 versus alpha-beta; this does not isolate evaluator quality"
+        "limitation": "Historical PUCT-128 versus alpha-beta screen; it does not isolate evaluator quality."
       },
       "same_search_ablation": {
-        "status": "started",
+        "status": "complete",
         "seed": 42,
         "candidate_strategy": "alpha-beta",
         "opponent_strategy": "alpha-beta",
@@ -79,7 +86,91 @@
         "qualification": false,
         "reused_development_openings": true,
         "paid_cost_cad": 0,
-        "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4"
+        "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4",
+        "node_ceiling": 2147483647,
+        "opening_pairs_per_opponent": 20,
+        "total_games": 80,
+        "qdepth": 4,
+        "opponents": {
+          "classical": {
+            "conservative": {
+              "score": 0.4375,
+              "ci95": [
+                0.3,
+                0.575
+              ],
+              "seed_sd": 0.0,
+              "pairs": 20,
+              "cap_fraction": 0.0
+            },
+            "neutral_cap_score": 0.4375,
+            "neutral_cap_ci95": [
+              0.3,
+              0.575
+            ],
+            "wins": 16,
+            "rules_draws": 3,
+            "losses": 21,
+            "caps": 0,
+            "coverage_fraction": null,
+            "games": 40,
+            "candidate_search_work": {
+              "moves": 1265,
+              "nodes": 4204315,
+              "search_seconds": 1817.6301786219701,
+              "mean_search_ms": 1436.8618012821898
+            },
+            "reference_search_work": {
+              "moves": 1267,
+              "nodes": 5151692,
+              "search_seconds": 1815.092136823805,
+              "mean_search_ms": 1432.5904789453868
+            }
+          },
+          "supervised": {
+            "conservative": {
+              "score": 0.6875,
+              "ci95": [
+                0.55,
+                0.8125
+              ],
+              "seed_sd": 0.0,
+              "pairs": 20,
+              "cap_fraction": 0.0
+            },
+            "neutral_cap_score": 0.6875,
+            "neutral_cap_ci95": [
+              0.55,
+              0.8125
+            ],
+            "wins": 26,
+            "rules_draws": 3,
+            "losses": 11,
+            "caps": 0,
+            "coverage_fraction": null,
+            "games": 40,
+            "candidate_search_work": {
+              "moves": 1707,
+              "nodes": 5791214,
+              "search_seconds": 2471.6233648303896,
+              "mean_search_ms": 1447.9340157178615
+            },
+            "reference_search_work": {
+              "moves": 1699,
+              "nodes": 6297104,
+              "search_seconds": 2462.163010589662,
+              "mean_search_ms": 1449.183643666664
+            }
+          }
+        },
+        "session_elapsed_seconds": 2492.8911310830154,
+        "limitations": [
+          "One fixed training seed and twenty already used opening pairs.",
+          "This controls search; it is not independent final confirmation or qualification.",
+          "Equal move-time allowances use a nonbinding node ceiling, not the serving node cap.",
+          "No model selection, promotion, further training or larger evaluation follows automatically."
+        ],
+        "takeaway": "Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned."
       },
       "tactical_diagnostic": {
         "legal_mate_in_one_defence_available": true,
@@ -92,8 +183,9 @@
     "hardware": "NVIDIA A40 for completed training; NumPy CPU inference during play",
     "limitations": [
       "Fresh validation pools differ from the historical 80k model; raw MSE is not a controlled comparison.",
-      "No playing-strength evidence is available yet. The smaller screen is exploratory, not qualification.",
-      "Final position labels remain sealed."
+      "The completed alpha-beta comparison is development evidence from one seed and 20 reused opening pairs per opponent, not qualification.",
+      "Its nonbinding node ceiling differs from the demo limit of 10,000 nodes; match scores do not measure the exact serving configuration.",
+      "Final position labels and qualification/final opening pools remain sealed."
     ]
   },
   "limitations": [

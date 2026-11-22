@@ -43,7 +43,7 @@ async function mock(page: any) {
             kind: "supervised",
             evidence: "test-qualified",
             checkpoint_id: "a".repeat(64),
-            strategy: "puct-uniform-v1",
+            strategy: "alpha-beta",
           },
           {
             id: "handcrafted",
@@ -68,13 +68,10 @@ async function mock(page: any) {
               : "g8f6",
         value: 0.12,
         depth: 2,
-        nodes: ["evolutionary-gpu", "supervised-1m"].includes(b.model_id)
-          ? 0
-          : 10000,
-        strategy: ["evolutionary-gpu", "supervised-1m"].includes(b.model_id)
-          ? "puct-uniform-v1"
-          : "alpha-beta",
-        simulations: 64,
+        nodes: b.model_id === "evolutionary-gpu" ? 0 : 10000,
+        strategy:
+          b.model_id === "evolutionary-gpu" ? "puct-uniform-v1" : "alpha-beta",
+        simulations: b.model_id === "evolutionary-gpu" ? 64 : undefined,
         elapsed_ms: 120,
         pv: ["e7e5", "g1f3"],
         checkpoint_id:
@@ -477,6 +474,12 @@ for (const [id, name] of [
       }
       expect(requests).toHaveLength(1);
       expect(requests[0].model_id).toBe(id);
+      await expect(page.locator(".player-strip").first()).toContainText(
+        "Shared alpha-beta search",
+      );
+      await expect(page.locator(".player-strip").first()).not.toContainText(
+        "PUCT",
+      );
       await expect(page.locator(".analysis-card .hash")).toContainText(
         id === "handcrafted"
           ? "handcrafted-"
@@ -502,7 +505,7 @@ test("released evidence is matched to checkpoint identity", async ({
     name: "Augmented Supervised research summary",
   });
   await expect(explanation).toContainText(
-    "playing strength is not yet established",
+    "broader playing strength remains unconfirmed",
   );
   await expect(
     explanation.getByRole("link", { name: "Read the research ↗", exact: true }),
@@ -643,7 +646,7 @@ test("explanation research links preserve the game and selected opponent", async
     name: "Augmented Supervised research summary",
   });
   await expect(explanation).toContainText(
-    "playing strength is not yet established",
+    "broader playing strength remains unconfirmed",
   );
   await page.screenshot({
     path: info.outputPath("three-approaches-desktop.png"),

@@ -10,6 +10,7 @@ from ..features import position_key, restore
 # Explicit user-authorized playable preview; this does not confer qualification.
 EXPERIMENTAL_SUPERVISED_SHA = '1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2'
 EXPERIMENTAL_AUTHORIZATION = 'user-20261122-augmented-play'
+ALPHA_BETA_AUTHORIZATION = 'user-20261122-augmented-alpha-beta'
 
 
 def validate_entry(row, evaluator):
@@ -23,9 +24,6 @@ def validate_entry(row, evaluator):
             or (row['id'] == 'evolutionary-gpu' and metadata.get('generation',0) <= 0)
             or metadata.get('kind') != MODEL_IDS[row['id']]
             or row.get('architecture') != ARCHITECTURE or row.get('feature_version') != 3
-            or row.get('search') != {'strategy': 'puct-uniform-v1', 'c_puct': 1.5,
-                                      'priors': 'uniform-legal', 'simulations': row.get('search', {}).get('simulations')}
-            or row['search']['simulations'] not in [32, 64, 128]
             or not row.get('evidence_id')):
         raise ValueError('New GPU model requires explicit architecture, search and evidence identities')
     experimental_preview = (
@@ -37,6 +35,16 @@ def validate_entry(row, evaluator):
         and row.get('strength_status') == 'not-established'
         and row.get('qualification_sha256') is None and row.get('final_sha256') is None
     )
+    # Search changes apply only to this authorized preview. Historical PUCT
+    # qualification protocols and the evolutionary release path stay intact.
+    search = row.get('search', {})
+    puct = (search == {'strategy': 'puct-uniform-v1', 'c_puct': 1.5,
+                       'priors': 'uniform-legal', 'simulations': search.get('simulations')}
+            and search.get('simulations') in [32, 64, 128])
+    alpha_beta_preview = (experimental_preview and search == {'strategy': 'alpha-beta'}
+                          and row.get('search_authorization_id') == ALPHA_BETA_AUTHORIZATION)
+    if not (puct or alpha_beta_preview):
+        raise ValueError('GPU model search requires its qualified PUCT protocol or authorized alpha-beta preview')
     if not experimental_preview and (row.get('qualified') is not True
             or not row.get('qualification_sha256') or not row.get('final_sha256')):
         raise ValueError('New GPU model requires qualification or the explicitly authorized supervised preview')

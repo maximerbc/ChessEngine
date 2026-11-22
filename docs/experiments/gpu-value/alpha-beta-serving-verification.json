@@ -1,0 +1,60 @@
+{
+  "branch": "codex/augmented-alpha-beta",
+  "base_main_commit": "41acf54ed465833b4bf6b77c4038393ce33289d9",
+  "checks": {
+    "python": {
+      "passed": 136,
+      "skipped": 2
+    },
+    "browser": {
+      "passed": 43,
+      "skipped": 6
+    },
+    "website_build": "passed",
+    "cli_help": "passed",
+    "ruff": "passed",
+    "whitespace": "passed",
+    "models_and_manifests": "checksums, unchanged weights and matching manifests verified",
+    "replayed_comparison_games": 80,
+    "archive_restore_files": 292
+  },
+  "source_sha256": {
+    "src/chessengine/gpu/release.py": "696354c9ae754fd103d19f3f152b9ff1ba986630735ca9d73e664015df5ec54e",
+    "src/chessengine/research_catalog.py": "08a99225ffd9f601db17107a33f6980ddabc0752923cb8f72e37297da75769c3",
+    "tests/test_augmented_play.py": "0e6f9a8faefeed4c1e489d977a07cee683fd1a2dc144d04c012e9ff4cd12948e",
+    "tests/test_research_catalog.py": "a1816b421eab5c891487d31f093b4d8030dc4070a721764ccc0d1a70ef489c21",
+    "src/chessengine/gpu/evaluation.py": "5180853cff352e33c8539ed94d7145ba1d187615fafd28aea980bb567c6920e6",
+    "src/chessengine/strength_screen.py": "05529b6883d74da10c96c466e80683935cb730f35b6a4a81143b02dd0322878e",
+    "src/chessengine/alpha_beta_screen.py": "49beb32f35348fa616c0219bbc7171cbf0056d2ba1a2fab55cd34b9b1bb8985e",
+    "tests/test_alpha_beta_screen.py": "b3ea8444258936452d779bdf06d7e967b63413ea4faba2c50bf6b44447345dc3"
+  },
+  "preserved_failures": [
+    "Browser launch inside the sandbox was blocked by macOS IPC permissions; the authorized external-sandbox run passed.",
+    "The first full Python run correctly rejected a resume after the report publisher was edited during that run. Source edits then stopped; the targeted resume/report checks passed and the final full suite passed."
+  ],
+  "not_executed": [
+    "container builds",
+    "hosted deployment",
+    "new training",
+    "qualification/final evaluation",
+    "NVIDIA verification"
+  ],
+  "paid_cost_cad": 0,
+  "merged": false,
+  "deployed": false,
+  "serving_limits": {
+    "nodes": 10000,
+    "time_ms": 1500,
+    "qdepth": 4
+  },
+  "study_limits": {
+    "node_ceiling": 2147483647,
+    "time_ms": 1500,
+    "qdepth": 4
+  },
+  "limitations": [
+    "Completed comparison is one seed on reused development openings; it is not qualification or the exact serving-budget match result."
+  ],
+  "initial_base_main_commit": "af4d59cf7be582107a23b808308fe000a272c290",
+  "integration": "Preserved merged PR #17 comparison infrastructure and diagnostics; updated its superseded PUCT-serving assertion for the explicitly authorized preview."
+}

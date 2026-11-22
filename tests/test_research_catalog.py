@@ -32,6 +32,15 @@ def test_report_publication_is_independent_of_failed_model_gate(tmp_path):
     assert pilot["result"] == "pilot"
     assert "deferred" in pilot["takeaway"]
     assert (tmp_path / "research/policy-value/release-scope.json").is_file()
+    gpu = next(r for r in rows if r["id"] == "gpu-value")
+    published = json.loads((tmp_path / "research/gpu-value/evidence.json").read_text())
+    ablation = published["evidence"]["summary"]["same_search_ablation"]
+    expected = json.loads(Path("docs/experiments/gpu-value/alpha-beta-screen-result.json").read_text())
+    assert ablation["status"] == "complete" and ablation["qualification"] is False
+    assert ablation["protocol_id"] == expected["protocol_id"]
+    assert ablation["opponents"] == expected["opponents"]
+    assert gpu["takeaway"] == ablation["takeaway"]
+    assert "qualification remains pending" in gpu["takeaway"]
     for p, sha in original.items():
         assert digest(p) == sha
     for document in (tmp_path / "research").glob("*/index.html"):

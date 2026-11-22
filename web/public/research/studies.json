@@ -27,7 +27,7 @@
       "result": "inconclusive",
       "availability": "available",
       "question": "Can broader supervision and GPU tournaments improve the value evaluator?",
-      "takeaway": "Augmented Supervised completed GPU training on 800,000 positions from a one-million-position dataset. It is playable experimentally; playing strength is not established. Evolutionary training remains planned.",
+      "takeaway": "Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned.",
       "report": "/research/gpu-value/index.html",
       "checkpoint_ids": {
         "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
@@ -186,7 +186,7 @@
     "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
     "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
     "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
-    "gpu-value/index.html": "671bff37796a44dcba1344596ff41ae6a3a9a1e5bfe0fa9f2959413a014d76ab",
-    "gpu-value/evidence.json": "c1ba1d515c02d482637d563e724c3d0945c26eef8921258e504dc8f9969503cd"
+    "gpu-value/index.html": "618fb1a36d2ce807dae0f0d1e7ebc5c1acbfa8a5ac5f7c6d576aa26179bd47fb",
+    "gpu-value/evidence.json": "1ebe04b843fcc256e45ee3937c8d4b0aa00fae0085c0c13a90c9e0954f034e5c"
   }
 }

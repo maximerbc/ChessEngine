@@ -1,5 +1,17 @@
 # GPU study operations
 
+## 2026-11-22: augmented alpha-beta release review
+
+The user requested changing the playable Augmented Supervised preview to the existing CPU alpha-beta after the completed same-search screen. Manifest v4 authorizes only the unchanged seed-42 checkpoint for this search exception. It stays experimental and unqualified; 80k Supervised stays default. The GPU-trained weights and training provenance are unchanged.
+
+All 80 games finished in 2,492.89 seconds locally (C$0 new cloud cost): 16 wins/3 draws/21 losses against Classical, score 43.75% (paired 95% interval 30–57.5%); 26/3/11 against 80k Supervised, score 68.75% (55–81.25%). All move histories, rules results and scores were independently replay-verified. See `docs/experiments/gpu-value/alpha-beta-screen-result.json`; retain the original failed PUCT screen separately. This is one seed on 20 reused opening pairs per opponent, not final confirmation or qualification.
+
+The demo keeps its bounded default of 10,000 nodes and 1,500 ms, qdepth four. The comparison gave each participant the same 1,500-ms allowance with a nonbinding node ceiling; its results must not be presented as measurements of the exact serving budget. No full study, fits, cloud resources, evolutionary tournaments or tests start automatically.
+
+Before editing, the completed comparison, frozen runtime, inputs, ledgers and logs were compressed and independently restored: `runs/preservation-augmented-alpha-beta-release-20261122/completed-comparison.tar.gz`. The committed checksum inventory is `docs/preservation/augmented-alpha-beta-release-20261122.json`; existing full training and legacy archives remain unchanged.
+
+Validate with `PYTHONPATH=src .venv/bin/python -m pytest`, `PYTHONPATH=src .venv/bin/python -m chessengine --help`, `npm --prefix web run build` and `npm --prefix web run test:e2e`. Verify `/models` declares alpha-beta for `supervised-1m`, `/analyze` reports node work, and `/evaluate-comparison` uses the same strategy. Build and review the private branch before any merge; deployment remains separate. To roll back, revert this review commit and retain all study records.
+
 ## 2026-11-22: alpha-beta search ablation after the failed PUCT screen
 
 The completed 80-game PUCT screen lost every game (40 versus each reference), all by replay-verified checkmate. Preserve its negative result in `docs/experiments/gpu-value/puct-screen-result.json`. Recorded search time was about one ninth of the references' total search time. A separate off-policy diagnostic found 34 last decisions with a legal defense against mate in one: PUCT-128 repeated all 34 blunders, full-time PUCT repeated 26, and the same weights under alpha-beta repeated none. This diagnoses a tactical weakness; it does not establish a counterfactual match win rate. A fixed 2,048-validation-position diagnostic measured MSE 0.22152 for the new evaluator and 0.32449 for the old evaluator on the same records; final tests were not opened. Details are in `search-diagnosis.json`.

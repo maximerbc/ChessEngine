@@ -4,6 +4,7 @@ import { Chess } from "chess.js";
 const identities: Record<string, string> = {
   handcrafted: "handcrafted-v1",
   supervised: "s".repeat(64),
+  "supervised-1m": "a".repeat(64),
   evolutionary: "e".repeat(64),
 };
 
@@ -16,6 +17,7 @@ function comparison(body: any) {
       promotion: uci[4],
     });
   const search = {
+    strategy: "alpha-beta",
     value: 0.3,
     mate_winner: null,
     terminal: null,
@@ -55,6 +57,7 @@ async function setup(page: Page) {
           checkpoint_id,
           name: id,
           kind: id,
+          strategy: "alpha-beta",
           evidence: "test",
         })),
       },
@@ -99,6 +102,7 @@ const panel = (page: Page) =>
 for (const [id, name] of [
   ["handcrafted", "Classical"],
   ["supervised", "Supervised"],
+  ["supervised-1m", "Augmented Supervised"],
   ["evolutionary", "Evolutionary"],
 ]) {
   test(`${name} displays adjacent position and search comparisons without moving`, async ({

@@ -1051,8 +1051,8 @@ export default function App() {
                   <>
                     {model === "supervised-1m" && (
                       <p className="notice" role="status">
-                        Experimental model · playing strength is not yet
-                        established.
+                        Experimental model · development results available;
+                        formal qualification is pending.
                       </p>
                     )}
                     <ResearchSummary
