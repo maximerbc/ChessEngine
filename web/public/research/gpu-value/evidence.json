@@ -83,6 +83,10 @@
         "candidate_strategy": "alpha-beta",
         "opponent_strategy": "alpha-beta",
         "time_ms": 1500,
+        "qualification": false,
+        "reused_development_openings": true,
+        "paid_cost_cad": 0,
+        "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4",
         "node_ceiling": 2147483647,
         "opening_pairs_per_opponent": 20,
         "total_games": 80,
@@ -160,10 +164,6 @@
           }
         },
         "session_elapsed_seconds": 2492.8911310830154,
-        "qualification": false,
-        "reused_development_openings": true,
-        "paid_cost_cad": 0,
-        "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4",
         "limitations": [
           "One fixed training seed and twenty already used opening pairs.",
           "This controls search; it is not independent final confirmation or qualification.",
@@ -171,6 +171,13 @@
           "No model selection, promotion, further training or larger evaluation follows automatically."
         ],
         "takeaway": "Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned."
+      },
+      "tactical_diagnostic": {
+        "legal_mate_in_one_defence_available": true,
+        "puct128_blunders": 34,
+        "full_time_puct_blunders": 26,
+        "alpha_beta_blunders": 0,
+        "evidence_level": "off-policy development diagnostic; not a match win rate"
       }
     },
     "hardware": "NVIDIA A40 for completed training; NumPy CPU inference during play",

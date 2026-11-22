@@ -83,6 +83,10 @@
         &quot;candidate_strategy&quot;: &quot;alpha-beta&quot;,
         &quot;opponent_strategy&quot;: &quot;alpha-beta&quot;,
         &quot;time_ms&quot;: 1500,
+        &quot;qualification&quot;: false,
+        &quot;reused_development_openings&quot;: true,
+        &quot;paid_cost_cad&quot;: 0,
+        &quot;protocol_id&quot;: &quot;2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4&quot;,
         &quot;node_ceiling&quot;: 2147483647,
         &quot;opening_pairs_per_opponent&quot;: 20,
         &quot;total_games&quot;: 80,
@@ -160,10 +164,6 @@
           }
         },
         &quot;session_elapsed_seconds&quot;: 2492.8911310830154,
-        &quot;qualification&quot;: false,
-        &quot;reused_development_openings&quot;: true,
-        &quot;paid_cost_cad&quot;: 0,
-        &quot;protocol_id&quot;: &quot;2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4&quot;,
         &quot;limitations&quot;: [
           &quot;One fixed training seed and twenty already used opening pairs.&quot;,
           &quot;This controls search; it is not independent final confirmation or qualification.&quot;,
@@ -171,6 +171,13 @@
           &quot;No model selection, promotion, further training or larger evaluation follows automatically.&quot;
         ],
         &quot;takeaway&quot;: &quot;Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned.&quot;
+      },
+      &quot;tactical_diagnostic&quot;: {
+        &quot;legal_mate_in_one_defence_available&quot;: true,
+        &quot;puct128_blunders&quot;: 34,
+        &quot;full_time_puct_blunders&quot;: 26,
+        &quot;alpha_beta_blunders&quot;: 0,
+        &quot;evidence_level&quot;: &quot;off-policy development diagnostic; not a match win rate&quot;
       }
     },
     &quot;hardware&quot;: &quot;NVIDIA A40 for completed training; NumPy CPU inference during play&quot;,

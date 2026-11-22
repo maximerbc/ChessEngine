@@ -1,0 +1,27 @@
+{
+  "study": "gpu-value-v1-supervised-alpha-beta-screen-v1",
+  "evidence_level": "development-search-ablation",
+  "seed": 42,
+  "opening_pool": "development",
+  "opening_offset": 0,
+  "opening_pairs": 20,
+  "opponents": [
+    "classical",
+    "supervised"
+  ],
+  "total_games": 80,
+  "candidate_strategy": "alpha-beta",
+  "opponent_strategy": "alpha-beta",
+  "time_ms": 1500,
+  "node_ceiling": 2147483647,
+  "qdepth": 4,
+  "max_plies": 512,
+  "bootstrap_resamples": 10000,
+  "opening_manifest_sha256": "6fffd948d59a88cff4771a970f2733818cd0caf367e33860c4631c2074f92165",
+  "reused_development_openings": true,
+  "qualification": false,
+  "final_tests_opened": false,
+  "paid_cost_cad": 0,
+  "automatic_model_promotion": false,
+  "automatic_larger_runs": false
+}
