@@ -20,7 +20,7 @@ PYTHONPATH=src .venv-gpu/bin/python -m chessengine.gpu doctor --require-nvidia
 PYTHONPATH=src .venv-gpu/bin/python -m pytest -q tests/gpu
 ```
 
-The CPU lock was installed and tested locally. The CUDA lock resolves Linux x86-64 dependencies, including pinned CUDA plugin/PJRT and NVIDIA wheels; actual NVIDIA execution remains pending the user's benchmark-budget/provider decision. Package resolution does not verify drivers, memory capacity or throughput. Do not use macOS CPU performance as a GPU forecast.
+The CPU lock was installed and tested locally. The CUDA lock was installed on an authorized NVIDIA A40: doctor --require-nvidia and all 17 GPU tests passed. GPU/NumPy benchmark export difference was below 1e-5. These checks establish correctness on that instance, not a completed learning study or playing strength. Keep source/runtime identities with each measurement and recheck the device after a host change. Stockfish labeling can run in the CPU environment separately from GPU fitting; do not use macOS CPU performance as a GPU-training forecast.
 
 Core pins are JAX/JAXlib 0.6.2, PGX 2.6.0, mctx 0.0.5, evosax 0.2.0 and Optax 0.2.4. These are deliberately tested compatible versions, rather than unbounded latest releases. Full transitive versions and artifact hashes are in the locks. Re-resolving a lock is a protocol change; use a new study directory. Regeneration uses uv 0.8.22 and the `.in` files; the CUDA lock targets `x86_64-manylinux_2_28`.
 

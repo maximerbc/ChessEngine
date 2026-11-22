@@ -1,5 +1,15 @@
 # Decision log
 
+## 2026-11-21 — Approved supervised execution and local labeling
+
+The user chose Runpod with a C$25 total supervised setup/training ceiling including storage, taxes and conversion, C$5 contingency, and up to C$3 initial hardware checks. This is not evolutionary-compute authorization. The approved instance is one A40 at US$0.59/hour with a 20 GB HIGH_PERFORMANCE volume at US$2.80/month prorated. Keep prepaid credits separate from consumption and actual invoice figures. Review-branch merging, deployment and model promotion remain separate decisions.
+
+Actual A40 verification passed the locked NVIDIA environment doctor, 17 GPU tests and NumPy export parity (maximum benchmark prediction difference 3.58e-7). These checks establish infrastructure correctness, not playing strength. A 1,024-position training-only labeling probe projected 4.58 hours for one million positions on the rented host; the full three-seed synthetic update/checkpoint projection was 22.3 minutes, excluding first-epoch I/O and other pipeline stages. Neither estimate is a completed study result.
+
+After comparing historical local labeling and cloud CPU prices, the user explicitly accepted local labeling followed by GPU training. A new same-sample Mac benchmark measured 156.21 positions/second with four workers (1.78-hour linear projection); two/four-worker targets matched for all 1,024 probe positions. Worker count is an operational setting recorded in the private receipt, not a scientific sample change. Allow for sustained throughput and startup overhead. Do not require the GPU to remain rented while a CPU labeling stage runs.
+
+The prepared corpus passed exact 800,000/100,000/100,000 counts and canonical-position/source-game separation. It retains 180,302 eligible old training positions without reusing targets. Positions SHA256 is 124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9. The verified private download preserves the preparation protocol and six source archive checksums. All new-study positions are labeled with the pinned macOS Stockfish 19 binary and explicitly exported NNUE; preserve Linux probe provenance separately and never mix those benchmark labels into the corpus. Local labeling has started; no completed new model or final assessment is claimed.
+
 ## 2026-11-21 — Teacher network identity during Runpod setup
 
 The official Stockfish 19 Linux release declares EvalFile only. Teacher pinning must inspect the pinned executable’s UCI options and require exactly its declared NNUE files, including EvalFileSmall only when that option exists. Every declared file retains an explicit hash and path. This corrects the previous two-file setup assumption without changing label nodes, threads, hash, perspective, data splits or learning protocol. No study labels or training runs preceded the correction.

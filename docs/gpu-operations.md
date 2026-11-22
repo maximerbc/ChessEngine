@@ -2,11 +2,21 @@
 
 ## Current boundary
 
-Implementation and local CPU verification are authorized. **No provider or new training budget has been chosen. No paid instance, NVIDIA benchmark or full learning experiment has been launched.** First choose a small benchmark budget/provider with the user; then generate the measured full-workload forecast and obtain the separate learning-budget decision. Merging and deployment are separate user decisions.
+The user authorized **Runpod augmented-supervised setup/training within C$25 total**, including storage/taxes/conversion, with C$5 contingency and at most C$3 for initial hardware checks. Actual A40 doctor/GPU checks passed. Following measured local/cloud comparisons, the user approved **local CPU labeling, then GPU fitting**. Dataset preparation is complete and local labeling is running; no completed new trained model is claimed. Evolutionary paid execution still needs its own measured forecast and budget decision. Merging, deployment, qualification and promotion remain separate decisions.
 
 Read [study design](gpu-study.md), [training environment](../training/README.md) and the current amendment in `AGENTS.md`. Historical operations documents describe their original experiments. Never point these commands at their output directories.
 
 All examples run from this branch's repository root. Explicit `PYTHONPATH=src` ensures that a shared development environment imports this checkout. Keep the private repository private. Transfer data/archives only through a user-approved private destination; never place raw examples, optimizers or full backups in `web/public`.
+
+## Current supervised workflow
+
+The primary checkout's private `runs/gpu-supervised-setup-20261121/NEXT-STEPS.md` is the live execution handoff; read its current status/log/receipt files before starting or resuming any job. Large data and process details stay ignored. The verified million-position corpus is in the primary checkout at `data/gpu-value-v1`. Do not rerun corpus preparation on another host or overwrite its preparation protocol simply because runtime paths differ.
+
+Label with the locked Python 3.12 CPU environment and reviewed branch source, keeping one explicitly pinned macOS teacher across train/validation/test. Completed 1,000-position chunks validate their source/teacher identity and checksum before resume. Run only one labeling invocation per output directory. Announce the measured runtime first, inhibit idle sleep only for the job lifetime, and tell the user to keep the laptop powered with its lid open. All final assessment remains sealed; labeling held-out positions does not authorize evaluating model predictions on them.
+
+Stop the rented GPU during local labeling and retain its durable volume. Package labels, teacher identity and chunk/protocol evidence privately after complete count/input/target checks. Transfer the package back through authenticated, pinned-host-key SSH; preserve the existing remote positions checksum and verify every archive member before placement. No external relay or account-wide SSH key changes. Port edits restart the container and erase root-only setup: finish active work first, then reinstall a task stop guard after the last port edit. Close temporary public ports after transfer. A stopped GPU can lose host capacity; inspect actual state/stock before any authorized replacement.
+
+Supervised labeling and fitting can use the base `configs/gpu-study.json`: unresolved PUCT simulations do not affect the dataset, value architecture or optimizer. Resolve simulation counts and evolutionary workload only for the separately budgeted search/evolution stages. Do not charge their tournaments or qualification/final matches to an assumed supervised-only forecast. GPU fitting requires a private receipt identifying its actual reviewed forecast/config and the existing approved spending scope. Measure full-data feature preparation and first-epoch I/O, retain seeds 42/43/44, and stop compute after fitting. Private local paths in teacher provenance remain truthful; GPU fitting consumes labels and does not invoke the Mac executable.
 
 ## Preserve and restore
 
