@@ -1,0 +1,62 @@
+{
+  "status": "complete",
+  "evidence_level": "exploratory development screen",
+  "seed": 42,
+  "protocol_id": "65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f",
+  "opponents": {
+    "classical": {
+      "conservative": {
+        "score": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "seed_sd": 0.0,
+        "pairs": 20,
+        "cap_fraction": 0.0
+      },
+      "neutral_cap_score": 0.0,
+      "neutral_cap_ci95": [
+        0.0,
+        0.0
+      ],
+      "wins": 0,
+      "rules_draws": 0,
+      "losses": 40,
+      "caps": 0,
+      "coverage_fraction": 0.8481012658227848,
+      "games": 40
+    },
+    "supervised": {
+      "conservative": {
+        "score": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "seed_sd": 0.0,
+        "pairs": 20,
+        "cap_fraction": 0.0
+      },
+      "neutral_cap_score": 0.0,
+      "neutral_cap_ci95": [
+        0.0,
+        0.0
+      ],
+      "wins": 0,
+      "rules_draws": 0,
+      "losses": 40,
+      "caps": 0,
+      "coverage_fraction": 0.8412698412698413,
+      "games": 40
+    }
+  },
+  "elapsed_seconds": 533.6118982499465,
+  "qualification": false,
+  "final_tests_opened": false,
+  "limitations": [
+    "Twenty opening pairs, one fixed training seed; close results may be inconclusive.",
+    "128 simulations is a provisional CPU screen ceiling, not a resolved evolutionary workload.",
+    "No strength qualification, checkpoint selection, Elo or superiority claim is implied."
+  ]
+}
