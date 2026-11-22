@@ -1,0 +1,20 @@
+{
+  "status": "started",
+  "stage": "exploratory-development-screen",
+  "games": 80,
+  "seed": 42,
+  "workers": 4,
+  "time_ms": 1500,
+  "simulations": 128,
+  "source_commit": "8f83169d33b305d4aa4cb5d11888fc91e4109116",
+  "protocol_id": "65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f",
+  "openings_sha256": "6fffd948d59a88cff4771a970f2733818cd0caf367e33860c4631c2074f92165",
+  "runtime_inventory_sha256": "06e5c811fbe6f2943eb32f0146da0d0b5299673353f3c75b6632f4debf5592bb",
+  "started_unix": 1795326862.667509,
+  "provider": "local-Apple-Silicon",
+  "paid_cost_cad": 0,
+  "final_position_tests_opened": false,
+  "qualification": false,
+  "larger_runs": "deferred-no-automatic-launch",
+  "results": "pending; this record proves launch, not completion or strength"
+}

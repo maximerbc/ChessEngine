@@ -61,8 +61,10 @@
         }
       ],
       "development_screen": {
-        "status": "preparing-fresh-openings",
-        "qualification": false
+        "status": "started",
+        "qualification": false,
+        "protocol_id": "65820b081ef601f5556dcfa05ad8795a8b75505ecd9e0beff594b4be7735686f",
+        "paid_cost_cad": 0
       }
     },
     "hardware": "NVIDIA A40 for completed training; NumPy CPU inference during play",
