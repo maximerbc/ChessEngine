@@ -71,14 +71,15 @@
         "limitation": "PUCT-128 versus alpha-beta; this does not isolate evaluator quality"
       },
       "same_search_ablation": {
-        "status": "protocol-frozen",
+        "status": "started",
         "seed": 42,
         "candidate_strategy": "alpha-beta",
         "opponent_strategy": "alpha-beta",
         "time_ms": 1500,
         "qualification": false,
         "reused_development_openings": true,
-        "paid_cost_cad": 0
+        "paid_cost_cad": 0,
+        "protocol_id": "2c620967200a30aa6f30a8382d453e456abab5fe583cee36488feadc44982ad4"
       },
       "tactical_diagnostic": {
         "legal_mate_in_one_defence_available": true,
