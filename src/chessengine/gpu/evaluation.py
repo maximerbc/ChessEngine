@@ -25,7 +25,7 @@ def cpu_matches(candidate, opponent, openings, output, time_ms=1500, simulations
         raise ValueError('Positive CPU evaluation concurrency required')
     config = dict(candidate_sha256=sha(candidate), opponent_sha256='handcrafted-v1' if opponent == 'handcrafted'
                   else sha(opponent), openings=openings, time_ms=time_ms, simulations=simulations,
-                  max_plies=max_plies, strategy=STRATEGY, opponent_strategy=opponent_strategy)
+                  max_plies=max_plies, strategy=STRATEGY, opponent_strategy=opponent_strategy, search_metrics_version=1)
     protocol = identity(config)
     path = Path(output)
     ledger = json.loads(path.read_text()) if path.exists() else dict(protocol_id=protocol, config=config, games=[],active_seconds=0.)
@@ -58,6 +58,9 @@ def cpu_matches(candidate, opponent, openings, output, time_ms=1500, simulations
             board = restore(opening)
             started = time.perf_counter()
             plies = 0
+            metrics = dict(candidate_moves=0, candidate_coverage_hits=0, candidate_simulations=0,
+                           candidate_search_seconds=0., reference_search_seconds=0.)
+            progress_path = path.with_name(path.stem + '-progress.json')
             while not board.is_game_over(claim_draw=True) and plies < max_plies:
                 candidate_turn = board.turn == (color == 'white')
                 evaluator = candidate_model if candidate_turn else reference
@@ -65,16 +68,29 @@ def cpu_matches(candidate, opponent, openings, output, time_ms=1500, simulations
                 result = search_for(evaluator, strategy, 2**31 - 1, time_ms, simulations).run(board)
                 if result.move is None:
                     raise ValueError('Nonterminal search returned no move')
+                if candidate_turn:
+                    metrics['candidate_moves'] += 1
+                    metrics['candidate_coverage_hits'] += int(result.root_coverage >= .8)
+                    metrics['candidate_simulations'] += result.simulations
+                    metrics['candidate_search_seconds'] += result.elapsed_ms / 1000
+                else:
+                    metrics['reference_search_seconds'] += result.elapsed_ms / 1000
                 board.push_uci(result.move)
                 plies += 1
+                if plies == 1 or plies % 10 == 0:
+                    atomic_json(progress_path, dict(status='playing', opening_id=opening['id'], color=color,
+                        plies=plies, elapsed_seconds=time.perf_counter()-started, metrics=metrics))
             outcome = board.outcome(claim_draw=True)
             capped = outcome is None
             score = .5 if capped or outcome.winner is None else float(outcome.winner == (color == 'white'))
             ledger['games'].append(dict(opening_id=opening['id'], source_game_id=opening['source_game_id'],
                 color=color, score=score, capped=capped, result='*' if capped else outcome.result(),
+                played_plies=plies, search_metrics=metrics,
                 checkpoint_sha256=sha(candidate), active_seconds=time.perf_counter()-started, **record_board(board)))
             ledger['active_seconds'] = sum(row['active_seconds'] for row in ledger['games'])
             atomic_json(path, ledger)
+            atomic_json(progress_path, dict(status='game-complete', opening_id=opening['id'], color=color,
+                plies=plies, elapsed_seconds=time.perf_counter()-started, metrics=metrics))
     return ledger
 
 

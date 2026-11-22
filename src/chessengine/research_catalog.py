@@ -247,7 +247,9 @@ def publish(destination="web/public/research"):
             level='GPU studies: '+gpu_evidence['status'], result=conclusion,
             availability='available' if gpu_ids & set(models) else 'research only',
             question='Can broader supervision and GPU tournaments improve the value evaluator?',
-            takeaway='One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.',
+            takeaway=('Augmented Supervised completed GPU training on 800,000 positions from a one-million-position dataset. It is playable experimentally; playing strength is not established. Evolutionary training remains planned.'
+                if gpu_evidence.get('evidence',{}).get('training_executed') else
+                'One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.'),
             report='/research/gpu-value/index.html',
             checkpoint_ids={key:models[key] for key in gpu_ids if key in models}))
     write_json(

@@ -33,3 +33,5 @@ web/*.tsbuildinfo
 
 !artifacts/models/ranker.npz
 !artifacts/models/evolutionary.npz
+
+!artifacts/models/supervised-1m.npz

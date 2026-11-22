@@ -1,4 +1,4 @@
-"""Stage a manifest only after recomputing qualification and fresh-final gates."""
+"""Validate manifests and stage qualified models; allow one explicit playable preview."""
 import json
 from pathlib import Path
 import shutil
@@ -6,6 +6,10 @@ from ..model import NumpyEvaluator
 from .protocol import LEGACY_SHA, ARCHITECTURE, MODEL_IDS, atomic_json, sha
 from .evaluation import qualify
 from ..features import position_key, restore
+
+# Explicit user-authorized playable preview; this does not confer qualification.
+EXPERIMENTAL_SUPERVISED_SHA = '1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2'
+EXPERIMENTAL_AUTHORIZATION = 'user-20261122-augmented-play'
 
 
 def validate_entry(row, evaluator):
@@ -22,9 +26,20 @@ def validate_entry(row, evaluator):
             or row.get('search') != {'strategy': 'puct-uniform-v1', 'c_puct': 1.5,
                                       'priors': 'uniform-legal', 'simulations': row.get('search', {}).get('simulations')}
             or row['search']['simulations'] not in [32, 64, 128]
-            or not row.get('evidence_id') or not row.get('qualification_sha256') or not row.get('final_sha256')
-            or row.get('qualified') is not True):
-        raise ValueError('New GPU model requires explicit architecture, search and qualification identities')
+            or not row.get('evidence_id')):
+        raise ValueError('New GPU model requires explicit architecture, search and evidence identities')
+    experimental_preview = (
+        row['id'] == 'supervised-1m'
+        and evaluator.checkpoint_id == EXPERIMENTAL_SUPERVISED_SHA
+        and row.get('release_status') == 'experimental-playable'
+        and row.get('authorization_id') == EXPERIMENTAL_AUTHORIZATION
+        and row.get('experimental') is True and row.get('qualified') is False
+        and row.get('strength_status') == 'not-established'
+        and row.get('qualification_sha256') is None and row.get('final_sha256') is None
+    )
+    if not experimental_preview and (row.get('qualified') is not True
+            or not row.get('qualification_sha256') or not row.get('final_sha256')):
+        raise ValueError('New GPU model requires qualification or the explicitly authorized supervised preview')
 
 
 def stage(legacy_manifest, candidates, destination):

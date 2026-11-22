@@ -374,12 +374,14 @@ export default function App() {
   const currentModel = models.find((m) => m.id === model);
   const opponentOptions = showcaseEnabled
     ? models
-    : releasedApproaches.map((a) => ({
-        id: a.id,
-        name: a.name,
-        kind: a.id,
-        description: a.description,
-      }));
+    : releasedApproaches
+        .filter((a) => a.id !== "evolutionary-gpu")
+        .map((a) => ({
+          id: a.id,
+          name: a.name,
+          kind: a.id,
+          description: a.description,
+        }));
   const displayName = (id: string, fallback?: string) =>
     (!showcaseEnabled && releasedApproach(id)?.name) || fallback || id;
   const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
@@ -763,9 +765,10 @@ export default function App() {
               <>
                 <h1 className="sr-only">Play chess</h1>
                 <p>
-                  Explore Classical, current Supervised and two new GPU learning studies. Play
-                  available opponents and discover three ways to evaluate a
-                  position using the same search.
+                  Play Classical, Supervised (80k), or Augmented Supervised
+                  (one-million-position dataset). Play available opponents and
+                  discover three ways to evaluate a position using the same
+                  search.
                 </p>
               </>
             ) : (
@@ -875,7 +878,9 @@ export default function App() {
                   <strong>{displayName(model, currentModel?.name)}</strong>
                   <span>
                     {!showcaseEnabled
-                      ? currentModel?.strategy === "puct-uniform-v1" ? "CPU PUCT search" : "Shared alpha-beta search"
+                      ? currentModel?.strategy === "puct-uniform-v1"
+                        ? "CPU PUCT search"
+                        : "Shared alpha-beta search"
                       : currentModel?.evidence === "pilot"
                         ? "Pilot checkpoint · research in progress"
                         : "Shared search engine"}
@@ -979,7 +984,9 @@ export default function App() {
                         </small>
                       </span>
                       <span className="selected-label">
-                        {connection === "ready" && (m.id === "evolutionary-gpu" || m.id === "supervised-1m") &&
+                        {connection === "ready" &&
+                        (m.id === "evolutionary-gpu" ||
+                          m.id === "supervised-1m") &&
                         !models.some((installed) => installed.id === m.id)
                           ? "IN RESEARCH"
                           : connection === "loading"
@@ -1042,11 +1049,19 @@ export default function App() {
                   </button>
                 </div>
                 {!showcaseEnabled && (
-                  <ResearchSummary
-                    id={model}
-                    checkpoint={currentModel?.checkpoint_id}
-                    openResearch={(study) => changeTab("research", study)}
-                  />
+                  <>
+                    {model === "supervised-1m" && (
+                      <p className="notice" role="status">
+                        Experimental model · playing strength is not yet
+                        established.
+                      </p>
+                    )}
+                    <ResearchSummary
+                      id={model}
+                      checkpoint={currentModel?.checkpoint_id}
+                      openResearch={(study) => changeTab("research", study)}
+                    />
+                  </>
                 )}
               </section>
               <section className="card analysis-card">
@@ -1079,8 +1094,17 @@ export default function App() {
                     <span>DEPTH</span>
                   </div>
                   <div>
-                    <strong>{(analysis?.strategy === "puct-uniform-v1" ? analysis.simulations : analysis?.nodes)?.toLocaleString() ?? "—"}</strong>
-                    <span>{analysis?.strategy === "puct-uniform-v1" ? "SIMULATIONS" : "NODES"}</span>
+                    <strong>
+                      {(analysis?.strategy === "puct-uniform-v1"
+                        ? analysis.simulations
+                        : analysis?.nodes
+                      )?.toLocaleString() ?? "—"}
+                    </strong>
+                    <span>
+                      {analysis?.strategy === "puct-uniform-v1"
+                        ? "SIMULATIONS"
+                        : "NODES"}
+                    </span>
                   </div>
                   <div>
                     <strong>

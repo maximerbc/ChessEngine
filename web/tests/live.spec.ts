@@ -79,7 +79,7 @@ test("live backend and released study render together", async ({
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: /^Supervised A neural network learns/,
+      name: /^Supervised A neural network/,
     }),
   ).toBeVisible();
   await page

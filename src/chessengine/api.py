@@ -103,6 +103,8 @@ def create_app(manifest_path=None, comparison_settings=None):
                 "strategy": row.get('search', {}).get('strategy', 'alpha-beta'),
                 "search": row.get('search', {'strategy': 'alpha-beta'}),
                 "evidence_id": row.get('evidence_id'),
+                "qualified": row.get("qualified"),
+                "strength_status": row.get("strength_status"),
             }
         for row in manifest["models"]:
             if row.get("kind") != "move-guided":

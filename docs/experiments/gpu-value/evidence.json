@@ -1,6 +1,6 @@
 {
   "study": "gpu-value-v1",
-  "status": "infrastructure-only",
+  "status": "supervised-training-complete",
   "supervised_positions": {
     "train": 800000,
     "validation": 100000,
@@ -8,32 +8,69 @@
   },
   "planned_evolutionary_training_games": 368640,
   "pilot_training_games": 30720,
-  "budget": "unset pending measured forecast and user decision",
+  "budget": "Supervised setup/training authorized within C$25; evolutionary budget unset",
   "evidence": {
-    "status": "infrastructure-only",
-    "nvidia_verified": false,
-    "training_executed": false,
-    "paid_spend_cad": 0,
-    "verification": {
-      "python": {
-        "passed": 127,
-        "skipped": 2
+    "status": "supervised-training-complete",
+    "conclusion": "inconclusive",
+    "nvidia_verified": true,
+    "training_executed": true,
+    "qualification": {
+      "executed": false,
+      "passed": false
+    },
+    "final": {
+      "executed": false
+    },
+    "playable_preview": {
+      "model": "supervised-1m",
+      "seed": 42,
+      "qualified": false,
+      "strength_status": "not-established"
+    },
+    "summary": {
+      "dataset_counts": {
+        "train": 800000,
+        "validation": 100000,
+        "test": 100000
       },
-      "jax_cpu": {
-        "passed": 17
-      },
-      "browser": {
-        "passed": 44,
-        "skipped": 6
-      },
-      "ruff": "passed",
-      "website_build": "passed",
-      "cli": "passed",
-      "archive_restored_files": 1578,
-      "serving_training_modules_loaded": [],
-      "nvidia": "not executed; benchmark budget/provider not selected",
-      "full_study": "not executed"
-    }
+      "validation_mse_mean": 0.2147632618799271,
+      "seeds": [
+        {
+          "seed": 42,
+          "epochs": 15,
+          "best_epoch": 9,
+          "validation_mse": 0.2145383036171156,
+          "checkpoint_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+          "representative": true
+        },
+        {
+          "seed": 43,
+          "epochs": 14,
+          "best_epoch": 8,
+          "validation_mse": 0.2155260762707081,
+          "checkpoint_sha256": "d7c61fd273da0db3d03d47b583798ef6f796d4cab93b35b8dd3beb3980f8315a",
+          "representative": false
+        },
+        {
+          "seed": 44,
+          "epochs": 16,
+          "best_epoch": 10,
+          "validation_mse": 0.21422540575195756,
+          "checkpoint_sha256": "14d9f56fc09eb537d35b8d8a67cc36517c2998ef7e00f9c5bfe942aaca842a65",
+          "representative": false
+        }
+      ],
+      "development_screen": {
+        "status": "preparing-fresh-openings",
+        "qualification": false
+      }
+    },
+    "hardware": "NVIDIA A40 for completed training; NumPy CPU inference during play",
+    "limitations": [
+      "Fresh validation pools differ from the historical 80k model; raw MSE is not a controlled comparison.",
+      "No playing-strength evidence is available yet. The smaller screen is exploratory, not qualification.",
+      "Final position labels remain sealed."
+    ]
   },
   "limitations": [
     "No NVIDIA throughput or strength claim without measured execution.",

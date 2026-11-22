@@ -2,7 +2,8 @@
   "version": 1,
   "default_model": "supervised",
   "released_models": {
-    "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b"
+    "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+    "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
   },
   "studies": [
     {
@@ -22,13 +23,15 @@
     {
       "id": "gpu-value",
       "title": "GPU value learning studies",
-      "level": "GPU studies: infrastructure-only",
-      "result": "planned",
-      "availability": "research only",
+      "level": "GPU studies: supervised-training-complete",
+      "result": "inconclusive",
+      "availability": "available",
       "question": "Can broader supervision and GPU tournaments improve the value evaluator?",
-      "takeaway": "One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.",
+      "takeaway": "Augmented Supervised completed GPU training on 800,000 positions from a one-million-position dataset. It is playable experimentally; playing strength is not established. Evolutionary training remains planned.",
       "report": "/research/gpu-value/index.html",
-      "checkpoint_ids": {}
+      "checkpoint_ids": {
+        "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
+      }
     },
     {
       "id": "evolutionary",
@@ -183,7 +186,7 @@
     "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
     "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
     "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
-    "gpu-value/index.html": "da6f26acdd3ac4f8a25a9c72df8ec73f792931960b519423524f2c4a24d351fa",
-    "gpu-value/evidence.json": "e44b5a4a4a235bc62a366534603ed2f73698b8fa9a1246effe2cae2312b25245"
+    "gpu-value/index.html": "857ddfed95d993bf3b515e1d5911bd2737f652387d94eabb065214e05ab85d68",
+    "gpu-value/evidence.json": "6ef8f55c68cccd165360ab3884ac1e94567767deca6a89aaacdc29a8235d64e1"
   }
 }
