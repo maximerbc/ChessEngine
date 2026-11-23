@@ -25,3 +25,5 @@ The CPU lock was installed and tested locally. The CUDA lock was installed on an
 Core pins are JAX/JAXlib 0.6.2, PGX 2.6.0, mctx 0.0.5, evosax 0.2.0 and Optax 0.2.4. These are deliberately tested compatible versions, rather than unbounded latest releases. Full transitive versions and artifact hashes are in the locks. Re-resolving a lock is a protocol change; use a new study directory. Regeneration uses uv 0.8.22 and the `.in` files; the CUDA lock targets `x86_64-manylinux_2_28`.
 
 Source references: [JAX installation](https://docs.jax.dev/en/latest/installation.html), [PGX](https://github.com/sotetsuk/pgx), [mctx](https://github.com/google-deepmind/mctx), [evosax](https://github.com/RobertTLange/evosax), [Optax](https://github.com/google-deepmind/optax). The rules adapter uses pinned PGX private interfaces, so upgrades require renewed parity tests.
+
+GPU-first evolutionary calibration uses the same locked Python 3.12 environment; see [pilot operations](../docs/evolutionary-gpu-pilot.md). It is a separately identified study and does not resume historical runs.

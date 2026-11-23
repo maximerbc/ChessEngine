@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "method": "seeded legal random histories; no target values read or used",
+  "config_sha256": "47a2eabeb470800837f6479e72800177c19c3a0f63dbe101e2b901fd061966e8",
+  "input_sha256": {
+    "data/main-positions.jsonl": "a37315873148c702787b0cb32e1ddbc159f1c0fef33530a4290485a089ae0ef6",
+    "data/pilot-positions.jsonl": "967b513442d0958c3570037190d2d5383d856a7cb13b331d4d66856c814d0c16",
+    "data/main-labeled.jsonl": "3a1520b32d9c0c3dc09577f67d31f1bd2beb50b28e3efba4b81ff616e90c41a2",
+    "data/pilot-labeled.jsonl": "1f667e58a2f49cb7f702354ebd827c526160903c2efb6bab32b59c07cdb56c71",
+    "data/expanded-200k-labeled.jsonl": "54241e9401245f88e6d357b4a22d9ed17e99a57d04bfe545c5ad1a7849bee055",
+    "data/gpu-value-v1/positions.jsonl": "124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9",
+    "configs/openings.json": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+    "runs/augmented-evaluation-20261122/historical/configs/openings.json": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+    "runs/augmented-evaluation-20261122/historical/runs/evolutionary/openings-manifest.json": "c8f69b892e7bfdb1d4c1d59a0a41af3faaa298960c63a656d30cf505b8bba53f",
+    "runs/augmented-evaluation-20261122/historical/runs/evolutionary/openings.json": "981b12fbb9e13f007467f7b3f9c234323cb1bade540f434563861e75bc1e2074",
+    "runs/augmented-evaluation-20261122/historical/runs/move-ranking/openings-manifest.json": "5c4d33280801328cb77b717c4ff0008edc4f30631c8ff30f7a0931bae9411e23",
+    "runs/augmented-evaluation-20261122/historical/runs/move-ranking/openings.json": "789d6699cebe0ad2cf2987cc8b924765af83879aea522ccb284fdfc437e343cb",
+    "runs/augmented-evaluation-20261122/historical/runs/policy-value/openings-manifest.json": "9c742862fd1696214d8550a475d3e5ab66c28c13ae5ccbb8c3dd2e989189bc95",
+    "runs/augmented-evaluation-20261122/historical/runs/policy-value/openings.json": "6e79744eacd9ef72fe4174eb8414bcb983be341409970424ab56d06a7bbd4bbc",
+    "runs/augmented-evaluation-20261122/historical/runs/rl-improvement/openings-manifest.json": "28b02542bd788490372f7d6a72f90291586f4d05edc6feb8f8cffb765861d4c0",
+    "runs/augmented-evaluation-20261122/historical/runs/rl-improvement/openings.json": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+    "runs/augmented-evaluation-20261122/openings.json": "6fffd948d59a88cff4771a970f2733818cd0caf367e33860c4631c2074f92165",
+    "runs/evolutionary/openings-manifest.json": "c8f69b892e7bfdb1d4c1d59a0a41af3faaa298960c63a656d30cf505b8bba53f",
+    "runs/evolutionary/openings.json": "981b12fbb9e13f007467f7b3f9c234323cb1bade540f434563861e75bc1e2074",
+    "runs/move-ranking/openings-manifest.json": "5c4d33280801328cb77b717c4ff0008edc4f30631c8ff30f7a0931bae9411e23",
+    "runs/move-ranking/openings.json": "789d6699cebe0ad2cf2987cc8b924765af83879aea522ccb284fdfc437e343cb",
+    "runs/policy-value/openings-manifest.json": "9c742862fd1696214d8550a475d3e5ab66c28c13ae5ccbb8c3dd2e989189bc95",
+    "runs/policy-value/openings.json": "6e79744eacd9ef72fe4174eb8414bcb983be341409970424ab56d06a7bbd4bbc",
+    "runs/rl-improvement/openings-manifest.json": "28b02542bd788490372f7d6a72f90291586f4d05edc6feb8f8cffb765861d4c0",
+    "runs/rl-improvement/openings.json": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d"
+  },
+  "openings_sha256": "98ec34443d59527080f92ad1acffe9b566f188f21f36f005c8f0c0f3112c477a",
+  "counts": {
+    "coverage": 12,
+    "benchmark": 4,
+    "pilot_train": 64
+  },
+  "seed": 2026112201,
+  "final_pools_opened_for_play": false,
+  "final_position_labels_used": false,
+  "limitation": "Synthetic openings calibrate throughput; they do not establish strength or main-study game lengths."
+}

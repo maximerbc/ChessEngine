@@ -1,0 +1,98 @@
+{
+  "archive": "/private/tmp/chess-evolutionary-preservation/current-research.tar.gz",
+  "archive_sha256": "dbc6d678017b5a2d50421e11b8ad2afe112496afeafec83004d4b417e7239050",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 16718,
+      "sha256": "9328e363df63d254e95ef1d6cafc7ff44aecd61df28ea52f778518aa6238581c"
+    },
+    {
+      "path": "docs/decisions.md",
+      "bytes": 17464,
+      "sha256": "7e33e46e90a571f1adbc75685c6e8a380f5885da5236534a1c741c23dfa0fd36"
+    },
+    {
+      "path": "docs/experiments/evolutionary/evidence.json",
+      "bytes": 26962,
+      "sha256": "0badf61ce4b278837130abae3cfd8e4cd6443536d4e4c20473064ab84e9be2ec"
+    },
+    {
+      "path": "docs/experiments/evolutionary/index.html",
+      "bytes": 2584,
+      "sha256": "afbfd7b589a3a9787070fd51e991f0f7c8530925f9be4f8016c016d37c44c251"
+    },
+    {
+      "path": "web/public/research/evolutionary/evidence.json",
+      "bytes": 26962,
+      "sha256": "0badf61ce4b278837130abae3cfd8e4cd6443536d4e4c20473064ab84e9be2ec"
+    },
+    {
+      "path": "web/public/research/evolutionary/index.html",
+      "bytes": 2584,
+      "sha256": "afbfd7b589a3a9787070fd51e991f0f7c8530925f9be4f8016c016d37c44c251"
+    },
+    {
+      "path": "web/public/research/studies.json",
+      "bytes": 9654,
+      "sha256": "56d9f6188f763ea75f08d44b49cb351519839ca8ba48c69b11b4bd84f2892227"
+    },
+    {
+      "path": "configs/evolutionary-augmented-20261122.json",
+      "bytes": 1475,
+      "sha256": "8d015136253611e3ca64d806ef104e72d517f282ce1f231836955b044fa4a043"
+    },
+    {
+      "path": "scripts/run_evolutionary_augmented.py",
+      "bytes": 3048,
+      "sha256": "20af87e9123066337ac5e1e4c7acde8e1f3d3cb343d032e6c3f6f5d472f2a8dd"
+    },
+    {
+      "path": "runs/evolutionary-augmented-20261122/exclusion-metadata.manifest.json",
+      "bytes": 400,
+      "sha256": "01f8655a169be5b5bf8883e134efda6be00d0f2bf744e8f714ed103257d09ff1"
+    },
+    {
+      "path": "runs/evolutionary-augmented-20261122/execution.log",
+      "bytes": 1381,
+      "sha256": "b03966c09904a5740fb3602c7110e5049cc79b0593d4de472d59e13673d905fe"
+    },
+    {
+      "path": "runs/evolutionary-augmented-20261122/protocol.json",
+      "bytes": 4087,
+      "sha256": "5a204f79891ff8272e87e8518a13dfefb048e5443b2d0207d92d7c315e21a857"
+    },
+    {
+      "path": "runs/evolutionary-augmented-20261122/exclusion-metadata.jsonl",
+      "bytes": 178768689,
+      "sha256": "8520452e51e0a9aad1cd50615f69beb397836c3a75d6cc31192f3d0446f191b0"
+    },
+    {
+      "path": "runs/evolutionary-augmented-20261122/execution.json",
+      "bytes": 174,
+      "sha256": "99d5d5fc1566240864401c22c251a2194fa0b3c09f1bb581218d278ac7be6d11"
+    },
+    {
+      "path": "runs/evolutionary-augmented-20261122/coordinator.pid",
+      "bytes": 6,
+      "sha256": "f66866ce435226f6565252fdedbf1f07c2054e704d759d31a73d28e84e9b95fd"
+    }
+  ],
+  "restore_verified": true,
+  "existing_verified_archives": [
+    {
+      "archive": "/Users/maximerobatche-claive/Documents/Projects/ChessEngine/runs/preservation-augmented-alpha-beta-release-20261122/completed-comparison.tar.gz",
+      "sha256": "f0baac0d5bcd368cbbd2ecaee8b8c339003588bea1c7ea9bfcfa7dfe51666d05",
+      "verified_members": 292
+    },
+    {
+      "archive": "/Users/maximerobatche-claive/Documents/Projects/ChessEngine/runs/gpu-supervised-results-20261122/results-preservation.tar.gz",
+      "sha256": "24f09c00d73b481a37b514842069779f14d7b2acdcb625e5a3c3b07fefa40e5d",
+      "verified_members": 204
+    }
+  ],
+  "legacy_archive": {
+    "sha256": "085913e019ba4ccdbb15ee922c10861cae132f9a849e8994fb9676f0f6e7d7ef",
+    "verified_files": 1578
+  }
+}
