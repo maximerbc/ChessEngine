@@ -24,7 +24,7 @@ def test_compact_search_matches_dense_reference():
     params = jax.tree.map(lambda x: np.zeros_like(x)[None], initialize(jax.random.PRNGKey(5)))
     for board in [chess.Board(), chess.Board('7k/5Q2/6K1/8/8/8/8/8 w - - 0 1')]:
         states = jax.tree.map(lambda x: x[None], rules.from_board(board))
-        a, b = make_search(32)(params, states, np.array([1])), dense_search(32)(params, states, np.array([1]))
+        a, b = make_search(32, root_coverage=False)(params, states, np.array([1])), dense_search(32)(params, states, np.array([1]))
         assert int(a['actions'][0]) == int(b['actions'][0])
         assert float(a['value'][0]) == pytest.approx(float(b['value'][0]), abs=1e-6)
         labels = np.asarray(a['labels'][0])
@@ -90,11 +90,28 @@ def test_native_identity_and_forecast_no_invented_rate(tmp_path):
     from chessengine.model import NumpyEvaluator
     model = NumpyEvaluator(target)
     assert model.metadata['study'] == 'evolutionary-gpu-native-v1'
-    assert model.metadata['search'] == 'puct-uniform-v1'
+    assert model.metadata['search'] == 'puct-rootcover-v1'
     result = forecast(tmp_path, {}, .89)
     assert result['games_per_second'] is None
     assert all(r['projected_compute_usd'] is None for r in result['scenarios'])
     assert result['full_training_authorized'] is False
+
+
+def test_rootcover_cpu_gpu_parity(tmp_path):
+    import numpy as np
+    from chessengine.gpu import rules
+    from chessengine.gpu.native_search import make_search
+    from chessengine.rootcover import RootCoverageValueSearch
+    from chessengine.model import NumpyEvaluator
+    target, _ = fixtures(tmp_path)
+    evaluator = NumpyEvaluator(target)
+    params = jax.tree.map(lambda x: x[None], initialize(jax.random.PRNGKey(42)))
+    for board in [chess.Board(), chess.Board('7k/5Q2/6K1/8/8/8/8/8 w - - 0 1')]:
+        result = make_search(32)(params, jax.tree.map(lambda x: x[None], rules.from_board(board)), np.array([1]))
+        reference = RootCoverageValueSearch(evaluator, 32, None).run(board)
+        assert rules.action_map(board)[int(result['actions'][0])].uci() == reference.move
+        assert float(result['value'][0]) == pytest.approx(reference.value, abs=1e-5)
+        assert float(result['root_coverage'][0]) == pytest.approx(reference.root_coverage)
 
 
 def test_native_changed_pending_record_is_rejected(tmp_path):

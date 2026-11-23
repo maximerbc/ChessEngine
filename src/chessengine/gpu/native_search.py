@@ -25,8 +25,14 @@ def legal_edges(state, done):
     return labels, valid, counts > CAPACITY
 
 
+def root_selection(key, tree, index, depth=0):
+    legal = jnp.isfinite(tree.children_prior_logits[index])
+    unseen = legal & (tree.children_visits[index] == 0)
+    return jnp.where(unseen.any(), jnp.argmax(unseen).astype(jnp.int32), selection(key, tree, index, depth))
+
+
 @lru_cache(maxsize=8)
-def make_search(simulations):
+def make_search(simulations, root_coverage=True):
     if simulations < 1:
         raise ValueError('Positive simulation budget required')
 
@@ -54,12 +60,16 @@ def make_search(simulations):
             return output, (after, evaluator_kinds, labels)
 
         tree = mctx.search(params, jax.random.PRNGKey(0), root=root, recurrent_fn=recurrent,
-            root_action_selection_fn=selection, interior_action_selection_fn=selection,
+            root_action_selection_fn=root_selection if root_coverage else selection,
+            interior_action_selection_fn=selection,
             num_simulations=simulations, invalid_actions=~masks)
         visits = tree.children_visits[:, 0]
-        edges = jnp.argmax(visits, axis=1).astype(jnp.int32)
-        actions = jnp.take_along_axis(labels, edges[:, None], 1)[:, 0]
         q = tree.children_rewards[:, 0] + tree.children_discounts[:, 0] * tree.children_values[:, 0]
+        if root_coverage:
+            edges = jnp.argmax(jnp.where(visits == visits.max(1, keepdims=True), q, -jnp.inf), axis=1).astype(jnp.int32)
+        else:
+            edges = jnp.argmax(visits, axis=1).astype(jnp.int32)
+        actions = jnp.take_along_axis(labels, edges[:, None], 1)[:, 0]
         value = jnp.take_along_axis(q, edges[:, None], 1)[:, 0]
         return dict(actions=actions, value=jnp.where(done, terminal_values, value), visits=visits,
             terminal=done, overflow=tree.embeddings[0].overflow.any(1), labels=labels,

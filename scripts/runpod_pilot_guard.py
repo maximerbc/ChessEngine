@@ -29,7 +29,7 @@ def pod_credential():
 def stop_self():
     pod = os.environ['RUNPOD_POD_ID']
     key = pod_credential()
-    request = urllib.request.Request(f'https://api.runpod.io/v2/pods/{pod}/actions',
+    request = urllib.request.Request(f'https://api.runpod.io/v2/pods/{pod}/action',
         data=json.dumps({'action':'stop'}).encode(),
         headers={'Authorization':'Bearer '+key, 'Content-Type':'application/json'}, method='POST')
     with urllib.request.urlopen(request, timeout=20) as response:

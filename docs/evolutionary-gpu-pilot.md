@@ -7,7 +7,7 @@ two-worker, alpha-beta and `gpu-value-v1` protocols are not resumed or rewritten
 
 ## Architecture and scientific boundary
 
-JAX/PGX/mctx run batched uniform-prior PUCT, chess transitions, features and
+JAX/PGX/mctx run batched root-coverage uniform-prior PUCT, chess transitions, features and
 853/128/64/1 value evaluation on the GPU. Separable CMA-ES evolves all weights
 from an independent random initializer, without teacher labels or gradients.
 The fixed seed-42 augmented checkpoint is an opponent, never an initializer.
@@ -42,6 +42,18 @@ completed game is independently replayed with python-chess, including checks
 for automatic draws at intermediate positions. Illegal moves, inconsistent
 terminal values, overflow, changed inputs or duplicate records reject fitness.
 Capped games keep `*`, with neutral tournament adjudication stated separately.
+
+The new `puct-rootcover-v1` first visits each legal root move in canonical order
+once, charging every visit to the fixed simulation budget, then uses ordinary
+PUCT. The final action maximizes visits, breaking visit ties by mean value and
+then canonical action order so a shallow equal-visit root does not ignore the
+network. The CPU counterpart implements exactly the same rule; historical callers
+retain their default search unchanged. A preliminary CPU probe found ordinary
+PUCT failed coverage at every 32/64/128/256 budget (augmented evaluator passed
+only 4/12 roots at 256). This negative development result is preserved in
+`docs/preservation/evolutionary-gpu-native-preliminary-failed-coverage.json`.
+The search design was amended before any paid execution or evolutionary learning;
+coverage thresholds, opponent composition and game counts were not relaxed.
 
 The new search packs legal edges in canonical PGX order, using 256 edge slots
 instead of 4,672 action labels at every tree node. This is storage compaction,

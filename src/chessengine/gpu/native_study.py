@@ -15,7 +15,7 @@ from evosax.algorithms import Sep_CMA_ES
 
 from ..features import restore, encode
 from ..model import NumpyEvaluator
-from ..puct_serving import ValueSearch
+from ..rootcover import RootCoverageValueSearch, STRATEGY
 from . import native_games, rules
 from .evolution import fitness
 from .games import tasks_for
@@ -33,6 +33,7 @@ def export_candidate(params, path, seed, generation, protocol, purpose):
         arrays = {k: bundle[k].copy() for k in bundle.files}
     metadata = json.loads(str(arrays['metadata']))
     metadata['study'] = 'evolutionary-gpu-native-v1'
+    metadata['search'] = STRATEGY
     arrays['metadata'] = np.array(json.dumps(metadata))
     temporary = path.with_suffix('.identity.tmp')
     with temporary.open('wb') as stream:
@@ -64,7 +65,7 @@ def preflight(supervised, output):
     root = boards[0]
     result = make_search(16)(jax.tree.map(lambda x: x[None], params),
         jax.tree.map(lambda x: x[None], rules.from_board(root)), jnp.ones(1, jnp.int32))
-    reference = ValueSearch(cpu, 16, None).run(root)
+    reference = RootCoverageValueSearch(cpu, 16, None).run(root)
     if rules.action_map(root)[int(result['actions'][0])].uci() != reference.move:
         raise ValueError('CPU/GPU search action mismatch')
     if abs(float(result['value'][0]) - reference.value) > 1e-5:

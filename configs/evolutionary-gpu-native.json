@@ -3,7 +3,7 @@
   "schema_version": 1,
   "architecture": [853, 128, 64, 1],
   "feature_version": 3,
-  "search": "puct-uniform-v1",
+  "search": "puct-rootcover-v1",
   "c_puct": 1.5,
   "noise_fraction": 0,
   "simulation_candidates": [32, 64, 128, 256],
