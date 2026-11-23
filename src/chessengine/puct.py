@@ -45,12 +45,14 @@ class Result:
 
 
 class PUCT:
-    def __init__(self, model, simulations=128, c_puct=1.5, time_ms=None, noise_fraction=0.0, noise_mass=10.0):
+    def __init__(self, model, simulations=128, c_puct=1.5, time_ms=None, noise_fraction=0.0, noise_mass=10.0,
+                 root_coverage=False):
         if simulations < 1 or c_puct <= 0 or not 0 <= noise_fraction <= 1 or noise_mass <= 0:
             raise ValueError("Invalid PUCT settings")
         if time_ms is not None and time_ms <= 0:
             raise ValueError("time_ms must be positive")
         self.model, self.simulations, self.c = model, simulations, c_puct
+        self.root_coverage = root_coverage
         self.time_ms, self.noise_fraction, self.noise_mass = time_ms, noise_fraction, noise_mass
 
     def run(self, board, rng=None):
@@ -92,7 +94,8 @@ class PUCT:
                 break
             position, node, path = original.copy(stack=True), root, []
             while True:
-                i = node.select(self.c)
+                unseen = np.flatnonzero(node.n == 0) if node is root and self.root_coverage else []
+                i = int(unseen[0]) if len(unseen) else node.select(self.c)
                 path.append((node, i))
                 position.push(node.moves[i])
                 edges += 1
@@ -117,7 +120,11 @@ class PUCT:
                 parent.w[i] += value
             completed += 1
         policy = root.n / root.n.sum()
-        best = int(np.argmax(root.n))
+        if self.root_coverage:
+            q = np.divide(root.w, root.n, out=np.zeros_like(root.w), where=root.n > 0)
+            best = int(np.argmax(np.where(root.n == root.n.max(), q, -np.inf)))
+        else:
+            best = int(np.argmax(root.n))
         v = float(root.w[best] / root.n[best])
         return Result(
             moves[best].uci(),
