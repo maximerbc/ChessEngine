@@ -323,3 +323,16 @@ def test_reserved_puzzle_trajectory(tmp_path):
     rows = list(exclusion_rows(path))
     assert len(rows) == 3 and rows[-1]["moves"] == ["e2e4", "e7e5"]
     assert rows[-1]["source_site_id"] == "abcdefgh"
+
+
+def test_budget_forecast_pauses_without_test_selection(tmp_path, monkeypatch):
+    import time
+    config = fixture_data(tmp_path, seeds=[42, 43])
+    monkeypatch.setenv('CHESS_POLICY_DEADLINE_UNIX', str(time.time() + 1))
+    result = train(config, tmp_path, 42)
+    assert not result['complete'] and result['pause_reason']
+    assert (tmp_path / 'seed-42/resume.pt').exists()
+    assert not (tmp_path / 'seed-43').exists()
+    assert not (tmp_path / 'test-protocol.json').exists()
+    script = Path(__file__).resolve().parents[1] / 'scripts/run_move_policy.sh'
+    assert 'move_policy_train benchmark' not in script.read_text()

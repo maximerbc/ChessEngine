@@ -77,13 +77,21 @@ def prepare(config, output, input_root="."):
             raise ValueError("Prepared policy data changed")
         return old
     excluded_games, excluded_positions, excluded_sites = set(), set(), set()
+    began = time.perf_counter()
+    indexed = 0
     for name in config["exclusions"]:
         path = Path(input_root) / name
         for row in exclusion_rows(path):
             excluded_games.update(row[k] for k in ("game_id", "source_game_id") if row.get(k))
             if row.get("source_site_id"):
                 excluded_sites.add(row["source_site_id"])
-            excluded_positions.add(canonical(restore(row)))
+            # Exclusion keys ignore clocks/history; only candidate examples replay history.
+            excluded_positions.add(canonical(chess.Board(row["fen"])))
+            indexed += 1
+            if indexed % 50000 == 0:
+                write_json(root / "progress.json", {"stage": "exclusions", "rows": indexed,
+                           "source": name, "seconds": time.perf_counter() - began})
+                print(f"Indexed {indexed:,} exclusion rows", flush=True)
     targets = config["positions"]
     if set(targets) != set(SPLITS) or any(type(v) is not int or v < 1 for v in targets.values()):
         raise ValueError("Positive train/validation/test sizes required")
@@ -137,6 +145,9 @@ def prepare(config, output, input_root="."):
                     db.commit()
                     counts = dict(db.execute("SELECT split,count(*) FROM samples JOIN games "
                                              "ON samples.game=games.id WHERE quarantine=0 GROUP BY split"))
+                    write_json(root / "progress.json", {"stage": "preparation", "games": scanned,
+                               "eligible_samples": counts, "seconds": time.perf_counter() - began})
+                    print(f"Scanned {scanned:,} games: {counts}", flush=True)
                     if all(counts.get(s, 0) >= targets[s] * 1.2 for s in SPLITS):
                         break
         db.commit()
@@ -195,8 +206,18 @@ def label(config, output, input_root="."):
     if digest(binary) != teacher["sha256"]:
         raise ValueError("Pinned Stockfish executable mismatch")
     identity = json_hash({"positions": positions["sha256"], "teacher": teacher})
+    networks = teacher.get("nnue", {})
+    for network in networks.values():
+        if digest(Path(input_root) / network["path"]) != network["sha256"]:
+            raise ValueError("Pinned teacher NNUE mismatch")
     manifests = []
     with chess.engine.SimpleEngine.popen_uci(str(binary)) as engine:
+        if networks:
+            declared = {name for name in ("EvalFile", "EvalFileSmall") if name in engine.options}
+            if declared != set(networks):
+                raise ValueError("Teacher NNUE option mismatch")
+            engine.configure({name: str((Path(input_root) / net["path"]).resolve())
+                              for name, net in networks.items()})
         engine.configure({"Threads": 1, "Hash": 32, "MultiPV": 1, "Skill Level": 20,
                           "UCI_LimitStrength": False})
         for i, subset in enumerate(chunks(records(root / "positions.jsonl"), config["shard_size"])):
@@ -226,6 +247,11 @@ def label(config, output, input_root="."):
                         "teacher": engine.id}
                 write_json(meta_path, meta)
             manifests.append({"path": str(path.relative_to(root)), **meta})
+            write_json(root / "progress.json", {"stage": "labeling",
+                       "positions": sum(m["positions"] for m in manifests),
+                       "total": sum(positions["counts"].values()),
+                       "seconds": sum(m["seconds"] for m in manifests)})
+            print(f"Labeled {sum(m['positions'] for m in manifests):,} positions", flush=True)
     result = {"identity": identity, "positions": positions["sha256"], "chunks": manifests,
               "complete": True, "seconds": sum(m["seconds"] for m in manifests)}
     write_json(root / "labels.manifest.json", result)

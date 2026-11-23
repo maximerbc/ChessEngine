@@ -210,3 +210,17 @@ The subsequent separate baseline process exited successfully with `136 passed,
 2 skipped`; the direct-policy process exited successfully with `14 passed`.
 Together these cover the same 150 tests without counting the terminated process
 as successful. No real-data study or paid compute was started.
+
+## Full-run authorization — 2026-11-23
+
+This amendment supersedes the earlier benchmark/approval sequence above. The user
+approved the fixed full run directly with C$10 total new paid spend, including
+setup, storage, taxes and conversion; hold C$2 contingency and operate within C$8.
+There is no separate pilot or compulsory benchmark. Train sequential seeds
+42/43/44 with unchanged data/settings, retain the first real epoch and forecast
+remaining work from it. Stop with checkpoints if its conservative forecast exceeds
+the calculated deadline. The launcher propagates a budget pause instead of
+starting later seeds or opening the final test set. Local preparation runs through
+`scripts/prepare_move_policy.py`, with progress/status and elapsed-time receipts.
+NNUE identity is explicitly pinned. Final checksums, backups and actual costs
+must be recorded before this run's temporary resources are removed.

@@ -1,6 +1,7 @@
 """Research CLI for direct-move CNN training; never provisions cloud resources."""
 import argparse
 import contextlib
+import os
 import subprocess
 import sys
 import time
@@ -197,8 +198,16 @@ def train(config, root, seed, requested="cpu", resume=False, stop_after=None):
         result = {"signature": signature, "seed": seed, "device": str(device), "history": history,
                   "best_validation_cross_entropy": best, "complete": complete,
                   "elapsed_seconds": elapsed, "best_sha256": digest(directory / "best.npz")}
+        remaining_epochs = (settings["epochs"] - epoch - 1 + settings["epochs"] *
+                            (len(config["seeds"]) - config["seeds"].index(seed) - 1))
+        result["maximum_remaining_seconds_forecast"] = seconds * remaining_epochs * 1.2
+        deadline = float(os.environ.get("CHESS_POLICY_DEADLINE_UNIX", "inf"))
+        if not complete and time.time() + result["maximum_remaining_seconds_forecast"] > deadline - 60:
+            result["pause_reason"] = "remaining_fixed_protocol_exceeds_budget_deadline"
         write_json(directory / "metrics.json", result)
         print(f"seed {seed} epoch {epoch + 1}: validation CE {val['cross_entropy']:.5f}", flush=True)
+        if "pause_reason" in result:
+            break
         if stop_after and epoch + 1 >= stop_after:
             break
     return read_json(directory / "metrics.json")
@@ -328,9 +337,13 @@ def main():
         result = benchmark(config, args.output, args.device)
     elif args.stage == "train":
         seeds = [args.seed] if args.seed is not None else config["seeds"]
-        result = [train(config, args.output, seed, args.device,
-                        args.resume and (Path(args.output) / f"seed-{seed}/resume.pt").exists())
-                  for seed in seeds]
+        result = []
+        for seed in seeds:
+            fitted = train(config, args.output, seed, args.device,
+                           args.resume and (Path(args.output) / f"seed-{seed}/resume.pt").exists())
+            result.append(fitted)
+            if not fitted["complete"]:
+                break
     elif args.stage == "evaluate":
         result = evaluate_all(config, args.output, args.device)
     else:
@@ -340,6 +353,8 @@ def main():
         result = NumpyMovePolicy(args.checkpoint).rank(restore(read_json(args.position)))
     import json
     print(json.dumps(result, indent=2))
+    if args.stage == "train" and any(not row["complete"] for row in result):
+        raise SystemExit(75)
 
 
 if __name__ == "__main__":

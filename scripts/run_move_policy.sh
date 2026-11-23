@@ -8,6 +8,5 @@ fi
 cd "$(dirname "$0")/.."
 export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
-python -m chessengine.move_policy_train benchmark --device cuda
 python -m chessengine.move_policy_train train --device cuda "$@"
 python -m chessengine.move_policy_train evaluate --device cuda

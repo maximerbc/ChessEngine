@@ -187,3 +187,17 @@ Implementation and tiny-fixture verification do not count as a completed study.
 The user explicitly requires confirmation before Runpod training; no paid
 benchmark, full run, provisioning, publication or promotion is authorized here.
 Released models, production search and ongoing evolutionary work are unchanged.
+
+## 2026-11-23 — Direct-policy full run without a pilot
+
+The user approved local full-data preparation and labeling followed by direct
+Runpod training of seeds 42/43/44, with no separate pilot/benchmark. The first
+real epoch remains part of the fit and supplies measured time/cost forecasts.
+The new authorization is C$10 total inclusive of setup/storage/taxes/conversion,
+with C$2 contingency and C$8 operational allowance. Retain the frozen scientific
+settings and stop with resumable checkpoints rather than silently reducing scope.
+Pin the teacher's actual EvalFile NNUE hash, avoid replaying full histories when
+indexing position-only exclusions, and retain full histories for training records.
+Record local progress, cloud receipts, all seed results and any failures. Back up
+and verify outputs before deleting only the new training resources; preserve the
+existing evolutionary Pod/volume. No deployment or model promotion is included.
