@@ -168,3 +168,22 @@ Run `PYTHONPATH=src .venv/bin/python -m chessengine.alpha_beta_screen --openings
 - Preserve the completed same-search development screen: 16 wins/3 draws/21 losses against Classical (43.75%, paired 95% interval 30–57.5%); 26/3/11 against 80k Supervised (68.75%, 55–81.25%). All 80 games replay-verified, no caps, 2,492.89 seconds locally and C$0 new paid compute. One fixed seed and 20 reused color-swapped opening pairs per opponent do not establish qualification, general superiority or an Elo.
 - Serving retains the existing 10,000-node/1,500-ms defaults and qdepth four. The comparison used a nonbinding 2^31-1 node ceiling; its scores are not evidence for the exact bounded demo configuration. API limits, Classical and 80k behavior stay unchanged. Display the declared search consistently in play, analysis, Stockfish comparison and Research.
 - Preserve the failed PUCT study and its frozen protocol, all backups and historical evolutionary requirements. This change does not retrain models, resolve GPU evolutionary simulations, relax qualification/final gates or open final tests. Merge and deployment remain user decisions.
+
+## 2026-11-22 — Direct Stockfish-move CNN research
+
+The user selected a direct legal-move policy and a PyTorch CNN, inspired by the
+Skripkon PyTorch/TensorFlow videos. The tutorials imitate human PGN moves; our
+separate experiment labels positions with the pinned Stockfish first-PV move.
+Use feature-v3 spatial inputs plus complete rule/history features and a shared
+candidate scorer, without an observed-move vocabulary or search at inference.
+All weights start fresh. This permits a research-only NumPy CNN export alongside
+the existing MLP schemas, preserving the training-only PyTorch boundary.
+
+The bounded protocol and Runpod handoff are in `docs/stockfish-move-policy.md`;
+values are in `configs/stockfish-move-policy.json`. Source-game splits, canonical
+exclusions, all-seed checkpoint selection and a frozen held-out-test protocol
+protect study integrity. Training metrics measure teacher imitation only.
+Implementation and tiny-fixture verification do not count as a completed study.
+The user explicitly requires confirmation before Runpod training; no paid
+benchmark, full run, provisioning, publication or promotion is authorized here.
+Released models, production search and ongoing evolutionary work are unchanged.

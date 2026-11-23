@@ -1,0 +1,7 @@
+# Install alongside the official template's CUDA-enabled PyTorch (tested: 2.7.0).
+# PyTorch's exact runtime version is fingerprinted in every run/resume identity.
+chess==1.11.2
+numpy==2.2.6
+threadpoolctl==3.6.0
+certifi==2025.1.31
+zstandard==0.25.0

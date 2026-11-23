@@ -1,0 +1,38 @@
+{
+  "study": "stockfish-direct-move-cnn-20261122",
+  "source": "data/lichess-2013-07.pgn.zst",
+  "exclusions": [
+    "data/main-labeled.jsonl",
+    "data/expanded-200k-labeled.jsonl",
+    "data/pilot-labeled.jsonl",
+    "data/gpu-value-v1/positions.jsonl",
+    "runs/evolutionary-augmented-20261122/exclusion-metadata.jsonl",
+    "configs/openings.json",
+    "runs/rl-improvement/openings.json",
+    "runs/move-ranking/openings.json",
+    "runs/policy-value/openings.json",
+    "runs/evolutionary/openings.json",
+    "runs/augmented-evaluation-20261122/openings.json",
+    "data/puzzles.csv"
+  ],
+  "sampling_seed": 20261122,
+  "max_games": 1000000,
+  "positions": {"train": 50000, "validation": 5000, "test": 5000},
+  "shard_size": 1000,
+  "teacher": {
+    "binary": "tools/stockfish/stockfish-macos-universal",
+    "sha256": "8eed61129d1493c5d1f2fd9323f0c54c47ac49319911fbde18c6b9c87e8b13c5",
+    "nodes": 10000,
+    "threads": 1,
+    "hash_mb": 32
+  },
+  "seeds": [42, 43, 44],
+  "representative_seed": 42,
+  "training": {
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "batch_size": 256,
+    "epochs": 40,
+    "patience": 6
+  }
+}
