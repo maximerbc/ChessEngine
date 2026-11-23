@@ -54,6 +54,8 @@ def test_native_chunk_resume_padding_and_atomic_ledger(tmp_path):
     whole = native_games.run(tasks, tmp_path/'whole', 2, 4, 2, 2)
     assert resumed['games'] == whole['games']
     assert len({g['task_id'] for g in resumed['games']}) == 3
+    assert whole['batch_histogram']['1'] > 0
+    assert whole['batch_histogram']['2'] > 0
     assert all(g['capped'] and g['result'] == '*' and g['score'] == .5 and g['replay_verified']
                for g in resumed['games'])
     with pytest.raises(ValueError, match='Protocol'):

@@ -90,6 +90,7 @@ def run(tasks, directory, simulations, max_plies=512, batch_size=32,
         chunk_plies=8, deadline=None, stop_after_chunks=None):
     if not tasks or batch_size < 1 or chunk_plies < 1 or max_plies < 1:
         raise ValueError('Positive workload and execution dimensions required')
+    batch_size = min(batch_size, len(tasks))
     ids = [t['task_id'] for t in tasks]
     if len(set(ids)) != len(ids):
         raise ValueError('Duplicate tournament task')
@@ -100,7 +101,7 @@ def run(tasks, directory, simulations, max_plies=512, batch_size=32,
         if task['opponent'] != 'handcrafted' and sha(task['opponent']) != task['opponent_sha256']:
             raise ValueError('Opponent changed')
     output = Path(directory)
-    protocol = freeze(output, dict(runner='gpu-native-chunk-v1', tasks=tasks,
+    protocol = freeze(output, dict(runner='gpu-native-chunk-v2', tasks=tasks,
         simulations=simulations, max_plies=max_plies, batch_size=batch_size, chunk_plies=chunk_plies), paths)
     state_path = output / 'continuation.pkl'
     if state_path.exists():
@@ -109,7 +110,7 @@ def run(tasks, directory, simulations, max_plies=512, batch_size=32,
         saved = dict(games=[], slots=[None] * batch_size, labels=[[] for _ in range(batch_size)],
             states=None, plies=np.zeros(batch_size, np.int32), coverage=np.zeros(batch_size, np.int32),
             next_task=0, chunks=0, active_seconds=0., rollout_seconds=0., verification_seconds=0.,
-            checkpoint_seconds=0., started_unix=time.time())
+            checkpoint_seconds=0., batch_histogram={}, started_unix=time.time())
     if len({g['task_id'] for g in saved['games']}) != len(saved['games']):
         raise ValueError('Duplicate completed records')
     completed = {g['task_id'] for g in saved['games']}
@@ -157,26 +158,35 @@ def run(tasks, directory, simulations, max_plies=512, batch_size=32,
                 root = root_state(task['opening'])
                 states = jax.tree.map(lambda x, y: x.at[i].set(y), states, root)
         enabled = np.array([s is not None for s in saved['slots']])
-        slots = [s if s is not None else tasks[0] for s in saved['slots']]
+        active_ids = np.flatnonzero(enabled)
+        # Static buckets avoid running a full generation's search for its last
+        # few unfinished games. Unique padding indices make scatter lossless.
+        buckets = sorted({min(batch_size, 2 ** i) for i in range(batch_size.bit_length()+1)})
+        width = next(b for b in buckets if b >= len(active_ids))
+        indices = np.concatenate([active_ids, np.flatnonzero(~enabled)[:width-len(active_ids)]])
+        slots = [saved['slots'][i] if saved['slots'][i] is not None else tasks[0] for i in indices]
+        active_states = jax.tree.map(lambda x: x[indices], states)
         candidate_ids = jnp.array([lookup[s['candidate']] for s in slots], jnp.int32)
         opponent_ids = jnp.array([lookup.get(s['opponent'], 0) for s in slots], jnp.int32)
         start = time.perf_counter()
-        result = advance(bank, states, candidate_ids, opponent_ids,
+        result = advance(bank, active_states, candidate_ids, opponent_ids,
             jnp.array([s['color'] == 'white' for s in slots]),
             jnp.array([0 if s['opponent'] == 'handcrafted' else 1 for s in slots], jnp.int32),
-            jnp.asarray(enabled), jnp.asarray(saved['plies']))
+            jnp.asarray(enabled[indices]), jnp.asarray(saved['plies'][indices]))
         jax.block_until_ready(result)
         saved['rollout_seconds'] += time.perf_counter() - start
         if np.asarray(result['invalid']).any() or np.asarray(result['overflow']).any():
             raise ValueError('GPU rollout failed legal/budget/history checks; fitness rejected')
-        states = result['states']
-        saved['plies'] = np.asarray(result['plies']).copy()
-        saved['coverage'] += np.asarray(result['coverage'])
+        states = jax.tree.map(lambda x, y: x.at[indices].set(y), states, result['states'])
+        saved['plies'][indices] = np.asarray(result['plies'])
+        saved['coverage'][indices] += np.asarray(result['coverage'])
+        saved['batch_histogram'][str(width)] = saved['batch_histogram'].get(str(width), 0) + 1
         labels = np.asarray(result['actions'])
-        for i in np.flatnonzero(enabled):
-            saved['labels'][i].extend(int(a) for a in labels[:, i] if a >= 0)
+        for j, i in enumerate(indices[:len(active_ids)]):
+            saved['labels'][i].extend(int(a) for a in labels[:, j] if a >= 0)
         before = time.perf_counter()
-        for i in np.flatnonzero(np.asarray(result['finished'])):
+        for j in np.flatnonzero(np.asarray(result['finished'])):
+            i = indices[j]
             row = replay(saved['slots'][i], saved['labels'][i],
                 jax.tree.map(lambda x: x[i], states), max_plies, saved['coverage'][i])
             saved['games'].append(row)

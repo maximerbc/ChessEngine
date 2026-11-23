@@ -127,3 +127,22 @@ no fabricated games-per-second figure. Evaluation/storage costs without direct
 measurements are marked as additional estimates, not a complete spend promise.
 Publish failure, partial progress and uncertainty. Preserve the failed historical
 PUCT screen; GPU throughput does not establish playing strength.
+
+## Scheduling calibration extension
+
+The initial on-device calibration tested 16/32/64 concurrent games, selecting
+64 at about 191 kernel moves/second. Before relying on that ceiling, extend
+performance-only trials through 128/256/384 concurrent games using
+`configs/evolutionary-gpu-native-scaled.json`. 384 is the complete eight-candidate
+pilot generation. Search, random seeds, openings, games and learning settings
+stay unchanged. Preserve the initial run and its continuation; use a separate
+`pilot-scaled` output rather than resuming under a changed protocol. The same
+C$5 receipt and original hard shutdown deadline apply; no new resources.
+
+The extended calibration times device execution, state transfer and durable
+checkpoint I/O together. The runner caps initial allocation at the actual task
+count and compacts unfinished games into power-of-two GPU buckets as a batch
+drains. This avoids searching hundreds of masked slots for a few remaining
+games. Bucket shapes are compiled and reused, with original slot identities and
+transactional resume preserved. These scheduling changes do not alter per-move
+simulation counts, legal moves, model parameters or scientific game counts.

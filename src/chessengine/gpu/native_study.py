@@ -157,13 +157,16 @@ def calibrate(config, pools, supervised, output, deadline):
                 start = time.perf_counter()
                 result = advance(*args)
                 jax.block_until_ready(result)
+                # Tune the execution path, including the actual transfer/fsync
+                # that chunking amortizes, rather than isolated GPU kernels.
+                save_state(out/'layout-checkpoint.pkl', jax.device_get(result), 'layout-only')
                 if np.asarray(result['invalid']).any() or np.asarray(result['overflow']).any():
                     raise ValueError('Scheduling trial failed integrity')
                 samples.append(time.perf_counter() - start)
             moves = int((np.asarray(result['actions']) >= 0).sum())
             timings.append(dict(batch_size=batch, chunk_plies=chunk, moves=moves,
                 compile_seconds=compile_seconds, seconds=float(np.median(samples)),
-                moves_per_second=moves/float(np.median(samples))))
+                moves_per_second=moves/float(np.median(samples)), includes_checkpoint_io=True))
             atomic_json(out / 'timings.json', timings)
     best = max(timings, key=lambda r: r['moves_per_second'])
     record = dict(passed=True, simulations=selected, batch_size=best['batch_size'],
