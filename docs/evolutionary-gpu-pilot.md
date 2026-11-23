@@ -146,3 +146,10 @@ drains. This avoids searching hundreds of masked slots for a few remaining
 games. Bucket shapes are compiled and reused, with original slot identities and
 transactional resume preserved. These scheduling changes do not alter per-move
 simulation counts, legal moves, model parameters or scientific game counts.
+
+The scaled 32-simulation complete-game benchmark reached only 84.47% move
+coverage against the frozen 90% threshold, so no evolutionary games started.
+Keep its 24 complete games and failed decision. Test 64 next, within the original
+32/64/128/256 selection range, using `configs/evolutionary-gpu-native-64.json`
+and a separate `pilot-64` output. No threshold is reduced and no full training
+is authorized. The original total C$5 and hard shutdown time remain binding.
