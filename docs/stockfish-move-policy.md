@@ -205,3 +205,8 @@ Ruff and both CLI help commands pass. One combined run printed `150 passed,
 not counted as a clean suite run. The Mac showed substantial memory pressure;
 the cause of that exit was not established. CUDA training remains unverified and
 requires the user's later Runpod approval.
+
+The subsequent separate baseline process exited successfully with `136 passed,
+2 skipped`; the direct-policy process exited successfully with `14 passed`.
+Together these cover the same 150 tests without counting the terminated process
+as successful. No real-data study or paid compute was started.
