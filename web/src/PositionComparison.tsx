@@ -21,7 +21,10 @@ export type ComparisonResult = {
   position_value: number | null;
   terminal: string | null;
   search: SearchAssessment | null;
-  policy?: {root_rankings: {move: string; probability: number}[]; elapsed_ms: number};
+  policy?: {
+    root_rankings: { move: string; probability: number }[];
+    elapsed_ms: number;
+  };
   stockfish: SearchAssessment & {
     status: "ok" | "unavailable" | "terminal";
     pawn_score: number | null;
@@ -209,7 +212,11 @@ export function PositionComparison({
                 <tbody>
                   <tr>
                     <th scope="row">Position evaluation</th>
-                    <td>{result.position_value === null ? "Not provided by this move predictor" : signed(result.position_value)}</td>
+                    <td>
+                      {result.position_value === null
+                        ? "Not provided by this move predictor"
+                        : signed(result.position_value)}
+                    </td>
                     <td>{assessment(result.stockfish)}</td>
                   </tr>
                   <tr className="comparison-gap">
@@ -218,7 +225,9 @@ export function PositionComparison({
                   </tr>
                   <tr>
                     <th scope="row">After search</th>
-                    <td>{result.search ? assessment(result.search) : "No search"}</td>
+                    <td>
+                      {result.search ? assessment(result.search) : "No search"}
+                    </td>
                     <td>{assessment(result.stockfish)}</td>
                   </tr>
                   <tr className="comparison-gap">
@@ -253,11 +262,19 @@ export function PositionComparison({
                 </p>
               )}
               <p className="micro">
-                {result.policy ? "This network predicts human moves and has no position-value head or search. Stockfish provides a separate position assessment."
+                {result.policy
+                  ? "This network predicts legal moves and has no position-value head or search. Stockfish provides a separate position assessment."
                   : `Position evaluation is ${modelName}’s own board assessment. After search adds looking ahead through possible moves. Both rows use the same Stockfish searched reference.`}
               </p>
-              {result.policy && <ol aria-label="Current-position predicted legal moves">{result.policy.root_rankings.slice(0,5).map(row =>
-                <li key={row.move}>{row.move} · {(row.probability * 100).toFixed(1)}%</li>)}</ol>}
+              {result.policy && (
+                <ol aria-label="Current-position predicted legal moves">
+                  {result.policy.root_rankings.slice(0, 5).map((row) => (
+                    <li key={row.move}>
+                      {row.move} · {(row.probability * 100).toFixed(1)}%
+                    </li>
+                  ))}
+                </ol>
+              )}
               <p className="micro">
                 Agreement on one position does not measure training efficiency
                 or playing strength. These values are not calibrated win
@@ -267,22 +284,30 @@ export function PositionComparison({
               </p>
               <details>
                 <summary>Search details and model version</summary>
-                {result.search && <><p>
-                  {modelName}: {result.search.depth} depth ·{" "}
-                  {result.search.strategy === "puct-uniform-v1"
-                    ? `${result.search.simulations?.toLocaleString()} simulations`
-                    : `${result.search.nodes.toLocaleString()} nodes`} ·{" "}
-                  {(result.search.elapsed_ms / 1000).toFixed(2)}s
-                </p>
-                <p>
-                  Selected engine limits:{" "}
-                  {result.search.strategy === "puct-uniform-v1"
-                    ? `${result.search.limits.simulations?.toLocaleString()} simulations`
-                    : `${result.search.limits.nodes?.toLocaleString()} nodes`} /{" "}
-                  {(result.search.limits.time_ms / 1000).toFixed(1)}s.
-                </p>
-                </>}
-                {result.policy && <p>{modelName}: direct inference · {(result.policy.elapsed_ms / 1000).toFixed(3)}s · no search.</p>}
+                {result.search && (
+                  <>
+                    <p>
+                      {modelName}: {result.search.depth} depth ·{" "}
+                      {result.search.strategy === "puct-uniform-v1"
+                        ? `${result.search.simulations?.toLocaleString()} simulations`
+                        : `${result.search.nodes.toLocaleString()} nodes`}{" "}
+                      · {(result.search.elapsed_ms / 1000).toFixed(2)}s
+                    </p>
+                    <p>
+                      Selected engine limits:{" "}
+                      {result.search.strategy === "puct-uniform-v1"
+                        ? `${result.search.limits.simulations?.toLocaleString()} simulations`
+                        : `${result.search.limits.nodes?.toLocaleString()} nodes`}{" "}
+                      / {(result.search.limits.time_ms / 1000).toFixed(1)}s.
+                    </p>
+                  </>
+                )}
+                {result.policy && (
+                  <p>
+                    {modelName}: direct inference ·{" "}
+                    {(result.policy.elapsed_ms / 1000).toFixed(3)}s · no search.
+                  </p>
+                )}
                 <p>
                   {reference?.version || "Stockfish reference"}:{" "}
                   {reference?.depth} depth · {reference?.nodes.toLocaleString()}{" "}

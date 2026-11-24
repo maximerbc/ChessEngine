@@ -7,6 +7,7 @@ test("real current-position comparison preserves play for each released evaluato
     !process.env.RUN_LIVE_TESTS,
     "Requires the local Python server and Stockfish 19.",
   );
+  test.setTimeout(180000);
   await page.goto("/");
   const installed = await (await page.request.get("/api/models")).json();
   for (const model of installed.models) {
@@ -77,11 +78,7 @@ test("live backend and released study render together", async ({
   );
   await page.goto("/");
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
-  await expect(
-    page.getByRole("button", {
-      name: /^Supervised A neural network/,
-    }),
-  ).toBeVisible();
+  await expect(page.locator(".model-option[aria-pressed=true]")).toContainText("Supervised");
   await page
     .getByRole("button", { name: "e2 white pawn", exact: true })
     .click();

@@ -300,3 +300,29 @@ evolutionary resources and production models remain unchanged. Conservative
 total spend is approximately C$0.70 including the aborted setup and allowances;
 main-run/volume billing was still unposted, not proven free. No new training,
 merge, deployment or promotion is authorized by closing this study.
+
+
+## 2026-11-24: all supervised variants available experimentally
+
+The user approved a single demo catalogue with Classical plus nineteen distinct
+supervised configurations, represented by their existing validation-selected
+seed-42 exports. Start from elite baseline commit bdc0f82, integrate current main
+8c64143 and Stockfish-policy commit 797582f, and preserve unrelated worktrees.
+The 180k model and fixed-data reference have identical trained arrays and appear
+once. Historical pilot fits, seed alternatives, epoch snapshots, the diagnostic
+prediction ensemble, learned ordering, RL and Evolutionary play are excluded.
+
+Manifest v6 supports the complete explicit catalogue with fail-closed artifact,
+kind, encoder, trained-array and gate checks. Supervised remains default; existing
+Supervised, Augmented Supervised and human-policy checkpoints remain byte-for-byte
+unchanged. Additional value variants use shared alpha-beta. The Stockfish and
+human move policies use distinct exact NumPy encoders and direct legal-move
+selection, without invented position scores or search statistics. The human
+encoder's history omissions remain documented; complete histories govern rules.
+
+This is an experimental-play authorization, not qualification or a re-evaluation
+of historical failed gates. Source and export hashes live in the frozen config
+and manifest; reproducible staging cannot change trained arrays. Only aggregate
+checkpoint-matched evidence enters the public research catalogue. New weights
+remain in the private API image, with no new public downloads. The user authorized
+this feature branch push and PR creation; merging and deployment remain separate.

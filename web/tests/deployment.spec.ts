@@ -1,25 +1,35 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+const release = JSON.parse(
+  readFileSync("../artifacts/models/manifest.json", "utf8"),
+);
 
 test.describe("production containers", () => {
   test.skip(!process.env.PLAYWRIGHT_BASE_URL, "Requires production containers");
 
-  for (const [id, name] of [
-    ["handcrafted", /^Classical Handcrafted/],
-    ["supervised", /^Supervised A neural network/],
-    ["supervised-1m", /^Augmented Supervised Trained/],
-    ["elite-policy", /^Move Prediction A convolutional/],
-  ] as const) {
-    test(`real ${id}: gameplay, comparison and export`, async ({ page }, testInfo) => {
-      await page.goto("/");
-      await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
-      const catalog = await page.request.get(`${process.env.DEPLOYMENT_API_URL}/models`);
-      const available = new Set((await catalog.json()).models.map((row: { id: string }) => row.id));
-      const card = page.getByRole("button", { name });
+  for (const id of [
+    "handcrafted",
+    ...release.models.map((row: { id: string }) => row.id),
+  ]) {
+    test(`real ${id}: gameplay, comparison and export`, async ({
+      page,
+    }, testInfo) => {
+      await page.goto(`/?model=${id}`);
+      await expect(
+        page.getByText("Engine online", { exact: true }),
+      ).toBeVisible();
+      const catalog = await page.request.get(
+        `${process.env.DEPLOYMENT_API_URL}/models`,
+      );
+      const available = new Set(
+        (await catalog.json()).models.map((row: { id: string }) => row.id),
+      );
+      const card = page.locator(".model-option[aria-pressed=true]");
       if (!available.has(id)) {
         await expect(card).toBeDisabled();
         return;
       }
-      await card.click();
+      await expect(card).toBeEnabled();
       await page
         .getByRole("button", { name: "e2 white pawn", exact: true })
         .click();
@@ -42,13 +52,24 @@ test.describe("production containers", () => {
       await expect(
         comparison.getByRole("row", { name: /Position evaluation/ }),
       ).toBeVisible();
-      if (id === "elite-policy") {
-        await expect(comparison).toContainText("Not provided by this move predictor");
+      if (["elite-policy", "stockfish-policy"].includes(id)) {
+        await expect(comparison).toContainText(
+          "Not provided by this move predictor",
+        );
         await expect(comparison).toContainText("No search");
-        await expect(page.locator(".analysis-card")).toContainText("NO POSITION VALUE");
-        await expect(page.getByRole("list", { name: "Predicted legal moves", exact: true })).toBeVisible();
+        await expect(page.locator(".analysis-card")).toContainText(
+          "NO POSITION VALUE",
+        );
+        await expect(
+          page.getByRole("list", {
+            name: "Predicted legal moves",
+            exact: true,
+          }),
+        ).toBeVisible();
       } else {
-        await expect(comparison.getByRole("row", { name: /After search/ })).toBeVisible();
+        await expect(
+          comparison.getByRole("row", { name: /After search/ }),
+        ).toBeVisible();
       }
       await comparison
         .getByText("Search details and model version", { exact: true })
@@ -66,7 +87,10 @@ test.describe("production containers", () => {
         page.getByRole("button", { name: "Compare", exact: true }),
       ).toHaveCount(0);
       await expect(
-        page.getByRole("button", { name: "Analyze this position", exact: true }),
+        page.getByRole("button", {
+          name: "Analyze this position",
+          exact: true,
+        }),
       ).toHaveCount(0);
       await page.screenshot({
         path: testInfo.outputPath(`production-${id}.png`),

@@ -1,0 +1,12 @@
+{
+  "seed": 42,
+  "selected_epoch": 4,
+  "checkpoint_sha256": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+  "parity_positions": 24,
+  "maximum_logit_error": 9.1552734375e-05,
+  "cpu_numpy_export_verified": true,
+  "failures": [],
+  "maximum_centered_logit_error": 9.1552734375e-05,
+  "maximum_probability_error": 1.5020370483398438e-05,
+  "chosen_moves_match": true
+}

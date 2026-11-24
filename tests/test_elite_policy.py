@@ -194,8 +194,8 @@ def install_test_policy(tmp_path):
     manifest = read_json(directory / 'manifest.json')
     manifest['release_version'] = 5
     # Replace an installed real policy with the isolated synthetic fixture.
-    manifest['models'] = [row for row in manifest['models'] if row['id'] != 'elite-policy']
-    manifest['required_model_ids'] = [mid for mid in manifest['required_model_ids'] if mid != 'elite-policy']
+    manifest['models'] = [row for row in manifest['models'] if row['id'] in {'supervised', 'supervised-1m'}]
+    manifest['required_model_ids'] = ['supervised', 'supervised-1m']
     manifest['models'].append(dict(id='elite-policy', name='Move Prediction', kind='human-move-policy',
         file='elite-policy.npz', sha256=checkpoint, architecture=SCHEMA,
         dataset_sha256='d' * 64,

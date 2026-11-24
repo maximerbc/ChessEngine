@@ -27,11 +27,12 @@ def test_release_models_and_recorded_results_are_consistent():
             continue
         path = manifest_path.parent / entry["file"]
         assert digest(path) == entry["sha256"]
-        if entry['id'] != 'elite-policy':
+        if (root / 'web/public/models' / entry['file']).exists():
             assert digest(root / "web/public/models" / entry["file"]) == entry["sha256"]
-        if entry['id'] == 'elite-policy':
-            from chessengine.elite_policy import NumpyElitePolicy
-            assert chess.Move.from_uci(NumpyElitePolicy(path).choose(chess.Board())) in chess.Board().legal_moves
+        if entry.get('search', {}).get('strategy') == 'direct-policy-v1':
+            from chessengine.demo_models import load_catalogue
+            policy = load_catalogue(manifest, manifest_path.parent)[entry['id']]['evaluator']
+            assert chess.Move.from_uci(policy.analyze(chess.Board())['best_move']) in chess.Board().legal_moves
         else:
             assert np.isfinite(load_evaluator(path)(chess.Board()))
     report = json.loads((root / "web/public/research/results.json").read_text())

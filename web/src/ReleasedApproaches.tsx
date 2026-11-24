@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { Opponent } from "./OpponentChooser";
 
 export const releasedApproaches = [
   {
@@ -54,10 +55,12 @@ type StudyIndex = {
 export function ResearchSummary({
   id,
   checkpoint,
+  modelMeta,
   openResearch,
 }: {
   id: string;
   checkpoint?: string;
+  modelMeta?: Opponent;
   openResearch: (study?: string) => void;
 }) {
   const [index, setIndex] = useState<StudyIndex | null>(null);
@@ -67,22 +70,22 @@ export function ResearchSummary({
       .then(setIndex)
       .catch(() => setIndex(null));
   }, []);
-  const approach = releasedApproach(id);
+  const legacy = releasedApproach(id);
+  const approach =
+    legacy ||
+    (modelMeta && {
+      name: modelMeta.name,
+      evaluation: modelMeta.description,
+      evidence:
+        "Experimental playable variant. Teacher agreement and demonstration access do not establish stronger play.",
+    });
   if (!approach) return null;
   const original = index?.studies?.find(
-    (study) =>
-      study.id ===
-      (id === "elite-policy" ? "elite-pytorch-baseline-20261124"
-        : id === "supervised-1m" ? "gpu-value" : "original-study"),
+    (study) => !!checkpoint && study.checkpoint_ids?.[id] === checkpoint,
   );
   const matches =
-    id === "handcrafted"
-      ? checkpoint === "handcrafted-v1"
-      : !!checkpoint && original?.checkpoint_ids?.[id] === checkpoint;
-  const study = matches
-    ? id === "elite-policy" ? "elite-pytorch-baseline-20261124"
-      : id === "supervised-1m" ? "gpu-value" : "original-study"
-    : undefined;
+    id === "handcrafted" ? checkpoint === "handcrafted-v1" : !!original;
+  const study = original?.id;
   return (
     <section
       className="research-summary"
@@ -91,7 +94,7 @@ export function ResearchSummary({
       <h3>Research summary</h3>
       <p>{approach.evaluation}</p>
       <p>
-        {id === "elite-policy"
+        {modelMeta?.strategy === "direct-policy-v1" || id === "elite-policy"
           ? "This model chooses a legal move directly, without search. "
           : "This model uses CPU alpha-beta search to choose moves. "}
         Playing here does not train the models.

@@ -78,7 +78,7 @@ STUDIES = [
 def sanitize(document, allowed):
     def link(match):
         tag, target = match.group(1), html.unescape(match.group(2))
-        if target.startswith(("https://", "#")) or target in allowed:
+        if target.startswith(("https://", "#", "/research")) or target in allowed:
             return match.group(0)
         if tag == "href":
             return 'title="Private research archive"'  # Keep prose, remove dead/private links.
@@ -253,6 +253,32 @@ def publish(destination="web/public/research"):
                 'One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.')),
             report='/research/gpu-value/index.html',
             checkpoint_ids={key:models[key] for key in gpu_ids if key in models}))
+    # These aggregate reports are explicitly allowlisted; checkpoint publication is separate.
+    for slug, study_id, title, names in [
+        ('elite-policy', 'elite-pytorch-baseline-20261124', 'Learning moves from elite human games', ['index.html', 'evidence.json', 'curves.svg']),
+        ('stockfish-move-policy', 'stockfish-move-policy', 'Stockfish move imitation', ['index.html', 'evidence.json']),
+        ('supervised-variants', 'supervised-variants', 'Playable supervised variants', ['index.html', 'evidence.json']),
+    ]:
+        source = Path('docs/experiments') / slug
+        if not (source / 'index.html').exists():
+            continue
+        target = out / slug
+        target.mkdir(exist_ok=True)
+        for name in names:
+            if not (source / name).exists():
+                continue
+            if name.endswith('.html'):
+                (target / name).write_text(sanitize((source / name).read_text(), set(names)))
+            else:
+                shutil.copyfile(source / name, target / name)
+            assets[f'{slug}/{name}'] = digest(target / name)
+        identities = (models if slug == 'supervised-variants' else
+                      {key: models[key] for key in ['elite-policy' if slug == 'elite-policy' else 'stockfish-policy'] if key in models})
+        rows.append(dict(id=study_id, title=title, level='Experimental playable models',
+            result='diagnostic', availability='experimental play' if identities else 'research only',
+            question='How do different supervised training choices behave?',
+            takeaway='Previously selected checkpoints are playable experimentally. Agreement metrics do not establish playing strength; historical failures remain preserved.',
+            report=f'/research/{slug}/index.html', checkpoint_ids=identities))
     write_json(
         out / "studies.json",
         dict(

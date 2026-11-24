@@ -707,7 +707,7 @@ for (const width of [1366, 890, 734, 390]) {
       0,
     );
     await expect(page.locator(".demo-intro")).toContainText(
-      "Play Classical, Supervised, Augmented Supervised, or Move Prediction. Availability follows each model’s validation status.",
+      "Choose Classical or a supervised training variant. Experimental access does not establish playing strength.",
     );
     await expect(
       page.getByRole("button", { name: "Play", exact: true }),
