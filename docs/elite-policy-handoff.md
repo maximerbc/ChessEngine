@@ -46,6 +46,17 @@ An early audit/loader implementation repeatedly decompressed each shard; it was
 corrected before any real fit. No dataset labels or frozen quotas were changed.
 Some early verification commands exited 137; clean native Ruff runs were completed afterward.
 
+## Durable private backup
+
+The original project checkout contains
+`runs/elite-policy-20261124/pretraining-backup.tar.gz` and the separate runnable
+`training-package.tar.gz`. The 203,767,547-byte backup has 39 verified members,
+including the runnable data/source bundle, original elite ZIP, indexes, audit
+receipts and verification logs. Its checksum receipt is
+`docs/experiments/elite-policy/backup.json`. This preserves prepared inputs, not
+trained weights. The runnable source is frozen at the recorded pre-receipt commit;
+this later backup receipt does not change the scientific source.
+
 ## Exact launch gate
 
 Read `docs/experiments/elite-policy/launch-proposal.json`: it is **not an approval**.
