@@ -1,0 +1,6 @@
+# Install into the pinned Runpod PyTorch 2.8.0 CUDA 12.8 environment; no AMP/TF32.
+torch==2.8.0
+numpy==2.2.6
+chess==1.11.2
+certifi==2025.1.31
+threadpoolctl==3.6.0

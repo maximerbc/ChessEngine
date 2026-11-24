@@ -168,3 +168,29 @@ Run `PYTHONPATH=src .venv/bin/python -m chessengine.alpha_beta_screen --openings
 - Preserve the completed same-search development screen: 16 wins/3 draws/21 losses against Classical (43.75%, paired 95% interval 30–57.5%); 26/3/11 against 80k Supervised (68.75%, 55–81.25%). All 80 games replay-verified, no caps, 2,492.89 seconds locally and C$0 new paid compute. One fixed seed and 20 reused color-swapped opening pairs per opponent do not establish qualification, general superiority or an Elo.
 - Serving retains the existing 10,000-node/1,500-ms defaults and qdepth four. The comparison used a nonbinding 2^31-1 node ceiling; its scores are not evidence for the exact bounded demo configuration. API limits, Classical and 80k behavior stay unchanged. Display the declared search consistently in play, analysis, Stockfish comparison and Research.
 - Preserve the failed PUCT study and its frozen protocol, all backups and historical evolutionary requirements. This change does not retrain models, resolve GPU evolutionary simulations, relax qualification/final gates or open final tests. Merge and deployment remain user decisions.
+
+
+## 2026-11-24: fresh elite human-move CNN baseline
+
+The user replaced the prior Stockfish best-move direction with the reference
+PyTorch CNN trained on actual moves in fresh elite games. The old studies remain
+immutable historical evidence. Freeze the one-million-example protocol in
+`configs/elite-policy.json` and `docs/elite-policy.md`; no additional architecture
+or optimization treatment precedes review of this baseline.
+
+The approved reference exception retains thirteen absolute planes and a global
+classifier, corrected to a complete 4208-class vocabulary. History still controls
+legality and automatic draws. NumPy direct-policy inference has no position-value
+head or search and cannot masquerade as alpha-beta or a win probability.
+
+The requested lineup is Classical, Supervised, Augmented Supervised and Move
+Prediction. Manifest v5 extends v3/v4 identity validation. Existing supervised
+weights/default are unchanged. Fixed seed 42 can be experimental-playable after
+validation learning and functional export gates, without a playing-strength
+claim; failed gates remain unavailable.
+
+All local preparation, tests, backups and the concrete Runpod package precede
+launch confirmation. No billable benchmark or training is authorized before that
+confirmation. The new cumulative budget is C$40 operating plus C$10 contingency,
+inside C$50 total; prior and pending charges count. No remote push, merge or
+deployment is included.
