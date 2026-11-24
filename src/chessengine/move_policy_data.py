@@ -100,7 +100,8 @@ def prepare(config, output, input_root="."):
     db = sqlite3.connect(database)
     db.executescript("CREATE TABLE games(id TEXT PRIMARY KEY, split TEXT, quarantine INTEGER);"
                      "CREATE TABLE samples(key TEXT, game TEXT, row TEXT, PRIMARY KEY(key,game));"
-                     "CREATE INDEX positions ON samples(key);")
+                     "CREATE INDEX positions ON samples(key);"
+                     "CREATE INDEX game_samples ON samples(game);")
     rng = random.Random(config["sampling_seed"])
     scanned = 0
     try:
