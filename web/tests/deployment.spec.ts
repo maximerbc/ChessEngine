@@ -10,11 +10,20 @@ test.describe("production containers", () => {
     await expect(
       page.getByText("Engine online", { exact: true }),
     ).toBeVisible();
-    for (const name of [
-      /^Supervised A neural network/,
-      /^Classical Handcrafted/,
-    ]) {
-      await page.getByRole("button", { name }).click();
+    const catalog = await page.request.get(`${process.env.DEPLOYMENT_API_URL}/models`);
+    const available = new Set((await catalog.json()).models.map((row: { id: string }) => row.id));
+    for (const [id, name] of [
+      ["handcrafted", /^Classical Handcrafted/],
+      ["supervised", /^Supervised A neural network/],
+      ["supervised-1m", /^Augmented Supervised Trained/],
+      ["elite-policy", /^Move Prediction A convolutional/],
+    ] as const) {
+      const card = page.getByRole("button", { name });
+      if (!available.has(id)) {
+        await expect(card).toBeDisabled();
+        continue;
+      }
+      await card.click();
       await page
         .getByRole("button", { name: "e2 white pawn", exact: true })
         .click();
@@ -37,9 +46,14 @@ test.describe("production containers", () => {
       await expect(
         comparison.getByRole("row", { name: /Position evaluation/ }),
       ).toBeVisible();
-      await expect(
-        comparison.getByRole("row", { name: /After search/ }),
-      ).toBeVisible();
+      if (id === "elite-policy") {
+        await expect(comparison).toContainText("Not provided by this move predictor");
+        await expect(comparison).toContainText("No search");
+        await expect(page.locator(".analysis-card")).toContainText("NO POSITION VALUE");
+        await expect(page.getByRole("list", { name: "Predicted legal moves", exact: true })).toBeVisible();
+      } else {
+        await expect(comparison.getByRole("row", { name: /After search/ })).toBeVisible();
+      }
       await comparison
         .getByText("Search details and model version", { exact: true })
         .click();

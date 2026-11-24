@@ -9,10 +9,11 @@
     "passed": false
   },
   "label_source": "elite-human-played-moves",
+  "operations": {},
   "playable": false,
   "qualified": false,
   "results": null,
-  "status": "awaiting-approved-runpod-training",
+  "status": "training-in-progress",
   "strength_status": "not-established",
   "study": "elite-pytorch-baseline-20261124"
 }

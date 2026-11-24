@@ -1,8 +1,8 @@
 # Elite human-move baseline handoff
 
 Branch: `codex/elite-pytorch-baseline`, based on the existing augmented alpha-beta
-integration at `b33405895c78e94c873687d5155dfdf59d2f3e5b`. No push, merge,
-deployment, GPU provisioning, gradient benchmark or real fit has occurred.
+integration at `b33405895c78e94c873687d5155dfdf59d2f3e5b`. Approved Runpod training
+is running. No push, merge or deployment has occurred.
 
 ## Ready locally
 
@@ -57,26 +57,35 @@ receipts and verification logs. Its checksum receipt is
 trained weights. The runnable source is frozen at the recorded pre-receipt commit;
 this later backup receipt does not change the scientific source.
 
-## Exact launch gate
+## Approved launch and measured forecast
 
-Read `docs/experiments/elite-policy/launch-proposal.json`: it is **not an approval**.
-It proposes one Secure Cloud RTX 4090 at the observed US$0.89/hour, the pinned
-`runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404` image, one new 10 GB network volume,
-SSH only, a five-hour independent deadline and a C$12 inclusive new-run cap.
-The four-hour planning estimate is unmeasured; the first authorized GPU operation
-is a discarded 30-second benchmark. Full fitting starts only if its measured
-forecast plus overhead fits the remaining deadline and cumulative budget.
+The user approved the bounded run and explicitly requested its launch. RTX 4090
+placement attempts were refused for capacity; its queued request was cancelled
+and verified cancelled. The single replacement is Secure Cloud RTX PRO 4500
+Blackwell in EU-RO-1 at US$0.72/hour. This changes only the execution hardware,
+within the approved C$12 inclusive cap; the frozen scientific protocol is unchanged.
+The pinned image is `runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404`, digest
+`sha256:0a360022e8de4375af99430f84e8b38951acc397252163a37ceac7204d01be35`.
 
-The proposal reserves C$10 for prior/pending project costs, giving C$22 planned
-cumulative operating cost with this run, below C$40 plus C$10 contingency.
-The USD/CAD 1.60 bound and fee/tax multipliers are conservative budget allowances,
-not a claim about the actual exchange rate or tax rate. Reconcile live bills and
-refresh capacity at launch. Stop before provisioning if the ledger no longer fits.
+The pod started at 18:13:22 UTC on November 24, 2026. Independent guards enforce
+23:13:22 UTC (five hours including setup), or stop after a verified-backup marker.
+Checkpoints live on this run's separate 10 GB network volume. The old evolutionary
+pod and volume remain outside this run's cleanup scope.
 
-The user must explicitly confirm before any billable GPU benchmark or training,
-as required by the accepted plan and the dated `AGENTS.md` amendment. Once approved,
-the operator creates the receipt binding the exact source/data, actions, deadline
-and cumulative forecast; the job wrapper rejects absent or mismatched approval.
+The discarded GPU benchmark processed 800,000 examples in 24.4773 seconds,
+32,683 examples/second. Its 7,343-second training-only forecast becomes 11,915
+seconds after the frozen 1.5 overhead factor and 900-second allowance. This passed
+the remaining-deadline gate. Seeds 42/43/44 then began the full 100-epoch recipe.
+The runnable source is frozen at `a7a142e0a5313a5538749a42a5c6d45aa4843991`;
+subsequent report-only edits do not alter the live training package.
+
+The conservative ledger reserves C$10 for prior/pending project costs and C$12 for
+this run, C$22 planned cumulative operating cost versus the C$40 allowance. The
+USD/CAD 1.60 bound and fee/tax multipliers are budget allowances, not actual rates.
+Live billing, final elapsed time and verified trained backups remain pending.
+Private launch receipts are under `runs/elite-launch-20261124` and are backed up
+with the final outputs. Test metrics remain sealed until every seed attempt and
+checkpoint selection is complete.
 
 ## Reproduction and final staging
 

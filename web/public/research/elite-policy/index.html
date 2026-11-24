@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Elite human-move baseline</title>
 <style>body{max-width:850px;margin:3rem auto;padding:1rem;font:18px/1.7 system-ui}td,th{text-align:left;padding:.5rem}table{width:100%;border-collapse:collapse}tr{border-bottom:1px solid #bbb}code{overflow-wrap:anywhere}</style>
 <nav><a href="/">Demo</a> · <a href="/research">Research</a></nav>
-<h1>Learning moves from elite human games</h1><p>Training has not started. The fourth demo choice remains unavailable.</p>
+<h1>Learning moves from elite human games</h1><p>Approved three-seed training is in progress. Test results remain sealed until every selection is frozen.</p>
 <p>This independently implemented baseline follows the <a href="https://github.com/Skripkon/chess-engine/tree/97238ead1892adca5e8626c568cd8129d5993ee9/engines/torch">Skripkon PyTorch method</a>:
 13 absolute board planes, two convolution layers, a 256-unit dense layer and a complete 4208-class move vocabulary.
 Labels are moves actually played by humans, not Stockfish best moves.</p>
@@ -16,8 +16,11 @@ Policy probabilities rank legal move predictions; they are not winning chances o
 100 epochs. Select minimum validation cross-entropy with earliest-epoch ties, seal all seed attempts,
 then evaluate held-out tests. Seed 42 remains representative. No architecture search follows these results automatically.</p>
 <h2>Results</h2><p>No trained result is claimed. Preparation and synthetic correctness tests are not study outcomes.</p>
+
+<p>The validation learning gate has not been evaluated yet.</p>
 <p>Full metrics, whole-game intervals, failures, hashes and the validation gate are in <a href="evidence.json">aggregate evidence</a>.
 Between-seed variation is distinct from whole-game bootstrap uncertainty. Human-move agreement does not establish playing strength or Elo.</p>
+<h2>Runtime and cost</h2><p>Final billing and elapsed-time reconciliation are pending.</p>
 <h2>Limitations and access</h2><p>The reference input omits explicit turn, castling-right, en-passant,
 halfmove-clock and repetition planes. Complete histories still enforce legality and automatic draws.
 Experimental playable access requires correctness, CPU export parity and a positive lower 95% whole-game
