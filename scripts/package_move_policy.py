@@ -20,6 +20,7 @@ def main():
                Path("requirements-policy.txt"),
                Path("docs/stockfish-move-policy.md"),
                Path("scripts/run_move_policy.sh"), Path("scripts/runpod_policy_guard.py"),
+               Path("scripts/run_move_policy_job.py"),
                Path("scripts/prepare_move_policy.py"), Path("scripts/verify_move_policy_results.py")]
     allowed += [f.relative_to(repository) for f in sorted((repository / "src/chessengine").glob("*.py"))]
     shards = []
