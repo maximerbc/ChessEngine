@@ -96,7 +96,7 @@ def report(root, repository='.'):
     cost_text = operations.get('cost_description', 'Final billing and elapsed-time reconciliation are pending.')
     html = f'''<!doctype html><html lang="en"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Elite human-move baseline</title>
-<style>body{{max-width:850px;margin:3rem auto;padding:1rem;font:18px/1.7 system-ui}}td,th{{text-align:left;padding:.5rem}}table{{width:100%;border-collapse:collapse}}tr{{border-bottom:1px solid #bbb}}code{{overflow-wrap:anywhere}}</style>
+<style>body{{max-width:850px;margin:3rem auto;padding:1rem;font:18px/1.7 system-ui}}td,th{{text-align:left;padding:.5rem}}table{{width:100%;min-width:640px;border-collapse:collapse}}.table-scroll{{max-width:100%;overflow-x:auto}}tr{{border-bottom:1px solid #bbb}}code{{overflow-wrap:anywhere}}</style>
 <nav><a href="/">Demo</a> · <a href="/research">Research</a></nav>
 <h1>Learning moves from elite human games</h1><p>{escape(status)}</p>
 <p>This independently implemented baseline follows the <a href="https://github.com/Skripkon/chess-engine/tree/97238ead1892adca5e8626c568cd8129d5993ee9/engines/torch">Skripkon PyTorch method</a>:
@@ -111,7 +111,7 @@ Policy probabilities rank legal move predictions; they are not winning chances o
 <h2>Frozen training protocol</h2><p>Fresh seeds 42/43/44, FP32, Adam 0.0001, batch 64, gradient clipping 1.0,
 100 epochs. Select minimum validation cross-entropy with earliest-epoch ties, seal all seed attempts,
 then evaluate held-out tests. Seed 42 remains representative. No architecture search follows these results automatically.</p>
-<h2>Results</h2>{('<table><thead><tr><th>Seed</th><th>Selected epoch</th><th>Test CE</th><th>Top one</th><th>Top three</th><th>Mean target rank</th><th>CPU export</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table>') if complete else '<p>No trained result is claimed. Preparation and synthetic correctness tests are not study outcomes.</p>'}
+<h2>Results</h2>{('<div class="table-scroll" role="region" aria-label="Seed results" tabindex="0"><table><thead><tr><th>Seed</th><th>Selected epoch</th><th>Test CE</th><th>Top one</th><th>Top three</th><th>Mean target rank</th><th>CPU export</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table></div>') if complete else '<p>No trained result is claimed. Preparation and synthetic correctness tests are not study outcomes.</p>'}
 {('<figure style="margin:1rem 0"><img src="curves.svg" style="width:100%;height:auto" alt="Actual training and validation curves for every seed"><figcaption>Dashed loss is online training loss; solid loss is validation CE. Stars mark validation-CE checkpoint selections. Final tests do not select checkpoints.</figcaption></figure>') if curves else ''}
 <p>{escape(learning)}</p>
 <p>Full metrics, whole-game intervals, failures, hashes and the validation gate are in <a href="evidence.json">aggregate evidence</a>.

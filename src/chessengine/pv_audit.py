@@ -91,10 +91,13 @@ def completed(config, groups, root):
             artifacts[str(path)] = digest(path)
     manifest = read_json("artifacts/models/manifest.json")
     for row in manifest["models"]:
-        if (
-            digest(Path("artifacts/models") / row["file"]) != row["sha256"]
-            or digest(Path("web/public/models") / row["file"]) != row["sha256"]
-        ):
+        path = Path("artifacts/models") / row["file"]
+        if digest(path) != row["sha256"]:
+            raise ValueError("Released model mismatch")
+        if row.get('kind') == 'human-move-policy':
+            from .elite_policy import NumpyElitePolicy, validate_release
+            validate_release(row, NumpyElitePolicy(path), path.parent)
+        elif digest(Path("web/public/models") / row["file"]) != row["sha256"]:
             raise ValueError("Released model mismatch")
     return dict(
         complete=True,

@@ -3,25 +3,21 @@ import { test, expect } from "@playwright/test";
 test.describe("production containers", () => {
   test.skip(!process.env.PLAYWRIGHT_BASE_URL, "Requires production containers");
 
-  test("real models, gameplay, comparison and export", async ({
-    page,
-  }, testInfo) => {
-    await page.goto("/");
-    await expect(
-      page.getByText("Engine online", { exact: true }),
-    ).toBeVisible();
-    const catalog = await page.request.get(`${process.env.DEPLOYMENT_API_URL}/models`);
-    const available = new Set((await catalog.json()).models.map((row: { id: string }) => row.id));
-    for (const [id, name] of [
-      ["handcrafted", /^Classical Handcrafted/],
-      ["supervised", /^Supervised A neural network/],
-      ["supervised-1m", /^Augmented Supervised Trained/],
-      ["elite-policy", /^Move Prediction A convolutional/],
-    ] as const) {
+  for (const [id, name] of [
+    ["handcrafted", /^Classical Handcrafted/],
+    ["supervised", /^Supervised A neural network/],
+    ["supervised-1m", /^Augmented Supervised Trained/],
+    ["elite-policy", /^Move Prediction A convolutional/],
+  ] as const) {
+    test(`real ${id}: gameplay, comparison and export`, async ({ page }, testInfo) => {
+      await page.goto("/");
+      await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
+      const catalog = await page.request.get(`${process.env.DEPLOYMENT_API_URL}/models`);
+      const available = new Set((await catalog.json()).models.map((row: { id: string }) => row.id));
       const card = page.getByRole("button", { name });
       if (!available.has(id)) {
         await expect(card).toBeDisabled();
-        continue;
+        return;
       }
       await card.click();
       await page
@@ -65,18 +61,19 @@ test.describe("production containers", () => {
         .click();
       expect((await download).suggestedFilename()).toBe("chessengine-game.pgn");
       await page.getByRole("button", { name: "New game", exact: true }).click();
-    }
-    await expect(
-      page.getByRole("button", { name: "Compare", exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      page.getByRole("button", { name: "Analyze this position", exact: true }),
-    ).toHaveCount(0);
-    await page.screenshot({
-      path: testInfo.outputPath("production.png"),
-      fullPage: true,
+
+      await expect(
+        page.getByRole("button", { name: "Compare", exact: true }),
+      ).toHaveCount(0);
+      await expect(
+        page.getByRole("button", { name: "Analyze this position", exact: true }),
+      ).toHaveCount(0);
+      await page.screenshot({
+        path: testInfo.outputPath(`production-${id}.png`),
+        fullPage: true,
+      });
     });
-  });
+  }
 
   test("mobile research survives API outage and reconnects", async ({
     page,

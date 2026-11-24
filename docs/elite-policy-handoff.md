@@ -1,113 +1,143 @@
-# Elite human-move baseline handoff
+# Completed elite human-move baseline handoff
 
-Branch: `codex/elite-pytorch-baseline`, based on the existing augmented alpha-beta
-integration at `b33405895c78e94c873687d5155dfdf59d2f3e5b`. Approved Runpod training
-is running. No push, merge or deployment has occurred.
+Branch: `codex/elite-pytorch-baseline`, based on augmented alpha-beta integration
+`b33405895c78e94c873687d5155dfdf59d2f3e5b`. The complete baseline and four-model
+demo are staged locally. **No push, merge or deployment has occurred.**
 
-## Ready locally
+## Completed study
 
-- The independently implemented reference CNN, complete 4208-class vocabulary,
-  bounded direct NumPy inference, resumable FP32 training and sealed test/report
-  pipeline are implemented.
-- The fresh November 2025 elite corpus is prepared: exactly 800,000 training,
-  100,000 validation and 100,000 test examples. Input archive SHA-256:
+The independently implemented reference CNN used fresh elite human played moves,
+not Stockfish training labels. All three seeds completed 100 FP32 epochs with the
+frozen Adam/batch/clipping recipe. No old weights were imported. Validation-only
+selection was sealed before test evaluation; the fixed representative stays seed 42.
+
+| Seed | Selected epoch | Test CE | Human top one | Human top three | Mean target rank |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 42 | 8 | 2.96556 | 25.695% | 47.607% | 7.11911 |
+| 43 | 8 | 2.95742 | 26.018% | 47.456% | 7.11962 |
+| 44 | 7 | 2.94613 | 25.899% | 47.533% | 7.13483 |
+
+Seed 42 test top-one 95% whole-game interval: 25.318%–26.042%. The test uniform
+legal baseline is 6.201%. Its validation paired advantage interval is
++19.570%–20.359 percentage points, passing the preregistered learning gate. The
+sample standard deviation of test top-one agreement across seeds is 0.163 percentage
+points; this is separate from the within-seed game-bootstrap uncertainty.
+All three exports passed strict logits/probabilities/chosen-move parity, both on
+the Runpod CPU and locally. No numerical training failure occurred.
+
+All curves show substantial overfitting after the early minimum. The full 100-epoch
+attempts are retained; the final tests use the validation-selected checkpoints.
+Frozen-checkpoint training CE is 2.23975/2.26146/2.31167, separately recorded from
+online epoch loss. Human-move agreement does not establish playing strength or Elo.
+Full results and actual curves: `docs/experiments/elite-policy/index.html` and
+`evidence.json`.
+
+## Data and execution identity
+
+- Exactly 800,000 train / 100,000 validation / 100,000 test examples. Whole-game
+  splits, global position deduplication and previous-corpus/reserved-pool exclusions
+  were frozen before training. All million raw/encoded labels, position keys and
+  owners were audited; full-history replay/encoding/draw checks sampled 1004 positions.
+- November 2025 input ZIP SHA-256:
   `1ffa577aa0a1352fa04c9a890a6706049a3a79edc52810b136758d1e2a1a2eab`.
-- Dataset SHA-256:
+- Dataset manifest SHA-256:
   `093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49`.
-  Counts, exclusions, source games and the independent audit are recorded in
-  `docs/experiments/elite-policy/preparation.json`. All million raw/encoded labels,
-  positions and split owners were checked; full history/encoding/draw checks were
-  sampled at 1004 positions, not claimed as exhaustive replays.
-- Dataset preparation took 663.48 seconds after a 31.41-second exclusion-index
-  build. The preliminary 100-game pass is part of the same resumable preparation,
-  not a trained pilot or playing-strength result.
-- The chooser contains Classical, Supervised, Augmented Supervised and Move
-  Prediction. The last card remains unavailable until real seed-42 evidence passes
-  the gate. Existing supervised checkpoint identities and default are preserved.
+- Frozen training source: `a7a142e0a5313a5538749a42a5c6d45aa4843991`.
+  Later report/recovery/audit edits did not alter the model, data, configuration or
+  training source. The original runnable package remains backed up byte-for-byte.
+- Selected seed-42 SHA-256:
+  `5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687`.
+- Selections SHA-256:
+  `0cf8201795baa918cf808aa7bbb218152af58db69efd9ccbe3191a5b3bdd3cbd`.
+- Secure Cloud RTX PRO 4500 Blackwell, US$0.72/hour, EU-RO-1. Two RTX 4090
+  placements were refused for capacity, and its queued request was verified cancelled.
+- Pinned image `runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404`, digest
+  `sha256:0a360022e8de4375af99430f84e8b38951acc397252163a37ceac7204d01be35`.
+  Actual Torch 2.8.0+cu128, NumPy 2.2.6, chess 1.11.2, Python 3.12.3, FP32.
+- Discarded benchmark: 800,000 examples in 24.4773 seconds. Raw training forecast
+  7,343 seconds; conservative launch forecast 11,915 seconds. Actual seed elapsed
+  times were 3,124.9 / 3,142.2 / 3,149.2 seconds, excluding initial data loading.
 
-## Verification
+## Four-model staging
 
-- Full Python run: 144 passed, 2 skipped. Ten focused new tests passed separately,
-  including two additional evidence-gate tests added after full-suite collection.
-- Browser suite: 47 passed, 6 skipped; the four direct-policy flows also passed
-  separately. Skips require production/live/local-preview services.
-- TypeScript/Vite production build, Ruff, CLI help and diff checks passed.
-- Docker/container execution is **not verified**: this machine has no Docker
-  executable. The existing container CI remains required before deployment.
+Classical, Supervised, Augmented Supervised and Move Prediction appear in that order.
+Supervised remains default. Both supervised checkpoint hashes remain unchanged.
+Manifest v5 stages seed 42 as **experimental playable**, with direct legal-move
+inference and nullable position-value/search fields. The backend policy checkpoint
+and validation gate are private artifacts; no policy weights are copied into the
+static public directory. Historical evolutionary, self-play and Stockfish-policy
+experiments remain in Research.
 
-Retained verification failures: the first broad run exposed a stale public v4
-manifest after the private v5 update; the manifests were synchronized. A subsequent
-run correctly rejected a source change made while its freeze/resume test was
-running; the stable-source run passed. Browser checks initially lacked Chromium,
-then hit macOS sandbox Mach-port restrictions; Chromium was installed in a task
-cache and browser checks ran with approved execution outside that sandbox. Old
-three-card expectations and a strict selector in the new policy test were fixed.
-An early audit/loader implementation repeatedly decompressed each shard; it was
-corrected before any real fit. No dataset labels or frozen quotas were changed.
-Some early verification commands exited 137; clean native Ruff runs were completed afterward.
+## Verification and retained failures
 
-## Durable private backup
+- Final pytest: **147 passed, 2 skipped**. CPU continuation, tiny-set learning,
+  alignment, exclusions, terminal/history-sensitive draws, promotion vocabulary,
+  source freeze, all model identities and integrity checks passed.
+- Browser suite: **48 passed, 9 skipped** (live/preview requirements). Separately,
+  all four real models plus mobile outage/reconnect passed: **5 passed**, 18.3 seconds.
+- TypeScript/Vite build, CLI/module help, Ruff and diff checks passed. Actual local
+  seed-42 runtime checks used no installed Torch: seven boards / 21 repetitions,
+  about 0.706 ms median and 6.84 ms maximum; this is a small correctness/latency check.
+- Docker image execution is **not verified**: no Docker, Podman or other container
+  runtime is installed. Existing container CI remains required before deployment.
 
-The original project checkout contains
-`runs/elite-policy-20261124/pretraining-backup.tar.gz` and the separate runnable
-`training-package.tar.gz`. The 203,767,547-byte backup has 39 verified members,
-including the runnable data/source bundle, original elite ZIP, indexes, audit
-receipts and verification logs. Its checksum receipt is
-`docs/experiments/elite-policy/backup.json`. This preserves prepared inputs, not
-trained weights. The runnable source is frozen at the recorded pre-receipt commit;
-this later backup receipt does not change the scientific source.
+Retained engineering failures: initial public/private manifest mismatch was fixed;
+a source-freeze test rejected an edit made during its run and passed on stable
+source; browser setup needed Chromium and execution outside the macOS sandbox;
+old three-card expectations/selectors were updated. Some early commands exited 137,
+with later clean verification passing. A foreground SSH launch request timed out,
+but the detached process was confirmed alive and no duplicate fit was started.
+The first post-staging full suite found a historical audit requiring a public policy
+weight copy; it now validates the private checkpoint and gate. The combined real-model
+browser test exhausted its total 30-second limit; independent per-model tests passed.
+The final visual check also caught a stale Vite public-file cache: restarting the
+preview served the valid generated SVG correctly. A new image-decode/mobile check
+passed (1 test), and the actual report was visually inspected. Restart a local Vite
+preview after generating new public files. These are engineering checks, separate
+from the three finite training outcomes.
 
-## Approved launch and measured forecast
+## Private backups, cleanup and cost
 
-The user approved the bounded run and explicitly requested its launch. RTX 4090
-placement attempts were refused for capacity; its queued request was cancelled
-and verified cancelled. The single replacement is Secure Cloud RTX PRO 4500
-Blackwell in EU-RO-1 at US$0.72/hour. This changes only the execution hardware,
-within the approved C$12 inclusive cap; the frozen scientific protocol is unchanged.
-The pinned image is `runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404`, digest
-`sha256:0a360022e8de4375af99430f84e8b38951acc397252163a37ceac7204d01be35`.
+Persistent folder in the original checkout: `runs/elite-policy-20261124`.
+The pretraining backup has 39 verified members (203,767,547 bytes), including the
+original source archive, prepared data and runnable package. The completed Runpod
+output archive is `runpod-results.tar.gz`, 166,316,542 bytes, 26 verified members,
+SHA-256 `2726ae33c77a04a31bf1cb81fecdae2c09efa5fad5b6d48bbcbf63d8ccf02617`.
+It preserves all three best/last models, model/optimizer/RNG/cursor checkpoints,
+metrics, sealed selections, final results, gates, source stamp, approval and logs.
+A local audit confirmed every minimum-validation selection, source hash and exact
+last-export/resume-model match. Operator receipts and local parity checks accompany
+this backup; the final receipt bundle is recorded in `delivery.json`.
 
-The pod started at 18:13:22 UTC on November 24, 2026. Independent guards enforce
-23:13:22 UTC (five hours including setup), or stop after a verified-backup marker.
-Checkpoints live on this run's separate 10 GB network volume. The old evolutionary
-pod and volume remain outside this run's cleanup scope.
+Backups were verified in both local copies before the independent guard stopped the
+GPU. This run's pod `nlapd6nrjsghs4` and 10 GB volume `sx2bx42702` were deleted;
+fresh get calls returned 404. The old evolutionary pod/volume were untouched.
 
-The discarded GPU benchmark processed 800,000 examples in 24.4773 seconds,
-32,683 examples/second. Its 7,343-second training-only forecast becomes 11,915
-seconds after the frozen 1.5 overhead factor and 900-second allowance. This passed
-the remaining-deadline gate. Seeds 42/43/44 then began the full 100-epoch recipe.
-The runnable source is frozen at `a7a142e0a5313a5538749a42a5c6d45aa4843991`;
-subsequent report-only edits do not alter the live training package.
+Rental window was at most 2.799 hours, including setup, benchmark, evaluation and
+backup. Estimated compute is US$2.015; US$1.346 of this run's pod/volume charges
+had posted at reconciliation, with posting still incomplete. The conservative
+inclusive new-run allowance is **C$5.74**, using the approved conversion/fee/tax
+bounds plus C$1.50 storage/rounding allowance, below the C$12 cap. With C$10
+reserved for prior/pending spending, the cumulative operating envelope is C$15.74,
+below C$40, with C$10 contingency separate. This is not a final CAD invoice.
 
-The conservative ledger reserves C$10 for prior/pending project costs and C$12 for
-this run, C$22 planned cumulative operating cost versus the C$40 allowance. The
-USD/CAD 1.60 bound and fee/tax multipliers are budget allowances, not actual rates.
-Live billing, final elapsed time and verified trained backups remain pending.
-Private launch receipts are under `runs/elite-launch-20261124` and are backed up
-with the final outputs. Test metrics remain sealed until every seed attempt and
-checkpoint selection is complete.
+## Reproduction and review
 
-## Reproduction and final staging
+Commands and protocol: `docs/elite-policy.md`. With the shared local virtualenv,
+set `PYTHONPATH=src`. Full training is not CI and requires a new bounded approval
+receipt for any additional paid run. Rebuild reports/staging from the frozen outputs:
 
-Use the commands and operations in `docs/elite-policy.md`. Run Python commands in
-the review worktree with `PYTHONPATH=src` when using the shared local virtualenv.
-The package builder includes only allowlisted source, requirements and the audited
-dataset; no credentials or existing released weights are uploaded.
+```sh
+PYTHONPATH=src .venv/bin/python -m chessengine.elite_release \
+  --root runs/elite-policy-20261124 --manifest artifacts/models/manifest.json
+PYTHONPATH=src .venv/bin/python -m chessengine.elite_report \
+  --root runs/elite-policy-20261124
+.venv/bin/python -m pytest
+npm --prefix web run build
+PLAYWRIGHT_BROWSERS_PATH=/private/tmp/elite-playwright npm --prefix web run test:e2e
+```
 
-After all three seed attempts finish, seal selections before test opening, publish
-every outcome and verify downloads locally. `chessengine.elite_release` can stage
-only seed 42 after validation/export checks. It must not choose another seed using
-test scores. Rebuild the report and both manifests, rerun release/browser/container
-checks and prepare the final local release commit. Then verify backups, remove only
-this run's temporary pod/volume and confirm their removal through fresh reads.
-No remote push, merge or deployment is included.
-
-## Checks during the live run
-
-A stable-source full pytest run passed 146 tests with 2 skips. The updated backup
-verifier also passed its corruption-rejection check. A separate clean environment
-with only `requirements-runtime.txt` started the API successfully and confirmed
-PyTorch is absent. The real three-model browser flows passed (2 production-style
-tests, 16.6 seconds), including Stockfish comparison, mobile research during an API
-outage, and reconnect. This is native-process evidence; it does not replace Docker
-image checks. Repeat the real-model checks after any successful seed-42 staging.
+Restore data/source from the pretraining backup and run outputs from the verified
+archive before invoking those commands in another checkout. Review the focused
+local commits on the isolated branch; the user handles any push. Deployment and
+architectural improvement treatments remain separate work.

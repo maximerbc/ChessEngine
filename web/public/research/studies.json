@@ -1,7 +1,8 @@
 {
   "assets": {
-    "elite-policy/evidence.json": "bcacc03bdfa0b797df9a0544c618293603136b891892fdf03d7494688e4c9a4f",
-    "elite-policy/index.html": "a77ac0c17e7729d3136fc04c00764b74ef109d07741627e643501efccca91394",
+    "elite-policy/curves.svg": "4aaa1f98a668a2fa31194c6904070b62bd2586ac8e48bf3439e5fdfdad3e5d7a",
+    "elite-policy/evidence.json": "b0e03880011506083ffadb3c1fdb9c2da9cfb72c62e4189baf4597cd926a9ae6",
+    "elite-policy/index.html": "241c3417a72b370198436689830b5dfba7cb1b1fc36a7ea86b7e959ad0a341c5",
     "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
     "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
     "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
@@ -32,19 +33,22 @@
   },
   "default_model": "supervised",
   "released_models": {
+    "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
     "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
     "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
   },
   "studies": [
     {
-      "availability": "awaiting validation",
-      "checkpoint_ids": {},
+      "availability": "experimental playable",
+      "checkpoint_ids": {
+        "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687"
+      },
       "id": "elite-pytorch-baseline-20261124",
       "level": "PyTorch direct-move baseline",
       "question": "Can a small CNN learn useful move preferences from elite human games?",
       "report": "/research/elite-policy/index.html",
-      "result": "running",
-      "takeaway": "Approved three-seed training is in progress. Test results remain sealed until every selection is frozen. Human-move agreement is separate from playing strength.",
+      "result": "complete",
+      "takeaway": "Completed baseline; experimental playable access enabled. Human-move agreement is separate from playing strength.",
       "title": "Elite human-move prediction"
     },
     {

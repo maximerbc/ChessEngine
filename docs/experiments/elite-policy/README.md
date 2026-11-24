@@ -1,6 +1,6 @@
 # Elite human-move baseline
 
-Approved three-seed training is in progress. Test results remain sealed until every selection is frozen.
+Completed baseline; experimental playable access enabled.
 
 Protocol: `docs/elite-policy.md`. Full aggregate evidence: `evidence.json`.
 No strength claim follows from human-move agreement.

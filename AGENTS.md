@@ -1,6 +1,8 @@
 # ChessEngine project contract
 
 ## Elite human-move baseline and four-model demo (2026-11-24)
+
+- The CNN checkpoint is a backend artifact. Static assets contain aggregate evidence and the manifest, without a policy weight download. Integrity audits validate its private checkpoint and learning/export gate; existing supervised public copies remain checksum-matched.
 - This approved plan supersedes incompatible earlier move-policy/release/budget rules for this named study only. Preserve all previous studies and unrelated work. No push, merge or deployment; the user handles remote actions.
 - Reproduce the 13-plane Skripkon PyTorch CNN from pinned commit 97238ead1892adca5e8626c568cd8129d5993ee9, with a complete deterministic 4208-class move vocabulary. This is an explicit limited-state encoder/direct-policy serving exception; do not import previous model weights.
 - Train from fresh elite human games, not Stockfish labels: 800k training/100k validation/100k test, frozen whole-game splits, global position deduplication, old-corpus and reserved-game/position exclusions. Preserve full original histories and automatic draws.

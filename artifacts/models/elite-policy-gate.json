@@ -1,0 +1,12 @@
+{
+  "checkpoint_sha256": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
+  "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+  "export_passed": true,
+  "passed": true,
+  "seed": 42,
+  "selections_sha256": "0cf8201795baa918cf808aa7bbb218152af58db69efd9ccbe3191a5b3bdd3cbd",
+  "validation_top1_difference_ci": [
+    0.19570059891769717,
+    0.20358967273143466
+  ]
+}

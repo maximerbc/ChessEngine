@@ -88,3 +88,19 @@ test("untrained policy stays unavailable and preserves opponent in saved URLs", 
   await expect(card).toBeDisabled();
   await expect(page).toHaveURL(/model=elite-policy/);
 });
+
+test("elite baseline report supports mobile reading and real result rows", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const evidence = await (await page.request.get('/research/elite-policy/evidence.json')).json();
+  await page.goto('/research/elite-policy/index.html');
+  await expect(page.getByRole('heading', { name: 'Learning moves from elite human games' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+  if (evidence.status === 'complete') {
+    await expect(page.getByRole('region', { name: 'Seed results' }).locator('tbody tr')).toHaveCount(3);
+    const curves = page.getByRole('img', { name: 'Actual training and validation curves for every seed' });
+    await expect(curves).toBeVisible();
+    await expect.poll(() => curves.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  }
+  await page.getByRole('link', { name: 'Research', exact: true }).click();
+  await expect(page).toHaveURL(/\/research$/);
+});

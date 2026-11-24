@@ -1,0 +1,98 @@
+{
+  "status": "complete-local-staging",
+  "frozen_source_commit": "a7a142e0a5313a5538749a42a5c6d45aa4843991",
+  "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+  "raw_output_backup": {
+    "file": "runpod-results.tar.gz",
+    "sha256": "2726ae33c77a04a31bf1cb81fecdae2c09efa5fad5b6d48bbcbf63d8ccf02617",
+    "members": 26,
+    "verified": true
+  },
+  "complete_private_backup": {
+    "file": "completed-study-backup.tar.gz",
+    "sha256": "6b0c86ff08a17bae7428f981fa7017bd193c8be6655ff488d25bb61c1437330c",
+    "bytes": 166400419,
+    "members": 72,
+    "complete": true,
+    "verified": true
+  },
+  "verification": {
+    "pytest": {
+      "passed": 147,
+      "skipped": 2,
+      "seconds": 86.66
+    },
+    "browser": {
+      "passed": 48,
+      "skipped": 9,
+      "seconds": 26.0
+    },
+    "real_four_model_browser": {
+      "passed": 5,
+      "seconds": 18.3
+    },
+    "build": true,
+    "ruff": true,
+    "cli": true,
+    "runtime_torch_installed": false,
+    "all_seed_local_export_parity": true,
+    "docker_verified": false,
+    "docker_limitation": "No installed container runtime",
+    "retained_integration_failures": [
+      "Historical audit required a public policy copy; now checks private checkpoint plus gate.",
+      "Combined four-model browser test hit total timeout; independent per-model checks passed."
+    ]
+  },
+  "cleanup": {
+    "pod_id": "nlapd6nrjsghs4",
+    "volume_id": "sx2bx42702",
+    "pod_stopped_by_guard": true,
+    "pod_deleted_readback": 404,
+    "volume_deleted_readback": 404,
+    "confirmed_stopped_utc": "2026-11-24T21:01:19Z",
+    "backup_sha256": "2726ae33c77a04a31bf1cb81fecdae2c09efa5fad5b6d48bbcbf63d8ccf02617",
+    "backup_members_verified": 26,
+    "queue_4090": "CANCELLED",
+    "unrelated_pod_id": "v9boe441yf0e0r",
+    "unrelated_pod_status": "EXITED",
+    "unrelated_volume_id": "lic7jwwjox",
+    "unrelated_resources_untouched": true
+  },
+  "cost": {
+    "rental_start_utc": "2026-11-24T18:13:22.630000+00:00",
+    "stopped_confirmed_utc": "2026-11-24T21:01:19+00:00",
+    "rental_seconds_upper": 10076.37,
+    "hourly_usd": 0.72,
+    "estimated_compute_usd_upper": 2.015274,
+    "posted_pod_usd": 1.3431083103641868,
+    "posted_volume_usd": 0.002916666562668979,
+    "estimated_unposted_compute_usd_upper": 0.6801518002709148,
+    "conversion_bound_cad_per_usd": 1.6,
+    "fee_multiplier": 1.05,
+    "tax_multiplier": 1.25,
+    "storage_and_rounding_allowance_cad": 1.5,
+    "conservative_new_run_cad_upper": 5.74,
+    "approved_new_run_cap_cad": 12,
+    "prior_project_reserve_cad": 10,
+    "conservative_cumulative_operating_cad_upper": 15.74,
+    "operating_allowance_cad": 40,
+    "contingency_cad": 10,
+    "total_ceiling_cad": 50,
+    "account_posted_usd": 4.406887573655695,
+    "prior_account_posted_excluding_this_run_usd": 3.060862596728839,
+    "billing_status": "posting-incomplete; compute estimated from elapsed rental, conservative conversion/tax allowances; not a final CAD invoice"
+  },
+  "no_push": true,
+  "no_merge": true,
+  "no_deployment": true,
+  "additional_visual_validation": {
+    "passed": true,
+    "report_svg_content_type": "image/svg+xml",
+    "report_svg_decodes_in_browser": true,
+    "mobile_no_horizontal_overflow": true,
+    "test_passed": 1,
+    "test_seconds": 1.3,
+    "log_sha256": "0dc3a88851b307cb284d3d53e41b7d6e0fdb011b5f8b3f0dbba3ceec91da54d5",
+    "note": "Restarted the existing Vite preview to refresh its new-public-file cache; generated and built SVG were already valid."
+  }
+}

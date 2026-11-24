@@ -1,55 +1,89 @@
 {
-  "release_version": 5,
   "default": "supervised",
-  "required_model_ids": [
-    "supervised",
-    "supervised-1m"
-  ],
   "models": [
     {
-      "id": "supervised",
-      "file": "supervised.npz",
-      "name": "Supervised model",
-      "sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
-      "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1",
       "architecture": [
         841,
         128,
         64,
         1
       ],
+      "evidence_id": "original-study",
       "feature_version": 1,
+      "file": "supervised.npz",
+      "id": "supervised",
+      "name": "Supervised model",
       "search": {
         "strategy": "alpha-beta"
       },
-      "evidence_id": "original-study"
+      "sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+      "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1"
     },
     {
-      "id": "supervised-1m",
-      "file": "supervised-1m.npz",
-      "name": "Augmented Supervised",
-      "kind": "supervised",
-      "sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
       "architecture": [
         853,
         128,
         64,
         1
       ],
+      "authorization_id": "user-20261122-augmented-play",
+      "documentation_path": "/research?study=gpu-value",
+      "evidence_id": "gpu-value-v1-supervised-20261122",
+      "experimental": true,
       "feature_version": 3,
+      "file": "supervised-1m.npz",
+      "final_sha256": null,
+      "id": "supervised-1m",
+      "kind": "supervised",
+      "name": "Augmented Supervised",
+      "qualification_sha256": null,
+      "qualified": false,
+      "release_status": "experimental-playable",
       "search": {
         "strategy": "alpha-beta"
       },
-      "evidence_id": "gpu-value-v1-supervised-20261122",
+      "search_authorization_id": "user-20261122-augmented-alpha-beta",
+      "sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "strength_status": "not-established"
+    },
+    {
+      "architecture": {
+        "channels": [
+          64,
+          128
+        ],
+        "classes": 4208,
+        "encoder": "absolute-13-legal-destinations-v1",
+        "format": "elite-human-cnn-v1",
+        "hidden": 256,
+        "label_source": "human-played-move",
+        "reference_commit": "97238ead1892adca5e8626c568cd8129d5993ee9",
+        "vocabulary_sha256": "c0b95687c52b254870ed521fd0659e72a36567b707c818a06c5b64b0d1e661ab"
+      },
+      "authorization_id": "user-20261124-elite-play",
+      "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+      "documentation_path": "/research?study=elite-pytorch-baseline-20261124",
+      "evidence_id": "elite-pytorch-baseline-20261124",
       "experimental": true,
+      "file": "elite-policy.npz",
+      "gate_file": "elite-policy-gate.json",
+      "gate_sha256": "675a750fac78eb714717b06c8caf1446d855d386c50dbba9d3adc9806d8a814e",
+      "id": "elite-policy",
+      "kind": "human-move-policy",
+      "name": "Move Prediction",
       "qualified": false,
       "release_status": "experimental-playable",
-      "authorization_id": "user-20261122-augmented-play",
-      "strength_status": "not-established",
-      "qualification_sha256": null,
-      "final_sha256": null,
-      "documentation_path": "/research?study=gpu-value",
-      "search_authorization_id": "user-20261122-augmented-alpha-beta"
+      "search": {
+        "strategy": "direct-policy-v1"
+      },
+      "sha256": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
+      "strength_status": "not-established"
     }
+  ],
+  "release_version": 5,
+  "required_model_ids": [
+    "supervised",
+    "supervised-1m",
+    "elite-policy"
   ]
 }

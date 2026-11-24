@@ -194,3 +194,20 @@ launch confirmation. No billable benchmark or training is authorized before that
 confirmation. The new cumulative budget is C$40 operating plus C$10 contingency,
 inside C$50 total; prior and pending charges count. No remote push, merge or
 deployment is included.
+
+## 2026-11-24: completed elite baseline staging
+
+All three fresh seeds completed the frozen 100-epoch recipe. Validation CE selected
+epochs 8/8/7; the fixed seed-42 checkpoint passed the learning and CPU-export gates
+and is staged locally as experimental playable. Human-move agreement is not
+playing-strength evidence. Full metrics, uncertainty and actual curves are in
+`docs/experiments/elite-policy`; no improvement treatment was added.
+
+The backend manifest declares the private NumPy policy and its validation gate;
+static assets contain aggregate evidence and the manifest. Historical integrity
+audits validate that private checkpoint/gate without requiring a public policy
+weight copy. The two existing supervised public artifacts remain unchanged.
+
+Verified private backups preceded independent guard shutdown and removal of only
+this run's pod and volume. Billing remains partly unposted; conservative allowances
+are recorded separately from posted charges. No push, merge or deployment occurred.
