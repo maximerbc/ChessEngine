@@ -276,12 +276,14 @@ def encode_shards(config, output):
         if digest(source) != chunk["sha256"]:
             raise ValueError("Corrupt teacher labels")
         rows = list(records(source))
+        boards = {}
         for row in rows:
             split, gid = row["split"], row["game_id"]
             if split not in SPLITS or (gid in games and games[gid] != split):
                 raise ValueError("Source-game split leakage")
             games[gid] = split
             board = restore(row)
+            boards[id(row)] = board
             key = canonical(board)
             if key in owners:
                 raise ValueError("Duplicate or cross-split policy position")
@@ -294,7 +296,7 @@ def encode_shards(config, output):
                 continue
             xs, moves, targets, offsets = [], [], [], [0]
             for row in selected:
-                board = restore(row)
+                board = boards[id(row)]
                 legal = list(board.legal_moves)
                 xs.append(encode(board, 3))
                 moves.append(move_features(board, legal))
@@ -310,6 +312,9 @@ def encode_shards(config, output):
             path.with_suffix(".tmp").replace(path)
             parts.append({"path": name, "split": split, "count": len(selected), "sha256": digest(path)})
             counts[split] += len(selected)
+        write_json(root / "progress.json", {"stage": "encoding", "counts": counts,
+                   "positions": sum(counts.values()), "total": sum(positions["counts"].values())})
+        print(f"Encoded {sum(counts.values()):,} positions", flush=True)
     if counts != positions["counts"]:
         raise ValueError("Encoded counts disagree with frozen positions")
     result = {"format": "direct-move-data-v1", "feature_version": 3, "move_schema": 1,
