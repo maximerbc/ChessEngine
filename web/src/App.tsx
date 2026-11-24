@@ -43,9 +43,9 @@ type Model = {
 };
 type Analysis = GuideAnalysis & {
   best_move: string | null;
-  value: number;
-  depth: number;
-  nodes: number;
+  value: number | null;
+  depth: number | null;
+  nodes: number | null;
   strategy?: string;
   simulations?: number;
   elapsed_ms: number;
@@ -375,7 +375,6 @@ export default function App() {
   const opponentOptions = showcaseEnabled
     ? models
     : releasedApproaches
-        .filter((a) => a.id !== "evolutionary-gpu")
         .map((a) => ({
           id: a.id,
           name: a.name,
@@ -765,9 +764,8 @@ export default function App() {
               <>
                 <h1 className="sr-only">Play chess</h1>
                 <p>
-                  Play Classical, Supervised (80k), or Augmented Supervised
-                  (one-million-position dataset). Compare how each model
-                  evaluates the board and chooses moves.
+                  Play Classical, Supervised, Augmented Supervised, or Move Prediction.
+                  Availability follows each model’s validation status.
                 </p>
               </>
             ) : (
@@ -879,7 +877,9 @@ export default function App() {
                     {!showcaseEnabled
                       ? currentModel?.strategy === "puct-uniform-v1"
                         ? "CPU PUCT search"
-                        : "Shared alpha-beta search"
+                        : currentModel?.strategy === "direct-policy-v1"
+                          ? "Human-move prediction · no search"
+                          : "Shared alpha-beta search"
                       : currentModel?.evidence === "pilot"
                         ? "Pilot checkpoint · research in progress"
                         : "Shared search engine"}
@@ -985,7 +985,7 @@ export default function App() {
                       <span className="selected-label">
                         {connection === "ready" &&
                         (m.id === "evolutionary-gpu" ||
-                          m.id === "supervised-1m") &&
+                          m.id === "supervised-1m" || m.id === "elite-policy") &&
                         !models.some((installed) => installed.id === m.id)
                           ? "IN RESEARCH"
                           : connection === "loading"
@@ -1069,24 +1069,32 @@ export default function App() {
                   <Activity size={16} />
                 </div>
                 <div className="eval-value">
-                  {analysis
+                  {analysis?.strategy === "direct-policy-v1"
+                    ? "Move prediction"
+                    : analysis && analysis.value !== null
                     ? analysis.mate_score
                       ? "Mate found"
                       : `${analysis.value >= 0 ? "+" : ""}${analysis.value.toFixed(2)}`
                     : "—"}
-                  <span>MODEL ADVANTAGE</span>
+                  <span>{analysis?.strategy === "direct-policy-v1" ? "NO POSITION VALUE" : "MODEL ADVANTAGE"}</span>
                 </div>
-                <div className="eval-track">
+                {analysis?.strategy !== "direct-policy-v1" && <div className="eval-track">
                   <span
                     style={{
-                      width: `${analysis ? (analysis.value + 1) * 50 : 50}%`,
+                      width: `${analysis && analysis.value !== null ? (analysis.value + 1) * 50 : 50}%`,
                     }}
                   />
-                </div>
+                </div>}
                 <p className="micro">
-                  From the engine’s perspective before its last move. Not a win
-                  probability.
+                  {analysis?.strategy === "direct-policy-v1"
+                    ? "These probabilities rank legal human-move predictions. They are not winning chances or position evaluations."
+                    : "From the engine’s perspective before its last move. Not a win probability."}
                 </p>
+                {analysis?.strategy === "direct-policy-v1" && <ol aria-label="Predicted legal moves">
+                  {analysis.root_rankings?.slice(0, 5).map(row => <li key={row.move}>
+                    {row.move} · {(row.probability * 100).toFixed(1)}%
+                  </li>)}
+                </ol>}
                 <div className="metrics">
                   <div>
                     <strong>{analysis?.depth ?? "—"}</strong>
@@ -1111,12 +1119,13 @@ export default function App() {
                         ? `${(analysis.elapsed_ms / 1000).toFixed(2)}s`
                         : "—"}
                     </strong>
-                    <span>SEARCH TIME</span>
+                    <span>{analysis?.strategy === "direct-policy-v1" ? "INFERENCE TIME" : "SEARCH TIME"}</span>
                   </div>
                 </div>
-                <span className="tiny-label">PRINCIPAL VARIATION</span>
+                <span className="tiny-label">{analysis?.strategy === "direct-policy-v1" ? "DIRECT MOVE SELECTION" : "PRINCIPAL VARIATION"}</span>
                 <p className="pv">
-                  {analysis
+                  {analysis?.strategy === "direct-policy-v1" ? "One network prediction; no search continuation."
+                    : analysis
                     ? sanLine(
                         boardFrom(initialFen, analysisHistory),
                         analysis.pv,

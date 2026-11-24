@@ -45,6 +45,7 @@ for (const url of ["/lab/rl?moves=e2e4,e7e5", "/?model=rl&moves=e2e4,e7e5"]) {
       "Classical",
       "Supervised",
       "Augmented Supervised",
+      "Move Prediction",
     ]);
     await expect(
       page.getByRole("link", { name: "RL weights", exact: true }),
@@ -68,7 +69,7 @@ for (const [status] of [
       name: /^GPU-trained Evolutionary A new/,
     });
     await expect(card).toHaveCount(0);
-    await expect(page.locator(".model-option")).toHaveCount(3);
+    await expect(page.locator(".model-option")).toHaveCount(4);
     await page
       .getByRole("button", { name: "Explore the evidence", exact: true })
       .click();

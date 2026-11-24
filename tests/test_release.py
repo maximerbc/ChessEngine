@@ -27,8 +27,13 @@ def test_release_models_and_recorded_results_are_consistent():
             continue
         path = manifest_path.parent / entry["file"]
         assert digest(path) == entry["sha256"]
-        assert digest(root / "web/public/models" / entry["file"]) == entry["sha256"]
-        assert np.isfinite(load_evaluator(path)(chess.Board()))
+        if entry['id'] != 'elite-policy':
+            assert digest(root / "web/public/models" / entry["file"]) == entry["sha256"]
+        if entry['id'] == 'elite-policy':
+            from chessengine.elite_policy import NumpyElitePolicy
+            assert chess.Move.from_uci(NumpyElitePolicy(path).choose(chess.Board())) in chess.Board().legal_moves
+        else:
+            assert np.isfinite(load_evaluator(path)(chess.Board()))
     report = json.loads((root / "web/public/research/results.json").read_text())
     for row in report["aggregate"]["runs"]:
         games = json.loads((root / f"web/public/research/games-seed-{row['seed']}.json").read_text())["games"]

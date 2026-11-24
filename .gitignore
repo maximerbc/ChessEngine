@@ -35,3 +35,6 @@ web/*.tsbuildinfo
 !artifacts/models/evolutionary.npz
 
 !artifacts/models/supervised-1m.npz
+
+!artifacts/models/elite-policy.npz
+!artifacts/models/elite-policy-gate.json

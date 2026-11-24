@@ -34,6 +34,10 @@ def winner(value):
 
 
 def model_assessments(board, evaluator, settings, strategy='alpha-beta', simulations=64):
+    if strategy == 'direct-policy-v1':
+        result = evaluator.analyze(board)
+        return dict(position_value=None, search=None, policy=dict(strategy=strategy,
+                    root_rankings=result['root_rankings'], elapsed_ms=result['elapsed_ms']))
     sign = 1 if board.turn == chess.WHITE else -1
     position_value = float(evaluator(board)) * sign
     search = (ValueSearch(evaluator, simulations, settings.model_time_ms) if strategy == STRATEGY

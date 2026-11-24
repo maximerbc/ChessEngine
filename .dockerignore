@@ -19,6 +19,8 @@ artifacts/models/*
 !artifacts/models/manifest.json
 !artifacts/models/supervised.npz
 !artifacts/models/supervised-1m.npz
+!artifacts/models/elite-policy.npz
+!artifacts/models/elite-policy-gate.json
 !artifacts/models/evolutionary.npz
 !web/
 !web/package.json

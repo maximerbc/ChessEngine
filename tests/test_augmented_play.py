@@ -23,7 +23,7 @@ def test_real_preview_identity_and_production_move(monkeypatch):
     assert public_manifest == manifest
     with TestClient(create_app()) as client:
         data = client.get('/models').json()
-        assert [r['id'] for r in data['models']] == ['handcrafted', 'supervised', 'supervised-1m']
+        assert [r['id'] for r in data['models']] == ['handcrafted', *manifest['required_model_ids']]
         preview = data['models'][2]
         assert preview['experimental'] and preview['qualified'] is False
         assert preview['strength_status'] == 'not-established'
