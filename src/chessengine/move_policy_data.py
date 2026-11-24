@@ -219,7 +219,8 @@ def label(config, output, input_root="."):
                 raise ValueError("Teacher NNUE option mismatch")
             engine.configure({name: str((Path(input_root) / net["path"]).resolve())
                               for name, net in networks.items()})
-        engine.configure({"Threads": 1, "Hash": 32, "MultiPV": 1, "Skill Level": 20,
+        # python-chess manages MultiPV and sets it to one for analyse(multipv=None).
+        engine.configure({"Threads": 1, "Hash": 32, "Skill Level": 20,
                           "UCI_LimitStrength": False})
         for i, subset in enumerate(chunks(records(root / "positions.jsonl"), config["shard_size"])):
             path = root / "labels" / f"{i:05}.jsonl"

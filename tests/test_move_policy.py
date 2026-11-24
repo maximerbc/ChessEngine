@@ -280,7 +280,7 @@ def test_label_resume_and_history(tmp_path, monkeypatch):
             pass
 
         def configure(self, options):
-            pass
+            assert 'MultiPV' not in options  # Automatically managed by python-chess.
 
         def analyse(self, board, limit, game):
             assert board.move_stack and limit.nodes == 10000

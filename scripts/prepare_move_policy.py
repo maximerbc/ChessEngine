@@ -14,7 +14,9 @@ def main():
     args = parser.parse_args()
     root = Path(args.output)
     root.mkdir(parents=True, exist_ok=True)
-    receipt = {'started_unix': time.time(), 'stages': [], 'paid_cost_cad': 0}
+    previous = root / 'local-execution.json'
+    receipt = json.loads(previous.read_text()) if previous.exists() else {
+        'started_unix': time.time(), 'stages': [], 'paid_cost_cad': 0}
     for stage in ['prepare', 'label', 'encode']:
         start = time.time()
         result = subprocess.run([sys.executable, '-u', '-m', 'chessengine.move_policy_train', stage,
