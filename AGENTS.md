@@ -141,3 +141,7 @@
 - The user authorized the fixed 50k/5k/5k direct-policy run, local pinned-Stockfish labeling, and sequential Runpod fits for seeds 42/43/44 without a separate pilot or compulsory benchmark. Keep all first-epoch updates; use that real epoch for the remaining-work forecast.
 - New-study total paid ceiling is C$10 including setup, storage, taxes and conversion, with C$2 contingency and C$8 planned spend. Arm a deadline and monitor cost independently. Pause with checkpoints if the unchanged remaining protocol cannot fit; do not shrink data, seeds or scientific settings.
 - After verified local backups, remove only this conversation's temporary training Pod and new volume. Existing evolutionary resources remain untouched. No promotion, merge or deployment is authorized.
+
+### Million-position correction (2026-11-23)
+- The user corrected the intended size to exactly 1,000,000 positions overall: 800,000 training, 100,000 validation and 100,000 test. This supersedes the earlier 50k/5k/5k bounded configuration. Never launch the approved cloud job unless both configuration and encoded manifests match these exact counts.
+- Preserve the completed 60,007-position preparation as superseded work; no CNN fit started on it. The briefly rented Pod and new volume were stopped/deleted before any fit. Billing must retain this aborted setup rather than calling it a free pilot. Keep the C$10 ceiling unchanged unless the user changes it.

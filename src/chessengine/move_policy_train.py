@@ -93,6 +93,8 @@ def identity(config, root, seed, device):
     meta = read_json(Path(root) / "dataset.json")
     if meta["config"] != config:
         raise ValueError("Dataset/config mismatch")
+    if meta["counts"] != config["positions"]:
+        raise ValueError("Dataset count mismatch: exact approved split counts are required")
     return json_hash({"config": config, "dataset": digest(Path(root) / "dataset.json"),
                       "seed": seed, "device": str(device), "runtime": runtime_versions(),
                       "science": scientific_hashes()})

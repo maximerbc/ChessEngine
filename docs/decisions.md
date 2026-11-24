@@ -201,3 +201,17 @@ indexing position-only exclusions, and retain full histories for training record
 Record local progress, cloud receipts, all seed results and any failures. Back up
 and verify outputs before deleting only the new training resources; preserve the
 existing evolutionary Pod/volume. No deployment or model promotion is included.
+
+## 2026-11-23 — Correct direct-policy size to one million
+
+The user corrected the intended supervised move-policy dataset to exactly
+800,000 training / 100,000 validation / 100,000 test positions. The earlier
+60,007-position preparation is preserved as superseded, with no student CNN fit
+started. Temporary Pod `k6g519tjra6wdk` was stopped and deleted, followed by its
+new volume `x371etfrtl`; existing evolutionary resources were untouched. The
+first billing reads had no posted records and must not be interpreted as zero
+actual charge. The previous local labels are not a completed million-position
+study or a pilot. Enforce exact counts before labeling, encoding and cloud fitting;
+source games remain in one split even if unused samples at a quota boundary are
+discarded. The C$10 budget is unchanged. Corpus reuse versus a fresh source pool
+is being resolved with the user before dependent work proceeds.

@@ -160,6 +160,8 @@ def prepare(config, output, input_root="."):
                 if counts[split] >= targets[split]:
                     continue
                 for key, row in db.execute("SELECT key,row FROM samples WHERE game=? ORDER BY key", (gid,)):
+                    if counts[split] >= targets[split]:
+                        break  # Discard unused samples; never assign this game to another split.
                     if key not in seen:
                         seen.add(key)
                         out.write(row + "\n")
@@ -181,6 +183,8 @@ def verify_positions(root, config):
     meta = read_json(root / "positions.manifest.json")
     if meta["identity"]["config"] != config or meta["sha256"] != digest(root / "positions.jsonl"):
         raise ValueError("Policy positions/config mismatch")
+    if meta["counts"] != config["positions"]:
+        raise ValueError("Policy split counts must exactly match the approved configuration")
     return meta
 
 
@@ -315,7 +319,7 @@ def encode_shards(config, output):
         write_json(root / "progress.json", {"stage": "encoding", "counts": counts,
                    "positions": sum(counts.values()), "total": sum(positions["counts"].values())})
         print(f"Encoded {sum(counts.values()):,} positions", flush=True)
-    if counts != positions["counts"]:
+    if counts != positions["counts"] or counts != config["positions"]:
         raise ValueError("Encoded counts disagree with frozen positions")
     result = {"format": "direct-move-data-v1", "feature_version": 3, "move_schema": 1,
               "config": config, "labels_sha256": digest(root / "labels.manifest.json"),

@@ -336,3 +336,13 @@ def test_budget_forecast_pauses_without_test_selection(tmp_path, monkeypatch):
     assert not (tmp_path / 'test-protocol.json').exists()
     script = Path(__file__).resolve().parents[1] / 'scripts/run_move_policy.sh'
     assert 'move_policy_train benchmark' not in script.read_text()
+
+
+def test_training_rejects_inexact_split_counts(tmp_path):
+    from chessengine.common import read_json
+    config = fixture_data(tmp_path)
+    meta = read_json(tmp_path / 'dataset.json')
+    meta['counts']['train'] += 1
+    write_json(tmp_path / 'dataset.json', meta)
+    with pytest.raises(ValueError, match='count mismatch'):
+        train(config, tmp_path, 42)

@@ -9,6 +9,11 @@ import time
 
 def main():
     root = Path('runs/stockfish-move-policy')
+    approved = {'train': 800000, 'validation': 100000, 'test': 100000}
+    config = json.loads(Path('configs/stockfish-move-policy.json').read_text())
+    dataset = json.loads((root / 'dataset.json').read_text())
+    if config['positions'] != approved or dataset['counts'] != approved:
+        raise RuntimeError('This authorized run requires exactly 800000/100000/100000 positions')
     root.mkdir(parents=True, exist_ok=True)
     receipt = {'started_unix': time.time(), 'status': 'running',
                'deadline_unix': float(os.environ['CHESS_POLICY_DEADLINE_UNIX']),

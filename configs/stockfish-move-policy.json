@@ -1,5 +1,5 @@
 {
-  "study": "stockfish-direct-move-cnn-20261122",
+  "study": "stockfish-direct-move-cnn-1m-20261123",
   "source": "data/lichess-2013-07.pgn.zst",
   "exclusions": [
     "data/main-labeled.jsonl",
@@ -17,7 +17,11 @@
   ],
   "sampling_seed": 20261122,
   "max_games": 1000000,
-  "positions": {"train": 50000, "validation": 5000, "test": 5000},
+  "positions": {
+    "train": 800000,
+    "validation": 100000,
+    "test": 100000
+  },
   "shard_size": 1000,
   "teacher": {
     "binary": "tools/stockfish/stockfish-macos-universal",
@@ -32,7 +36,11 @@
       }
     }
   },
-  "seeds": [42, 43, 44],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
   "representative_seed": 42,
   "training": {
     "learning_rate": 0.0003,
