@@ -101,3 +101,13 @@ test scores. Rebuild the report and both manifests, rerun release/browser/contai
 checks and prepare the final local release commit. Then verify backups, remove only
 this run's temporary pod/volume and confirm their removal through fresh reads.
 No remote push, merge or deployment is included.
+
+## Checks during the live run
+
+A stable-source full pytest run passed 146 tests with 2 skips. The updated backup
+verifier also passed its corruption-rejection check. A separate clean environment
+with only `requirements-runtime.txt` started the API successfully and confirmed
+PyTorch is absent. The real three-model browser flows passed (2 production-style
+tests, 16.6 seconds), including Stockfish comparison, mobile research during an API
+outage, and reconnect. This is native-process evidence; it does not replace Docker
+image checks. Repeat the real-model checks after any successful seed-42 staging.
