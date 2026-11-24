@@ -102,7 +102,8 @@ def identity(config, root, seed, device):
 
 def scientific_hashes():
     return {n: digest(Path(__file__).with_name(n + ".py"))
-            for n in ("move_policy", "move_policy_data", "move_policy_train", "features", "ranking", "train")}
+            for n in ("move_policy", "move_policy_data", "move_policy_reuse", "move_policy_train",
+                      "features", "ranking", "train")}
 
 
 def runtime_versions():

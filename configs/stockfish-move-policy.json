@@ -1,12 +1,7 @@
 {
   "study": "stockfish-direct-move-cnn-1m-20261123",
-  "source": "data/lichess-2013-07.pgn.zst",
+  "source": "data/gpu-value-v1/positions.jsonl",
   "exclusions": [
-    "data/main-labeled.jsonl",
-    "data/expanded-200k-labeled.jsonl",
-    "data/pilot-labeled.jsonl",
-    "data/gpu-value-v1/positions.jsonl",
-    "runs/evolutionary-augmented-20261122/exclusion-metadata.jsonl",
     "configs/openings.json",
     "runs/rl-improvement/openings.json",
     "runs/move-ranking/openings.json",
@@ -48,5 +43,9 @@
     "batch_size": 256,
     "epochs": 40,
     "patience": 6
-  }
+  },
+  "preparation_mode": "reuse",
+  "reuse_source_sha256": "124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9",
+  "refill_source": "runs/stockfish-policy-inputs-20261123/refill-positions.jsonl",
+  "label_workers": 2
 }

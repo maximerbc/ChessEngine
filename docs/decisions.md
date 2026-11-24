@@ -215,3 +215,19 @@ study or a pilot. Enforce exact counts before labeling, encoding and cloud fitti
 source games remain in one split even if unused samples at a quota boundary are
 discarded. The C$10 budget is unchanged. Corpus reuse versus a fresh source pool
 is being resolved with the user before dependent work proceeds.
+
+## 2026-11-23 — Reuse position inputs and relabel best moves
+
+The user delegated the easier/faster corpus choice and authorized proceeding to
+Runpod. Reuse the existing million-position pool's inputs and split assignments
+in a new copy. Its checksum is
+`124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9`.
+The stricter canonical audit found 188 duplicate rows including 69 cross-split
+overlaps. Quarantine whole conflicting/reserved source games, deduplicate and
+refill from the already audited fresh July pool, enforcing exact 800k/100k/100k
+counts without changing original files. Scalar teacher values never become move
+targets. Generate new pinned first-PV labels with at most two independent teacher
+processes, one thread/32 MiB each, using bounded chunks. Historical measured
+single-worker throughput forecasts roughly four hours for one million labels;
+two workers target about two to three hours. No new GPU is rented during local
+labeling; no separate pilot or automatic model promotion is introduced.

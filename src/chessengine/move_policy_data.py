@@ -38,6 +38,8 @@ def position_rows(value):
 def input_identity(config, input_root):
     root = Path(input_root)
     paths = [config["source"], *config["exclusions"]]
+    if config.get("refill_source"):
+        paths.append(config["refill_source"])
     if not config["exclusions"]:
         raise ValueError("Explicit exclusion sources are required")
     return {name: digest(root / name) for name in paths}  # Missing inputs fail closed.
@@ -67,6 +69,9 @@ def site_id(url):
 
 
 def prepare(config, output, input_root="."):
+    if config.get("preparation_mode") == "reuse":
+        from .move_policy_reuse import prepare_reused
+        return prepare_reused(config, output, input_root)
     root = Path(output)
     root.mkdir(parents=True, exist_ok=True)
     identity = {"config": config, "inputs": input_identity(config, input_root)}
@@ -199,7 +204,47 @@ def chunks(iterator, size):
         yield chunk
 
 
+def _label_chunk(config, root, input_root, identity, index, subset):
+    teacher = config["teacher"]
+    path = root / "labels" / f"{index:05}.jsonl"
+    meta_path = path.with_suffix(".manifest.json")
+    source_hash = json_hash(subset)
+    if meta_path.exists():
+        meta = read_json(meta_path)
+        if (meta["identity"] != identity or meta["source"] != source_hash
+                or meta["sha256"] != digest(path)):
+            raise ValueError("Policy label resume mismatch")
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        start = time.perf_counter()
+        networks = teacher.get("nnue", {})
+        with chess.engine.SimpleEngine.popen_uci(str(Path(input_root) / teacher["binary"])) as engine:
+            if networks:
+                declared = {name for name in ("EvalFile", "EvalFileSmall") if name in engine.options}
+                if declared != set(networks):
+                    raise ValueError("Teacher NNUE option mismatch")
+                engine.configure({name: str((Path(input_root) / net["path"]).resolve())
+                                  for name, net in networks.items()})
+            # python-chess manages MultiPV and sets it to one for analyse(multipv=None).
+            engine.configure({"Threads": 1, "Hash": 32, "Skill Level": 20, "UCI_LimitStrength": False})
+            temp = path.with_suffix(".tmp")
+            with temp.open("w") as out:
+                for row in subset:
+                    board = restore(row)
+                    engine.configure({"Clear Hash": None})
+                    info = engine.analyse(board, chess.engine.Limit(nodes=teacher["nodes"]), game=object())
+                    if not info.get("pv") or info["pv"][0] not in board.legal_moves:
+                        raise ValueError("Missing or illegal teacher move")
+                    out.write(json.dumps({**row, "teacher_move": info["pv"][0].uci()}) + "\n")
+            temp.replace(path)
+            meta = {"identity": identity, "source": source_hash, "sha256": digest(path),
+                    "positions": len(subset), "seconds": time.perf_counter() - start, "teacher": engine.id}
+        write_json(meta_path, meta)
+    return {"path": str(path.relative_to(root)), **meta}
+
+
 def label(config, output, input_root="."):
+    from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
     root = Path(output)
     positions = verify_positions(root, config)
     teacher = config["teacher"]
@@ -207,59 +252,43 @@ def label(config, output, input_root="."):
         raise ValueError("Teacher protocol requires one thread, 32 MiB hash and positive nodes")
     if type(config["shard_size"]) is not int or config["shard_size"] < 1:
         raise ValueError("Positive shard size required")
-    binary = Path(input_root) / teacher["binary"]
-    if digest(binary) != teacher["sha256"]:
+    workers = config.get("label_workers", 1)
+    if workers not in (1, 2):
+        raise ValueError("Local labeling supports at most two teacher workers")
+    if digest(Path(input_root) / teacher["binary"]) != teacher["sha256"]:
         raise ValueError("Pinned Stockfish executable mismatch")
-    identity = json_hash({"positions": positions["sha256"], "teacher": teacher})
-    networks = teacher.get("nnue", {})
-    for network in networks.values():
+    for network in teacher.get("nnue", {}).values():
         if digest(Path(input_root) / network["path"]) != network["sha256"]:
             raise ValueError("Pinned teacher NNUE mismatch")
+    identity = json_hash({"positions": positions["sha256"], "teacher": teacher})
+    batches = enumerate(chunks(records(root / "positions.jsonl"), config["shard_size"]))
     manifests = []
-    with chess.engine.SimpleEngine.popen_uci(str(binary)) as engine:
-        if networks:
-            declared = {name for name in ("EvalFile", "EvalFileSmall") if name in engine.options}
-            if declared != set(networks):
-                raise ValueError("Teacher NNUE option mismatch")
-            engine.configure({name: str((Path(input_root) / net["path"]).resolve())
-                              for name, net in networks.items()})
-        # python-chess manages MultiPV and sets it to one for analyse(multipv=None).
-        engine.configure({"Threads": 1, "Hash": 32, "Skill Level": 20,
-                          "UCI_LimitStrength": False})
-        for i, subset in enumerate(chunks(records(root / "positions.jsonl"), config["shard_size"])):
-            path = root / "labels" / f"{i:05}.jsonl"
-            meta_path = path.with_suffix(".manifest.json")
-            source_hash = json_hash(subset)
-            if meta_path.exists():
-                meta = read_json(meta_path)
-                if (meta["identity"] != identity or meta["source"] != source_hash
-                        or meta["sha256"] != digest(path)):
-                    raise ValueError("Policy label resume mismatch")
-            else:
-                path.parent.mkdir(parents=True, exist_ok=True)
-                start = time.perf_counter()
-                temp = path.with_suffix(".tmp")
-                with temp.open("w") as out:
-                    for row in subset:
-                        board = restore(row)
-                        engine.configure({"Clear Hash": None})
-                        info = engine.analyse(board, chess.engine.Limit(nodes=teacher["nodes"]), game=object())
-                        if not info.get("pv") or info["pv"][0] not in board.legal_moves:
-                            raise ValueError("Missing or illegal teacher move")
-                        out.write(json.dumps({**row, "teacher_move": info["pv"][0].uci()}) + "\n")
-                temp.replace(path)
-                meta = {"identity": identity, "source": source_hash, "sha256": digest(path),
-                        "positions": len(subset), "seconds": time.perf_counter() - start,
-                        "teacher": engine.id}
-                write_json(meta_path, meta)
-            manifests.append({"path": str(path.relative_to(root)), **meta})
-            write_json(root / "progress.json", {"stage": "labeling",
-                       "positions": sum(m["positions"] for m in manifests),
-                       "total": sum(positions["counts"].values()),
-                       "seconds": sum(m["seconds"] for m in manifests)})
-            print(f"Labeled {sum(m['positions'] for m in manifests):,} positions", flush=True)
+    began = time.perf_counter()
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        pending = set()
+        def submit():
+            try:
+                index, subset = next(batches)
+            except StopIteration:
+                return False
+            pending.add(pool.submit(_label_chunk, config, root, input_root, identity, index, subset))
+            return True
+        for _ in range(workers):
+            submit()
+        while pending:
+            done, pending = wait(pending, return_when=FIRST_COMPLETED)
+            for future in done:
+                manifests.append(future.result())
+                submit()
+            completed = sum(m["positions"] for m in manifests)
+            write_json(root / "progress.json", {"stage": "labeling", "positions": completed,
+                       "total": sum(positions["counts"].values()), "label_workers": workers,
+                       "worker_seconds": sum(m["seconds"] for m in manifests),
+                       "wall_seconds": time.perf_counter() - began})
+            print(f"Labeled {completed:,} positions with {workers} worker(s)", flush=True)
+    manifests.sort(key=lambda m: m["path"])
     result = {"identity": identity, "positions": positions["sha256"], "chunks": manifests,
-              "complete": True, "seconds": sum(m["seconds"] for m in manifests)}
+              "complete": True, "seconds": sum(m["seconds"] for m in manifests), "label_workers": workers}
     write_json(root / "labels.manifest.json", result)
     return result
 
@@ -374,3 +403,26 @@ def collate(rows):
         mask[i, :len(row[1])] = True
     return (torch.from_numpy(np.stack([r[0] for r in rows])), moves, mask,
             torch.tensor([r[2] for r in rows]), [r[3] for r in rows])
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='Local policy data stages without PyTorch import')
+    parser.add_argument('stage', choices=['prepare', 'label', 'encode'])
+    parser.add_argument('--config', default='configs/stockfish-move-policy.json')
+    parser.add_argument('--output', default='runs/stockfish-move-policy')
+    parser.add_argument('--input-root', default='.')
+    args = parser.parse_args()
+    config = read_json(args.config)
+    if args.stage == 'prepare':
+        result = prepare(config, args.output, args.input_root)
+    elif args.stage == 'label':
+        result = label(config, args.output, args.input_root)
+    else:
+        result = encode_shards(config, args.output)
+    print(json.dumps({'stage': args.stage, 'complete': True,
+                      'counts': result.get('counts'), 'sha256': result.get('sha256')}), flush=True)
+
+
+if __name__ == '__main__':
+    main()

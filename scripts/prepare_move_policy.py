@@ -19,7 +19,7 @@ def main():
         'started_unix': time.time(), 'stages': [], 'paid_cost_cad': 0}
     for stage in ['prepare', 'label', 'encode']:
         start = time.time()
-        result = subprocess.run([sys.executable, '-u', '-m', 'chessengine.move_policy_train', stage,
+        result = subprocess.run([sys.executable, '-u', '-m', 'chessengine.move_policy_data', stage,
                                  '--input-root', args.input_root, '--output', args.output])
         receipt['stages'].append({'stage': stage, 'seconds': time.time() - start,
                                  'returncode': result.returncode})

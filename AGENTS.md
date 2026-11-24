@@ -145,3 +145,7 @@
 ### Million-position correction (2026-11-23)
 - The user corrected the intended size to exactly 1,000,000 positions overall: 800,000 training, 100,000 validation and 100,000 test. This supersedes the earlier 50k/5k/5k bounded configuration. Never launch the approved cloud job unless both configuration and encoded manifests match these exact counts.
 - Preserve the completed 60,007-position preparation as superseded work; no CNN fit started on it. The briefly rented Pod and new volume were stopped/deleted before any fit. Billing must retain this aborted setup rather than calling it a free pilot. Keep the C$10 ceiling unchanged unless the user changes it.
+
+### Reuse the million-position pool (2026-11-23)
+- The user delegated the corpus choice and authorized the easier/faster path and subsequent Runpod launch. Reuse the immutable million-position value-study corpus as position inputs only, removing canonical duplicates and quarantining whole games involved in cross-split/reserved conflicts in a separate copy. Refill exact 800k/100k/100k quotas from the audited fresh-position pool; keep original datasets unchanged and strip scalar targets.
+- Generate new first-PV move labels with two independent one-thread Stockfish workers, each with the pinned executable/NNUE, 10,000 nodes and 32 MiB hash. This changes concurrency only, not teacher strength or targets. Bound in-flight chunks and retain checksummed resume records. The C$10 inclusive ceiling, no-pilot full-run authorization and production/release boundaries remain unchanged.
