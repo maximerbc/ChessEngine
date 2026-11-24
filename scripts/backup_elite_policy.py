@@ -23,7 +23,7 @@ def snapshot(root, destination, extras=(), allow_incomplete=False):
         raise ValueError('Run is not complete; do not snapshot mutable checkpoints')
     files = {}
     for path in sorted(root.glob('*.json')):
-        if path.name != 'backup-verified.json':
+        if path.name not in ['backup-verified.json', 'backup-manifest.json']:
             files[path.name] = path
     for directory in sorted(root.glob('seed-*')):
         for path in sorted(directory.iterdir()):

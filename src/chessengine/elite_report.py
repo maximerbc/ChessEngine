@@ -4,13 +4,14 @@ import os
 from html import escape
 from pathlib import Path
 import shutil
+import tempfile
 from .common import read_json, digest
 from .elite_data import atomic_json
 
 
 def learning_curves(results, destination):
     """Plot actual epoch records only; final-test scores never form a selection curve."""
-    os.environ.setdefault('MPLCONFIGDIR', '/private/tmp/elite-matplotlib')
+    os.environ.setdefault('MPLCONFIGDIR', str(Path(tempfile.gettempdir()) / 'chessengine-elite-matplotlib'))
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt

@@ -24,6 +24,9 @@ def test_backup_requires_completed_run_and_verifies_every_member(tmp_path):
     extracted = tmp_path / 'restored'
     assert BACKUP['verify'](archive, receipt['sha256'], extracted)['verified']
     assert (extracted / 'seed-42/resume.pt').read_bytes() == (root / 'seed-42/resume.pt').read_bytes()
+    restored_archive = tmp_path / 'restored.tar.gz'
+    restored_receipt = BACKUP['snapshot'](extracted, restored_archive)
+    assert BACKUP['verify'](restored_archive, restored_receipt['sha256'])['verified']
     with pytest.raises(ValueError, match='archive checksum'):
         BACKUP['verify'](archive, '0' * 64)
     tampered = tmp_path / 'tampered.tar.gz'
