@@ -1,0 +1,18 @@
+{
+  "counts": {
+    "test": 100000,
+    "train": 800000,
+    "validation": 100000
+  },
+  "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+  "gate": {
+    "passed": false
+  },
+  "label_source": "elite-human-played-moves",
+  "playable": false,
+  "qualified": false,
+  "results": null,
+  "status": "awaiting-approved-runpod-training",
+  "strength_status": "not-established",
+  "study": "elite-pytorch-baseline-20261124"
+}
