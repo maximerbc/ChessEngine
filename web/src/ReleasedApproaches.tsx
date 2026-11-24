@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { Opponent } from "./OpponentChooser";
 
 export const releasedApproaches = [
   {
@@ -31,14 +32,14 @@ export const releasedApproaches = [
       "Experimental playable model. An 80-game development comparison favored it over the 80k model; broader playing strength remains unconfirmed. Results and limitations are in Research.",
   },
   {
-    id: "evolutionary-gpu",
-    name: "GPU-trained Evolutionary",
+    id: "elite-policy",
+    name: "Move Prediction",
     description:
-      "A new value network evolves through GPU tournaments from random initialization. CPU PUCT chooses moves after qualification.",
+      "A convolutional network learns moves played in elite human games. It chooses a legal move directly, without search. Experimental; strength is not established.",
     evaluation:
-      "Separable CMA-ES evolves the same value-network architecture through tournament results, without teacher labels, imported supervised weights or gradients. The planned main study contains 368,640 training games.",
+      "A 13-plane CNN learns from 800,000 elite-game positions, with 100,000 validation and 100,000 held-out test examples. Its output ranks moves, not position values.",
     evidence:
-      "Play requires a completed three-seed study and passing qualification and fresh-final gates.",
+      "Experimental playable access requires validation learning and CPU export checks. Human-move agreement does not establish playing strength.",
   },
 ] as const;
 
@@ -54,10 +55,12 @@ type StudyIndex = {
 export function ResearchSummary({
   id,
   checkpoint,
+  modelMeta,
   openResearch,
 }: {
   id: string;
   checkpoint?: string;
+  modelMeta?: Opponent;
   openResearch: (study?: string) => void;
 }) {
   const [index, setIndex] = useState<StudyIndex | null>(null);
@@ -67,24 +70,22 @@ export function ResearchSummary({
       .then(setIndex)
       .catch(() => setIndex(null));
   }, []);
-  const approach = releasedApproach(id);
+  const legacy = releasedApproach(id);
+  const approach =
+    legacy ||
+    (modelMeta && {
+      name: modelMeta.name,
+      evaluation: modelMeta.description,
+      evidence:
+        "Experimental playable variant. Teacher agreement and demonstration access do not establish stronger play.",
+    });
   if (!approach) return null;
   const original = index?.studies?.find(
-    (study) =>
-      study.id ===
-      (id === "supervised-1m" || id === "evolutionary-gpu"
-        ? "gpu-value"
-        : "original-study"),
+    (study) => !!checkpoint && study.checkpoint_ids?.[id] === checkpoint,
   );
   const matches =
-    id === "handcrafted"
-      ? checkpoint === "handcrafted-v1"
-      : !!checkpoint && original?.checkpoint_ids?.[id] === checkpoint;
-  const study = matches
-    ? id === "supervised-1m" || id === "evolutionary-gpu"
-      ? "gpu-value"
-      : "original-study"
-    : undefined;
+    id === "handcrafted" ? checkpoint === "handcrafted-v1" : !!original;
+  const study = original?.id;
   return (
     <section
       className="research-summary"
@@ -93,9 +94,9 @@ export function ResearchSummary({
       <h3>Research summary</h3>
       <p>{approach.evaluation}</p>
       <p>
-        {id === "evolutionary-gpu"
-          ? "This approach uses a value network with CPU PUCT search. "
-          : "All three playable models use CPU alpha-beta search with different evaluators. "}
+        {modelMeta?.strategy === "direct-policy-v1" || id === "elite-policy"
+          ? "This model chooses a legal move directly, without search. "
+          : "This model uses CPU alpha-beta search to choose moves. "}
         Playing here does not train the models.
       </p>
       <p>

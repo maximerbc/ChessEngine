@@ -1,0 +1,12 @@
+{
+  "status": "pretraining-backup-no-trained-model",
+  "source_commit": "a7a142e0a5313a5538749a42a5c6d45aa4843991",
+  "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+  "archive_sha256": "201205f84d994de8120313fa8757ccd8bd83b3cf6319ef05ca5943efb4f44892",
+  "archive_bytes": 203767547,
+  "verified_members": 39,
+  "location_relative_to_original_checkout": "runs/elite-policy-20261124/pretraining-backup.tar.gz",
+  "training_package_sha256": "56f6282c6d72dc6f2438fe96ba65eb6c6e413fa452b09e4bbf0fb7b43e3a8f0e",
+  "training_package_bytes": 55634490,
+  "verification": "Every archive member and the copied training package matched its SHA-256; no extraction needed."
+}

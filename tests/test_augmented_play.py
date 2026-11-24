@@ -23,8 +23,8 @@ def test_real_preview_identity_and_production_move(monkeypatch):
     assert public_manifest == manifest
     with TestClient(create_app()) as client:
         data = client.get('/models').json()
-        assert [r['id'] for r in data['models']] == ['handcrafted', 'supervised', 'supervised-1m']
-        preview = data['models'][2]
+        assert [r['id'] for r in data['models']] == ['handcrafted', *manifest['required_model_ids']]
+        preview = next(row for row in data['models'] if row['id'] == 'supervised-1m')
         assert preview['experimental'] and preview['qualified'] is False
         assert preview['strength_status'] == 'not-established'
         assert preview['strategy'] == 'alpha-beta'
@@ -49,7 +49,7 @@ def test_real_preview_identity_and_production_move(monkeypatch):
 
 def test_access_exception_does_not_fabricate_or_disable_qualification():
     manifest = json.loads(Path('artifacts/models/manifest.json').read_text())
-    row = manifest['models'][1]
+    row = next(row for row in manifest['models'] if row['id'] == 'supervised-1m')
     evaluator = NumpyEvaluator('artifacts/models/supervised-1m.npz')
     validate_entry(row, evaluator)
     for change in [dict(authorization_id='unapproved'), dict(qualified=True),
@@ -65,7 +65,7 @@ def test_access_exception_does_not_fabricate_or_disable_qualification():
 
 
 def test_alpha_beta_exception_cannot_qualify_or_change_other_models():
-    row = json.loads(Path('artifacts/models/manifest.json').read_text())['models'][1]
+    row = next(row for row in json.loads(Path('artifacts/models/manifest.json').read_text())['models'] if row['id'] == 'supervised-1m')
     evaluator = NumpyEvaluator('artifacts/models/supervised-1m.npz')
     for change in [dict(search_authorization_id='unapproved'),
                    dict(search={'strategy':'alpha-beta', 'simulations':128}),

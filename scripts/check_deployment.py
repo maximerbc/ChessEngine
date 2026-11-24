@@ -29,9 +29,17 @@ def main():
         raise AssertionError("Retired weights remain publicly downloadable")
     for row in manifest["models"]:
         assert models[row["id"]]["checkpoint_id"] == row["sha256"]
-        weights, headers = get(web + "/models/" + row.get("file", row.get("ranker_file")))
-        assert hashlib.sha256(weights).hexdigest() == row.get("ranker_sha256", row["sha256"])
-        assert "text/html" not in headers["Content-Type"]
+        if row['id'] in {'supervised', 'supervised-1m'}:
+            weights, headers = get(web + "/models/" + row.get("file", row.get("ranker_file")))
+            assert hashlib.sha256(weights).hexdigest() == row.get("ranker_sha256", row["sha256"])
+            assert "text/html" not in headers["Content-Type"]
+        else:
+            try:
+                get(web + "/models/" + row['file'])
+            except urllib.error.HTTPError as error:
+                assert error.code == 404
+            else:
+                raise AssertionError("Private experimental weights are downloadable")
         request = urllib.request.Request(
             api + "/analyze",
             data=json.dumps(
@@ -62,7 +70,11 @@ def main():
         assert comparison["checkpoint_id"] == models[model_id]["checkpoint_id"]
         assert comparison["stockfish"]["status"] == "ok"
         assert comparison["stockfish"]["version"] == "Stockfish 19"
-        assert comparison["search"]["nodes"] <= 10000
+        if models[model_id].get('strategy') == 'direct-policy-v1':
+            assert comparison['position_value'] is None and comparison['search'] is None
+            assert comparison['policy']['root_rankings']
+        else:
+            assert comparison["search"]["nodes"] <= 10000
     for path, content_type in [
         ("/", "text/html"),
         ("/health", "text/plain"),

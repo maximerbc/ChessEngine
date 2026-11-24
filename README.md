@@ -159,3 +159,17 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_c
 ```
 
 Do not run this alongside another continuation or a raw main-study process. It checks the recorded runtime environment, preserves failures, handles interruption through existing resume state, and checkpoints elapsed time every 30 seconds. Reports state the actual evidence level; no background process promotes a model or deploys the website.
+
+
+### Playable supervised catalogue
+
+The demo's searchable, grouped opponent chooser exposes Classical and nineteen
+supervised variants: original and larger networks; coverage and regularization
+diagnostics; the 180k model; representation/optimizer variants; averaged weights;
+Augmented Supervised; Stockfish move imitation; and human-game move prediction.
+Supervised remains default. Additional variants are experimental; availability
+is not strength qualification. The two direct policies predict legal moves
+without search or a position-value head. Value models share bounded alpha-beta.
+
+See [catalogue operations](docs/demo-catalogue.md) for frozen identities,
+reproducible staging, evidence limits and deployment boundaries.

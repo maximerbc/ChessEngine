@@ -1,0 +1,46 @@
+{
+  "status": "local-implementation-ready-awaiting-launch",
+  "python_full": {
+    "passed": 144,
+    "skipped": 2,
+    "clean_exit": true
+  },
+  "elite_focused": {
+    "passed": 10,
+    "clean_exit": true,
+    "notes": "Includes two tests added after full-suite collection"
+  },
+  "direct_api_followup": {
+    "passed": 1,
+    "clean_exit": true,
+    "checks": [
+      "no alpha-beta substitution",
+      "nullable policy comparison"
+    ]
+  },
+  "browser": {
+    "passed": 47,
+    "skipped": 6,
+    "clean_exit": true
+  },
+  "frontend_build": "passed",
+  "ruff": "passed",
+  "cli_help": "passed",
+  "diff_check": "passed",
+  "serving_import": "Torch absent from imported serving modules",
+  "containers": {
+    "verified": false,
+    "reason": "Docker executable not installed"
+  },
+  "dataset_audit": "passed: complete split/label/position checks; 1004 sampled history replays",
+  "real_training_started": false,
+  "new_paid_resources_created": false,
+  "retained_failures": [
+    "stale private/public manifest mismatch corrected",
+    "source changed during freeze/resume verification; subsequent stable-source run passed",
+    "Chromium initially missing, then sandbox Mach-port denial; approved browser execution passed",
+    "three-card expectations and strict policy test locator corrected",
+    "repeated per-row shard decompression corrected before fitting",
+    "some early verification commands exited 137; subsequent clean checks passed"
+  ]
+}

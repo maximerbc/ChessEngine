@@ -90,11 +90,20 @@ def completed(config, groups, root):
                 raise ValueError("Incomplete or modified final matches")
             artifacts[str(path)] = digest(path)
     manifest = read_json("artifacts/models/manifest.json")
+    if manifest.get('release_version') == 6:
+        from .demo_models import load_catalogue
+        load_catalogue(manifest, Path('artifacts/models'))
     for row in manifest["models"]:
-        if (
-            digest(Path("artifacts/models") / row["file"]) != row["sha256"]
-            or digest(Path("web/public/models") / row["file"]) != row["sha256"]
-        ):
+        path = Path("artifacts/models") / row["file"]
+        if digest(path) != row["sha256"]:
+            raise ValueError("Released model mismatch")
+        if manifest.get('release_version') == 6 and row['id'] not in {'supervised', 'supervised-1m'}:
+            if (Path('web/public/models') / row['file']).exists():
+                raise ValueError('Private experimental checkpoint is publicly exposed')
+        elif row.get('kind') == 'human-move-policy':
+            from .elite_policy import NumpyElitePolicy, validate_release
+            validate_release(row, NumpyElitePolicy(path), path.parent)
+        elif digest(Path("web/public/models") / row["file"]) != row["sha256"]:
             raise ValueError("Released model mismatch")
     return dict(
         complete=True,

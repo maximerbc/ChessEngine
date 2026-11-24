@@ -1,17 +1,114 @@
 {
-  "release_version": 4,
+  "release_version": 6,
   "default": "supervised",
   "required_model_ids": [
     "supervised",
-    "supervised-1m"
+    "supervised-large",
+    "supervised-10k",
+    "supervised-40k",
+    "supervised-diagnostic",
+    "supervised-weaker-decay",
+    "supervised-stronger-decay",
+    "supervised-dropout-01",
+    "supervised-dropout-02",
+    "supervised-180k",
+    "supervised-smaller-lr",
+    "supervised-adaptive-lr",
+    "supervised-relative",
+    "supervised-relative-material",
+    "supervised-combined",
+    "supervised-averaged",
+    "supervised-1m",
+    "stockfish-policy",
+    "elite-policy"
   ],
   "models": [
     {
-      "id": "supervised",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "evidence_id": "supervised-variants",
+      "feature_version": 1,
       "file": "supervised.npz",
-      "name": "Supervised model",
+      "id": "supervised",
+      "name": "Supervised",
+      "search": {
+        "strategy": "alpha-beta"
+      },
       "sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
       "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1",
+      "group": "Original models",
+      "description": "The original 80k-position value network and unchanged demo default.",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": false,
+      "qualified": null,
+      "strength_status": "not-established",
+      "release_status": "released",
+      "checkpoint_schema": 1,
+      "weights_sha256": "38bff3f6aea4000744112c08cbccf6d023aa439cd4fcef06d7e0909609a4e392"
+    },
+    {
+      "id": "supervised-large",
+      "name": "Supervised \u00b7 larger network",
+      "group": "Original models",
+      "description": "A larger 256/128 value network trained on the original corpus; strength is not established.",
+      "source_sha256": "088a62a8a15453a8f2d9e4a0a150b08738ca9eca47f9b8dbe049b4eaeba5834a",
+      "file": "supervised-large.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "088a62a8a15453a8f2d9e4a0a150b08738ca9eca47f9b8dbe049b4eaeba5834a",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        256,
+        128,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "3db32d048fd7378b4c48d2150f7c20c82a90444e2fd5447c2e618bd42462e15e",
+      "weights_sha256": "a82b72cdf8acc013d6f5db116accf60e82db670c5f357ac70b900a601f9cbc3e"
+    },
+    {
+      "id": "supervised-10k",
+      "name": "Supervised \u00b7 10k positions",
+      "group": "Training coverage",
+      "description": "Diagnostic baseline trained on 10,000 training positions.",
+      "source_sha256": "810fe9812ccea7f87b984a0274eada75a839c5b5247ec84dbaa0d1b2826d802e",
+      "file": "supervised-10k.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "810fe9812ccea7f87b984a0274eada75a839c5b5247ec84dbaa0d1b2826d802e",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
       "architecture": [
         841,
         128,
@@ -22,14 +119,370 @@
       "search": {
         "strategy": "alpha-beta"
       },
-      "evidence_id": "original-study"
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "3ad718228a401e1065edc0fa8cb77f3204badee6546379f4c96b38588502af74",
+      "weights_sha256": "643038d1714450922b0233f881b6554e5d5276373e2b4fb9ee5558a4cb21e739"
     },
     {
-      "id": "supervised-1m",
-      "file": "supervised-1m.npz",
-      "name": "Augmented Supervised",
+      "id": "supervised-40k",
+      "name": "Supervised \u00b7 40k positions",
+      "group": "Training coverage",
+      "description": "Diagnostic baseline trained on 40,000 training positions.",
+      "source_sha256": "45635d7d974583b8866e5c8d7e7e68aa4b143ff15394f407d9a2bf112bbde1e9",
+      "file": "supervised-40k.npz",
       "kind": "supervised",
-      "sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "45635d7d974583b8866e5c8d7e7e68aa4b143ff15394f407d9a2bf112bbde1e9",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "636ef527d9cc4a13b2804eea519ff7cee7793a79690b045e11e6bae797f5a0a8",
+      "weights_sha256": "c4bf82869de4767a95eb60ee2a44427e1f0f1321a53c3c0c4aca9d7d9c5f5abf"
+    },
+    {
+      "id": "supervised-diagnostic",
+      "name": "Supervised \u00b7 full diagnostic corpus",
+      "group": "Training coverage",
+      "description": "Diagnostic baseline trained on the full original training corpus with diagnostic game ordering.",
+      "source_sha256": "745998807bb28b540a187cbde02c3097072648cd08667692756cf3b0a33d810e",
+      "file": "supervised-diagnostic.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "745998807bb28b540a187cbde02c3097072648cd08667692756cf3b0a33d810e",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "6f9190527a138f0e1d7906718c06fddec086d7bc6a3034479561dcd2adf4451f",
+      "weights_sha256": "1142b32a6c5f21c750664381bd0f8f685c51abf7850b8c45c2e278e81e9b45f0"
+    },
+    {
+      "id": "supervised-weaker-decay",
+      "name": "Supervised \u00b7 weaker decay",
+      "group": "Regularization",
+      "description": "Original-corpus regularization diagnostic using weaker decay; no playing-strength improvement is established.",
+      "source_sha256": "f51647b10223177cb4ce973183efe6a9949f4ce37e1be408dca610111180529d",
+      "file": "supervised-weaker-decay.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "f51647b10223177cb4ce973183efe6a9949f4ce37e1be408dca610111180529d",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "f839dbe05dca8e43704bf7f9a3ada1730b26694ee73b371b7c9c1024a17bdbeb",
+      "weights_sha256": "fc889245c7da5966d4cd6049a199f769ed9982f6f241718aa8ecc17dfc945a1f"
+    },
+    {
+      "id": "supervised-stronger-decay",
+      "name": "Supervised \u00b7 stronger decay",
+      "group": "Regularization",
+      "description": "Original-corpus regularization diagnostic using stronger decay; no playing-strength improvement is established.",
+      "source_sha256": "d94356a71b07ff3f8ba1f20301a02986626d4688298e8bad1143995844a6f27a",
+      "file": "supervised-stronger-decay.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "d94356a71b07ff3f8ba1f20301a02986626d4688298e8bad1143995844a6f27a",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "f7b814d1213bd670b3362ef2f4d2ea96f922120c45a348a6ed015049e714881e",
+      "weights_sha256": "57802afa04c0431d5e4443af0addf75b4e0e3618420540572b60208e4c4e8d8d"
+    },
+    {
+      "id": "supervised-dropout-01",
+      "name": "Supervised \u00b7 dropout 0.1",
+      "group": "Regularization",
+      "description": "Original-corpus regularization diagnostic using dropout 0.1; no playing-strength improvement is established.",
+      "source_sha256": "8ab1d21886edfcff92138476f5be5030c101d6b1c8a9d5c8ef2cbde0ceac7271",
+      "file": "supervised-dropout-01.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "8ab1d21886edfcff92138476f5be5030c101d6b1c8a9d5c8ef2cbde0ceac7271",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "1a30c1275a3438bab1eaf1c43edd2f4fa2a87fe05cc204cd7e14c061a7f0346d",
+      "weights_sha256": "20a211ed46249f2cf1b557c081ee84dc25c3efdb40c610aaa593035a6fa132ac"
+    },
+    {
+      "id": "supervised-dropout-02",
+      "name": "Supervised \u00b7 dropout 0.2",
+      "group": "Regularization",
+      "description": "Original-corpus regularization diagnostic using dropout 0.2; no playing-strength improvement is established.",
+      "source_sha256": "995a55bd40b5f848224f77ccd3a59ab9be3211269f07469add7a0680164b5d8f",
+      "file": "supervised-dropout-02.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "995a55bd40b5f848224f77ccd3a59ab9be3211269f07469add7a0680164b5d8f",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "381d775a22d8d494f077d27328746fdae6162d005d95ec577fcaaa50efb7b3a3",
+      "weights_sha256": "14fd2e96579dc9f78eaeb87b82724e52c3de46ad498ea6e0eefcc1009a750f87"
+    },
+    {
+      "id": "supervised-180k",
+      "name": "Supervised \u00b7 180k positions",
+      "group": "Expanded corpus",
+      "description": "Trained on 180,302 positions. Also the identical fixed-data reference; its release screen missed the promotion threshold.",
+      "source_sha256": "05d37bdb0ecd6717c719608e66c21fd30b19e6dd6ce27d72763d6d982d848ba5",
+      "file": "supervised-180k.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "05d37bdb0ecd6717c719608e66c21fd30b19e6dd6ce27d72763d6d982d848ba5",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "0bf2eeaf6d0fd91e1aada9f7d8a873eff05f6b663e932d33f320df492c04d842",
+      "weights_sha256": "d260d437bec07532dee8b41d96ab7fb586597750a909d1b5cf565fc54a19b917"
+    },
+    {
+      "id": "supervised-smaller-lr",
+      "name": "Supervised \u00b7 smaller learning rate",
+      "group": "Representation and optimization",
+      "description": "Lower fixed learning rate on the fixed 180,302-position training corpus.",
+      "source_sha256": "d479594fd5601fb623e831f348cabab0d3638a9443916adf51349e527264f942",
+      "file": "supervised-smaller-lr.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "d479594fd5601fb623e831f348cabab0d3638a9443916adf51349e527264f942",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "4507d8a75d4247e71254204754d5a874665d1a3a208e56753d6a358b1566c1b4",
+      "weights_sha256": "079b1993edd74090c9ac95a94348d3de11f7bd3cfe6a05faf9ef0409b122ca5c"
+    },
+    {
+      "id": "supervised-adaptive-lr",
+      "name": "Supervised \u00b7 adaptive learning rate",
+      "group": "Representation and optimization",
+      "description": "Validation-driven learning-rate scheduler on the fixed 180,302-position training corpus.",
+      "source_sha256": "6a668d8e5662ae79438cd2d006d82248f3b46716690123d7e1fb5f3705f995de",
+      "file": "supervised-adaptive-lr.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "6a668d8e5662ae79438cd2d006d82248f3b46716690123d7e1fb5f3705f995de",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 1,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "0a42a971d61c2a7948d1e543ae41e0929e85db675b1b88a86e560366f37984ab",
+      "weights_sha256": "3f38d99e13d1aada159ebd05ef4420c67e47153300089c0029bbba1aa7a08e0d"
+    },
+    {
+      "id": "supervised-relative",
+      "name": "Supervised \u00b7 relative features",
+      "group": "Representation and optimization",
+      "description": "Player-relative feature v2 on the fixed 180,302-position training corpus.",
+      "source_sha256": "2dd803a6c08b0a4d81878d82fae083a8739e92f29b12195830e4d47fd0ae5ab5",
+      "file": "supervised-relative.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "2dd803a6c08b0a4d81878d82fae083a8739e92f29b12195830e4d47fd0ae5ab5",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        841,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 2,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "2a2195214a85734ac25453d85fd8f5b4a1586c0c4ae3f588e2503f512f4b62c6",
+      "weights_sha256": "4c39126cf3179b2a280ece36978060ca7370220e45f80eddab75533b24748ff1"
+    },
+    {
+      "id": "supervised-relative-material",
+      "name": "Supervised \u00b7 relative + material",
+      "group": "Representation and optimization",
+      "description": "Player-relative feature v3 with normalized material summaries on the fixed 180,302-position training corpus.",
+      "source_sha256": "6383940eb6c6e6a263e29c63b85a74a87134dd55fc77ea01e7bf6816f7884362",
+      "file": "supervised-relative-material.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "6383940eb6c6e6a263e29c63b85a74a87134dd55fc77ea01e7bf6816f7884362",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
       "architecture": [
         853,
         128,
@@ -40,16 +493,198 @@
       "search": {
         "strategy": "alpha-beta"
       },
-      "evidence_id": "gpu-value-v1-supervised-20261122",
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "94b5e848638669d6da76716b71670046b490caadf5f966f8057f3759b4c81fee",
+      "weights_sha256": "654a5538afd28dd4797e0271a737ca912f2862fd43fad03dba19150fb209d536"
+    },
+    {
+      "id": "supervised-combined",
+      "name": "Supervised \u00b7 combined v3",
+      "group": "Representation and optimization",
+      "description": "Feature v3 plus the lower learning rate; its release comparison did not pass on the fixed 180,302-position training corpus.",
+      "source_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+      "file": "supervised-combined.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
       "experimental": true,
       "qualified": false,
-      "release_status": "experimental-playable",
-      "authorization_id": "user-20261122-augmented-play",
       "strength_status": "not-established",
-      "qualification_sha256": null,
+      "release_status": "experimental-playable",
+      "architecture": [
+        853,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 3,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "13b59d0377d5ba54b04a28a943b2df8aeaea473de4040f959802b6a6890f2c96",
+      "weights_sha256": "e5928499da768be801b5c730692db3c553fdd64a7ac9d20ba8be4e6c8aa29907"
+    },
+    {
+      "id": "supervised-averaged",
+      "name": "Supervised \u00b7 averaged weights",
+      "group": "Averaging",
+      "description": "Selected running-average weights from the combined trajectory. The three-seed study missed its 2% adoption threshold.",
+      "source_sha256": "a01b6d70022a3d2e40135dad66a44e030bb43b9a80461b2e2b639f0db0b278fe",
+      "file": "supervised-averaged.npz",
+      "kind": "supervised",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "a01b6d70022a3d2e40135dad66a44e030bb43b9a80461b2e2b639f0db0b278fe",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "architecture": [
+        853,
+        128,
+        64,
+        1
+      ],
+      "feature_version": 3,
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "checkpoint_schema": 1,
+      "sha256": "860b7cfe9de4dbeb5238acabc289c4562e85aa061db35ad6606ffd14d0dd05e7",
+      "weights_sha256": "198a19b0dc8b5013f4b72b16bc26c04c510eef1b5339632dc9bf834b7fce86ee"
+    },
+    {
+      "architecture": [
+        853,
+        128,
+        64,
+        1
+      ],
+      "authorization_id": "user-20261122-augmented-play",
+      "documentation_path": "/research?study=supervised-variants",
+      "evidence_id": "supervised-variants",
+      "experimental": true,
+      "feature_version": 3,
+      "file": "supervised-1m.npz",
       "final_sha256": null,
-      "documentation_path": "/research?study=gpu-value",
-      "search_authorization_id": "user-20261122-augmented-alpha-beta"
+      "id": "supervised-1m",
+      "kind": "supervised",
+      "name": "Augmented Supervised",
+      "qualification_sha256": null,
+      "qualified": false,
+      "release_status": "experimental-playable",
+      "search": {
+        "strategy": "alpha-beta"
+      },
+      "search_authorization_id": "user-20261122-augmented-alpha-beta",
+      "sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "strength_status": "not-established",
+      "group": "Augmented learning",
+      "description": "Value network trained on 800k positions from a one-million-position dataset; existing experimental alpha-beta opponent.",
+      "source_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "checkpoint_schema": 1,
+      "weights_sha256": "11a8b939c89b5156eaed7d6f8b7c742ccc45f2dd1d05434a2c5634b27390d03a"
+    },
+    {
+      "id": "stockfish-policy",
+      "name": "Stockfish Move Prediction",
+      "group": "Move prediction",
+      "description": "CNN learns Stockfish first-PV moves and chooses a legal move directly. Seed 42 passed export checks; seed 43 failed. No strength qualification.",
+      "source_sha256": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+      "file": "stockfish-policy.npz",
+      "kind": "research-direct-move-policy",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "evidence_id": "supervised-variants",
+      "documentation_path": "/research?study=supervised-variants",
+      "experimental": true,
+      "qualified": false,
+      "strength_status": "not-established",
+      "release_status": "experimental-playable",
+      "authorization_id": "user-20261124-all-supervised-demo",
+      "architecture": {
+        "format": "direct-move-cnn-v1",
+        "feature_version": 3,
+        "move_schema": 1,
+        "channels": [
+          64,
+          128
+        ],
+        "context": 256,
+        "move_hidden": 128
+      },
+      "search": {
+        "strategy": "direct-policy-v1"
+      },
+      "gate_file": "stockfish-policy-gate.json",
+      "checkpoint_schema": "direct-move-cnn-v1",
+      "sha256": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+      "weights_sha256": "1c3e261d8fd3f3e1368bd7e3f7e2622f903f33b6e9cc73d99715e910f77fcbf5",
+      "gate_sha256": "0f55b0f43540b2ee080cf39249cff625c263949962814a583836d85c917d487b"
+    },
+    {
+      "architecture": {
+        "channels": [
+          64,
+          128
+        ],
+        "classes": 4208,
+        "encoder": "absolute-13-legal-destinations-v1",
+        "format": "elite-human-cnn-v1",
+        "hidden": 256,
+        "label_source": "human-played-move",
+        "reference_commit": "97238ead1892adca5e8626c568cd8129d5993ee9",
+        "vocabulary_sha256": "c0b95687c52b254870ed521fd0659e72a36567b707c818a06c5b64b0d1e661ab"
+      },
+      "authorization_id": "user-20261124-elite-play",
+      "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+      "documentation_path": "/research?study=supervised-variants",
+      "evidence_id": "elite-pytorch-baseline-20261124",
+      "experimental": true,
+      "file": "elite-policy.npz",
+      "gate_file": "elite-policy-gate.json",
+      "gate_sha256": "675a750fac78eb714717b06c8caf1446d855d386c50dbba9d3adc9806d8a814e",
+      "id": "elite-policy",
+      "kind": "human-move-policy",
+      "name": "Move Prediction",
+      "qualified": false,
+      "release_status": "experimental-playable",
+      "search": {
+        "strategy": "direct-policy-v1"
+      },
+      "sha256": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
+      "strength_status": "not-established",
+      "group": "Move prediction",
+      "description": "CNN learns moves played in elite human games and chooses a legal move directly, without search or a position-value head.",
+      "source_sha256": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
+      "representative_seed": 42,
+      "provenance": {
+        "input_sha256": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
+        "selection": "Previously selected validation checkpoint; fixed representative seed 42"
+      },
+      "checkpoint_schema": "elite-human-cnn-v1",
+      "weights_sha256": "c7b1c871e09ca62a8df32623edbbe4fafe10ac91652475283b398d94973cddd5"
     }
   ]
 }

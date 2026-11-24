@@ -1,20 +1,35 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+const release = JSON.parse(
+  readFileSync("../artifacts/models/manifest.json", "utf8"),
+);
 
 test.describe("production containers", () => {
   test.skip(!process.env.PLAYWRIGHT_BASE_URL, "Requires production containers");
 
-  test("real models, gameplay, comparison and export", async ({
-    page,
-  }, testInfo) => {
-    await page.goto("/");
-    await expect(
-      page.getByText("Engine online", { exact: true }),
-    ).toBeVisible();
-    for (const name of [
-      /^Supervised A neural network/,
-      /^Classical Handcrafted/,
-    ]) {
-      await page.getByRole("button", { name }).click();
+  for (const id of [
+    "handcrafted",
+    ...release.models.map((row: { id: string }) => row.id),
+  ]) {
+    test(`real ${id}: gameplay, comparison and export`, async ({
+      page,
+    }, testInfo) => {
+      await page.goto(`/?model=${id}`);
+      await expect(
+        page.getByText("Engine online", { exact: true }),
+      ).toBeVisible();
+      const catalog = await page.request.get(
+        `${process.env.DEPLOYMENT_API_URL}/models`,
+      );
+      const available = new Set(
+        (await catalog.json()).models.map((row: { id: string }) => row.id),
+      );
+      const card = page.locator(".model-option[aria-pressed=true]");
+      if (!available.has(id)) {
+        await expect(card).toBeDisabled();
+        return;
+      }
+      await expect(card).toBeEnabled();
       await page
         .getByRole("button", { name: "e2 white pawn", exact: true })
         .click();
@@ -37,9 +52,25 @@ test.describe("production containers", () => {
       await expect(
         comparison.getByRole("row", { name: /Position evaluation/ }),
       ).toBeVisible();
-      await expect(
-        comparison.getByRole("row", { name: /After search/ }),
-      ).toBeVisible();
+      if (["elite-policy", "stockfish-policy"].includes(id)) {
+        await expect(comparison).toContainText(
+          "Not provided by this move predictor",
+        );
+        await expect(comparison).toContainText("No search");
+        await expect(page.locator(".analysis-card")).toContainText(
+          "NO POSITION VALUE",
+        );
+        await expect(
+          page.getByRole("list", {
+            name: "Predicted legal moves",
+            exact: true,
+          }),
+        ).toBeVisible();
+      } else {
+        await expect(
+          comparison.getByRole("row", { name: /After search/ }),
+        ).toBeVisible();
+      }
       await comparison
         .getByText("Search details and model version", { exact: true })
         .click();
@@ -51,18 +82,22 @@ test.describe("production containers", () => {
         .click();
       expect((await download).suggestedFilename()).toBe("chessengine-game.pgn");
       await page.getByRole("button", { name: "New game", exact: true }).click();
-    }
-    await expect(
-      page.getByRole("button", { name: "Compare", exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      page.getByRole("button", { name: "Analyze this position", exact: true }),
-    ).toHaveCount(0);
-    await page.screenshot({
-      path: testInfo.outputPath("production.png"),
-      fullPage: true,
+
+      await expect(
+        page.getByRole("button", { name: "Compare", exact: true }),
+      ).toHaveCount(0);
+      await expect(
+        page.getByRole("button", {
+          name: "Analyze this position",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      await page.screenshot({
+        path: testInfo.outputPath(`production-${id}.png`),
+        fullPage: true,
+      });
     });
-  });
+  }
 
   test("mobile research survives API outage and reconnects", async ({
     page,

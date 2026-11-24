@@ -1,0 +1,38 @@
+{
+  "study": "elite-pytorch-baseline-20261124",
+  "reference_commit": "97238ead1892adca5e8626c568cd8129d5993ee9",
+  "first_month": "2025-11",
+  "positions": {"train": 800000, "validation": 100000, "test": 100000},
+  "shard_size": 4096,
+  "seeds": [42, 43, 44],
+  "representative_seed": 42,
+  "training": {
+    "learning_rate": 0.0001,
+    "batch_size": 64,
+    "epochs": 100,
+    "gradient_clip": 1.0,
+    "checkpoint_steps": 500,
+    "precision": "float32",
+    "optimizer": "Adam",
+    "selection": "minimum-validation-cross-entropy-earliest-tie"
+  },
+  "exclusions": [
+    "data/main-labeled.jsonl",
+    "data/expanded-200k-labeled.jsonl",
+    "data/gpu-value-v1/positions.jsonl",
+    "runs/stockfish-move-policy-1m-20261123/positions.jsonl",
+    "configs/openings.json",
+    "runs/rl-improvement/openings.json",
+    "runs/move-ranking/openings.json",
+    "runs/policy-value/openings.json",
+    "runs/evolutionary/openings.json",
+    "runs/augmented-evaluation-20261122/openings.json",
+    "data/puzzles.csv"
+  ],
+  "budget": {
+    "project_ceiling_cad": 50,
+    "cumulative_operating_ceiling_cad": 40,
+    "contingency_cad": 10,
+    "launch_confirmation_required": true
+  }
+}

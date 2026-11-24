@@ -1,0 +1,60 @@
+{
+  "status": "prepared-and-audited-not-trained",
+  "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+  "counts": {
+    "test": 100000,
+    "train": 800000,
+    "validation": 100000
+  },
+  "source_games": {
+    "test": 1365,
+    "train": 10891,
+    "validation": 1341
+  },
+  "sources": {
+    "2025-11": "1ffa577aa0a1352fa04c9a890a6706049a3a79edc52810b136758d1e2a1a2eab"
+  },
+  "vocabulary_classes": 4208,
+  "observed_played_moves": 1876,
+  "preparation_seconds": 663.4779595442815,
+  "exclusion_build_seconds": 31.409421540913172,
+  "exclusions": {
+    "games": 233368,
+    "positions": 1024424
+  },
+  "exclusions_receipt_sha256": "512b188cb6ccc043f0f54c0bc145c0fbc57268c7a32655f776d0e9594ad0275f",
+  "audit": {
+    "complete_checks": [
+      "shard hashes",
+      "raw/encoded labels",
+      "game ownership",
+      "position deduplication",
+      "old source games",
+      "prior/reserved positions"
+    ],
+    "dataset_sha256": "093938622f8d8903020ee4afc25c23d787bd5f47607bc479f3f2eeec4d558d49",
+    "full_history_replays": 1004,
+    "history_stride": 997,
+    "passed": true,
+    "positions": {
+      "test": 100000,
+      "train": 800000,
+      "validation": 100000
+    },
+    "sampled_checks": [
+      "full history reconstruction",
+      "automatic draws",
+      "13-plane encoding",
+      "legality"
+    ],
+    "seconds": 211.82115608395543,
+    "source_games": {
+      "test": 1365,
+      "train": 10891,
+      "validation": 1341
+    },
+    "unique_played_moves": 1876,
+    "unique_positions": 1000000
+  },
+  "new_paid_resources_created": false
+}

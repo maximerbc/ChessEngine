@@ -32,8 +32,10 @@ import {
   ResearchSummary,
 } from "./ReleasedApproaches";
 
+import { OpponentChooser, type Opponent } from "./OpponentChooser";
+
 const API = import.meta.env.VITE_API_URL || "/api";
-type Model = {
+type Model = Opponent & {
   id: string;
   name: string;
   evidence: string;
@@ -43,9 +45,9 @@ type Model = {
 };
 type Analysis = GuideAnalysis & {
   best_move: string | null;
-  value: number;
-  depth: number;
-  nodes: number;
+  value: number | null;
+  depth: number | null;
+  nodes: number | null;
   strategy?: string;
   simulations?: number;
   elapsed_ms: number;
@@ -353,7 +355,11 @@ export default function App() {
     "loading",
   );
   const [history, setHistory] = useState<string[]>(() => routePosition().moves);
-  const [color, setColor] = useState("w");
+  const [color, setColor] = useState(() =>
+    new URLSearchParams(window.location.search).get("color") === "b"
+      ? "b"
+      : "w",
+  );
   const [selected, setSelected] = useState<Square | null>(null);
   const [promotion, setPromotion] = useState<{
     from: Square;
@@ -372,18 +378,46 @@ export default function App() {
   const activeRequest = useRef(false);
   const game = boardFrom(initialFen, history);
   const currentModel = models.find((m) => m.id === model);
-  const opponentOptions = showcaseEnabled
+  const isDirectPolicy =
+    currentModel?.capabilities?.move_probabilities ??
+    currentModel?.strategy === "direct-policy-v1";
+  const opponentOptions: Opponent[] = showcaseEnabled
     ? models
-    : releasedApproaches
-        .filter((a) => a.id !== "evolutionary-gpu")
-        .map((a) => ({
-          id: a.id,
-          name: a.name,
-          kind: a.id,
-          description: a.description,
-        }));
+    : [
+        ...models
+          .filter(
+            (m) =>
+              m.id === "handcrafted" ||
+              [
+                "supervised",
+                "human-move-policy",
+                "research-direct-move-policy",
+              ].includes(m.kind),
+          )
+          .map((m) => ({
+            ...m,
+            name: releasedApproach(m.id)?.name || m.name,
+            description: m.description || releasedApproach(m.id)?.description,
+            group:
+              m.group ||
+              (m.id === "handcrafted" ? "Classical" : "Supervised models"),
+          })),
+        ...releasedApproaches
+          .filter((a) => !models.some((m) => m.id === a.id))
+          .map((a) => ({
+            ...a,
+            kind: a.id,
+            group: a.id === "handcrafted" ? "Classical" : "Supervised models",
+          })),
+      ].sort(
+        (a, b) =>
+          Number(b.id === "handcrafted") - Number(a.id === "handcrafted"),
+      );
   const displayName = (id: string, fallback?: string) =>
-    (!showcaseEnabled && releasedApproach(id)?.name) || fallback || id;
+    (!showcaseEnabled && releasedApproach(id)?.name) ||
+    models.find((m) => m.id === id)?.name ||
+    fallback ||
+    id;
   const expectedCheckpoint = page && catalog?.models[page.id]?.checkpoint_id;
   const identityMatches =
     (!page && !!currentModel) ||
@@ -401,12 +435,13 @@ export default function App() {
     query.set("moves", history.join(","));
     query.set("model", model);
     query.set("mode", "play");
+    query.set("color", color);
     window.history.replaceState(
       null,
       "",
       window.location.pathname + "?" + query,
     );
-  }, [initialFen, history, model, tab, connection]);
+  }, [initialFen, history, model, tab, connection, color]);
 
   const studyId =
     new URLSearchParams(window.location.search).get("study") ||
@@ -418,6 +453,7 @@ export default function App() {
       moves: history.join(","),
       model,
       mode: "play",
+      color,
     });
     if (study) query.set("study", study);
     window.history.pushState(
@@ -451,6 +487,7 @@ export default function App() {
     const query = new URLSearchParams({
       fen: initialFen,
       moves: history.join(","),
+      color,
     });
     window.history.pushState(null, "", (target?.path || "/") + "?" + query);
     setPath(window.location.pathname);
@@ -468,6 +505,11 @@ export default function App() {
       const position = routePosition();
       setInitialFen(position.fen);
       setHistory(position.moves);
+      setColor(
+        new URLSearchParams(window.location.search).get("color") === "b"
+          ? "b"
+          : "w",
+      );
       setPath(window.location.pathname);
       setTab(window.location.pathname === "/research" ? "research" : "play");
       const target = approaches.find(
@@ -545,7 +587,7 @@ export default function App() {
       setModel(
         (showcaseEnabled &&
           approaches.find((a) => a.path === window.location.pathname)?.id) ||
-          (requested && requested !== "rl" ? requested : "supervised"),
+          (requested && requested !== "rl" ? requested : data.default),
       );
       setConnection("ready");
     } catch {
@@ -765,9 +807,8 @@ export default function App() {
               <>
                 <h1 className="sr-only">Play chess</h1>
                 <p>
-                  Play Classical, Supervised (80k), or Augmented Supervised
-                  (one-million-position dataset). Compare how each model
-                  evaluates the board and chooses moves.
+                  Choose Classical or a supervised training variant.
+                  Experimental access does not establish playing strength.
                 </p>
               </>
             ) : (
@@ -879,7 +920,11 @@ export default function App() {
                     {!showcaseEnabled
                       ? currentModel?.strategy === "puct-uniform-v1"
                         ? "CPU PUCT search"
-                        : "Shared alpha-beta search"
+                        : isDirectPolicy
+                          ? currentModel?.kind === "research-direct-move-policy"
+                            ? "Stockfish move prediction · no search"
+                            : "Human-move prediction · no search"
+                          : "Shared alpha-beta search"
                       : currentModel?.evidence === "pilot"
                         ? "Pilot checkpoint · research in progress"
                         : "Shared search engine"}
@@ -938,70 +983,27 @@ export default function App() {
                   <Cpu size={17} />
                 </div>
                 <h2>Choose an opponent</h2>
-                <div className="model-options">
-                  {opponentOptions.map((m) => (
-                    <button
-                      disabled={
-                        busy ||
-                        history.length > 0 ||
-                        connection !== "ready" ||
-                        !models.some((installed) => installed.id === m.id)
-                      }
-                      aria-pressed={model === m.id}
-                      key={m.id}
-                      className={`model-option ${model === m.id ? "chosen" : ""}`}
-                      onClick={() => {
-                        if (page) navigate(m.id);
-                        else {
-                          setModel(m.id);
-                          setAnalysis(null);
-                          const query = new URLSearchParams(
-                            window.location.search,
-                          );
-                          query.set("model", m.id);
-                          window.history.replaceState(
-                            null,
-                            "",
-                            window.location.pathname + "?" + query,
-                          );
-                        }
-                      }}
-                    >
-                      <span className="radio" />
-                      <span>
-                        <strong>{displayName(m.id, m.name)}</strong>
-                        <small>
-                          {!showcaseEnabled
-                            ? releasedApproach(m.id)?.description
-                            : m.kind === "move-guided"
-                              ? "Learned root ordering + supervised value"
-                              : m.kind === "rl"
-                                ? "Learned from self-play outcomes"
-                                : m.kind === "supervised"
-                                  ? "Learned from Stockfish evaluations"
-                                  : "Material and piece-square heuristics"}
-                        </small>
-                      </span>
-                      <span className="selected-label">
-                        {connection === "ready" &&
-                        (m.id === "evolutionary-gpu" ||
-                          m.id === "supervised-1m") &&
-                        !models.some((installed) => installed.id === m.id)
-                          ? "IN RESEARCH"
-                          : connection === "loading"
-                            ? "LOADING"
-                            : connection !== "ready" ||
-                                !models.some(
-                                  (installed) => installed.id === m.id,
-                                )
-                              ? "UNAVAILABLE"
-                              : model === m.id
-                                ? "SELECTED"
-                                : "AVAILABLE"}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                <OpponentChooser
+                  options={opponentOptions}
+                  selected={model}
+                  installed={models.map((m) => m.id)}
+                  connection={connection}
+                  disabled={busy || history.length > 0}
+                  choose={(id) => {
+                    if (page) navigate(id);
+                    else {
+                      setModel(id);
+                      setAnalysis(null);
+                      const query = new URLSearchParams(window.location.search);
+                      query.set("model", id);
+                      window.history.replaceState(
+                        null,
+                        "",
+                        window.location.pathname + "?" + query,
+                      );
+                    }
+                  }}
+                />
                 {history.length > 0 && (
                   <p className="micro">Start a new game to change opponents.</p>
                 )}
@@ -1049,14 +1051,15 @@ export default function App() {
                 </div>
                 {!showcaseEnabled && (
                   <>
-                    {model === "supervised-1m" && (
+                    {currentModel?.experimental && (
                       <p className="notice" role="status">
-                        Experimental model · development results available;
-                        formal qualification is pending.
+                        Experimental model · playing strength is not
+                        established. See the recorded results in Research.
                       </p>
                     )}
                     <ResearchSummary
                       id={model}
+                      modelMeta={currentModel}
                       checkpoint={currentModel?.checkpoint_id}
                       openResearch={(study) => changeTab("research", study)}
                     />
@@ -1069,59 +1072,91 @@ export default function App() {
                   <Activity size={16} />
                 </div>
                 <div className="eval-value">
-                  {analysis
-                    ? analysis.mate_score
-                      ? "Mate found"
-                      : `${analysis.value >= 0 ? "+" : ""}${analysis.value.toFixed(2)}`
-                    : "—"}
-                  <span>MODEL ADVANTAGE</span>
+                  {isDirectPolicy
+                    ? "Move prediction"
+                    : analysis && analysis.value !== null
+                      ? analysis.mate_score
+                        ? "Mate found"
+                        : `${analysis.value >= 0 ? "+" : ""}${analysis.value.toFixed(2)}`
+                      : "—"}
+                  <span>
+                    {isDirectPolicy ? "NO POSITION VALUE" : "MODEL ADVANTAGE"}
+                  </span>
                 </div>
-                <div className="eval-track">
-                  <span
-                    style={{
-                      width: `${analysis ? (analysis.value + 1) * 50 : 50}%`,
-                    }}
-                  />
-                </div>
+                {!isDirectPolicy && (
+                  <div className="eval-track">
+                    <span
+                      style={{
+                        width: `${analysis && analysis.value !== null ? (analysis.value + 1) * 50 : 50}%`,
+                      }}
+                    />
+                  </div>
+                )}
                 <p className="micro">
-                  From the engine’s perspective before its last move. Not a win
-                  probability.
+                  {isDirectPolicy
+                    ? "These probabilities rank legal-move predictions. They are not winning chances or position evaluations."
+                    : "From the engine’s perspective before its last move. Not a win probability."}
                 </p>
-                <div className="metrics">
-                  <div>
-                    <strong>{analysis?.depth ?? "—"}</strong>
-                    <span>DEPTH</span>
-                  </div>
-                  <div>
-                    <strong>
-                      {(analysis?.strategy === "puct-uniform-v1"
-                        ? analysis.simulations
-                        : analysis?.nodes
-                      )?.toLocaleString() ?? "—"}
-                    </strong>
-                    <span>
-                      {analysis?.strategy === "puct-uniform-v1"
-                        ? "SIMULATIONS"
-                        : "NODES"}
-                    </span>
-                  </div>
+                {isDirectPolicy && analysis && (
+                  <ol aria-label="Predicted legal moves">
+                    {analysis.root_rankings?.slice(0, 5).map((row) => (
+                      <li key={row.move}>
+                        {row.move} · {(row.probability * 100).toFixed(1)}%
+                      </li>
+                    ))}
+                  </ol>
+                )}
+                <div
+                  className={
+                    isDirectPolicy ? "metrics policy-metrics" : "metrics"
+                  }
+                >
+                  {!isDirectPolicy && (
+                    <>
+                      <div>
+                        <strong>{analysis?.depth ?? "—"}</strong>
+                        <span>DEPTH</span>
+                      </div>
+                      <div>
+                        <strong>
+                          {(analysis?.strategy === "puct-uniform-v1"
+                            ? analysis.simulations
+                            : analysis?.nodes
+                          )?.toLocaleString() ?? "—"}
+                        </strong>
+                        <span>
+                          {analysis?.strategy === "puct-uniform-v1"
+                            ? "SIMULATIONS"
+                            : "NODES"}
+                        </span>
+                      </div>
+                    </>
+                  )}
                   <div>
                     <strong>
                       {analysis
                         ? `${(analysis.elapsed_ms / 1000).toFixed(2)}s`
                         : "—"}
                     </strong>
-                    <span>SEARCH TIME</span>
+                    <span>
+                      {isDirectPolicy ? "INFERENCE TIME" : "SEARCH TIME"}
+                    </span>
                   </div>
                 </div>
-                <span className="tiny-label">PRINCIPAL VARIATION</span>
+                <span className="tiny-label">
+                  {isDirectPolicy
+                    ? "DIRECT MOVE SELECTION"
+                    : "PRINCIPAL VARIATION"}
+                </span>
                 <p className="pv">
-                  {analysis
-                    ? sanLine(
-                        boardFrom(initialFen, analysisHistory),
-                        analysis.pv,
-                      ) || "No continuation"
-                    : "Make a move to begin the analysis."}
+                  {isDirectPolicy
+                    ? "One network prediction; no search continuation."
+                    : analysis
+                      ? sanLine(
+                          boardFrom(initialFen, analysisHistory),
+                          analysis.pv,
+                        ) || "No continuation"
+                      : "Make a move to begin the analysis."}
                 </p>
                 {analysis && (
                   <code className="hash">

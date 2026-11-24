@@ -67,7 +67,7 @@ export type Catalog = {
 export type GuideAnalysis = {
   root_rankings?: { move: string; probability: number }[];
   explanation?: {
-    raw_value: number;
+    raw_value: number | null;
     side_to_move: string;
     feature_version: number | null;
     piece_counts: Record<string, Record<string, number>>;
@@ -226,7 +226,7 @@ export function ModelGuide({
             <div className="live-explanation">
               <p>
                 Last analysis:{" "}
-                <strong>{analysis.explanation.raw_value.toFixed(3)}</strong>,
+                <strong>{analysis.explanation.raw_value?.toFixed(3) ?? "Unavailable"}</strong>,
                 from {analysis.explanation.side_to_move}’s perspective.
               </p>
               {analysis.explanation.handcrafted && (

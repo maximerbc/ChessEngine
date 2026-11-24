@@ -1,0 +1,66 @@
+{
+  "study": "elite-pytorch-baseline-20261124",
+  "approved": false,
+  "status": "proposal-awaiting-user-launch-confirmation",
+  "billing_read": {
+    "query": {
+      "bucketSize": "year",
+      "endTime": "2027-01-01T00:00:00Z",
+      "startTime": "2026-01-01T00:00:00Z"
+    },
+    "recordCount": 1,
+    "totals": {
+      "clusterDiskAmount": 0,
+      "clusterGpuAmount": 0,
+      "clusterNetworkingAmount": 0,
+      "endpointAmount": 0,
+      "podCpuAmount": 0,
+      "podDiskAmount": 0.01527777686715126,
+      "podGpuAmount": 2.935723706148565,
+      "serverlessCpuAmount": 0,
+      "serverlessDiskAmount": 0,
+      "serverlessFeeAmount": 0,
+      "serverlessGpuAmount": 0,
+      "storageHighPerformanceAmount": 0.023333333898335695,
+      "storageStandardAmount": 0.07875000184867531,
+      "totalAmount": 3.053084818762727
+    }
+  },
+  "hourly_usd": 0.89,
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "cloud": "SECURE",
+  "data_center": "EU-RO-1",
+  "availability_at_read": "LOW",
+  "image": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+  "template_source": "get-template runpod-torch-v280",
+  "minimum_host_cuda": "12.8",
+  "network_volume_gb": 10,
+  "ports": [
+    "22/tcp"
+  ],
+  "public_http": false,
+  "proposed_actions": [
+    "30-second discarded gradient benchmark",
+    "three-seed 100-epoch FP32 fit if measured forecast fits",
+    "sealed held-out evaluation",
+    "backup verification and teardown"
+  ],
+  "planning_estimate_hours": 4,
+  "planning_estimate_is_measured": false,
+  "rental_deadline_hours": 5,
+  "new_run_cap_cad": 12,
+  "fx_budget_bound_cad_per_usd": 1.6,
+  "conversion_fee_allowance": 1.05,
+  "tax_allowance": 1.25,
+  "maximum_gpu_cad": 9.345000000000002,
+  "setup_storage_and_rounding_allowance_cad": 1.5,
+  "posted_prior_usd": 3.053084818762727,
+  "conservative_prior_project_envelope_cad": 10,
+  "conservative_cumulative_operating_cad": 22,
+  "operating_ceiling_cad": 40,
+  "reserved_contingency_cad": 10,
+  "total_project_ceiling_cad": 50,
+  "prior_envelope_note": "Posted Runpod charges converted at the budget bound, plus C$2 pending-charge allowance and C$1.5 ongoing-storage/rounding allowance. Reconcile at launch; refuse if total no longer fits.",
+  "execution_gate": "User approval required before any GPU benchmark. Then require measured training forecast * 1.5 + 900 seconds to fit the remaining approved deadline, with no changes to seeds, data or epochs.",
+  "cleanup": "Only this run's new pod and volume, after locally verified backups. Existing v9boe441yf0e0r / lic7jwwjox are untouched."
+}

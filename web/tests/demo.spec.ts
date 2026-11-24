@@ -452,11 +452,12 @@ for (const [id, name] of [
       });
       await page.goto("/");
       const cards = page.locator(".model-option");
-      await expect(cards).toHaveCount(3);
+      await expect(cards).toHaveCount(4);
       await expect(cards.locator("strong")).toHaveText([
         "Classical",
         "Supervised",
         "Augmented Supervised",
+        "Move Prediction",
       ]);
       await page.getByRole("button", { name: new RegExp(`^${name} `) }).click();
       await expect(
@@ -491,7 +492,10 @@ for (const [id, name] of [
       for (const card of await cards.all()) await expect(card).toBeDisabled();
       // White avoids an immediate opening move after resetting as Black.
       await page.getByRole("button", { name: "White", exact: true }).click();
-      for (const card of await cards.all()) await expect(card).toBeEnabled();
+      for (const card of await cards.all()) {
+        if ((await card.innerText()).includes('Move Prediction')) await expect(card).toBeDisabled();
+        else await expect(card).toBeEnabled();
+      }
     });
   }
 }
@@ -607,7 +611,7 @@ test("loading and offline cards stay visible and keyboard selection works on mob
   });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.locator(".model-option")).toHaveCount(3);
+  await expect(page.locator(".model-option")).toHaveCount(4);
   await expect(page.locator(".model-options")).toContainText("LOADING");
   for (const card of await page.locator(".model-option").all())
     await expect(card).toBeDisabled();
@@ -630,7 +634,7 @@ test("loading and offline cards stay visible and keyboard selection works on mob
   });
   await page.route("**/api/models", (route) => route.abort());
   await page.reload();
-  await expect(page.locator(".model-option")).toHaveCount(3);
+  await expect(page.locator(".model-option")).toHaveCount(4);
   for (const card of await page.locator(".model-option").all()) {
     await expect(card).toBeDisabled();
     await expect(card).toContainText("UNAVAILABLE");
@@ -703,7 +707,7 @@ for (const width of [1366, 890, 734, 390]) {
       0,
     );
     await expect(page.locator(".demo-intro")).toContainText(
-      "Play Classical, Supervised (80k), or Augmented Supervised (one-million-position dataset).",
+      "Choose Classical or a supervised training variant. Experimental access does not establish playing strength.",
     );
     await expect(
       page.getByRole("button", { name: "Play", exact: true }),
@@ -729,7 +733,7 @@ for (const width of [1366, 890, 734, 390]) {
         exact: true,
       }),
     ).toHaveCount(0);
-    await expect(page.locator(".model-option")).toHaveCount(3);
+    await expect(page.locator(".model-option")).toHaveCount(4);
     await expect(
       page.getByRole("region", { name: "Supervised research summary" }),
     ).toContainText("Research summary");
