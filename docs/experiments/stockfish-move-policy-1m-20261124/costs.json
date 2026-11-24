@@ -1,0 +1,124 @@
+{
+  "queried_clock": {
+    "current_time": "2026-11-24 05:32:35 UTC"
+  },
+  "aborted_pod": {
+    "metadata": {
+      "query": {
+        "bucketSize": "hour",
+        "endTime": "2026-11-24T05:00:00Z",
+        "podId": "k6g519tjra6wdk",
+        "startTime": "2026-11-23T05:00:00Z"
+      },
+      "recordCount": 1,
+      "totals": {
+        "cpuAmount": 0,
+        "diskAmount": 0.000347222201526165,
+        "gpuAmount": 0.014084497350268066,
+        "totalAmount": 0.014431719551794231
+      },
+      "uniquePodCount": 1
+    },
+    "records": [
+      {
+        "cpuAmount": 0,
+        "diskAmount": 0.000347222201526165,
+        "endTime": "2026-11-24T01:00:00Z",
+        "gpuAmount": 0.014084497350268066,
+        "podId": "k6g519tjra6wdk",
+        "startTime": "2026-11-24T00:00:00Z",
+        "totalAmount": 0.014431719551794231
+      }
+    ],
+    "pagination": {
+      "returned": 1,
+      "total": 1,
+      "hasNextPage": false,
+      "nextCursor": null
+    }
+  },
+  "aborted_volume": {
+    "metadata": {
+      "query": {
+        "bucketSize": "hour",
+        "endTime": "2026-11-24T06:00:00Z",
+        "networkVolumeId": "x371etfrtl",
+        "startTime": "2026-11-23T06:00:00Z"
+      },
+      "recordCount": 0,
+      "totals": {
+        "highPerformanceAmount": 0,
+        "standardAmount": 0,
+        "totalAmount": 0
+      },
+      "uniqueNetworkVolumeCount": 0
+    },
+    "records": [],
+    "pagination": {
+      "returned": 0,
+      "total": 0,
+      "hasNextPage": false,
+      "nextCursor": null
+    }
+  },
+  "main_pod": {
+    "metadata": {
+      "query": {
+        "bucketSize": "hour",
+        "endTime": "2026-11-24T06:00:00Z",
+        "podId": "vx2ej25ygoim98",
+        "startTime": "2026-11-23T06:00:00Z"
+      },
+      "recordCount": 0,
+      "totals": {
+        "cpuAmount": 0,
+        "diskAmount": 0,
+        "gpuAmount": 0,
+        "totalAmount": 0
+      },
+      "uniquePodCount": 0
+    },
+    "records": [],
+    "pagination": {
+      "returned": 0,
+      "total": 0,
+      "hasNextPage": false,
+      "nextCursor": null
+    }
+  },
+  "main_volume": {
+    "metadata": {
+      "query": {
+        "bucketSize": "hour",
+        "endTime": "2026-11-24T06:00:00Z",
+        "networkVolumeId": "0yxvu4xpjj",
+        "startTime": "2026-11-23T06:00:00Z"
+      },
+      "recordCount": 0,
+      "totals": {
+        "highPerformanceAmount": 0,
+        "standardAmount": 0,
+        "totalAmount": 0
+      },
+      "uniqueNetworkVolumeCount": 0
+    },
+    "records": [],
+    "pagination": {
+      "returned": 0,
+      "total": 0,
+      "hasNextPage": false,
+      "nextCursor": null
+    }
+  },
+  "status": "Main-run charges not posted at final read; zero records do not mean free",
+  "estimated_cad_with_allowances": 0.7,
+  "cap_cad": 10,
+  "planned_cad": 8,
+  "fx_usd_cad": 1.4369,
+  "fx_allowance": 1.05,
+  "tax_allowance": 1.25,
+  "gpu_uptime_seconds": 1368,
+  "gpu_rate_usd_hour": 0.89,
+  "storage_allowance": "One full hour of 30 GB container disk and one full hour for each of two 10 GB standard volumes; conservative relative to observed lifetimes",
+  "rounding_allowance": "Round GPU duration up to 23 minutes"
+}

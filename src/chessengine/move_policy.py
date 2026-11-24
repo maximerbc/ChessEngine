@@ -93,7 +93,9 @@ class NumpyMovePolicy:
         context = np.maximum(a["fw"] @ np.concatenate((z.ravel(), x[768:])) + a["fb"], 0)
         base = a["hw"][:, :256] @ context + a["hb"]
         hidden = np.maximum(base[None, :] + a["hw"][:, 256:].T[moves].sum(1), 0)
-        return (hidden @ a["ow"].T + a["ob"]).ravel()
+        # Reduce each row identically: BLAS row tiling can invent move preferences
+        # when large, identical activations differ only through rounding.
+        return np.einsum("mh,h->m", hidden, a["ow"][0], optimize=False) + a["ob"][0]
 
     def rank(self, board: chess.Board):
         if board.is_game_over(claim_draw=True):

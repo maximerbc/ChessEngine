@@ -231,3 +231,30 @@ processes, one thread/32 MiB each, using bounded chunks. Historical measured
 single-worker throughput forecasts roughly four hours for one million labels;
 two workers target about two to three hours. No new GPU is rented during local
 labeling; no separate pilot or automatic model promotion is introduced.
+
+## 2026-11-24 — Complete the million-position direct-policy study
+
+The full no-pilot Runpod job completed on exactly 800k/100k/100k positions using
+frozen source 7b43f04. Early stopping completed 10/7/13 epochs for seeds 42/43/44;
+selected epochs remain 4/1/7 and seed 42 remains representative. Held-out top-one
+teacher agreement is 31.008%/6.858%/32.128%. Seed 43 collapsed to uniform scores;
+publish it as a failed seed rather than replacing it or launching extra fits.
+The complete private report and machine-readable evidence live in
+`docs/experiments/stockfish-move-policy-1m-20261124`.
+
+The initial relative-logit-only export check masked large probability errors.
+Require explicit probability and chosen-move parity and record all failures.
+Correct NumPy's final reduction so identical large activations cannot gain
+artificial move preferences through row-dependent rounding. Preserve original
+weights, Torch training forward, selections and test results; historical resume
+still requires the original scientific source/runtime. Seeds 42/44 pass the
+strict sampled check; seed 43 still fails probability parity and is unqualified.
+Do not relax tolerance or claim that every export passed.
+
+All artifact bytes, selected hashes, raw teacher chunks and source/data archives
+are backed up locally. The independent guard stopped the GPU after the verified
+backup marker; its Pod and new volume were deleted with 404 read-backs. Existing
+evolutionary resources and production models remain unchanged. Conservative
+total spend is approximately C$0.70 including the aborted setup and allowances;
+main-run/volume billing was still unposted, not proven free. No new training,
+merge, deployment or promotion is authorized by closing this study.

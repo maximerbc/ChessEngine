@@ -1,0 +1,47 @@
+{
+  "analysis": "Posthoc read-only baseline and corrected NumPy-kernel latency; no training or checkpoint reselection",
+  "cpu": "Local macOS arm64; exact CPU brand unavailable in sandbox",
+  "numpy": "2.2.6",
+  "threads": 1,
+  "method": "First 32 encoded test positions, no extra warmup; excludes feature encoding and file loading",
+  "uniform_baselines": {
+    "train": {
+      "uniform_legal_move_cross_entropy": 3.22436654771134,
+      "positions": 800000
+    },
+    "validation": {
+      "uniform_legal_move_cross_entropy": 3.225029223840396,
+      "positions": 100000
+    },
+    "test": {
+      "uniform_legal_move_cross_entropy": 3.22436215436265,
+      "positions": 100000
+    }
+  },
+  "latency": [
+    {
+      "seed": 42,
+      "median_ms": 0.27241650968790054,
+      "positions": 32,
+      "maximum_logit_span": 10.784164428710938,
+      "maximum_absolute_logit": 352.76416015625,
+      "positions_with_constant_scores": 0
+    },
+    {
+      "seed": 43,
+      "median_ms": 0.26672903914004564,
+      "positions": 32,
+      "maximum_logit_span": 0.0,
+      "maximum_absolute_logit": 8350870528.0,
+      "positions_with_constant_scores": 32
+    },
+    {
+      "seed": 44,
+      "median_ms": 0.2669375389814377,
+      "positions": 32,
+      "maximum_logit_span": 11.037933349609375,
+      "maximum_absolute_logit": 398.05352783203125,
+      "positions_with_constant_scores": 0
+    }
+  ]
+}

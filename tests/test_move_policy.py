@@ -72,6 +72,47 @@ def test_numpy_export_parity_and_special_moves(tmp_path):
         "a7a8q", "a7a8r", "a7a8b", "a7a8n"}
 
 
+def test_large_identical_activations_do_not_invent_move_preferences(tmp_path):
+    torch.manual_seed(43)
+    model = build_policy().eval()
+    with torch.no_grad():
+        model.context.weight.zero_()
+        model.context.bias.fill_(1e8)
+        model.head.weight[:, 256:].zero_()
+    path = tmp_path / 'large-constant.npz'
+    export_policy(model, path, {})
+    policy = NumpyMovePolicy(path)
+    board = chess.Board()
+    features = move_features(board, list(board.legal_moves))
+    for count in (1, 3, 8, 20, 36, 63, 200):
+        candidates = np.resize(features, (count, 3))
+        logits = policy.logits(encode(board, 3), candidates)
+        assert np.ptp(logits) == 0
+    ranked = policy.rank(board)
+    assert all(row['probability'] == pytest.approx(1 / len(ranked)) for row in ranked)
+    assert policy.choose(board) == list(board.legal_moves)[0].uci()
+
+
+def test_export_verifier_checks_probabilities_and_chosen_moves():
+    import importlib.util
+    path = Path(__file__).resolve().parents[1] / 'scripts/verify_move_policy_results.py'
+    spec = importlib.util.spec_from_file_location('policy_result_verifier', path)
+    verifier = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(verifier)
+    expected = np.full(36, 1e9, dtype=np.float32)
+    actual = expected.copy()
+    actual[0] += 512
+    # The former relative-only check accepts a severe probability distortion.
+    np.testing.assert_allclose(actual, expected, atol=3e-5, rtol=1e-4)
+    with pytest.raises(AssertionError):
+        verifier.compare_logits(actual, expected)
+    failure = verifier.compare_logits(actual, expected, strict=False)
+    assert not failure['passed'] and failure['probability'] > 0.9
+    assert verifier.compare_logits(expected + 512, expected)['probability'] == 0
+    with pytest.raises(ValueError, match='different move'):
+        verifier.compare_logits(np.array([1e-7, 0]), np.array([0, 1e-7]))
+
+
 def test_claimed_draw_history_and_schema(tmp_path):
     path = tmp_path / "p.npz"
     export_policy(build_policy(), path, {})
