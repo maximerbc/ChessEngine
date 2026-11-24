@@ -1,0 +1,65 @@
+{
+  "verified_unix": 1795498116.577476,
+  "seeds": [
+    {
+      "seed": 42,
+      "selected_epoch": 4,
+      "checkpoint_sha256": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+      "parity_positions": 24,
+      "maximum_logit_error": 9.1552734375e-05,
+      "cpu_numpy_export_verified": true,
+      "failures": [],
+      "maximum_centered_logit_error": 9.1552734375e-05,
+      "maximum_probability_error": 1.5020370483398438e-05,
+      "chosen_moves_match": true
+    },
+    {
+      "seed": 43,
+      "selected_epoch": 1,
+      "checkpoint_sha256": "86fe138ca9061c9424b35fdffe8e2a8f56a424a28754215d16228e1f76a02b90",
+      "parity_positions": 24,
+      "maximum_logit_error": 1024.0,
+      "cpu_numpy_export_verified": false,
+      "failures": [
+        {
+          "split": "validation",
+          "index": 7,
+          "raw": 1024.0,
+          "centered": 1024.0,
+          "probability": 0.12362638115882874,
+          "chosen_matches": true,
+          "passed": false
+        },
+        {
+          "split": "test",
+          "index": 1,
+          "raw": 512.0,
+          "centered": 512.0,
+          "probability": 0.1428571492433548,
+          "chosen_matches": true,
+          "passed": false
+        }
+      ],
+      "maximum_centered_logit_error": 1024.0,
+      "maximum_probability_error": 0.1428571492433548,
+      "chosen_moves_match": true
+    },
+    {
+      "seed": 44,
+      "selected_epoch": 7,
+      "checkpoint_sha256": "c72d4d98ac485bf32bb5b527e4a030cd8eaaa26100aee088822a5e614a3ceab1",
+      "parity_positions": 24,
+      "maximum_logit_error": 6.103515625e-05,
+      "cpu_numpy_export_verified": true,
+      "failures": [],
+      "maximum_centered_logit_error": 9.1552734375e-05,
+      "maximum_probability_error": 7.62939453125e-06,
+      "chosen_moves_match": true
+    }
+  ],
+  "all_checkpoint_hashes_verified": true,
+  "all_selected_checkpoints_verified": false,
+  "all_functional_exports_verified": false,
+  "verifier_sha256": "8d6066849455fc0643c7887de36f2bf52a08868440458596eef18f1b17a0ddd6",
+  "numpy_source_sha256": "4e15904a4223327b201f6340d82803e7c1f0a77e9a809ac534b93bc6c3cb0c91"
+}

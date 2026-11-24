@@ -1,0 +1,51 @@
+{
+  "study": "stockfish-direct-move-cnn-1m-20261123",
+  "source": "data/gpu-value-v1/positions.jsonl",
+  "exclusions": [
+    "configs/openings.json",
+    "runs/rl-improvement/openings.json",
+    "runs/move-ranking/openings.json",
+    "runs/policy-value/openings.json",
+    "runs/evolutionary/openings.json",
+    "runs/augmented-evaluation-20261122/openings.json",
+    "data/puzzles.csv"
+  ],
+  "sampling_seed": 20261122,
+  "max_games": 1000000,
+  "positions": {
+    "train": 800000,
+    "validation": 100000,
+    "test": 100000
+  },
+  "shard_size": 1000,
+  "teacher": {
+    "binary": "tools/stockfish/stockfish-macos-universal",
+    "sha256": "8eed61129d1493c5d1f2fd9323f0c54c47ac49319911fbde18c6b9c87e8b13c5",
+    "nodes": 10000,
+    "threads": 1,
+    "hash_mb": 32,
+    "nnue": {
+      "EvalFile": {
+        "path": "runs/gpu-supervised-setup-20261121/local-teacher/stockfish/nn-1a298aa575a0.nnue",
+        "sha256": "1a298aa575a085434d29027978dc36867fe9c5bcea9376654b7a8eba1e52dfc2"
+      }
+    }
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "representative_seed": 42,
+  "training": {
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "batch_size": 256,
+    "epochs": 40,
+    "patience": 6
+  },
+  "preparation_mode": "reuse",
+  "reuse_source_sha256": "124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9",
+  "refill_source": "runs/stockfish-policy-inputs-20261123/refill-positions.jsonl",
+  "label_workers": 2
+}

@@ -211,3 +211,92 @@ weight copy. The two existing supervised public artifacts remain unchanged.
 Verified private backups preceded independent guard shutdown and removal of only
 this run's pod and volume. Billing remains partly unposted; conservative allowances
 are recorded separately from posted charges. No push, merge or deployment occurred.
+## 2026-11-22 — Direct Stockfish-move CNN research
+
+The user selected a direct legal-move policy and a PyTorch CNN, inspired by the
+Skripkon PyTorch/TensorFlow videos. The tutorials imitate human PGN moves; our
+separate experiment labels positions with the pinned Stockfish first-PV move.
+Use feature-v3 spatial inputs plus complete rule/history features and a shared
+candidate scorer, without an observed-move vocabulary or search at inference.
+All weights start fresh. This permits a research-only NumPy CNN export alongside
+the existing MLP schemas, preserving the training-only PyTorch boundary.
+
+The bounded protocol and Runpod handoff are in `docs/stockfish-move-policy.md`;
+values are in `configs/stockfish-move-policy.json`. Source-game splits, canonical
+exclusions, all-seed checkpoint selection and a frozen held-out-test protocol
+protect study integrity. Training metrics measure teacher imitation only.
+Implementation and tiny-fixture verification do not count as a completed study.
+The user explicitly requires confirmation before Runpod training; no paid
+benchmark, full run, provisioning, publication or promotion is authorized here.
+Released models, production search and ongoing evolutionary work are unchanged.
+
+## 2026-11-23 — Direct-policy full run without a pilot
+
+The user approved local full-data preparation and labeling followed by direct
+Runpod training of seeds 42/43/44, with no separate pilot/benchmark. The first
+real epoch remains part of the fit and supplies measured time/cost forecasts.
+The new authorization is C$10 total inclusive of setup/storage/taxes/conversion,
+with C$2 contingency and C$8 operational allowance. Retain the frozen scientific
+settings and stop with resumable checkpoints rather than silently reducing scope.
+Pin the teacher's actual EvalFile NNUE hash, avoid replaying full histories when
+indexing position-only exclusions, and retain full histories for training records.
+Record local progress, cloud receipts, all seed results and any failures. Back up
+and verify outputs before deleting only the new training resources; preserve the
+existing evolutionary Pod/volume. No deployment or model promotion is included.
+
+## 2026-11-23 — Correct direct-policy size to one million
+
+The user corrected the intended supervised move-policy dataset to exactly
+800,000 training / 100,000 validation / 100,000 test positions. The earlier
+60,007-position preparation is preserved as superseded, with no student CNN fit
+started. Temporary Pod `k6g519tjra6wdk` was stopped and deleted, followed by its
+new volume `x371etfrtl`; existing evolutionary resources were untouched. The
+first billing reads had no posted records and must not be interpreted as zero
+actual charge. The previous local labels are not a completed million-position
+study or a pilot. Enforce exact counts before labeling, encoding and cloud fitting;
+source games remain in one split even if unused samples at a quota boundary are
+discarded. The C$10 budget is unchanged. Corpus reuse versus a fresh source pool
+is being resolved with the user before dependent work proceeds.
+
+## 2026-11-23 — Reuse position inputs and relabel best moves
+
+The user delegated the easier/faster corpus choice and authorized proceeding to
+Runpod. Reuse the existing million-position pool's inputs and split assignments
+in a new copy. Its checksum is
+`124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9`.
+The stricter canonical audit found 188 duplicate rows including 69 cross-split
+overlaps. Quarantine whole conflicting/reserved source games, deduplicate and
+refill from the already audited fresh July pool, enforcing exact 800k/100k/100k
+counts without changing original files. Scalar teacher values never become move
+targets. Generate new pinned first-PV labels with at most two independent teacher
+processes, one thread/32 MiB each, using bounded chunks. Historical measured
+single-worker throughput forecasts roughly four hours for one million labels;
+two workers target about two to three hours. No new GPU is rented during local
+labeling; no separate pilot or automatic model promotion is introduced.
+
+## 2026-11-24 — Complete the million-position direct-policy study
+
+The full no-pilot Runpod job completed on exactly 800k/100k/100k positions using
+frozen source 7b43f04. Early stopping completed 10/7/13 epochs for seeds 42/43/44;
+selected epochs remain 4/1/7 and seed 42 remains representative. Held-out top-one
+teacher agreement is 31.008%/6.858%/32.128%. Seed 43 collapsed to uniform scores;
+publish it as a failed seed rather than replacing it or launching extra fits.
+The complete private report and machine-readable evidence live in
+`docs/experiments/stockfish-move-policy-1m-20261124`.
+
+The initial relative-logit-only export check masked large probability errors.
+Require explicit probability and chosen-move parity and record all failures.
+Correct NumPy's final reduction so identical large activations cannot gain
+artificial move preferences through row-dependent rounding. Preserve original
+weights, Torch training forward, selections and test results; historical resume
+still requires the original scientific source/runtime. Seeds 42/44 pass the
+strict sampled check; seed 43 still fails probability parity and is unqualified.
+Do not relax tolerance or claim that every export passed.
+
+All artifact bytes, selected hashes, raw teacher chunks and source/data archives
+are backed up locally. The independent guard stopped the GPU after the verified
+backup marker; its Pod and new volume were deleted with 404 read-backs. Existing
+evolutionary resources and production models remain unchanged. Conservative
+total spend is approximately C$0.70 including the aborted setup and allowances;
+main-run/volume billing was still unposted, not proven free. No new training,
+merge, deployment or promotion is authorized by closing this study.
