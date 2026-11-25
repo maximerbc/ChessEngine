@@ -20,7 +20,7 @@ async function mock(page: any) {
   await page.route("**/api/models", async (route: any) =>
     route.fulfill({
       json: {
-        default: "supervised",
+        default: "supervised-1m",
         models: [
           {
             id: "supervised",
@@ -114,6 +114,10 @@ test("offline research and mobile layout", async ({ page }) => {
   await expect(page.getByText("The live engine is unavailable")).toBeVisible();
   await page.getByRole("button", { name: "Research", exact: true }).click();
   await page
+    .locator(".research-family > summary")
+    .filter({ hasText: "Self-play" })
+    .click();
+  await page
     .getByText("Original study: charts and saved games", { exact: true })
     .click();
   await expect(page.getByText("Does the model learn?")).toBeVisible();
@@ -172,7 +176,7 @@ test("model choice, drag move, and restart are coherent", async ({ page }) => {
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
   await page
     .getByRole("button", {
-      name: /^Augmented Supervised Trained on/,
+      name: /^Augmented Supervised A neural/,
     })
     .click();
   await expect(page.locator(".player-strip").first()).toContainText(
@@ -210,6 +214,10 @@ test("saved-game replay works without the API", async ({ page }) => {
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page
+    .locator(".research-family > summary")
+    .filter({ hasText: "Self-play" })
+    .click();
   await page
     .getByText("Original study: charts and saved games", { exact: true })
     .click();
@@ -293,13 +301,13 @@ for (const offline of [false, true]) {
     });
     await page.getByRole("button", { name: "Research", exact: true }).click();
     await expect(
-      page.getByRole("heading", { name: "The research journal" }),
+      page.getByRole("heading", { name: "Three ways to choose a move." }),
     ).toBeVisible();
     await page.goBack();
     await preserved();
     await page.goForward();
     await expect(
-      page.getByRole("heading", { name: "The research journal" }),
+      page.getByRole("heading", { name: "Three ways to choose a move." }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Demo", exact: true }).click();
     await preserved();
@@ -437,7 +445,6 @@ test("new game and move history survive a refresh", async ({ page }) => {
 
 for (const [id, name] of [
   ["handcrafted", "Classical"],
-  ["supervised", "Supervised"],
   ["supervised-1m", "Augmented Supervised"],
 ]) {
   for (const color of ["White", "Black"]) {
@@ -452,12 +459,11 @@ for (const [id, name] of [
       });
       await page.goto("/");
       const cards = page.locator(".model-option");
-      await expect(cards).toHaveCount(4);
+      await expect(cards).toHaveCount(3);
       await expect(cards.locator("strong")).toHaveText([
         "Classical",
-        "Supervised",
         "Augmented Supervised",
-        "Move Prediction",
+        "Direct-Move CNN",
       ]);
       await page.getByRole("button", { name: new RegExp(`^${name} `) }).click();
       await expect(
@@ -493,7 +499,8 @@ for (const [id, name] of [
       // White avoids an immediate opening move after resetting as Black.
       await page.getByRole("button", { name: "White", exact: true }).click();
       for (const card of await cards.all()) {
-        if ((await card.innerText()).includes('Move Prediction')) await expect(card).toBeDisabled();
+        if ((await card.innerText()).includes("Direct-Move CNN"))
+          await expect(card).toBeDisabled();
         else await expect(card).toBeEnabled();
       }
     });
@@ -509,31 +516,27 @@ test("released evidence is matched to checkpoint identity", async ({
     name: "Augmented Supervised research summary",
   });
   await expect(explanation).toContainText(
-    "broader playing strength remains unconfirmed",
+    "teacher agreement does not establish stronger play",
   );
   await expect(
     explanation.getByRole("link", { name: "Read the research ↗", exact: true }),
   ).toHaveAttribute("href", "/research?study=gpu-value");
-  await page.getByRole("button", { name: /^Supervised A neural/ }).click();
-  await expect(
-    page.getByRole("region", { name: "Supervised research summary" }),
-  ).toContainText("not Stockfish moves");
   await page.route("**/research/studies.json", (route) =>
     route.fulfill({
       json: {
         studies: [
-          { id: "original-study", checkpoint_ids: { supervised: "other" } },
+          { id: "gpu-value", checkpoint_ids: { "supervised-1m": "other" } },
         ],
       },
     }),
   );
   await page.reload();
   await expect(
-    page.getByRole("region", { name: "Supervised research summary" }),
+    page.getByRole("region", { name: "Augmented Supervised research summary" }),
   ).toContainText("Evidence unavailable for this version");
   await expect(
     page
-      .getByRole("region", { name: "Supervised research summary" })
+      .getByRole("region", { name: "Augmented Supervised research summary" })
       .getByRole("link", { name: "Read the research ↗", exact: true }),
   ).toHaveAttribute("href", "/research");
 });
@@ -574,7 +577,7 @@ test("unavailable requested opponent stays selected without fallback and require
   ).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: /^Augmented Supervised Trained on/,
+      name: /^Augmented Supervised A neural/,
     }),
   ).toBeDisabled();
   await expect(page.locator(".model-option[aria-pressed=true]")).toContainText(
@@ -611,7 +614,7 @@ test("loading and offline cards stay visible and keyboard selection works on mob
   });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.locator(".model-option")).toHaveCount(4);
+  await expect(page.locator(".model-option")).toHaveCount(3);
   await expect(page.locator(".model-options")).toContainText("LOADING");
   for (const card of await page.locator(".model-option").all())
     await expect(card).toBeDisabled();
@@ -634,7 +637,7 @@ test("loading and offline cards stay visible and keyboard selection works on mob
   });
   await page.route("**/api/models", (route) => route.abort());
   await page.reload();
-  await expect(page.locator(".model-option")).toHaveCount(4);
+  await expect(page.locator(".model-option")).toHaveCount(3);
   for (const card of await page.locator(".model-option").all()) {
     await expect(card).toBeDisabled();
     await expect(card).toContainText("UNAVAILABLE");
@@ -650,7 +653,7 @@ test("explanation research links preserve the game and selected opponent", async
     name: "Augmented Supervised research summary",
   });
   await expect(explanation).toContainText(
-    "broader playing strength remains unconfirmed",
+    "teacher agreement does not establish stronger play",
   );
   await page.screenshot({
     path: info.outputPath("three-approaches-desktop.png"),
@@ -707,7 +710,7 @@ for (const width of [1366, 890, 734, 390]) {
       0,
     );
     await expect(page.locator(".demo-intro")).toContainText(
-      "Play Classical, Supervised, Augmented Supervised, or Move Prediction. Availability follows each model’s validation status.",
+      "Play Classical, Augmented Supervised, or Direct-Move CNN. Explore how each approach chooses a move.",
     );
     await expect(
       page.getByRole("button", { name: "Play", exact: true }),
@@ -733,9 +736,11 @@ for (const width of [1366, 890, 734, 390]) {
         exact: true,
       }),
     ).toHaveCount(0);
-    await expect(page.locator(".model-option")).toHaveCount(4);
+    await expect(page.locator(".model-option")).toHaveCount(3);
     await expect(
-      page.getByRole("region", { name: "Supervised research summary" }),
+      page.getByRole("region", {
+        name: "Augmented Supervised research summary",
+      }),
     ).toContainText("Research summary");
     await expect(page.locator(".analysis-card")).toContainText(
       "ENGINE INSIGHT",
@@ -746,7 +751,7 @@ for (const width of [1366, 890, 734, 390]) {
       page.getByText("Test the difference", { exact: true }),
     ).toHaveCount(0);
     const summary = page.getByRole("region", {
-      name: "Supervised research summary",
+      name: "Augmented Supervised research summary",
     });
     await expect(summary.getByRole("heading")).toHaveText("Research summary");
     await expect(summary.getByRole("link")).toHaveCount(1);
@@ -761,7 +766,7 @@ for (const width of [1366, 890, 734, 390]) {
       footer.getByRole("link", { name: "Research", exact: true }),
     ).toHaveAttribute("href", "/research");
     await expect(page.locator(".intro-note")).toContainText(
-      "Can evolution through tournament play produce a competitive chess evaluator?",
+      "How do handcrafted evaluation, learned position assessment, and direct move prediction differ?",
     );
     expect(
       await page.evaluate(
@@ -776,9 +781,9 @@ for (const width of [1366, 890, 734, 390]) {
       .getByRole("button", { name: "Explore the evidence", exact: true })
       .click();
     await expect(page).toHaveURL(/research.*study=gpu-value/);
-    await expect(page.locator("#study-evolutionary")).toBeVisible();
+    await expect(page.locator("#study-gpu-value")).toBeVisible();
     await expect(page.locator(".eyebrow")).toContainText(
-      "FROM SUPERVISION TO EVOLUTION",
+      "METHODS AND EVIDENCE",
     );
     await expect(
       page.getByRole("heading", { name: "Evidence over assumptions." }),

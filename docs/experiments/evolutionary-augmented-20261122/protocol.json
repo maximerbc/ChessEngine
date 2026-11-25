@@ -1,0 +1,95 @@
+{
+  "identity": {
+    "config": {
+      "supervised": "artifact-1138babd697dd0ac",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "representative_seed": 42,
+      "pilot_seed": 20261026,
+      "sampling_seed": 20261027,
+      "population": 16,
+      "generations": 40,
+      "pilot_generations": 10,
+      "initial_sd": 0.05,
+      "sigma": 0.1,
+      "bounds": [
+        -3,
+        3
+      ],
+      "workers": 2,
+      "nodes": [
+        512,
+        2048,
+        8192
+      ],
+      "qdepth": 4,
+      "max_plies": 512,
+      "pools": {
+        "train": 600,
+        "pilot": 120,
+        "pilot-check": 40,
+        "development": 40,
+        "qualification": 200,
+        "final": 200
+      },
+      "checkpoints": [
+        10,
+        20,
+        40
+      ],
+      "production_nodes": 10000,
+      "production_time_ms": 1500,
+      "bootstrap_resamples": 10000,
+      "bootstrap_seed": 20261028,
+      "gates": {
+        "depth_one": 0.99,
+        "depth_two": 0.9,
+        "pilot_caps": 0.2,
+        "pilot_decisive": 0.1,
+        "pilot_gain": 0.05,
+        "memory_gib": 4,
+        "release_caps": 0.05,
+        "classical_lower": 0.5,
+        "supervised_lower": 0.45
+      }
+    },
+    "packages": {
+      "cma": "4.5.0",
+      "numpy": "2.2.6",
+      "chess": "1.11.2"
+    },
+    "inputs": {
+      "artifact-5f1c2c5cf4c001f3": "aa40b3671fa3cf1072eb182892cd90b0e1e003a4a5943492f64b77e7f3fd1635",
+      "artifact-f696c3966d15d1d3": "8520452e51e0a9aad1cd50615f69beb397836c3a75d6cc31192f3d0446f191b0",
+      "artifact-1138babd697dd0ac": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "configs/openings.json": "0da5790d8ed7c416cf604531fa2bffb283190e77cc6267fab165f83b0437a88c",
+      "artifact-4d609540c1805e10": "c0029b515b93799b37d96de3f6a7d304474b6dddcf508b140c43663834aa715d",
+      "artifact-d5fb92ced1fe12cf": "789d6699cebe0ad2cf2987cc8b924765af83879aea522ccb284fdfc437e343cb",
+      "artifact-70c69031b44a896e": "6e79744eacd9ef72fe4174eb8414bcb983be341409970424ab56d06a7bbd4bbc",
+      "artifact-7e19db54d95e9d66": "981b12fbb9e13f007467f7b3f9c234323cb1bade540f434563861e75bc1e2074",
+      "artifact-423fdcf501b3240b": "6fffd948d59a88cff4771a970f2733818cd0caf367e33860c4631c2074f92165"
+    },
+    "sources": {
+      "evolution_study": "8ee7f5142249a51882291c5b3f73bba6233b7c8f28caffd5589a3383c7294d89",
+      "evolution_data": "295f7806abc48522faab3f632c49c51bc27ca18b64a3a7bac2d7e9705f193c00",
+      "evolution_model": "246ef70eca6f2011671dbe84cc406db6f49726940a8cf1892804b35c2544c710",
+      "evolution_games": "44e28a27cf621e2bb59dfe25eba8c6c493dfd39866af04303cb074947488bf19",
+      "engine": "c2602a16550500aad8246530b3a2fac1a23c6b2a69ddc3538316012921a3c929",
+      "features": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e",
+      "model": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+      "common": "0c5c47823fafb21beb5d705ee77525230d72ccd161f07b4d37159cc9ac1a9d8a",
+      "evaluate": "d5e25da18daccb7bd34b27a2d3947feac36c11d5cbe41460e2fec157655dbe79"
+    }
+  },
+  "provenance": {
+    "commit": "b1e574ed90fde95ed321b769bf6513dcaa89417b",
+    "dirty": true,
+    "python": "3.10.6",
+    "platform": "macOS-15.6.1-arm64-arm-64bit"
+  },
+  "representative_seed": 42,
+  "note": "All evaluation weights random; no teacher targets or fixed material score."
+}

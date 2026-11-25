@@ -5,15 +5,22 @@ test.describe("production containers", () => {
 
   for (const [id, name] of [
     ["handcrafted", /^Classical Handcrafted/],
-    ["supervised", /^Supervised A neural network/],
-    ["supervised-1m", /^Augmented Supervised Trained/],
-    ["elite-policy", /^Move Prediction A convolutional/],
+    ["supervised-1m", /^Augmented Supervised A neural/],
+    ["elite-policy", /^Direct-Move CNN Predicts/],
   ] as const) {
-    test(`real ${id}: gameplay, comparison and export`, async ({ page }, testInfo) => {
+    test(`real ${id}: gameplay, comparison and export`, async ({
+      page,
+    }, testInfo) => {
       await page.goto("/");
-      await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
-      const catalog = await page.request.get(`${process.env.DEPLOYMENT_API_URL}/models`);
-      const available = new Set((await catalog.json()).models.map((row: { id: string }) => row.id));
+      await expect(
+        page.getByText("Engine online", { exact: true }),
+      ).toBeVisible();
+      const catalog = await page.request.get(
+        `${process.env.DEPLOYMENT_API_URL}/models`,
+      );
+      const available = new Set(
+        (await catalog.json()).models.map((row: { id: string }) => row.id),
+      );
       const card = page.getByRole("button", { name });
       if (!available.has(id)) {
         await expect(card).toBeDisabled();
@@ -43,12 +50,23 @@ test.describe("production containers", () => {
         comparison.getByRole("row", { name: /Position evaluation/ }),
       ).toBeVisible();
       if (id === "elite-policy") {
-        await expect(comparison).toContainText("Not provided by this move predictor");
+        await expect(comparison).toContainText(
+          "Not provided by this move predictor",
+        );
         await expect(comparison).toContainText("No search");
-        await expect(page.locator(".analysis-card")).toContainText("NO POSITION VALUE");
-        await expect(page.getByRole("list", { name: "Predicted legal moves", exact: true })).toBeVisible();
+        await expect(page.locator(".analysis-card")).toContainText(
+          "NO POSITION VALUE",
+        );
+        await expect(
+          page.getByRole("list", {
+            name: "Predicted legal moves",
+            exact: true,
+          }),
+        ).toBeVisible();
       } else {
-        await expect(comparison.getByRole("row", { name: /After search/ })).toBeVisible();
+        await expect(
+          comparison.getByRole("row", { name: /After search/ }),
+        ).toBeVisible();
       }
       await comparison
         .getByText("Search details and model version", { exact: true })
@@ -66,7 +84,10 @@ test.describe("production containers", () => {
         page.getByRole("button", { name: "Compare", exact: true }),
       ).toHaveCount(0);
       await expect(
-        page.getByRole("button", { name: "Analyze this position", exact: true }),
+        page.getByRole("button", {
+          name: "Analyze this position",
+          exact: true,
+        }),
       ).toHaveCount(0);
       await page.screenshot({
         path: testInfo.outputPath(`production-${id}.png`),
@@ -86,6 +107,10 @@ test.describe("production containers", () => {
       page.getByText("The live engine is unavailable"),
     ).toBeVisible();
     await page.getByRole("button", { name: "Research", exact: true }).click();
+    await page
+      .locator(".research-family > summary")
+      .filter({ hasText: "Self-play" })
+      .click();
     await page
       .getByText("Original study: charts and saved games", { exact: true })
       .click();

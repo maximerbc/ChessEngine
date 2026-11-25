@@ -1,0 +1,28 @@
+{
+  "verified_unix": 1795497845.272537,
+  "functional_parity_passed": false,
+  "seeds": [
+    {
+      "seed": 42,
+      "positions": 24,
+      "maximum_probability_error": 1.055002212524414e-05,
+      "argmax_mismatches": [],
+      "passed": true
+    },
+    {
+      "seed": 43,
+      "positions": 24,
+      "maximum_probability_error": 0.17222222685813904,
+      "argmax_mismatches": [],
+      "passed": false
+    },
+    {
+      "seed": 44,
+      "positions": 24,
+      "maximum_probability_error": 6.4373016357421875e-06,
+      "argmax_mismatches": [],
+      "passed": true
+    }
+  ],
+  "status": "retained pre-fix numerical export failure"
+}

@@ -51,7 +51,7 @@ async function setup(page: Page) {
   await page.route("**/api/models", (route) =>
     route.fulfill({
       json: {
-        default: "supervised",
+        default: "supervised-1m",
         models: Object.entries(identities).map(([id, checkpoint_id]) => ({
           id,
           checkpoint_id,
@@ -101,9 +101,7 @@ const panel = (page: Page) =>
 
 for (const [id, name] of [
   ["handcrafted", "Classical"],
-  ["supervised", "Supervised"],
   ["supervised-1m", "Augmented Supervised"],
-  ["evolutionary", "Evolutionary"],
 ]) {
   test(`${name} displays adjacent position and search comparisons without moving`, async ({
     page,

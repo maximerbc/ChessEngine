@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ChessEngine · Supervised 180k release check</title>
+<style>body{background:#f5f6f2;color:#20322b;font:17px/1.7 system-ui;margin:0}main{max-width:900px;margin:auto;padding:36px 24px}h1{font-size:38px;line-height:1.2}h2{margin-top:32px}a{color:#14614e}code{overflow-wrap:anywhere}table{border-collapse:collapse;width:100%}td,th{padding:10px;text-align:left;border-bottom:1px solid #cad5cc}</style>
+<main><p>CHESSENGINE · DEVELOPMENT RELEASE SCREEN</p>
+<nav><a href="/research">← All research</a></nav><h1>Does the 180k model qualify for release?</h1>
+<p><strong>It did not pass the development gate. The original 80,299-position
+model remains the demo default.</strong> The proposed replacement is the existing
+seed-42, feature-v1, 128/64 MLP trained on 180,302 positions. Its inference weights
+are preserved as a candidate, unchanged from the saved training checkpoint.</p>
+<h2>Why this candidate?</h2>
+<p>The expanded-data study reduced mean validation MSE from 0.30132 to 0.27350
+across three seeds (9.2%). The selected seed-42 candidate's validation MSE is
+0.27411. These are measures of agreement with Stockfish position assessments,
+not move imitation or calibrated winning probabilities. The data comparison
+did not match optimizer update counts, and repeated validation use makes it
+development evidence.</p>
+<h2>Direct check against the previous release</h2>
+<p>Seed 42 was fixed before measurement. All 40 opening pairs swap colors and
+come from the development pool excluding the expanded supervised corpus and
+old reserved games/positions. Each side receives 100 ms per move, a
+1,000,000,000-node ceiling, qdepth two, automatic draw claims, fresh search tables
+and a 512-ply cap. Two local workers ran the matches at C$0 paid cost.
+Every saved game was independently replayed to verify legal history and outcome.</p>
+<table><tr><th>Measure</th><th>Result</th></tr>
+<tr><td>Wins / draws / losses</td><td>27 / 24 / 29</td></tr>
+<tr><td>Candidate score</td><td>48.75%</td></tr>
+<tr><td>95% opening-pair bootstrap interval</td><td>40.00%–58.13%</td></tr>
+<tr><td>Capped games</td><td>0 / 80</td></tr>
+<tr><td>Uncapped-pair score</td><td>48.75%</td></tr></table>
+<p>The frozen gate requires all 80 games, score at least 50%, at most 5% capped
+games and uncapped-pair score at least 50%. This candidate missed the score gate.
+The interval's estimand is the paired-opening score for these fixed models;
+it does not include training-seed or checkpoint-selection uncertainty.</p>
+<h2>What this check does and does not establish</h2>
+<p>This is a bounded development screen. Its uncertainty conclusion is
+<strong>inconclusive</strong>. A passing point-score gate is not proof
+of stronger chess play. Production remains at 10,000 nodes, 1,500 ms and qdepth
+four; those settings were not evaluated by this release screen. No fresh final
+strength comparison, new training, model ensemble or deployment is claimed.</p>
+<p>The 48.75% point score is below the 50% threshold frozen before measurement.
+Its broad interval does not establish a regression either. We do not try another
+seed, change the threshold or rerun until the candidate passes.</p>
+<p>The later feature-v3 combined evaluator that failed its own release check is a
+different checkpoint. Original local-study charts and recorded games remain
+historical evidence for the old release. Existing evolutionary protocols retain
+their old supervised hashes and cannot silently resume using this new model.</p>
+<h2>Exact identity and reproducibility</h2>
+<p>Training positions: 180,302. Validation positions: 9,789. Training seed: 42.
+Only weights and allowlisted inference metadata enter the public model export.</p>
+<p>Candidate inference SHA256 (not active): <code>f59145dcb350703f9f0a05ea95e3a3a9036ae4ec0f3c32eed88c8f721c4faa17</code></p>
+<p>Source checkpoint SHA256: <code>05d37bdb0ecd6717c719608e66c21fd30b19e6dd6ce27d72763d6d982d848ba5</code></p>
+<p><a href="evidence.json">Summary and identities</a> ·
+<a href="protocol.json">Frozen settings and development openings</a> ·
+<a href="games.json">All 80 recorded games</a></p></main></html>

@@ -1,0 +1,30 @@
+{
+  "verified_unix": 1795497693.572417,
+  "seeds": [
+    {
+      "seed": 42,
+      "selected_epoch": 4,
+      "checkpoint_sha256": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+      "parity_positions": 24,
+      "maximum_logit_error": 6.103515625e-05,
+      "cpu_numpy_export_verified": true
+    },
+    {
+      "seed": 43,
+      "selected_epoch": 1,
+      "checkpoint_sha256": "86fe138ca9061c9424b35fdffe8e2a8f56a424a28754215d16228e1f76a02b90",
+      "parity_positions": 24,
+      "maximum_logit_error": 512.0,
+      "cpu_numpy_export_verified": true
+    },
+    {
+      "seed": 44,
+      "selected_epoch": 7,
+      "checkpoint_sha256": "c72d4d98ac485bf32bb5b527e4a030cd8eaaa26100aee088822a5e614a3ceab1",
+      "parity_positions": 24,
+      "maximum_logit_error": 6.103515625e-05,
+      "cpu_numpy_export_verified": true
+    }
+  ],
+  "all_selected_checkpoints_verified": true
+}

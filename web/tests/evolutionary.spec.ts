@@ -4,7 +4,7 @@ async function models(page: any) {
   await page.route("**/api/models", (route: any) =>
     route.fulfill({
       json: {
-        default: "supervised",
+        default: "supervised-1m",
         models: [
           {
             id: "handcrafted",
@@ -34,7 +34,14 @@ for (const url of ["/lab/rl?moves=e2e4,e7e5", "/?model=rl&moves=e2e4,e7e5"]) {
       if (r.url().endsWith("/api/analyze")) calls.push(r.url());
     });
     await page.goto(url);
-    await expect(page).toHaveURL(/research.*study=self-play-archive/);
+    await expect(page).toHaveURL(/model=supervised-1m/);
+    if (!page.url().includes("/research")) {
+      await page.getByRole("button", { name: "Research", exact: true }).click();
+      await page
+        .locator(".research-family > summary")
+        .filter({ hasText: "Self-play" })
+        .click();
+    }
     await expect(page.locator("#study-self-play-archive")).toContainText(
       "larger follow-up regressed",
     );
@@ -43,9 +50,8 @@ for (const url of ["/lab/rl?moves=e2e4,e7e5", "/?model=rl&moves=e2e4,e7e5"]) {
     await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
     await expect(page.locator(".model-option strong")).toHaveText([
       "Classical",
-      "Supervised",
       "Augmented Supervised",
-      "Move Prediction",
+      "Direct-Move CNN",
     ]);
     await expect(
       page.getByRole("link", { name: "RL weights", exact: true }),
@@ -69,7 +75,7 @@ for (const [status] of [
       name: /^GPU-trained Evolutionary A new/,
     });
     await expect(card).toHaveCount(0);
-    await expect(page.locator(".model-option")).toHaveCount(4);
+    await expect(page.locator(".model-option")).toHaveCount(3);
     await page
       .getByRole("button", { name: "Explore the evidence", exact: true })
       .click();

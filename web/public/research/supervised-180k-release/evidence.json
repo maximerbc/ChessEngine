@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "status": "blocked",
+  "release_eligible": false,
+  "seed": 42,
+  "training_positions": 180302,
+  "validation_positions": 9789,
+  "source_checkpoint_sha256": "05d37bdb0ecd6717c719608e66c21fd30b19e6dd6ce27d72763d6d982d848ba5",
+  "checkpoint_sha256": "f59145dcb350703f9f0a05ea95e3a3a9036ae4ec0f3c32eed88c8f721c4faa17",
+  "previous_release_sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+  "training_dataset_sha256": "ce1d74d238bfe7a41e241dd5a2723609d2b178d406c6d417dea5fc7c05a8b87c",
+  "selected_validation_mse": 0.27411275530180584,
+  "expansion_mean_validation_mse": 0.2734971541161662,
+  "expansion_relative_mse_reduction": 0.09233588092114986,
+  "protocol_sha256": "3edb6f529e4182ef31283ba9037716fe9c60e458d761fd987d7ac659efd12b83",
+  "ledger_sha256": "3dc715d49568a4252f88a45c7f93a6d72d334f1a24fb087a07ea24e44db9c4ad",
+  "settings": {
+    "nodes": 1000000000,
+    "time_ms": 100,
+    "qdepth": 2,
+    "max_plies": 512
+  },
+  "split": "development",
+  "summary": {
+    "games": 80,
+    "pairs": 40,
+    "wins": 27,
+    "draws": 24,
+    "losses": 29,
+    "score": 0.4875,
+    "ci95": [
+      0.4,
+      0.58125
+    ],
+    "capped_games": 0,
+    "uncapped_pairs": 40,
+    "uncapped_score": 0.4875,
+    "conclusion": "inconclusive"
+  },
+  "gate": {
+    "minimum_score": 0.5,
+    "maximum_capped_fraction": 0.05,
+    "minimum_uncapped_score": 0.5
+  },
+  "elapsed_seconds": 566.0250002919929,
+  "paid_cost_cad": 0,
+  "limitations": [
+    "Development screen at 100 ms and qdepth two; production remains 10000 nodes/1500 ms/qdepth four.",
+    "Point-score eligibility is not a statistically established playing-strength improvement.",
+    "The expanded-data comparison did not match optimizer update counts.",
+    "Original local-study results describe the archived 80k release, not this checkpoint."
+  ]
+}

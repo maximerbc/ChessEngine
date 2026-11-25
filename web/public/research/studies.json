@@ -1,209 +1,321 @@
 {
-  "assets": {
-    "elite-policy/curves.svg": "4aaa1f98a668a2fa31194c6904070b62bd2586ac8e48bf3439e5fdfdad3e5d7a",
-    "elite-policy/evidence.json": "b0e03880011506083ffadb3c1fdb9c2da9cfb72c62e4189baf4597cd926a9ae6",
-    "elite-policy/index.html": "241c3417a72b370198436689830b5dfba7cb1b1fc36a7ea86b7e959ad0a341c5",
-    "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
-    "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
-    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
-    "fixed-data-improvements/comparison.png": "56ae74d65edb74903ae2f3d749989c2727c5cdce5ac1e873f496fbb1b2d493e6",
-    "fixed-data-improvements/curves.png": "cc615872e0360cc01a68d349e892f6f115a5a1cde2e47571c473906aa3ab3dd6",
-    "fixed-data-improvements/index.html": "804c1f551ea30e419a79b072ff88d6f322b66b10746a4307fa314b02f9af4816",
-    "gpu-value/evidence.json": "1ebe04b843fcc256e45ee3937c8d4b0aa00fae0085c0c13a90c9e0954f034e5c",
-    "gpu-value/index.html": "618fb1a36d2ce807dae0f0d1e7ebc5c1acbfa8a5ac5f7c6d576aa26179bd47fb",
-    "move-ranking/index.html": "2f0a211c3048e31be39e77f47d21c62b8393c11e70c8d339974dabc73893f16b",
-    "policy-value/evidence.json": "e04ada459d3ff3a0e22eecee1cef6324c608ddbeb055051d65439e59af3ab43d",
-    "policy-value/index.html": "6b3aa8455ee6dc895415618145cda5ad8c650bcabb9e8cd201219a30123573a2",
-    "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866",
-    "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
-    "rl-improvement/index.html": "128000234bf9400ae7e672b13c2da49c38ad90ee04b3f359ce96b9ad95d24283",
-    "rl-improvement/learning.png": "92c028dfd2b7c0e3a10676f9be831f8ce599fbf6497f26a47181f475bc82c858",
-    "rl-update-diagnosis/index.html": "fa330900432925625d52bd8185fa03145044285e083aeb9020d1f93071c762fd",
-    "self-play-archive/index.html": "befa836ef2718f7d91843f75cff1f7af754bab94ea476a1515596222dab24abd",
-    "supervised-200k/data-size.png": "fd69130d4171879573c6dd8ed2d8f683b22be41dc90e282b1b7a7d7b5c6becf7",
-    "supervised-200k/index.html": "aac4ddaffd21439728f264bb5bff87e20ad68be03918234786948c5065681e5e",
-    "supervised-200k/training-curves.png": "49a1ad83ac8cef151f29655ef68c52ccd39175fcc80acd5ec3284abcf471d109",
-    "supervised-averaging/comparison.png": "f33b567a1057f24c6bd0aaf6046c5b683c36e25a9bca056317cd38cd2c378558",
-    "supervised-averaging/curves.png": "2d278417ac1160eb1623f7b07d4c93eea4b75c4f54d5853beac9047513244bce",
-    "supervised-averaging/index.html": "f4b6ec580d2b907b6e608a9e3cffddcd07ca1ace263b6dc566901f4a51e9cc9a",
-    "supervised-diagnostics/data-size.png": "4510432089807cdf84e7523853ec4cf49804ad98c9fc44a54ec738eedaefd73a",
-    "supervised-diagnostics/index.html": "ed77ac9a23cf19f3482a3b24318522e0b79cae28a88254e3c5d01a3006eb5ced",
-    "supervised-diagnostics/predictions.png": "b59eded773acd2714006208a7669fd3b3e786cc2890cd2aaca657e4423bfb931",
-    "supervised-diagnostics/training-curves.png": "8b6de96858a1ff35ca04e15c5462002818c5e7100fc965dc6f281d454d89e999"
-  },
-  "default_model": "supervised",
+  "version": 2,
+  "groups": [
+    {
+      "id": "evaluation",
+      "title": "Position evaluation",
+      "summary": "Coverage, representation and regularization; averaging missed its adoption threshold."
+    },
+    {
+      "id": "moves",
+      "title": "Move prediction and search guidance",
+      "summary": "The earlier CNN retained a collapsed seed; learned ordering did not pass its release gate."
+    },
+    {
+      "id": "self-play",
+      "title": "Self-play",
+      "summary": "Original evidence was inconclusive; the larger follow-up regressed. Offline diagnosis and feasibility remain separate."
+    },
+    {
+      "id": "evolution",
+      "title": "Evolutionary learning",
+      "summary": "Separate protocols and interrupted experiments; no evolutionary opponent is qualified for this release."
+    }
+  ],
+  "approaches": [
+    {
+      "id": "handcrafted",
+      "study_id": null,
+      "checkpoint_id": "handcrafted-v1",
+      "representative": "Existing handcrafted baseline; no training."
+    },
+    {
+      "id": "supervised-1m",
+      "study_id": "gpu-value",
+      "checkpoint_id": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+      "representative": "Playable checkpoint: seed 42. Validation MSE above is the three-seed mean, not the checkpoint\u2019s individual score."
+    },
+    {
+      "id": "elite-policy",
+      "study_id": "elite-pytorch-baseline-20261124",
+      "checkpoint_id": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
+      "representative": "Playable checkpoint: fixed seed 42, selected epoch 8 using validation cross-entropy."
+    }
+  ],
+  "default_model": "supervised-1m",
   "released_models": {
-    "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687",
-    "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
-    "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
+    "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+    "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687"
   },
   "studies": [
     {
-      "availability": "experimental playable",
-      "checkpoint_ids": {
-        "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687"
-      },
-      "id": "elite-pytorch-baseline-20261124",
-      "level": "PyTorch direct-move baseline",
-      "question": "Can a small CNN learn useful move preferences from elite human games?",
-      "report": "/research/elite-policy/index.html",
-      "result": "complete",
-      "takeaway": "Completed baseline; experimental playable access enabled. Human-move agreement is separate from playing strength.",
-      "title": "Elite human-move prediction"
-    },
-    {
-      "availability": "research only",
-      "checkpoint_ids": {
-        "rl": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc",
-        "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b"
-      },
       "id": "self-play-archive",
+      "title": "Self-play: results and lessons",
       "level": "Archived research",
-      "question": "What did the unsuccessful self-play experiments teach us?",
-      "report": "/research/self-play-archive/index.html",
       "result": "inconclusive",
+      "availability": "research only",
+      "question": "What did the unsuccessful self-play experiments teach us?",
       "takeaway": "Self-play did not establish an improvement; the larger follow-up regressed. Reports, diagnoses and recorded matches remain available; live play is retired.",
-      "title": "Self-play: results and lessons"
+      "report": "/research/self-play-archive/index.html",
+      "checkpoint_ids": {
+        "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+        "rl": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc"
+      },
+      "group": "self-play"
     },
     {
+      "id": "gpu-value",
+      "title": "Augmented supervised evaluation",
+      "level": "GPU studies: supervised-training-complete",
+      "result": "inconclusive",
       "availability": "available",
+      "question": "Can broader supervision and GPU tournaments improve the value evaluator?",
+      "takeaway": "Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned.",
+      "report": "/research/gpu-value/index.html",
       "checkpoint_ids": {
         "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2"
       },
-      "id": "gpu-value",
-      "level": "GPU studies: supervised-training-complete",
-      "question": "Can broader supervision and GPU tournaments improve the value evaluator?",
-      "report": "/research/gpu-value/index.html",
-      "result": "inconclusive",
-      "takeaway": "Augmented Supervised is playable experimentally with alpha-beta. A development comparison scored 68.75% versus the 80k model and 43.75% versus Classical; qualification remains pending. Evolutionary training remains planned.",
-      "title": "GPU value learning studies"
+      "group": "evaluation"
     },
     {
-      "availability": "in research",
-      "checkpoint_ids": {},
       "id": "evolutionary",
+      "title": "Evolutionary chess",
       "level": "Teacher-free evolutionary study",
+      "result": "diagnostic",
+      "availability": "in research",
       "question": "Can tournament-driven evolution learn a useful evaluator from scratch?",
-      "report": "/research/evolutionary/index.html",
-      "result": "diagnostic",
       "takeaway": "All 324 evaluation parameters start randomly; no teacher labels or fixed material score. See the measured gates and evidence.",
-      "title": "Evolutionary chess"
+      "report": "/research/evolutionary/index.html",
+      "checkpoint_ids": {},
+      "group": "evolution"
     },
     {
-      "availability": "historical study",
-      "checkpoint_ids": {
-        "rl": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc",
-        "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b"
-      },
       "id": "original-study",
+      "title": "Original local study",
       "level": "Completed local study",
+      "result": "inconclusive",
+      "availability": "historical study",
       "question": "From supervision to self-play",
-      "report": "/research/report.html",
-      "result": "inconclusive",
       "takeaway": "Historical three-seed evidence for the original released collection; later studies use different checkpoints.",
-      "title": "Original local study"
+      "report": "/research/report.html",
+      "checkpoint_ids": {
+        "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+        "rl": "b378f90f3ab629a9c7b806099589410392bad9dc2facd3c6bbee12b2406e02fc"
+      },
+      "group": "self-play"
     },
     {
-      "availability": "research only",
       "checkpoint_ids": {},
-      "id": "supervised-diagnostics",
-      "level": "Development diagnostic",
-      "question": "Training coverage and regularization",
-      "report": "/research/supervised-diagnostics/index.html",
-      "result": "diagnostic",
       "source_evidence_sha256": "3fa2f7220e2c90239f1d5c028112eb298073b8739b1bf0421074c3fad112e9e0",
+      "id": "supervised-diagnostics",
+      "title": "Supervised generalization",
+      "level": "Development diagnostic",
+      "result": "diagnostic",
+      "question": "Training coverage and regularization",
       "takeaway": "The fixed regularization search did not establish a better evaluator.",
-      "title": "Supervised generalization"
+      "availability": "research only",
+      "report": "/research/supervised-diagnostics/index.html",
+      "group": "evaluation"
     },
     {
-      "availability": "research only",
       "checkpoint_ids": {},
-      "id": "supervised-200k",
-      "level": "Development study",
-      "question": "Does broader training coverage help?",
-      "report": "/research/supervised-200k/index.html",
-      "result": "diagnostic",
       "source_evidence_sha256": "3d5a302b8ed8b46cef38b415ad60d90a23c623436fe090e534fffbc3aeb941ac",
-      "takeaway": "An expanded training corpus; original held-out splits were preserved.",
-      "title": "More training positions"
-    },
-    {
-      "availability": "research only",
-      "checkpoint_ids": {},
-      "id": "fixed-data-improvements",
+      "id": "supervised-200k",
+      "title": "More training positions",
       "level": "Development study",
-      "question": "Improve fitting without adding examples",
-      "report": "/research/fixed-data-improvements/index.html",
       "result": "diagnostic",
-      "source_evidence_sha256": "1706340791746cf0e9390192e2ee232836fc3eaec6b94fa0a446e0730e8feb41",
-      "takeaway": "Player-relative representation and optimization were evaluated on fixed data; teacher error is not playing strength.",
-      "title": "Representation and optimization"
+      "question": "Does broader training coverage help?",
+      "takeaway": "An expanded training corpus; original held-out splits were preserved.",
+      "availability": "research only",
+      "report": "/research/supervised-200k/index.html",
+      "group": "evaluation"
     },
     {
-      "availability": "research only",
       "checkpoint_ids": {},
-      "id": "supervised-averaging",
+      "source_evidence_sha256": "1706340791746cf0e9390192e2ee232836fc3eaec6b94fa0a446e0730e8feb41",
+      "id": "fixed-data-improvements",
+      "title": "Representation and optimization",
       "level": "Development study",
-      "question": "Can averaging improve the initializer?",
-      "report": "/research/supervised-averaging/index.html",
-      "result": "inconclusive",
-      "source_evidence_sha256": "e271c7ef2489b7a2d057b2a27db7cba39a328308a6eff87d0d5883822072aa01",
-      "takeaway": "The 1.65% MSE reduction missed the predefined 2% adoption threshold.",
-      "title": "Model averaging"
+      "result": "diagnostic",
+      "question": "Improve fitting without adding examples",
+      "takeaway": "Player-relative representation and optimization were evaluated on fixed data; teacher error is not playing strength.",
+      "availability": "research only",
+      "report": "/research/fixed-data-improvements/index.html",
+      "group": "evaluation"
     },
     {
+      "checkpoint_ids": {},
+      "source_evidence_sha256": "e271c7ef2489b7a2d057b2a27db7cba39a328308a6eff87d0d5883822072aa01",
+      "id": "supervised-averaging",
+      "title": "Model averaging",
+      "level": "Development study",
+      "result": "inconclusive",
+      "question": "Can averaging improve the initializer?",
+      "takeaway": "The 1.65% MSE reduction missed the predefined 2% adoption threshold.",
       "availability": "research only",
+      "report": "/research/supervised-averaging/index.html",
+      "group": "evaluation"
+    },
+    {
       "checkpoint_ids": {
         "42": "8b7ad33a2648ff715af0957f398e624cd9c511d6841a1429f9f4a458e96a4126",
         "43": "717d79b9fe859a677bc196e6492f27e22cdbca938e817691d6384bd20ebfbdda",
         "44": "5246915d34029221fe74a850c59715960c6c370bc2c76bb64432a2655a05b104"
       },
-      "id": "rl-improvement",
-      "level": "Completed live self-play study",
-      "question": "Does outcome learning improve the v3 evaluator?",
-      "report": "/research/rl-improvement/index.html",
-      "result": "regression",
       "source_evidence_sha256": "ec71ee482e607525c347ae0a2d46490250fcc3da03f9a6ca3559e7955d74010f",
+      "id": "rl-improvement",
+      "title": "Live self-play follow-up",
+      "level": "Completed live self-play study",
+      "result": "regression",
+      "question": "Does outcome learning improve the v3 evaluator?",
       "takeaway": "Mean final score was 44.125% against its initializer. This is a different checkpoint from the earlier released self-play model.",
-      "title": "Live self-play follow-up"
-    },
-    {
       "availability": "research only",
-      "checkpoint_ids": {},
-      "id": "rl-update-diagnosis",
-      "level": "Off-policy development diagnostic",
-      "question": "Why did outcome fitting hurt?",
-      "report": "/research/rl-update-diagnosis/index.html",
-      "result": "diagnostic",
-      "source_evidence_sha256": "5311395305d6b96736b6ce3c455e340bcc96a420128b8fd8619eae97958d49e9",
-      "takeaway": "Anchoring passed the development screen on fixed historical trajectories; this does not establish live self-play success.",
-      "title": "Understanding value drift"
+      "report": "/research/rl-improvement/index.html",
+      "group": "self-play"
     },
     {
-      "availability": "local preview",
+      "checkpoint_ids": {},
+      "source_evidence_sha256": "5311395305d6b96736b6ce3c455e340bcc96a420128b8fd8619eae97958d49e9",
+      "id": "rl-update-diagnosis",
+      "title": "Understanding value drift",
+      "level": "Off-policy development diagnostic",
+      "result": "diagnostic",
+      "question": "Why did outcome fitting hurt?",
+      "takeaway": "Anchoring passed the development screen on fixed historical trajectories; this does not establish live self-play success.",
+      "availability": "research only",
+      "report": "/research/rl-update-diagnosis/index.html",
+      "group": "self-play"
+    },
+    {
       "checkpoint_ids": {
         "ranker_sha256": "ce9b052904830682710e1c547383ac8069a46ad57c65c47ddab6301cc23e0127",
         "value_sha256": "bafdc5908a4a9c4474683e022e92dc156eb219b7e40a089ccf8b8236642e80c7"
       },
-      "id": "move-ranking",
-      "level": "Completed final evaluation",
-      "question": "Does learned root ordering improve search?",
-      "report": "/research/move-ranking/index.html",
-      "result": "inconclusive",
       "source_evidence_sha256": "02e402046e32e798acaa528be3c11bf79a47ac3f39d37ec2a75a917640ef2cd4",
+      "id": "move-ranking",
+      "title": "Learned move ordering",
+      "level": "Completed final evaluation",
+      "result": "inconclusive",
+      "question": "Does learned root ordering improve search?",
       "takeaway": "48.75% final score (95% paired interval 45.75\u201351.625%). The supervised release gate failed; this remains a local preview.",
-      "title": "Learned move ordering"
+      "availability": "local preview",
+      "report": "/research/move-ranking/index.html",
+      "group": "moves"
     },
     {
-      "availability": "research only",
       "id": "policy-value",
+      "title": "Policy/value self-play",
       "level": "Completed feasibility pilot",
-      "question": "Does prediction anchoring improve policy/value self-play?",
-      "report": "/research/policy-value/index.html",
       "result": "pilot",
+      "availability": "research only",
+      "question": "Does prediction anchoring improve policy/value self-play?",
       "takeaway": "All three search budgets passed the 60-game feasibility pilot. The full anchoring comparison was deferred because of its compute cost; no strength improvement is claimed.",
-      "title": "Policy/value self-play"
+      "report": "/research/policy-value/index.html",
+      "group": "self-play"
+    },
+    {
+      "id": "supervised-180k-release",
+      "title": "Earlier supervised release candidate",
+      "level": "Development evaluation",
+      "result": "inconclusive",
+      "question": "What did the intermediate supervised candidate establish?",
+      "takeaway": "Historical development evidence and recorded games are retained; this checkpoint is no longer a playable opponent.",
+      "report": "/research/supervised-180k-release/index.html",
+      "group": "evaluation",
+      "availability": "research only",
+      "checkpoint_ids": {},
+      "source_evidence_sha256": "b6920d2b738e4091acc4a8c0f74cf0ec538224cb93d72913ad4b6ff2a7857bb6"
+    },
+    {
+      "id": "elite-pytorch-baseline-20261124",
+      "title": "Elite human-move prediction",
+      "level": "Completed three-seed study",
+      "result": "complete",
+      "question": "Can a CNN learn move preferences from elite human games?",
+      "takeaway": "All three seeds exported successfully. Fixed representative: seed 42, selected epoch 8 by validation cross-entropy; agreement is not playing strength.",
+      "report": "/research/elite-policy/index.html",
+      "group": "moves",
+      "availability": "experimental playable",
+      "checkpoint_ids": {
+        "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687"
+      },
+      "source_evidence_sha256": "b0e03880011506083ffadb3c1fdb9c2da9cfb72c62e4189baf4597cd926a9ae6"
+    },
+    {
+      "id": "stockfish-move-policy-1m-20261124",
+      "title": "Stockfish move prediction",
+      "level": "Completed three-seed study",
+      "result": "negative",
+      "question": "Can a CNN predict the teacher\u2019s preferred legal move?",
+      "takeaway": "Seed 43 collapsed and failed strict export parity; seeds 42 and 44 exported successfully. No model from this study is playable.",
+      "report": "/research/stockfish-move-policy-1m-20261124/index.html",
+      "group": "moves",
+      "availability": "research only",
+      "checkpoint_ids": {},
+      "source_evidence_sha256": "2e7a07d879c683757ae1a56118d507705d6824377bf116150c3331891de60be0"
+    },
+    {
+      "id": "evolutionary-augmented-20261122",
+      "title": "Evolution against the augmented baseline",
+      "level": "Interrupted experiment",
+      "result": "interrupted",
+      "question": "Can random evolutionary evaluators compete with the augmented supervised baseline?",
+      "takeaway": "The saved run was interrupted; no completed qualification or final results are available. Its frozen protocol is separate from the original study.",
+      "report": "/research/evolutionary-augmented-20261122/index.html",
+      "group": "evolution",
+      "availability": "research only",
+      "checkpoint_ids": {},
+      "source_evidence_sha256": "3b3b84c427879fc344dbbaad164f1bc038e606e7eccaba6b3d8b59e9f2f55192"
     }
   ],
-  "version": 1
+  "assets": {
+    "self-play-archive/index.html": "befa836ef2718f7d91843f75cff1f7af754bab94ea476a1515596222dab24abd",
+    "supervised-diagnostics/index.html": "ed77ac9a23cf19f3482a3b24318522e0b79cae28a88254e3c5d01a3006eb5ced",
+    "supervised-diagnostics/data-size.png": "4510432089807cdf84e7523853ec4cf49804ad98c9fc44a54ec738eedaefd73a",
+    "supervised-diagnostics/training-curves.png": "8b6de96858a1ff35ca04e15c5462002818c5e7100fc965dc6f281d454d89e999",
+    "supervised-diagnostics/predictions.png": "b59eded773acd2714006208a7669fd3b3e786cc2890cd2aaca657e4423bfb931",
+    "supervised-200k/index.html": "aac4ddaffd21439728f264bb5bff87e20ad68be03918234786948c5065681e5e",
+    "supervised-200k/data-size.png": "fd69130d4171879573c6dd8ed2d8f683b22be41dc90e282b1b7a7d7b5c6becf7",
+    "supervised-200k/training-curves.png": "49a1ad83ac8cef151f29655ef68c52ccd39175fcc80acd5ec3284abcf471d109",
+    "fixed-data-improvements/index.html": "804c1f551ea30e419a79b072ff88d6f322b66b10746a4307fa314b02f9af4816",
+    "fixed-data-improvements/comparison.png": "56ae74d65edb74903ae2f3d749989c2727c5cdce5ac1e873f496fbb1b2d493e6",
+    "fixed-data-improvements/curves.png": "cc615872e0360cc01a68d349e892f6f115a5a1cde2e47571c473906aa3ab3dd6",
+    "supervised-averaging/index.html": "f4b6ec580d2b907b6e608a9e3cffddcd07ca1ace263b6dc566901f4a51e9cc9a",
+    "supervised-averaging/comparison.png": "f33b567a1057f24c6bd0aaf6046c5b683c36e25a9bca056317cd38cd2c378558",
+    "supervised-averaging/curves.png": "2d278417ac1160eb1623f7b07d4c93eea4b75c4f54d5853beac9047513244bce",
+    "rl-improvement/index.html": "128000234bf9400ae7e672b13c2da49c38ad90ee04b3f359ce96b9ad95d24283",
+    "rl-improvement/learning.png": "92c028dfd2b7c0e3a10676f9be831f8ce599fbf6497f26a47181f475bc82c858",
+    "rl-update-diagnosis/index.html": "fa330900432925625d52bd8185fa03145044285e083aeb9020d1f93071c762fd",
+    "move-ranking/index.html": "2f0a211c3048e31be39e77f47d21c62b8393c11e70c8d339974dabc73893f16b",
+    "policy-value/index.html": "6b3aa8455ee6dc895415618145cda5ad8c650bcabb9e8cd201219a30123573a2",
+    "policy-value/evidence.json": "e04ada459d3ff3a0e22eecee1cef6324c608ddbeb055051d65439e59af3ab43d",
+    "policy-value/protocol.json": "e2a5e0a60d0d8e521d6c76ec01c41834c824f8a5313df6042e5e2063c9795866",
+    "policy-value/release-scope.json": "330d1fa4eb75b577468740a3fd8d1374a4737a70cbe6bd7e67841982c50ea36d",
+    "evolutionary/evidence.json": "7a509d212977dd6ace8f48cbd5a518f5381b325f23be76b0a08ad676d9816318",
+    "evolutionary/index.html": "ab4b2bec1bd58cb0d727cb157e91ada55101d0c10549a35c5f277ff699746d07",
+    "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
+    "gpu-value/index.html": "26e3663bb3180ffb656ef346140b4689e97e6a7941f85e385f3e538990a53408",
+    "gpu-value/evidence.json": "1ebe04b843fcc256e45ee3937c8d4b0aa00fae0085c0c13a90c9e0954f034e5c",
+    "supervised-180k-release/index.html": "c8fff9ef0e53aedbbea7a87f765b8431cae30e69982552435319fa839df9532b",
+    "supervised-180k-release/evidence.json": "b6920d2b738e4091acc4a8c0f74cf0ec538224cb93d72913ad4b6ff2a7857bb6",
+    "supervised-180k-release/games.json": "0b5980cc4a20c0c8b1c84e59c0528d9b5637998825bc8095628b307c599af44c",
+    "supervised-180k-release/protocol.json": "d606f21af2369c77ed7b382224ae9dce5b679cc759e845227d22aed0b4e268fa",
+    "elite-policy/index.html": "fdc4ab893fdaecbc2a92f2eb6e6e1b45f144c45979af193d1c40f3083241b81f",
+    "elite-policy/evidence.json": "b0e03880011506083ffadb3c1fdb9c2da9cfb72c62e4189baf4597cd926a9ae6",
+    "elite-policy/curves.svg": "4aaa1f98a668a2fa31194c6904070b62bd2586ac8e48bf3439e5fdfdad3e5d7a",
+    "stockfish-move-policy-1m-20261124/index.html": "7e1335fa0d194005df7da802237523bcd00beab7afccc71347377730398f56ce",
+    "stockfish-move-policy-1m-20261124/README.md": "2e7a07d879c683757ae1a56118d507705d6824377bf116150c3331891de60be0",
+    "stockfish-move-policy-1m-20261124/results.json": "1be5024bf1806096b652fe3c4c71b3f5ca3e418031d02cefe873cb90a3652fca",
+    "stockfish-move-policy-1m-20261124/selections.json": "d921db2a29d9e5a7679642ccaf93ff0d2715f250d06aa5ee3427475fd7ea8f89",
+    "stockfish-move-policy-1m-20261124/numerical-audit.json": "3e66d812e15b5407aa42f047d17a3e943a3117f4800135034d8b4430f4354d5b",
+    "stockfish-move-policy-1m-20261124/export-verification.json": "8af8694712780cbb1051366041f27292c69e51b7343f198fc8b77099d93adfbf",
+    "stockfish-move-policy-1m-20261124/initial-export-failure.json": "c413ec1a92dbb90060c71a10be2dff711bf3aae924c26b286fb1ed20bdcaf62b",
+    "stockfish-move-policy-1m-20261124/superseded-relative-only-verification.json": "bc470c0886d80de3b1ba3783c6886ac10c4cc1fef800f20a52f8a1c7c6026ce2",
+    "stockfish-move-policy-1m-20261124/frozen-source.json": "fd6ae7c892241e44fa8f635f60e2c615d58175dda21902637204e0a81a73a870",
+    "stockfish-move-policy-1m-20261124/execution.json": "3ed7f6aaf8c480276f6c6f8d6a1e7b54efbca34ae15eaa1c12880ac68feb78fb",
+    "stockfish-move-policy-1m-20261124/costs.json": "d4d8a7c93efc530812dbcad80ad9207d3a5e88e7455421ac33fa8a6dd6baf784",
+    "evolutionary-augmented-20261122/index.html": "b0f544cb5919a79565f95894e85eeecb1a7c8a7815331310490d4195b7ed5f9f",
+    "evolutionary-augmented-20261122/protocol.json": "3b3b84c427879fc344dbbaad164f1bc038e606e7eccaba6b3d8b59e9f2f55192",
+    "evolutionary-augmented-20261122/execution.json": "79893e75c61fbcd251bf9ec41b76617f31f203fdf383b42665e4e1b71b7a28b7"
+  }
 }
