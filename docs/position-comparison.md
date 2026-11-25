@@ -2,8 +2,9 @@
 
 The Demo's **Compare with Stockfish** button assesses the displayed board without
 applying a move. It supports every available selected evaluator; the current
-release keeps Classical and Supervised playable and Evolutionary gated. Archived
-Self-play remains unavailable. This feature never changes release selection.
+release offers Classical, Augmented Supervised (default), and Direct-Move CNN.
+The CNN returns move preferences with no position value or search; Stockfish
+remains a separate reference. This feature never changes release selection.
 
 The first row shows the selected evaluator's direct output. The second shows its
 shared alpha-beta search assessment. Both rows repeat the **same searched
@@ -18,14 +19,21 @@ and `model_id`, using the same validation and model availability as `/analyze`.
 The response identifies the full request position, checkpoint, White perspective,
 `position_value`, `search`, and `stockfish` assessments. Search limits live in
 `configs/comparison.json` (override its path with `COMPARISON_CONFIG`). Both
-engines currently use 10,000 nodes / 1,500 ms, following the updated gameplay
+engines currently use 30,000 nodes / 3,000 ms, following the updated gameplay
 contract; node definitions differ between engines and this is not a strength
-test. Stockfish uses one thread and 32 MB hash, in a fresh process per request.
+test. Search stops at whichever limit is reached first; quiescence nodes count
+toward the alpha-beta node allowance, with qdepth four. Model search and the
+Stockfish reference run sequentially, so comparison can take approximately six
+seconds plus process/network overhead. The single API worker rejects concurrent
+search requests with HTTP 429 while occupied. Stockfish uses one thread and 32 MB hash, in a fresh process per request.
 Reported elapsed reference time includes process startup and analysis. Process
 initialization, commands and shutdown have bounded protocol timeouts. The shared
 API worker remains occupied until background work and cleanup finish, including
 when the client disconnects. No persistent process, cache, volume, new service,
 paid resource, model training or automatic comparison is introduced.
+
+See [the live search budget assessment](live-search-budget.md) for local timing
+measurements, capacity limits and reproduction commands.
 
 Full histories and automatic draw claims are preserved. Terminal positions use
 their exact rules outcome without invoking Stockfish. Mate scores remain

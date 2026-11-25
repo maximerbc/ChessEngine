@@ -1,8 +1,8 @@
 {
-  "model_nodes": 10000,
-  "model_time_ms": 1500,
-  "stockfish_nodes": 10000,
-  "stockfish_time_ms": 1500,
+  "model_nodes": 30000,
+  "model_time_ms": 3000,
+  "stockfish_nodes": 30000,
+  "stockfish_time_ms": 3000,
   "protocol_timeout_seconds": 3,
   "threads": 1,
   "hash_mb": 32,

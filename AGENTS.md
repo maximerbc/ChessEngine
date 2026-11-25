@@ -183,3 +183,8 @@
 
 ### Main integration and manifest compatibility (2026-11-25)
 - Manifest v7 identifies the approved three-opponent release because main already used v6 for the broader catalogue. Preserve v6 catalogue loading and private artifacts as historical research infrastructure; v7 supersedes that public lineup and default. Current production packages contain only the two declared neural weights and required gate.
+
+### Live search budget (2026-11-25)
+- The user authorized 30,000 nodes / 3,000 ms for playable alpha-beta models, including gameplay and position inspection, and aligned current-position model/Stockfish comparison limits. Stop at the first exhausted limit; alpha-beta includes quiescence nodes and keeps qdepth four. Smaller API budgets remain supported; larger live requests are rejected.
+- Preserve manifest v7, the Augmented Supervised default, checkpoint identities and Direct-Move CNN's search-free inference. The new serving budget supersedes earlier live-budget requirements only; frozen study configurations and historical evidence remain unchanged. Extra search time is not demonstrated stronger play or an Elo gain.
+- The user authorized a new branch from latest main, its private push and PR. No merge, deployment, training or paid resources are authorized.

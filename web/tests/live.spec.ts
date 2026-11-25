@@ -27,6 +27,8 @@ test("real current-position comparison preserves play for each released evaluato
       .click();
     const data = await (await response).json();
     expect(data.stockfish.status).toBe("ok");
+    expect(data.stockfish.limits.nodes).toBe(30000);
+    expect(data.stockfish.limits.time_ms).toBe(3000);
     expect(data.model_id).toBe(model.id);
     expect(data.checkpoint_id).toBe(model.checkpoint_id);
     await expect(
@@ -38,6 +40,7 @@ test("real current-position comparison preserves play for each released evaluato
       expect(data.policy.root_rankings.length).toBeGreaterThan(0);
       await expect(comparison).toContainText("No search");
     } else {
+      expect(data.search.limits).toEqual({ nodes: 30000, time_ms: 3000 });
       await expect(
         comparison.getByRole("row", { name: /After search/ }),
       ).toBeVisible();

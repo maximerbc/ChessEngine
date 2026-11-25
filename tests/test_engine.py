@@ -22,6 +22,27 @@ def test_budget_and_no_mutation():
     assert Search(Handcrafted(), time_ms=0).run(board).move is not None
 
 
+def test_deadline_returns_last_completed_iteration(monkeypatch):
+    now = [0.0]
+    monkeypatch.setattr("chessengine.engine.time.perf_counter", lambda: now[0])
+    search = Search(Handcrafted(), nodes=30000, time_ms=3000)
+    original = search.negamax
+
+    def expire_next_iteration(board, depth, alpha, beta, ply):
+        if ply == 0 and depth == 2:
+            now[0] = 3.0
+        return original(board, depth, alpha, beta, ply)
+
+    monkeypatch.setattr(search, "negamax", expire_next_iteration)
+    board = chess.Board()
+    result = search.run(board)
+    assert result.depth == 1
+    assert result.elapsed_ms == 3000
+    assert result.nodes < 30000
+    assert chess.Move.from_uci(result.move) in board.legal_moves
+    assert not board.move_stack
+
+
 def test_repetition_history():
     board = chess.Board()
     for move in ["g1f3", "g8f6", "f3g1", "f6g8"] * 2:

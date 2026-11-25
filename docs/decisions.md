@@ -1,5 +1,28 @@
 # Decision log
 
+## 2026-11-25 — Increase the live alpha-beta search allowance
+
+The user authorized a 30,000-node / 3,000-ms default and maximum for live
+alpha-beta requests, including Classical and Augmented Supervised gameplay and
+inspection. The current-position model search and separate Stockfish reference
+use the same limits. Each search stops when either allowance is exhausted;
+alpha-beta counts quiescence nodes and retains qdepth four. Smaller client
+budgets remain valid. Direct-Move CNN continues direct legal-move inference.
+
+Model search and Stockfish run sequentially during comparison, so its search
+allowances total up to approximately six seconds plus overhead. Gameplay has
+up to approximately three seconds of thinking plus request/wake-up overhead.
+The API retains its single-search lock and HTTP 429 busy response. Longer search
+occupancy reduces capacity for concurrent visitors; hosted throughput and cost
+have not been measured. The frontend's existing request timeout accommodates
+these budgets. Time limits are cooperative checks between nodes, not hard
+end-to-end response deadlines.
+
+Manifest v7, the augmented default, checkpoint hashes, scientific protocols and
+historical evidence stay unchanged. Local timing checks assess responsiveness
+and completed depth, not strength or Elo. A new private review branch and PR are
+authorized; merge, deployment, training and paid resources are separate.
+
 ## 2026-11-22 — Augmented-supervised fitting completed and preserved
 
 All one million positions were labeled locally with the pinned Mac teacher in 7,000.68 seconds. The A40 pipeline then completed full feature preparation, three independent fits, validation selection sealing and NumPy export parity in 1,192.49 seconds. Summed fit active timers were 426.45 seconds. Seeds 42/43/44 stopped after 15/14/16 epochs under the frozen patience-six rule; best epochs were 9/8/10. Their validation MSEs were 0.2145383/0.2155261/0.2142254 (mean 0.2147633, sample seed SD 0.0006789). Different historical validation pools preclude direct old/new MSE comparisons, and no playing-strength claim follows. Seed42 remains representative.

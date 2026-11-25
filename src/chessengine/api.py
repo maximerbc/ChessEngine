@@ -29,8 +29,8 @@ class PositionRequest(BaseModel):
 
 
 class AnalysisRequest(PositionRequest):
-    nodes: int = Field(default=10000, ge=1, le=10000)
-    time_ms: int = Field(default=1500, ge=10, le=3000)
+    nodes: int = Field(default=30000, ge=1, le=30000)
+    time_ms: int = Field(default=3000, ge=10, le=3000)
     simulations: int | None = Field(default=None, ge=1, le=128)
 
 

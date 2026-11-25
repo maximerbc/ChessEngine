@@ -19,9 +19,9 @@ log = logging.getLogger(__name__)
 
 class ComparisonSettings(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    model_nodes: int = Field(ge=1, le=10000)
+    model_nodes: int = Field(ge=1, le=30000)
     model_time_ms: int = Field(ge=10, le=3000)
-    stockfish_nodes: int = Field(ge=1, le=10000)
+    stockfish_nodes: int = Field(ge=1, le=30000)
     stockfish_time_ms: int = Field(ge=10, le=3000)
     protocol_timeout_seconds: float = Field(gt=0, le=5)
     threads: Literal[1]
