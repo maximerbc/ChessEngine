@@ -62,3 +62,9 @@ git archive HEAD | tar -x -C /path/to/an/empty/audit-directory
 ```
 
 Review author metadata with `git log --all --format='%h %ae %ce'` privately. Do not paste suspected credentials into issues or reports. If a later scan discovers a real secret, revoke/rotate it before any publication, then assess history and hosted copies; merely deleting its current file is insufficient.
+
+## PR #24 container-check follow-up
+
+The initial PR run failed in `scripts/check_deployment.py`: its comparison smoke check still asserted the superseded 10,000-node ceiling, while the API correctly used the approved 30,000-node / 3,000-ms budget. The push-triggered container run passed because measured search work stayed under the obsolete ceiling; the PR-triggered run exceeded it. This was a stale, hardware-dependent assertion, not a model/checksum/startup failure.
+
+The smoke check now reads `configs/comparison.json`, verifies the response declares that exact node/time allowance, and rejects actual work beyond its node ceiling. Regression cases accept 10,001 and 30,000 nodes, reject 30,001, and reject stale node/time declarations. Focused deployment/API/comparison checks passed: 32 passed, one real-Stockfish integration check skipped locally. Ruff and whitespace checks passed. Serving behavior, weights and deployment definitions remain unchanged; full container verification runs in CI.
