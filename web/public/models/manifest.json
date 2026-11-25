@@ -1,24 +1,6 @@
 {
-  "default": "supervised",
+  "default": "supervised-1m",
   "models": [
-    {
-      "architecture": [
-        841,
-        128,
-        64,
-        1
-      ],
-      "evidence_id": "original-study",
-      "feature_version": 1,
-      "file": "supervised.npz",
-      "id": "supervised",
-      "name": "Supervised model",
-      "search": {
-        "strategy": "alpha-beta"
-      },
-      "sha256": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
-      "source_sha256": "35a5243f2d8c95153e51d35868bed5e11eacec903cb74a6a3a8f86afb0fa7ef1"
-    },
     {
       "architecture": [
         853,
@@ -70,7 +52,7 @@
       "gate_sha256": "675a750fac78eb714717b06c8caf1446d855d386c50dbba9d3adc9806d8a814e",
       "id": "elite-policy",
       "kind": "human-move-policy",
-      "name": "Move Prediction",
+      "name": "Direct-Move CNN",
       "qualified": false,
       "release_status": "experimental-playable",
       "search": {
@@ -80,9 +62,8 @@
       "strength_status": "not-established"
     }
   ],
-  "release_version": 5,
+  "release_version": 6,
   "required_model_ids": [
-    "supervised",
     "supervised-1m",
     "elite-policy"
   ]

@@ -59,8 +59,8 @@ def create_app(manifest_path=None, comparison_settings=None):
             raise ValueError('Duplicate model identity in manifest')
         if require_models:
             required = manifest.get('required_model_ids')
-            if (manifest.get('release_version') not in {3, 4, 5} or not isinstance(required, list)
-                    or 'supervised' not in required or len(set(required)) != len(required)
+            if (manifest.get('release_version') not in {3, 4, 5, 6} or not isinstance(required, list)
+                    or ('supervised' not in required if manifest.get('release_version') != 6 else set(required) != {'supervised-1m', 'elite-policy'}) or len(set(required)) != len(required)
                     or not set(required).issubset({'supervised', 'evolutionary', 'elite-policy', *MODEL_IDS})
                     or {r['id'] for r in manifest['models']} != set(required)):
                 raise ValueError('Production requires a v3 manifest or v4 manifest with explicit required models')
@@ -70,7 +70,7 @@ def create_app(manifest_path=None, comparison_settings=None):
             if Path(row['file']).name != row['file']:
                 raise ValueError('Model file must be inside the manifest directory')
             if row['id'] == 'elite-policy':
-                if manifest.get('release_version') != 5:
+                if manifest.get('release_version') not in {5, 6}:
                     raise ValueError('Elite policy requires manifest v5')
                 evaluator = NumpyElitePolicy(manifest_path.parent / row['file'])
                 if evaluator.checkpoint_id != row['sha256']:
@@ -93,10 +93,10 @@ def create_app(manifest_path=None, comparison_settings=None):
             if manifest.get('release_version') in {4, 5} and row['id']=='supervised' and row['sha256'] != LEGACY_SHA:
                 raise ValueError('Manifest v4 must preserve the released 80k Supervised identity')
             if row['id'] in MODEL_IDS:
-                if manifest.get('release_version') not in {4, 5}:
+                if manifest.get('release_version') not in {4, 5, 6}:
                     raise ValueError('GPU study models require manifest v4')
                 validate_entry(row, evaluator)
-            if manifest.get('release_version') in {4, 5}:
+            if manifest.get('release_version') in {4, 5, 6}:
                 architecture = [853 if evaluator.feature_version == 3 else 841,
                                 *evaluator.metadata['hidden'], 1]
                 if (row.get('architecture') != architecture
@@ -146,10 +146,18 @@ def create_app(manifest_path=None, comparison_settings=None):
             allowed = {'supervised', 'supervised-1m', 'elite-policy'}
             if not {'supervised', 'supervised-1m'}.issubset(models) or not {r['id'] for r in manifest['models']}.issubset(allowed):
                 raise ValueError('Manifest v5 requires the authorized four-model lineup')
+        if manifest.get('release_version') == 6:
+            if (manifest.get('default') != 'supervised-1m'
+                    or manifest.get('required_model_ids') != ['supervised-1m', 'elite-policy']
+                    or [r['id'] for r in manifest['models']] != ['supervised-1m', 'elite-policy']
+                    or models['supervised-1m']['strategy'] != 'alpha-beta'
+                    or models['supervised-1m']['checkpoint_id'] != '1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2'
+                    or models['elite-policy']['checkpoint_id'] != '5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687'):
+                raise ValueError('Manifest v6 requires the fixed three-approach release identities')
         default_model = manifest.get("default", default_model)
         if default_model not in models:
             raise ValueError("Default model is missing")
-    if require_models and 'supervised' not in models:
+    if require_models and not {'supervised', 'supervised-1m'} & models.keys():
         raise ValueError('Production requires supervised model')
     for model in models.values():
         policy = model.get('strategy') == ELITE_STRATEGY
@@ -182,6 +190,8 @@ def create_app(manifest_path=None, comparison_settings=None):
         }
 
     def request_board(request: PositionRequest):
+        if manifest_path.exists() and manifest.get('release_version') == 6 and request.model_id in {'supervised', 'evolutionary', 'evolutionary-gpu', 'move-guided'}:
+            raise HTTPException(410, 'This opponent is retired from live play. See /research')
         if request.model_id == 'rl':
             raise HTTPException(410, 'Self-play is retired from live play. See /research?study=self-play-archive')
         if request.model_id not in models:

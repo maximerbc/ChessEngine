@@ -23,7 +23,7 @@ from chessengine.puct_serving import ValueSearch
 
 
 def test_legacy_assets_and_historical_protocol_are_immutable():
-    for path in ['artifacts/models/supervised.npz', 'web/public/models/supervised.npz']:
+    for path in ['artifacts/models/supervised.npz']:
         assert sha(path) == LEGACY_SHA
     config = json.loads(Path('configs/evolutionary.json').read_text())
     assert config['workers'] == 2 and config['population'] == 16
