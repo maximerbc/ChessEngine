@@ -211,3 +211,11 @@ weight copy. The two existing supervised public artifacts remain unchanged.
 Verified private backups preceded independent guard shutdown and removal of only
 this run's pod and volume. Billing remains partly unposted; conservative allowances
 are recorded separately from posted charges. No push, merge or deployment occurred.
+
+## 2026-11-24 — Three playable approaches, manifest v6
+
+The approved lineup is Classical, Augmented Supervised and Direct-Move CNN. The augmented seed-42 value evaluator becomes the default; it retains the shared alpha-beta search. The later human-game CNN uses its existing direct-policy NumPy implementation and fixed seed-42 validation selection (epoch 8). Its completed export gate is required. This explicitly supersedes the older requirement to retain the 80k supervised default and the production alpha-beta-only restriction.
+
+Manifest v6 requires both neural artifacts and exact approved checkpoint identities. Earlier declarations are retained in `artifacts/research/release-v5.json` and `public-release-v5.json`; historical checkpoints are preserved. Playable availability is distinct from qualification or demonstrated playing strength. The augmented three-seed mean validation MSE (0.21476) is agreement on its own validation dataset, not a comparison of playing strength across studies.
+
+Research presents the three active methods first, then four collapsed experiment families. Original charts/replay live within their original-study archive entry. Study links expand the containing family. Earlier CNN collapse/export failures, negative self-play results, failed ordering gates and interrupted evolutionary runs remain discoverable. A snapshot of the augmented-baseline evolutionary interruption is published independently of the original study; no run is restarted.
