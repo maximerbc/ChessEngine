@@ -43,9 +43,9 @@ Private vulnerability reporting was not verified as enabled. `SECURITY.md` uses 
 
 - Python: **240 passed, 2 skipped** in 250.02 seconds, with `PYTHONPATH=src` and one BLAS/OpenMP thread.
 - Browser: **58 passed, 8 skipped** in 34.5 seconds. Skips need live services, production containers or optional previews. The first sandboxed Chromium launch failed; the approved unsandboxed run passed. A real local API and Vite server also produced the current README screenshot.
-- CLI help, TypeScript/Vite production build, Ruff and whitespace checks passed.
+- CLI help, TypeScript/Vite production build, Ruff and whitespace checks passed. The documented installation commands also passed in a fresh runtime-only virtual environment: CLI help and manifest-v7 app initialization worked with PyTorch absent.
 - New documentation links, snapshot secret scans, the exact checksum exception and synthetic generic/provider credential canaries were checked separately. The new GitHub workflow has not run remotely; it uses read-only contents permission, a pinned checkout commit, a checksum-pinned scanner, full fetched history, tracked-file snapshots, redacted output, and no uploaded secret findings.
-- No engine/API/search/model code, release manifests, existing checkpoint bytes, frozen research evidence, or deployment definitions changed. No training, history deletion/rewrite, remote push, visibility change, deployment, or paid activity occurred.
+- No engine/API/search/model code, release manifests, existing checkpoint bytes, frozen research evidence, or deployment definitions changed. NOTICE now accurately credits the independently implemented CNN reference and states that the API image retains the pinned Stockfish release with upstream source/license/authors. No training, history deletion/rewrite, remote push, visibility change, deployment, or paid activity occurred.
 
 ## Recheck and publish separately
 

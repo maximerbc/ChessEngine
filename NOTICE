@@ -2,7 +2,10 @@ ChessEngine Lab
 Project code: GPL-3.0-or-later. See LICENSE.
 
 python-chess / chess: https://github.com/niklasf/python-chess (GPL-3.0-or-later).
-Stockfish: https://github.com/official-stockfish/Stockfish (GPLv3); used locally as a labeling/reference tool, not bundled in the application.
+Stockfish: https://github.com/official-stockfish/Stockfish (GPLv3); used for labeling
+and explicitly named reference assessments. The production API image installs
+the pinned upstream release with its source, license and authors retained; see
+scripts/install_stockfish.py. It never substitutes for the demo models.
 Lichess database: https://database.lichess.org/ (CC0); game data and generated labels have recorded provenance.
 PyTorch: https://github.com/pytorch/pytorch (BSD-style).
 NumPy: https://numpy.org/ (BSD-3-Clause).
