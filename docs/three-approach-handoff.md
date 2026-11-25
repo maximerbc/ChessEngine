@@ -1,5 +1,7 @@
 # Three playable approaches — local review handoff
 
+> Historical handoff: branch, lineup, and authorization details below apply to its original date. See the [current overview](../README.md) and [operations archive](archive/README.md).
+
 The approved Demo lineup is Classical, Augmented Supervised (default), and Direct-Move CNN. Research now starts with those three methods, followed by four collapsed experiment families. The original charts/replay sit inside the original-study entry; study links reveal the correct family.
 
 ## Release identities

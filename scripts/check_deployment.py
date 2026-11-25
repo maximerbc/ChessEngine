@@ -14,12 +14,23 @@ def get(url):
         return response.read(), response.headers
 
 
+def check_search_budget(search, comparison_config):
+    expected = {
+        "nodes": comparison_config["model_nodes"],
+        "time_ms": comparison_config["model_time_ms"],
+    }
+    assert search["limits"] == expected
+    assert 0 < search["nodes"] <= expected["nodes"]
+
+
 def main():
     api, web = "http://127.0.0.1:8000", "http://127.0.0.1:8080"
     assert json.loads(get(api + "/health")[0])["models"] >= 2
     models = {row["id"]: row for row in json.loads(get(api + "/models")[0])["models"]}
     with open("artifacts/models/manifest.json") as source:
         manifest = json.load(source)
+    with open("configs/comparison.json") as source:
+        comparison_config = json.load(source)
     assert list(models) == ["handcrafted", "supervised-1m", "elite-policy"]
     try:
         get(web + "/models/rl.npz")
@@ -74,7 +85,7 @@ def main():
             assert comparison['position_value'] is None and comparison['search'] is None
             assert comparison['policy']['root_rankings']
         else:
-            assert comparison["search"]["nodes"] <= 10000
+            check_search_budget(comparison["search"], comparison_config)
     for path, content_type in [
         ("/", "text/html"),
         ("/health", "text/plain"),

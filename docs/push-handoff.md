@@ -1,5 +1,7 @@
 # Policy/value research and consolidated website handoff
 
+> Historical handoff: branch, lineup, and authorization details below apply to its original date. See the [current overview](../README.md) and [operations archive](archive/README.md).
+
 Implementation branch: `codex/policy-value-research`. Local implementation commit: `ded5e5a` (**Add policy value research**). Later commits record execution evidence and documentation. The user manages all remote pushes; no PR, visibility, account or hosting setting was changed here.
 
 PRs #9 and #10 are already merged. This branch starts from their verified equivalent file tree; do not reopen those completed studies or push the deleted historical branches.

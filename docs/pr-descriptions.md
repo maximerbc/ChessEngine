@@ -1,5 +1,7 @@
 # Prepared pull request descriptions
 
+> Historical handoff: branch, lineup, and authorization details below apply to its original date. See the [current overview](../README.md) and [operations archive](archive/README.md).
+
 These are local handoff drafts, not evidence of remote PR creation. Earlier batches may already have been pushed and merged by the user.
 
 ## PR 1: Build the shared chess engine and supervised learning foundation

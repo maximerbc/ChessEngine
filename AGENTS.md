@@ -1,5 +1,12 @@
 # ChessEngine project contract
 
+## Public-readiness amendment (2026-11-25)
+
+- The user authorized preparing this repository for public visitors: audit files/history and accessible GitHub surfaces, simplify documentation, add contribution/security guidance and secret scanning, and preserve research evidence. This supersedes permanent-private wording for preparation only; the repository remains private until the owner changes it.
+- The owner handles remote pushes and visibility. Do not rewrite history, remove private artifacts, rotate account credentials, deploy, train, or spend as part of cleanup. Report publication blockers and privacy choices explicitly; tracked weights become accessible with a public repository even if absent from the website.
+- Preserve manifest v7, checkpoint identities, Augmented Supervised default, direct-policy behavior, current search budgets, scientific gates and immutable protocols. Keep historical authorization text in dated evidence; it does not grant current execution permission.
+- Report the audited commit, available history/refs, scanner version, reviewed exceptions, hosted-surface coverage and limitations. Never equate a clean secret scan with complete publication clearance.
+
 ## Elite human-move baseline and four-model demo (2026-11-24)
 
 - The CNN checkpoint is a backend artifact. Static assets contain aggregate evidence and the manifest, without a policy weight download. Integrity audits validate its private checkpoint and learning/export gate; existing supervised public copies remain checksum-matched.
@@ -53,7 +60,7 @@
 
 ## Purpose and workflow
 - Demonstrate supervised learning, evolutionary learning, archived self-play research, careful experiments, and a polished chess demo for master's applications. Playing strength and positive RL results are not promised.
-- The repository stays private. Agents may push private review branches and open PRs under the current amendment; the user reviews and merges. Never change visibility or push directly to main. Historical review batches remain documented below.
+- Prepare for public release under the public-readiness amendment; visibility stays private until the owner changes it. The owner handles pushes, review and merging. Historical review batches remain documented below.
 - Implement autonomously, explain mathematics and evidence at milestones, and minimize questions. Ask only for consequential scope changes, identity/account access, or costs outside authorization.
 - Historical paid spend ceiling was C$50 equivalent with 20% contingency. New GPU training has an unset budget pending forecast and user decision; existing hosting still requires explicit approval. Local Apple Silicon/8 GB development remains supported. No paid resources are provisioned implicitly.
 
@@ -75,7 +82,7 @@
 - Stable decisions live here; tunable values live in JSON configs. Record changes to invariants in `docs/decisions.md` and update this file together.
 
 ## Delivery and verification
-- Host a static public demo/report and a bounded FastAPI engine on two Railway services (always-running Nginx website, serverless FastAPI engine), with explicit wake-up/error states. Private source stays private. Only allowlisted assets enter static deployment.
+- Host a static public demo/report and a bounded FastAPI engine on two Railway services (always-running Nginx website, serverless FastAPI engine), with explicit wake-up/error states. Repository publication follows the separate readiness audit and owner decision. Only allowlisted assets enter static deployment.
 - Test chess integration/search signs/budgets, history-sensitive draws, feature/target perspective, leakage, overfit/resume/export parity, RL actor freezing/outcomes/truncation, paired statistics, and browser flows.
 - Standard commands: `.venv/bin/python -m pytest`, `.venv/bin/python -m chessengine --help`, `npm --prefix web run build`, `npm --prefix web run test:e2e`. Full training is not CI.
 - Do not claim deployment, full experiments, or a verified PDF unless actually completed. Preserve all meaningful failures in the report and provide reproducible follow-up commands for work requiring external account access.
@@ -85,7 +92,7 @@
 - Select the representative RL checkpoint and demo default using development results only. Publish all seed-level final scores, and keep seed variability separate from opening-pair uncertainty. The default stays supervised unless the selected RL model's development score exceeds 50%.
 
 ## Railway deployment contract
-- A fourth deployment PR follows showcase. User-managed pushes and private visibility remain mandatory.
+- A fourth deployment PR follows showcase. User-managed pushes remain mandatory; repository visibility follows the public-readiness amendment.
 - Production requires a version-3 manifest declaring Supervised and any qualified Evolutionary model, with valid checksums; missing declared artifacts fail startup. One API replica, one Uvicorn worker, no persistent volume or training dependencies.
 - Dockerfiles and dashboard instructions define deployment. No paid activation or automatic PR environments. Track hosting costs within the C$50 ceiling.
 
