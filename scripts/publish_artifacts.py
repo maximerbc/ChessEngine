@@ -9,7 +9,7 @@ parser.add_argument('--config', default='configs/evolutionary.json')
 parser.add_argument('--report-only', action='store_true')
 args = parser.parse_args()
 config = read_json(args.config)
-if read_json('artifacts/models/manifest.json').get('release_version') != 6:
+if read_json('artifacts/models/manifest.json').get('release_version') not in {6, 7}:
     report(config)
     if not args.report_only:
         print(release(config))

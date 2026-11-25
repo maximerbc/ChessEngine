@@ -74,7 +74,15 @@ test("study permalinks expand the correct family and preserve replay", async ({
   ).toBeVisible();
 });
 
-for (const id of ["supervised", "evolutionary", "rl", "move-guided"]) {
+for (const id of [
+  "supervised",
+  "supervised-relative",
+  "supervised-averaged",
+  "stockfish-policy",
+  "evolutionary",
+  "rl",
+  "move-guided",
+]) {
   test(`retired ${id} preserves history offline and on browser navigation`, async ({
     page,
   }) => {

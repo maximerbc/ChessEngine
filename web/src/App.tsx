@@ -298,17 +298,36 @@ function Chart({
   );
 }
 
-const playableIds = ["handcrafted", "supervised-1m", "elite-policy"];
 const defaultOpponent = "supervised-1m";
+const retiredIds = new Set([
+  "supervised",
+  "supervised-large",
+  "supervised-10k",
+  "supervised-40k",
+  "supervised-diagnostic",
+  "supervised-weaker-decay",
+  "supervised-stronger-decay",
+  "supervised-dropout-01",
+  "supervised-dropout-02",
+  "supervised-180k",
+  "supervised-smaller-lr",
+  "supervised-adaptive-lr",
+  "supervised-relative",
+  "supervised-relative-material",
+  "supervised-combined",
+  "supervised-averaged",
+  "stockfish-policy",
+  "rl",
+  "evolutionary",
+  "evolutionary-gpu",
+  "move-guided",
+]);
 function normalizedOpponent(requested: string | null) {
-  return requested && playableIds.includes(requested)
-    ? requested
-    : defaultOpponent;
+  return requested && !retiredIds.has(requested) ? requested : defaultOpponent;
 }
 function normalizeLegacyMode() {
   const query = new URLSearchParams(window.location.search);
-  const retired =
-    query.has("model") && !playableIds.includes(query.get("model")!);
+  const retired = query.has("model") && retiredIds.has(query.get("model")!);
   if (query.get("mode") !== "compare" && !retired) return;
   if (query.get("mode") === "compare") query.set("mode", "play");
   if (retired) query.set("model", defaultOpponent);
@@ -360,7 +379,7 @@ export default function App() {
   });
   const [retiredNotice, setRetiredNotice] = useState(() => {
     const requested = new URLSearchParams(window.location.search).get("model");
-    return !!requested && !playableIds.includes(requested);
+    return !!requested && retiredIds.has(requested);
   });
   const [connection, setConnection] = useState<"loading" | "ready" | "offline">(
     "loading",
@@ -479,9 +498,7 @@ export default function App() {
       const requestedBefore = new URLSearchParams(window.location.search).get(
         "model",
       );
-      setRetiredNotice(
-        !!requestedBefore && !playableIds.includes(requestedBefore),
-      );
+      setRetiredNotice(!!requestedBefore && retiredIds.has(requestedBefore));
       normalizeLegacyMode();
       const position = routePosition();
       setInitialFen(position.fen);

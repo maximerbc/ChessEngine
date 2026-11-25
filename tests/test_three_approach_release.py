@@ -17,7 +17,7 @@ def test_real_release_lineup_and_direct_inference(monkeypatch):
         catalog = client.get('/models').json()
         assert catalog['default'] == 'supervised-1m'
         assert [m['id'] for m in catalog['models']] == ['handcrafted', 'supervised-1m', 'elite-policy']
-        for retired in ['supervised', 'rl', 'evolutionary', 'move-guided', 'evolutionary-gpu']:
+        for retired in ['supervised', 'rl', 'evolutionary', 'move-guided', 'evolutionary-gpu', 'supervised-relative', 'supervised-averaged', 'stockfish-policy']:
             assert client.post('/analyze', json={'model_id': retired}).status_code == 410
         result = client.post('/analyze', json={'model_id': 'elite-policy', 'moves': ['e2e4']})
         assert result.status_code == 200
@@ -52,3 +52,23 @@ def test_release_rejects_changed_declarations(tmp_path, monkeypatch, change):
     with pytest.raises((ValueError, FileNotFoundError)):
         create_app(tmp_path / 'manifest.json')
 
+
+
+def test_v7_cannot_reuse_catalogue_version_or_escape_package(tmp_path):
+    import shutil
+    from chessengine.release_lineup import load_three_approaches
+    directory = tmp_path / 'models'
+    shutil.copytree('artifacts/models', directory)
+    manifest = json.loads((directory / 'manifest.json').read_text())
+    assert manifest['release_version'] == 7
+    changed = copy.deepcopy(manifest)
+    changed['release_version'] = 6
+    with pytest.raises(ValueError, match='v7'):
+        load_three_approaches(changed, directory)
+    outside = tmp_path / 'outside.npz'
+    model = directory / manifest['models'][0]['file']
+    shutil.copy2(model, outside)
+    model.unlink()
+    model.symlink_to(outside)
+    with pytest.raises(ValueError, match='inside the manifest'):
+        load_three_approaches(manifest, directory)

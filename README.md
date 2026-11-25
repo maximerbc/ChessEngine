@@ -2,7 +2,7 @@
 
 The Demo offers **Classical**, **Augmented Supervised** (default), and **Direct-Move CNN**, in that order. Classical and the augmented seed-42 value evaluator share CPU alpha-beta search. The later seed-42 CNN (selected epoch 8) predicts a preferred legal move learned from elite human games, directly without search.
 
-The augmented evaluator trained on 800,000 positions. Its three-seed mean validation MSE is 0.21476 on its own validation dataset; this does not establish superior playing strength. The CNN retains its completed validation/export gate. Manifest v6 pins both approved checkpoint identities; previous release declarations and private checkpoints are preserved.
+The augmented evaluator trained on 800,000 positions. Its three-seed mean validation MSE is 0.21476 on its own validation dataset; this does not establish superior playing strength. The CNN retains its completed validation/export gate. Manifest v7 pins both approved checkpoint identities; previous release declarations and private checkpoints are preserved.
 
 Research begins with the three methods and their evidence, then groups earlier work into position evaluation, move prediction/search guidance, self-play, and evolutionary learning. Negative results, failed gates, study permalinks, protocols and recorded games remain available. No new training or model selection is part of this release. Source stays private; the user handles remote pushes. No deployment or paid activation is included.
 
@@ -19,7 +19,7 @@ teacher-free, randomly initialized 324-parameter evaluator optimized by CMA-ES.
 Run `.venv/bin/python -m chessengine evolutionary --stage all`; the runner reports
 measured forecasts and stops without full training if pilot gates fail. Paid
 compute, automatic pushes and deployment are not authorized. Older release and
-four-model workflow descriptions below are historical; the v6 active manifest is
+four-model workflow descriptions below are historical; the v7 active manifest is
 the authority for playable models.
 
 # ChessEngine Lab
@@ -161,3 +161,17 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -m chessengine.pv_c
 ```
 
 Do not run this alongside another continuation or a raw main-study process. It checks the recorded runtime environment, preserves failures, handles interruption through existing resume state, and checkpoints elapsed time every 30 seconds. Reports state the actual evidence level; no background process promotes a model or deploys the website.
+
+
+### Playable supervised catalogue
+
+The demo's searchable, grouped opponent chooser exposes Classical and nineteen
+supervised variants: original and larger networks; coverage and regularization
+diagnostics; the 180k model; representation/optimizer variants; averaged weights;
+Augmented Supervised; Stockfish move imitation; and human-game move prediction.
+Supervised remains default. Additional variants are experimental; availability
+is not strength qualification. The two direct policies predict legal moves
+without search or a position-value head. Value models share bounded alpha-beta.
+
+See [catalogue operations](docs/demo-catalogue.md) for frozen identities,
+reproducible staging, evidence limits and deployment boundaries.

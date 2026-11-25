@@ -1434,3 +1434,90 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+.research-summary h3 {
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+.research-summary p {
+  font-size: 12px;
+  margin: 0 0 10px;
+}
+.research-summary a {
+  color: var(--accent);
+  font-size: 12px;
+}
+.model-option > span:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+.model-option .selected-label {
+  flex-shrink: 0;
+}
+.model-option:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.model-option:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+/* The catalogue stays bounded as new explicitly released variants are added. */
+.opponent-search {
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  margin: 0.8rem 0;
+}
+.opponent-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--line, #d4d5ce);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.model-options {
+  max-height: 24rem;
+  overflow-y: auto;
+  padding: 0.2rem;
+}
+.opponent-group {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+.opponent-group h3 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0.75rem 0 0.25rem;
+}
+.selected-opponent {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line, #d4d5ce);
+}
+.selected-opponent h3 {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+}
+.selected-opponent p {
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+@media (max-width: 600px) {
+  .model-option {
+    flex-wrap: wrap;
+  }
+  .model-option .selected-label {
+    margin-left: 1.5rem;
+  }
+}
+
+.policy-metrics {
+  grid-template-columns: 1fr;
+}

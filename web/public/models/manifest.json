@@ -62,7 +62,7 @@
       "strength_status": "not-established"
     }
   ],
-  "release_version": 6,
+  "release_version": 7,
   "required_model_ids": [
     "supervised-1m",
     "elite-policy"

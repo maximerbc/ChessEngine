@@ -3,6 +3,7 @@ import { releasedApproaches } from "./ReleasedApproaches";
 
 type Study = {
   id: string;
+  aliases?: string[];
   title: string;
   level: string;
   result: string;
@@ -40,9 +41,14 @@ export function ResearchIndex({
       .then(setIndex)
       .catch(() => setFailed(true));
   }, []);
+  const selectedId =
+    index?.studies.find(
+      (study) =>
+        study.id === selected || study.aliases?.includes(selected || ""),
+    )?.id || selected;
   useEffect(() => {
-    if (!selected || !index) return;
-    const entry = document.getElementById(`study-${selected}`);
+    if (!selectedId || !index) return;
+    const entry = document.getElementById(`study-${selectedId}`);
     if (!entry) return;
     let parent = entry.parentElement;
     while (parent) {
@@ -50,7 +56,7 @@ export function ResearchIndex({
       parent = parent.parentElement;
     }
     entry.scrollIntoView({ block: "start" });
-  }, [selected, index]);
+  }, [selectedId, index]);
   const featured = new Set(
     index?.approaches?.map((a) => a.study_id).filter(Boolean),
   );
@@ -129,7 +135,7 @@ export function ResearchIndex({
             )
             .map((study) => (
               <article
-                className={`study-row ${selected === study.id ? "study-selected" : ""}`}
+                className={`study-row ${selectedId === study.id ? "study-selected" : ""}`}
                 id={`study-${study.id}`}
                 key={study.id}
               >

@@ -214,6 +214,39 @@
       "group": "self-play"
     },
     {
+      "id": "supervised-variants",
+      "title": "Earlier supervised configurations",
+      "level": "Archived supervised catalogue",
+      "result": "diagnostic",
+      "question": "How do data coverage, representation, regularization and averaging affect the evaluator?",
+      "takeaway": "Previously selected seed-42 configurations and their evidence are preserved for research. They are no longer separate playable opponents; agreement metrics do not establish playing strength.",
+      "report": "/research/supervised-variants/index.html",
+      "group": "evaluation",
+      "availability": "research only",
+      "checkpoint_ids": {
+        "supervised": "ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b",
+        "supervised-large": "3db32d048fd7378b4c48d2150f7c20c82a90444e2fd5447c2e618bd42462e15e",
+        "supervised-10k": "3ad718228a401e1065edc0fa8cb77f3204badee6546379f4c96b38588502af74",
+        "supervised-40k": "636ef527d9cc4a13b2804eea519ff7cee7793a79690b045e11e6bae797f5a0a8",
+        "supervised-diagnostic": "6f9190527a138f0e1d7906718c06fddec086d7bc6a3034479561dcd2adf4451f",
+        "supervised-weaker-decay": "f839dbe05dca8e43704bf7f9a3ada1730b26694ee73b371b7c9c1024a17bdbeb",
+        "supervised-stronger-decay": "f7b814d1213bd670b3362ef2f4d2ea96f922120c45a348a6ed015049e714881e",
+        "supervised-dropout-01": "1a30c1275a3438bab1eaf1c43edd2f4fa2a87fe05cc204cd7e14c061a7f0346d",
+        "supervised-dropout-02": "381d775a22d8d494f077d27328746fdae6162d005d95ec577fcaaa50efb7b3a3",
+        "supervised-180k": "0bf2eeaf6d0fd91e1aada9f7d8a873eff05f6b663e932d33f320df492c04d842",
+        "supervised-smaller-lr": "4507d8a75d4247e71254204754d5a874665d1a3a208e56753d6a358b1566c1b4",
+        "supervised-adaptive-lr": "0a42a971d61c2a7948d1e543ae41e0929e85db675b1b88a86e560366f37984ab",
+        "supervised-relative": "2a2195214a85734ac25453d85fd8f5b4a1586c0c4ae3f588e2503f512f4b62c6",
+        "supervised-relative-material": "94b5e848638669d6da76716b71670046b490caadf5f966f8057f3759b4c81fee",
+        "supervised-combined": "13b59d0377d5ba54b04a28a943b2df8aeaea473de4040f959802b6a6890f2c96",
+        "supervised-averaged": "860b7cfe9de4dbeb5238acabc289c4562e85aa061db35ad6606ffd14d0dd05e7",
+        "supervised-1m": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+        "stockfish-policy": "079622b555c3f3c58bba991054a2f507db8b600e1cdf0cc88b1bd66975fa7df1",
+        "elite-policy": "5e6deee52407776949178f846b97ed1b02d5af964328beb632b7361b6d4b7687"
+      },
+      "source_evidence_sha256": "bfce63e14df0de86aacfecbdd2c0c9af88a1044e1676245add164f4363429ca2"
+    },
+    {
       "id": "supervised-180k-release",
       "title": "Earlier supervised release candidate",
       "level": "Development evaluation",
@@ -252,7 +285,10 @@
       "group": "moves",
       "availability": "research only",
       "checkpoint_ids": {},
-      "source_evidence_sha256": "2e7a07d879c683757ae1a56118d507705d6824377bf116150c3331891de60be0"
+      "source_evidence_sha256": "2e7a07d879c683757ae1a56118d507705d6824377bf116150c3331891de60be0",
+      "aliases": [
+        "stockfish-move-policy"
+      ]
     },
     {
       "id": "evolutionary-augmented-20261122",
@@ -296,6 +332,9 @@
     "evolutionary/protocol.json": "12093de69fbaaea5e6ee852085b0eab0d759459b17a177ac41e1e7842e0a83b3",
     "gpu-value/index.html": "26e3663bb3180ffb656ef346140b4689e97e6a7941f85e385f3e538990a53408",
     "gpu-value/evidence.json": "1ebe04b843fcc256e45ee3937c8d4b0aa00fae0085c0c13a90c9e0954f034e5c",
+    "supervised-variants/index.html": "d952a3004dfe1a23e5c7b903e88a1b30269feb3ff57ec1d12a0ebe714a5cd695",
+    "supervised-variants/evidence.json": "bfce63e14df0de86aacfecbdd2c0c9af88a1044e1676245add164f4363429ca2",
+    "supervised-variants/validation.json": "4ccc9adf9499185bca870645294736611de7776c3a7584840c8c971036e353cb",
     "supervised-180k-release/index.html": "c8fff9ef0e53aedbbea7a87f765b8431cae30e69982552435319fa839df9532b",
     "supervised-180k-release/evidence.json": "b6920d2b738e4091acc4a8c0f74cf0ec538224cb93d72913ad4b6ff2a7857bb6",
     "supervised-180k-release/games.json": "0b5980cc4a20c0c8b1c84e59c0528d9b5637998825bc8095628b307c599af44c",
@@ -316,6 +355,8 @@
     "stockfish-move-policy-1m-20261124/costs.json": "d4d8a7c93efc530812dbcad80ad9207d3a5e88e7455421ac33fa8a6dd6baf784",
     "evolutionary-augmented-20261122/index.html": "b0f544cb5919a79565f95894e85eeecb1a7c8a7815331310490d4195b7ed5f9f",
     "evolutionary-augmented-20261122/protocol.json": "3b3b84c427879fc344dbbaad164f1bc038e606e7eccaba6b3d8b59e9f2f55192",
-    "evolutionary-augmented-20261122/execution.json": "79893e75c61fbcd251bf9ec41b76617f31f203fdf383b42665e4e1b71b7a28b7"
+    "evolutionary-augmented-20261122/execution.json": "79893e75c61fbcd251bf9ec41b76617f31f203fdf383b42665e4e1b71b7a28b7",
+    "stockfish-move-policy/index.html": "7ebababbb0a0463ec3149082eff0897a716d347e878ffba29caf67eabb884563",
+    "stockfish-move-policy/evidence.json": "d6c7dc0b379e621337b191cde4a04ae42698c5ce55fba2454dc8592cc36c2996"
   }
 }

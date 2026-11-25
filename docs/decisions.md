@@ -211,6 +211,122 @@ weight copy. The two existing supervised public artifacts remain unchanged.
 Verified private backups preceded independent guard shutdown and removal of only
 this run's pod and volume. Billing remains partly unposted; conservative allowances
 are recorded separately from posted charges. No push, merge or deployment occurred.
+## 2026-11-22 — Direct Stockfish-move CNN research
+
+The user selected a direct legal-move policy and a PyTorch CNN, inspired by the
+Skripkon PyTorch/TensorFlow videos. The tutorials imitate human PGN moves; our
+separate experiment labels positions with the pinned Stockfish first-PV move.
+Use feature-v3 spatial inputs plus complete rule/history features and a shared
+candidate scorer, without an observed-move vocabulary or search at inference.
+All weights start fresh. This permits a research-only NumPy CNN export alongside
+the existing MLP schemas, preserving the training-only PyTorch boundary.
+
+The bounded protocol and Runpod handoff are in `docs/stockfish-move-policy.md`;
+values are in `configs/stockfish-move-policy.json`. Source-game splits, canonical
+exclusions, all-seed checkpoint selection and a frozen held-out-test protocol
+protect study integrity. Training metrics measure teacher imitation only.
+Implementation and tiny-fixture verification do not count as a completed study.
+The user explicitly requires confirmation before Runpod training; no paid
+benchmark, full run, provisioning, publication or promotion is authorized here.
+Released models, production search and ongoing evolutionary work are unchanged.
+
+## 2026-11-23 — Direct-policy full run without a pilot
+
+The user approved local full-data preparation and labeling followed by direct
+Runpod training of seeds 42/43/44, with no separate pilot/benchmark. The first
+real epoch remains part of the fit and supplies measured time/cost forecasts.
+The new authorization is C$10 total inclusive of setup/storage/taxes/conversion,
+with C$2 contingency and C$8 operational allowance. Retain the frozen scientific
+settings and stop with resumable checkpoints rather than silently reducing scope.
+Pin the teacher's actual EvalFile NNUE hash, avoid replaying full histories when
+indexing position-only exclusions, and retain full histories for training records.
+Record local progress, cloud receipts, all seed results and any failures. Back up
+and verify outputs before deleting only the new training resources; preserve the
+existing evolutionary Pod/volume. No deployment or model promotion is included.
+
+## 2026-11-23 — Correct direct-policy size to one million
+
+The user corrected the intended supervised move-policy dataset to exactly
+800,000 training / 100,000 validation / 100,000 test positions. The earlier
+60,007-position preparation is preserved as superseded, with no student CNN fit
+started. Temporary Pod `k6g519tjra6wdk` was stopped and deleted, followed by its
+new volume `x371etfrtl`; existing evolutionary resources were untouched. The
+first billing reads had no posted records and must not be interpreted as zero
+actual charge. The previous local labels are not a completed million-position
+study or a pilot. Enforce exact counts before labeling, encoding and cloud fitting;
+source games remain in one split even if unused samples at a quota boundary are
+discarded. The C$10 budget is unchanged. Corpus reuse versus a fresh source pool
+is being resolved with the user before dependent work proceeds.
+
+## 2026-11-23 — Reuse position inputs and relabel best moves
+
+The user delegated the easier/faster corpus choice and authorized proceeding to
+Runpod. Reuse the existing million-position pool's inputs and split assignments
+in a new copy. Its checksum is
+`124cce87b231a32acdd0f7eab8916791f728f9b7ec8b83f7c1fbe6e2c06ea0a9`.
+The stricter canonical audit found 188 duplicate rows including 69 cross-split
+overlaps. Quarantine whole conflicting/reserved source games, deduplicate and
+refill from the already audited fresh July pool, enforcing exact 800k/100k/100k
+counts without changing original files. Scalar teacher values never become move
+targets. Generate new pinned first-PV labels with at most two independent teacher
+processes, one thread/32 MiB each, using bounded chunks. Historical measured
+single-worker throughput forecasts roughly four hours for one million labels;
+two workers target about two to three hours. No new GPU is rented during local
+labeling; no separate pilot or automatic model promotion is introduced.
+
+## 2026-11-24 — Complete the million-position direct-policy study
+
+The full no-pilot Runpod job completed on exactly 800k/100k/100k positions using
+frozen source 7b43f04. Early stopping completed 10/7/13 epochs for seeds 42/43/44;
+selected epochs remain 4/1/7 and seed 42 remains representative. Held-out top-one
+teacher agreement is 31.008%/6.858%/32.128%. Seed 43 collapsed to uniform scores;
+publish it as a failed seed rather than replacing it or launching extra fits.
+The complete private report and machine-readable evidence live in
+`docs/experiments/stockfish-move-policy-1m-20261124`.
+
+The initial relative-logit-only export check masked large probability errors.
+Require explicit probability and chosen-move parity and record all failures.
+Correct NumPy's final reduction so identical large activations cannot gain
+artificial move preferences through row-dependent rounding. Preserve original
+weights, Torch training forward, selections and test results; historical resume
+still requires the original scientific source/runtime. Seeds 42/44 pass the
+strict sampled check; seed 43 still fails probability parity and is unqualified.
+Do not relax tolerance or claim that every export passed.
+
+All artifact bytes, selected hashes, raw teacher chunks and source/data archives
+are backed up locally. The independent guard stopped the GPU after the verified
+backup marker; its Pod and new volume were deleted with 404 read-backs. Existing
+evolutionary resources and production models remain unchanged. Conservative
+total spend is approximately C$0.70 including the aborted setup and allowances;
+main-run/volume billing was still unposted, not proven free. No new training,
+merge, deployment or promotion is authorized by closing this study.
+
+
+## 2026-11-24: all supervised variants available experimentally
+
+The user approved a single demo catalogue with Classical plus nineteen distinct
+supervised configurations, represented by their existing validation-selected
+seed-42 exports. Start from elite baseline commit bdc0f82, integrate current main
+8c64143 and Stockfish-policy commit 797582f, and preserve unrelated worktrees.
+The 180k model and fixed-data reference have identical trained arrays and appear
+once. Historical pilot fits, seed alternatives, epoch snapshots, the diagnostic
+prediction ensemble, learned ordering, RL and Evolutionary play are excluded.
+
+Manifest v6 supports the complete explicit catalogue with fail-closed artifact,
+kind, encoder, trained-array and gate checks. Supervised remains default; existing
+Supervised, Augmented Supervised and human-policy checkpoints remain byte-for-byte
+unchanged. Additional value variants use shared alpha-beta. The Stockfish and
+human move policies use distinct exact NumPy encoders and direct legal-move
+selection, without invented position scores or search statistics. The human
+encoder's history omissions remain documented; complete histories govern rules.
+
+This is an experimental-play authorization, not qualification or a re-evaluation
+of historical failed gates. Source and export hashes live in the frozen config
+and manifest; reproducible staging cannot change trained arrays. Only aggregate
+checkpoint-matched evidence enters the public research catalogue. New weights
+remain in the private API image, with no new public downloads. The user authorized
+this feature branch push and PR creation; merging and deployment remain separate.
+
 
 ## 2026-11-24 — Three playable approaches, manifest v6
 
@@ -219,3 +335,9 @@ The approved lineup is Classical, Augmented Supervised and Direct-Move CNN. The 
 Manifest v6 requires both neural artifacts and exact approved checkpoint identities. Earlier declarations are retained in `artifacts/research/release-v5.json` and `public-release-v5.json`; historical checkpoints are preserved. Playable availability is distinct from qualification or demonstrated playing strength. The augmented three-seed mean validation MSE (0.21476) is agreement on its own validation dataset, not a comparison of playing strength across studies.
 
 Research presents the three active methods first, then four collapsed experiment families. Original charts/replay live within their original-study archive entry. Study links expand the containing family. Earlier CNN collapse/export failures, negative self-play results, failed ordering gates and interrupted evolutionary runs remain discoverable. A snapshot of the augmented-baseline evolutionary interruption is published independently of the original study; no run is restarted.
+
+## 2026-11-25 — Integrate main without reusing its manifest version
+
+Main introduced a broader v6 supervised catalogue while the three-approach release was being prepared. The three-approach release now uses v7, retaining its exact checkpoint identities, augmented default and direct-human-CNN gate. Main’s v6 declaration is archived in `artifacts/research/catalogue-release-v6.json`; its loader, provenance, private artifacts, training safeguards and numerical checks remain supported by explicit historical fixtures. The approved three-opponent product supersedes the catalogue’s public selection.
+
+Earlier supervised-variant reports remain in the position-evaluation archive. The old Stockfish study permalink aliases its comprehensive dated entry, preserving both report URLs without duplicate cards. No studies are rerun or promoted by this merge.

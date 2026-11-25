@@ -1,0 +1,7 @@
+# Keep the official template's CUDA PyTorch (executed: 2.8.0+cu128; CPU tests: 2.7.0).
+# PyTorch's exact runtime version is fingerprinted in every run/resume identity.
+chess==1.11.2
+numpy==2.2.6
+threadpoolctl==3.6.0
+certifi==2025.1.31
+zstandard==0.25.0
