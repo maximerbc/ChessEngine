@@ -1,5 +1,9 @@
 # Decision log
 
+## 2026-11-25 — Prepare for public repository review
+
+The owner requested a safety audit and visitor-facing cleanup for admissions/recruiter readers. Public preparation supersedes permanent-private wording; visibility stays private until the owner changes it. The owner handles pushes. Preserve existing history and model artifacts pending explicit privacy decisions, research evidence, active manifest/default, inference behavior and scientific gates. No history rewrite, model publication/removal, credential rotation, training, spending or deployment is included. The dated audit in `docs/public-readiness.md` records blockers and incomplete coverage; a clean scanner result is not publication approval.
+
 ## 2026-11-25 — Increase the live alpha-beta search allowance
 
 The user authorized a 30,000-node / 3,000-ms default and maximum for live

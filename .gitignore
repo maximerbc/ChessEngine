@@ -56,3 +56,34 @@ web/*.tsbuildinfo
 !artifacts/models/supervised-averaged.npz
 !artifacts/models/stockfish-policy.npz
 !artifacts/models/stockfish-policy-gate.json
+
+# Local credentials and private keys (examples must use non-secret placeholders).
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa*
+id_ed25519*
+.aws/
+.ssh/
+credentials.json
+credentials-*.json
+service-account*.json
+*.tfstate
+*.tfstate.*
+
+# Local backup bundles and scanner findings; tracked evidence stays intact.
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.bundle
+*.pt
+*.pth
+*.ckpt
+.gitleaks-report*
+gitleaks-report*
+
+# Existing tracked research exports are preserved; new ones require review.
+/artifacts/research/**/*.npz

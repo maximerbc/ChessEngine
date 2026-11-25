@@ -1,0 +1,19 @@
+title = "ChessEngine secret scanning"
+
+[extend]
+useDefault = true
+
+# A source-file SHA-256 is mistaken for an API key because its key is api.py.
+# Match only this reviewed immutable provenance line in its two published copies.
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "Frozen api.py source checksum, not a credential"
+condition = "AND"
+paths = [
+  '''^docs/experiments/stockfish-move-policy-1m-20261124/frozen-source\.json$''',
+  '''^web/public/research/stockfish-move-policy-1m-20261124/frozen-source\.json$''',
+]
+regexTarget = "line"
+regexes = ['''^\s*"src/chessengine/api\.py": "2aea6613abbf6a5223165803e326f15ee2f9760bb225a569cfcce33ec69f14f4",?\s*$''']
