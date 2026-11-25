@@ -1,5 +1,7 @@
 # Completed elite human-move baseline handoff
 
+> Historical handoff: branch, lineup, and authorization details below apply to its original date. See the [current overview](../README.md) and [operations archive](archive/README.md).
+
 Branch: `codex/elite-pytorch-baseline`, based on augmented alpha-beta integration
 `b33405895c78e94c873687d5155dfdf59d2f3e5b`. The complete baseline and four-model
 demo are staged locally. **No push, merge or deployment has occurred.**

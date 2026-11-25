@@ -1,5 +1,7 @@
 # Four-model showcase
 
+> Historical handoff: branch, lineup, and authorization details below apply to its original date. See the [current overview](../README.md) and [operations archive](archive/README.md).
+
 The overview leads to `/lab/classical`, `/lab/supervised`, `/lab/move-guided`, and `/lab/rl`. Switching pages carries the initial position and complete move history. Each page explains its inputs, computation, output and limits, with expandable mathematics and live position inspection. Checkpoint identities in the static evidence must match the API before play is enabled.
 
 The guided approach combines a separate cross-entropy-trained move scorer with the same frozen supervised value network. Its probabilities rank legal choices; they are not win probabilities. The RL page uses the completed live-self-play seed-42 batch-10 checkpoint and explicitly reports the regression. Anchored replay is not relabeled as successful live RL.

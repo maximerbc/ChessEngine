@@ -1,5 +1,7 @@
 # GitHub handoff
 
+> Historical handoff: branch, lineup, and authorization details below apply to its original date. See the [current overview](../README.md) and [operations archive](archive/README.md).
+
 The repository remains private. The assistant creates local commits/branches only; the user pushes them. No GitHub PR is claimed to exist until actually created remotely.
 
 The intended local stack is:
