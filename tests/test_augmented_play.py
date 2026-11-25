@@ -14,9 +14,9 @@ from chessengine.model import NumpyEvaluator
 def test_real_preview_identity_and_production_move(monkeypatch):
     monkeypatch.setenv('REQUIRE_MODELS', '1')
     manifest = json.loads(Path('artifacts/models/manifest.json').read_text())
-    assert manifest['default'] == 'supervised'
+    assert manifest['default'] == 'supervised-1m'
     assert sha('artifacts/models/supervised.npz') == LEGACY_SHA
-    assert sha('web/public/models/supervised.npz') == LEGACY_SHA
+    assert not Path('web/public/models/supervised.npz').exists()
     assert sha('artifacts/models/supervised-1m.npz') == EXPERIMENTAL_SUPERVISED_SHA
     assert sha('web/public/models/supervised-1m.npz') == EXPERIMENTAL_SUPERVISED_SHA
     public_manifest = json.loads(Path('web/public/models/manifest.json').read_text())

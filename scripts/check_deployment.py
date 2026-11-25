@@ -20,7 +20,7 @@ def main():
     models = {row["id"]: row for row in json.loads(get(api + "/models")[0])["models"]}
     with open("artifacts/models/manifest.json") as source:
         manifest = json.load(source)
-    assert "rl" not in models
+    assert list(models) == ["handcrafted", "supervised-1m", "elite-policy"]
     try:
         get(web + "/models/rl.npz")
     except urllib.error.HTTPError as error:

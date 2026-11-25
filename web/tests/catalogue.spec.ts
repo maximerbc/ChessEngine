@@ -24,7 +24,7 @@ const models = [
 
 async function mockCatalogue(page: any) {
   await page.route("**/api/models", (route: any) =>
-    route.fulfill({ json: { default: "supervised", models } }),
+    route.fulfill({ json: { default: manifest.default, models } }),
   );
   await page.route("**/api/analyze", (route: any) => {
     const body = route.request().postDataJSON();
@@ -59,37 +59,32 @@ async function mockCatalogue(page: any) {
 }
 
 for (const model of models) {
-  test(`${model.id} is selectable and preserves its identity after play and refresh`, async ({
+  test(`${model.id} remains selectable with the approved identity`, async ({
     page,
   }) => {
     await mockCatalogue(page);
     await page.goto("/");
+    await expect(page.locator(".model-option")).toHaveCount(3);
     await expect(
-      page.getByText("20 of 20 opponents", { exact: true }),
-    ).toBeVisible();
-    const search = page.getByRole("searchbox", { name: "Search opponents" });
-    await search.fill(model.name);
+      page.getByRole("searchbox", { name: "Search opponents" }),
+    ).toHaveCount(0);
     await page
       .locator(".model-option")
       .filter({ has: page.locator("strong", { hasText: model.name }) })
-      .filter({ hasText: model.description })
       .first()
       .click();
     await expect(page).toHaveURL(new RegExp(`model=${model.id}(?:&|$)`));
-    await expect(page.locator(".selected-opponent")).toContainText(model.name);
-    if (model.search.strategy === "direct-policy-v1") {
-      await expect(page.locator(".analysis-card .eval-track")).toHaveCount(0);
-      await expect(page.locator(".analysis-card")).toContainText(
-        "NO POSITION VALUE",
-      );
-      await expect(page.locator(".player-strip").first()).toContainText(
-        model.id === "stockfish-policy"
-          ? "Stockfish move prediction"
-          : "Human-move prediction",
-      );
-    }
-    await page.getByRole("button", { name: "Black", exact: true }).click();
-    await expect(page.getByText("1 plies", { exact: true })).toBeVisible();
+    await expect(page.locator(".player-strip").first()).toContainText(
+      model.name,
+    );
+    await page
+      .getByRole("button", { name: "e2 white pawn", exact: true })
+      .click();
+    await page.getByRole("button", { name: "e4", exact: true }).click();
+    await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
+    await expect(page.locator(".analysis-card .hash")).toContainText(
+      model.checkpoint_id.slice(0, 12),
+    );
     if (model.search.strategy === "direct-policy-v1") {
       await expect(page.locator(".analysis-card .eval-track")).toHaveCount(0);
       await expect(
@@ -97,37 +92,26 @@ for (const model of models) {
       ).toBeVisible();
     }
     await page.reload();
-    await expect(page.getByText("1 plies", { exact: true })).toBeVisible();
+    await expect(page.getByText("2 plies", { exact: true })).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`model=${model.id}(?:&|$)`));
-    await expect(
-      page.locator(".model-option[aria-pressed=true]"),
-    ).toBeDisabled();
   });
 }
 
-test("catalogue searches groups, keeps the selected summary and fits mobile", async ({
+test("historical configurations remain in Research rather than the opponent chooser", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
   await mockCatalogue(page);
-  await page.goto("/?model=supervised-relative");
-  const search = page.getByRole("searchbox", { name: "Search opponents" });
-  await search.fill("Regularization");
-  await expect(page.locator(".model-option")).toHaveCount(4);
-  await expect(page.locator(".selected-opponent")).toContainText(
-    "relative features",
+  await page.goto("/research?study=supervised-variants");
+  await expect(page.locator("#study-supervised-variants")).toBeVisible();
+  await expect(page.locator("#study-supervised-variants")).toContainText(
+    "no longer separate playable opponents",
   );
-  await search.fill("no matching model");
-  await expect(page.getByText("No opponents match your search.")).toBeVisible();
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBeTruthy();
-  await search.fill("averaged weights");
-  await page.locator(".model-option").focus();
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/model=supervised-averaged/);
+  await expect(page.locator(".research-family[open]")).toHaveCount(1);
+  await page.goto("/research?study=stockfish-move-policy");
+  await expect(
+    page.locator("#study-stockfish-move-policy-1m-20261124"),
+  ).toBeVisible();
+  await expect(page.locator("#study-stockfish-move-policy")).toHaveCount(0);
 });
 
 test("unknown opponent URL never silently substitutes a model", async ({

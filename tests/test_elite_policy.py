@@ -191,7 +191,7 @@ def install_test_policy(tmp_path):
     checkpoint = digest(directory / 'elite-policy.npz')
     atomic_json(directory / 'gate.json', dict(seed=42, checkpoint_sha256=checkpoint,
         dataset_sha256='d' * 64, passed=True, export_passed=True, validation_top1_difference_ci=[.01, .1]))
-    manifest = read_json(directory / 'manifest.json')
+    manifest = read_json(root / 'artifacts/research/release-v5.json')
     manifest['release_version'] = 5
     # Replace an installed real policy with the isolated synthetic fixture.
     manifest['models'] = [row for row in manifest['models'] if row['id'] in {'supervised', 'supervised-1m'}]

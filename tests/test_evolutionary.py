@@ -150,11 +150,11 @@ def test_retirement_manifest_and_reports(monkeypatch, tmp_path):
     monkeypatch.setenv('REQUIRE_MODELS', '1')
     with TestClient(create_app()) as client:
         data = client.get('/models').json()
-        assert data['default'] == 'supervised'
+        assert data['default'] == 'supervised-1m'
         manifest = read_json('artifacts/models/manifest.json')
         assert {m['id'] for m in data['models']} == {'handcrafted', *[r['id'] for r in manifest['models']]}
         assert client.post('/analyze', json={'model_id': 'rl'}).status_code == 410
-        expected = 200 if 'evolutionary' in manifest['required_model_ids'] else 404
+        expected = 200 if 'evolutionary' in manifest['required_model_ids'] else 410
         assert client.post('/analyze', json={'model_id': 'evolutionary', 'nodes': 8}).status_code == expected
     assert not Path('web/public/models/rl.npz').exists()
     old = read_json('artifacts/research/original-release.json')

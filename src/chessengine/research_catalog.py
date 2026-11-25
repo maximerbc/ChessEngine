@@ -75,10 +75,64 @@ STUDIES = [
 ]
 
 
+GROUPS = [
+    dict(id='evaluation', title='Position evaluation',
+         summary='Coverage, representation and regularization; averaging missed its adoption threshold.'),
+    dict(id='moves', title='Move prediction and search guidance',
+         summary='The earlier CNN retained a collapsed seed; learned ordering did not pass its release gate.'),
+    dict(id='self-play', title='Self-play',
+         summary='Original evidence was inconclusive; the larger follow-up regressed. Offline diagnosis and feasibility remain separate.'),
+    dict(id='evolution', title='Evolutionary learning',
+         summary='Separate protocols and interrupted experiments; no evolutionary opponent is qualified for this release.'),
+]
+
+EXTRA_STUDIES = [
+    ('supervised-variants', 'supervised-variants', 'Earlier supervised configurations', 'Archived supervised catalogue', 'diagnostic',
+     'How do data coverage, representation, regularization and averaging affect the evaluator?',
+     'Previously selected seed-42 configurations and their evidence are preserved for research. They are no longer separate playable opponents; agreement metrics do not establish playing strength.',
+     ['index.html', 'evidence.json', 'validation.json'], 'evaluation'),
+    ('supervised-180k-release', 'supervised-180k-release', 'Earlier supervised release candidate', 'Development evaluation', 'inconclusive',
+     'What did the intermediate supervised candidate establish?',
+     'Historical development evidence and recorded games are retained; this checkpoint is no longer a playable opponent.',
+     ['index.html', 'evidence.json', 'games.json', 'protocol.json'], 'evaluation'),
+    ('elite-policy', 'elite-pytorch-baseline-20261124', 'Elite human-move prediction', 'Completed three-seed study', 'complete',
+     'Can a CNN learn move preferences from elite human games?',
+     'All three seeds exported successfully. Fixed representative: seed 42, selected epoch 8 by validation cross-entropy; agreement is not playing strength.',
+     ['index.html', 'evidence.json', 'curves.svg'], 'moves'),
+    ('stockfish-move-policy-1m-20261124', 'stockfish-move-policy-1m-20261124', 'Stockfish move prediction', 'Completed three-seed study', 'negative',
+     'Can a CNN predict the teacher’s preferred legal move?',
+     'Seed 43 collapsed and failed strict export parity; seeds 42 and 44 exported successfully. No model from this study is playable.',
+     ['index.html', 'README.md', 'results.json', 'selections.json', 'numerical-audit.json', 'export-verification.json',
+      'initial-export-failure.json', 'superseded-relative-only-verification.json', 'frozen-source.json', 'execution.json', 'costs.json'], 'moves'),
+    ('evolutionary-augmented-20261122', 'evolutionary-augmented-20261122', 'Evolution against the augmented baseline', 'Interrupted experiment', 'interrupted',
+     'Can random evolutionary evaluators compete with the augmented supervised baseline?',
+     'The saved run was interrupted; no completed qualification or final results are available. Its frozen protocol is separate from the original study.',
+     ['index.html', 'protocol.json', 'execution.json'], 'evolution'),
+]
+
+
+def organize(rows, models):
+    for row in rows:
+        row.setdefault('group', 'evaluation')
+        if row['id'] in {'self-play-archive', 'original-study', 'rl-improvement', 'rl-update-diagnosis', 'policy-value'}:
+            row['group'] = 'self-play'
+        elif row['id'] == 'evolutionary':
+            row['group'] = 'evolution'
+        elif row['id'] == 'move-ranking':
+            row['group'] = 'moves'
+    return [
+        dict(id='handcrafted', study_id=None, checkpoint_id='handcrafted-v1', representative='Existing handcrafted baseline; no training.'),
+        dict(id='supervised-1m', study_id='gpu-value', checkpoint_id=models.get('supervised-1m', ''),
+             representative='Playable checkpoint: seed 42. Validation MSE above is the three-seed mean, not the checkpoint’s individual score.'),
+        dict(id='elite-policy', study_id='elite-pytorch-baseline-20261124', checkpoint_id=models.get('elite-policy', ''),
+             representative='Playable checkpoint: fixed seed 42, selected epoch 8 using validation cross-entropy.'),
+    ]
+
+
 def sanitize(document, allowed):
     def link(match):
         tag, target = match.group(1), html.unescape(match.group(2))
-        if target.startswith(("https://", "#", "/research")) or target in allowed:
+        if target.startswith(("https://", "#")) or (tag == "href" and target.startswith("/research")) or target in allowed:
             return match.group(0)
         if tag == "href":
             return 'title="Private research archive"'  # Keep prose, remove dead/private links.
@@ -130,7 +184,10 @@ def publish(destination="web/public/research"):
             if not path.is_file():
                 raise ValueError(f"Missing allowlisted report asset: {path}")
             if name.endswith(".html"):
-                (target / name).write_text(sanitize(path.read_text(), set(names)))
+                document = path.read_text()
+                if slug == 'supervised-variants':
+                    document = document.replace('<h1>', '<p><strong>Archived catalogue.</strong> These checkpoints are retained for research; the current three playable approaches are described in <a href="/research">Research</a>.</p><h1>', 1)
+                (target / name).write_text(sanitize(document, set(names)))
             else:
                 shutil.copyfile(path, target / name)
             assets[f"{slug}/{name}"] = digest(target / name)
@@ -253,36 +310,58 @@ def publish(destination="web/public/research"):
                 'One million total positions (800,000 training); planned evolution uses 368,640 main training games. No NVIDIA training or playing-strength result is claimed.')),
             report='/research/gpu-value/index.html',
             checkpoint_ids={key:models[key] for key in gpu_ids if key in models}))
-    # These aggregate reports are explicitly allowlisted; checkpoint publication is separate.
-    for slug, study_id, title, names in [
-        ('elite-policy', 'elite-pytorch-baseline-20261124', 'Learning moves from elite human games', ['index.html', 'evidence.json', 'curves.svg']),
-        ('stockfish-move-policy', 'stockfish-move-policy', 'Stockfish move imitation', ['index.html', 'evidence.json']),
-        ('supervised-variants', 'supervised-variants', 'Playable supervised variants', ['index.html', 'evidence.json']),
-    ]:
-        source = Path('docs/experiments') / slug
-        if not (source / 'index.html').exists():
-            continue
-        target = out / slug
+    from .pv_reporting import public
+    for slug, study_id, title, level, result, question, takeaway, names, group in EXTRA_STUDIES:
+        source, target = Path('docs/experiments') / slug, out / slug
         target.mkdir(exist_ok=True)
         for name in names:
-            if not (source / name).exists():
-                continue
+            path = source / name
+            if not path.is_file():
+                raise ValueError(f'Missing allowlisted report asset: {path}')
             if name.endswith('.html'):
-                (target / name).write_text(sanitize((source / name).read_text(), set(names)))
+                document = path.read_text()
+                if slug == 'supervised-variants':
+                    document = document.replace('<h1>', '<p><strong>Archived catalogue.</strong> These checkpoints are retained for research; the current three playable approaches are described in <a href="/research">Research</a>.</p><h1>', 1)
+                (target / name).write_text(sanitize(document, set(names)))
+            elif name.endswith('.json'):
+                write_json(target / name, public(read_json(path)))
             else:
-                shutil.copyfile(source / name, target / name)
+                shutil.copyfile(path, target / name)
             assets[f'{slug}/{name}'] = digest(target / name)
-        identities = (models if slug == 'supervised-variants' else
-                      {key: models[key] for key in ['elite-policy' if slug == 'elite-policy' else 'stockfish-policy'] if key in models})
-        rows.append(dict(id=study_id, title=title, level='Experimental playable models',
-            result='diagnostic', availability='experimental play' if identities else 'research only',
-            question='How do different supervised training choices behave?',
-            takeaway='Previously selected checkpoints are playable experimentally. Agreement metrics do not establish playing strength; historical failures remain preserved.',
-            report=f'/research/{slug}/index.html', checkpoint_ids=identities))
+        checkpoint_ids = {}
+        if slug == 'elite-policy':
+            # Evidence identity comes from the completed audit, never the active manifest.
+            checkpoint_ids = {'elite-policy': read_json(source / 'evidence.json')['gate']['checkpoint_sha256']}
+        if slug == 'supervised-variants':
+            checkpoint_ids = {row['id']: row['sha256'] for row in read_json('artifacts/research/catalogue-release-v6.json')['models']}
+        rows.append(dict(id=study_id, title=title, level=level, result=result, question=question,
+                         takeaway=takeaway, report=f'/research/{slug}/index.html', group=group,
+                         availability='experimental playable' if slug == 'elite-policy' and 'elite-policy' in models else 'research only',
+                         checkpoint_ids=checkpoint_ids, source_evidence_sha256=digest(source / names[1])))
+    # Retain the old report URL without creating a duplicate study card.
+    source = Path('docs/experiments/stockfish-move-policy')
+    target = out / 'stockfish-move-policy'
+    target.mkdir(exist_ok=True)
+    for name in ['index.html', 'evidence.json']:
+        if name.endswith('.html'):
+            document = (source / name).read_text().replace('<h1>', '<p><strong>Archived report.</strong> This model is now research only. See <a href="/research">Research</a> for the current three playable approaches.</p><h1>', 1)
+            (target / name).write_text(sanitize(document, {'index.html', 'evidence.json'}))
+        else:
+            write_json(target / name, public(read_json(source / name)))
+        assets[f'stockfish-move-policy/{name}'] = digest(target / name)
+    for row in rows:
+        if row['id'] == 'stockfish-move-policy-1m-20261124':
+            row['aliases'] = ['stockfish-move-policy']
+    # Keep the augmented value identity independent of the active manifest.
+    for row in rows:
+        if row['id'] == 'gpu-value':
+            row['title'] = 'Augmented supervised evaluation'
+            row['checkpoint_ids'] = {'supervised-1m': '1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2'}
+    approaches = organize(rows, models)
     write_json(
         out / "studies.json",
         dict(
-            version=1, default_model=released["default"], released_models=models, studies=rows, assets=assets
+            version=2, groups=GROUPS, approaches=approaches, default_model=released["default"], released_models=models, studies=rows, assets=assets
         ),
     )
     return rows

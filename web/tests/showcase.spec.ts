@@ -47,7 +47,7 @@ test("local preview retains manual analysis with matching identities (mocked)", 
   await page.route("**/api/models", (route) =>
     route.fulfill({
       json: {
-        default: "supervised",
+        default: "supervised-1m",
         models: [
           {
             id: "handcrafted",

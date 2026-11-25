@@ -53,7 +53,7 @@ def test_authorized_serving_change_preserves_frozen_historical_protocols():
     augmented = next(r for r in manifest['models'] if r['id'] == 'supervised-1m')
     assert augmented['search'] == {'strategy': 'alpha-beta'}
     assert augmented['search_authorization_id'] == 'user-20261122-augmented-alpha-beta'
-    assert manifest['default'] == 'supervised'
+    assert manifest['default'] == 'supervised-1m'
     assert sha('artifacts/models/supervised.npz') == 'ff3436d07d18eb4953e24e6c83b55d25bbb46b44094ed347f99320148ae04c4b'
     from chessengine.gpu.evaluation import qualify
     from test_gpu_study import gate_evidence

@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-24",
+  "implementation_base": "bdc0f82b4f174beedc302e20f696818dbcf830c2",
+  "integrated_main": "8c64143da3e41b13a30eba81764d41cf113b1b71",
+  "integrated_stockfish_policy": "797582f7a878a6af86719742c63cbb937ed5b7c1",
+  "lineup": {
+    "total": 20,
+    "supervised": 19,
+    "default": "supervised",
+    "representative_seed": 42
+  },
+  "python_full": {
+    "passed": 219,
+    "skipped": 1,
+    "seconds": 217.36
+  },
+  "catalogue_final": {
+    "passed": 51,
+    "seconds": 6.61,
+    "note": "Includes two additional path/dedup cases after the full suite, and all 19 trained-export math checks."
+  },
+  "real_backend": {
+    "compiled_site_gameplay_and_comparison": {
+      "passed": 21,
+      "includes": "Every model plus mobile outage recovery"
+    },
+    "live_comparison_and_research": {
+      "passed": 2,
+      "seconds": 46.1
+    },
+    "final_policy_ui": {
+      "passed": 2,
+      "seconds": 20.0
+    }
+  },
+  "build": "passed",
+  "ruff": "passed",
+  "cli": "passed",
+  "staging_reproduction": "passed with frozen source, export and gate hashes",
+  "visual_review": {
+    "desktop": "reviewed",
+    "mobile": "reviewed; no horizontal overflow at 390px"
+  },
+  "container_local": "Unavailable: no installed Docker runtime. Production container checks run in PR CI.",
+  "retained_failures": [
+    "Initial integration tests assumed the augmented model was the second manifest row and all weights were public; fixed identity-based fixtures and private-artifact audit.",
+    "The new browser checks exposed player-color loss on refresh; persisted player color with the saved game URL.",
+    "Research publication removed a public Research navigation link; preserved internal research navigation.",
+    "Initial browser setup lacked the required executable and macOS sandbox blocked IPC; used a temporary verified Playwright download and ran browser checks outside the sandbox.",
+    "An early live run mixed a development proxy with production outage interception and used an ambiguous Supervised selector; final checks use a compiled site with direct API addressing and exact model identity.",
+    "Visual review caught a human-only label and pre-move value gauge on the Stockfish policy; corrected labels and capability-based rendering, with regression checks."
+  ],
+  "browser_final": {
+    "passed": 70,
+    "skipped": 25,
+    "seconds": 37.1
+  }
+}

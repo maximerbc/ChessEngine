@@ -23,7 +23,7 @@ def test_report_publication_is_independent_of_failed_model_gate(tmp_path):
         if p.is_file()
     }
     rows = publish(tmp_path / "research")
-    assert len(rows) == 15
+    assert len(rows) == 17
     rank = next(r for r in rows if r["id"] == "move-ranking")
     assert rank["result"] == "inconclusive" and rank["availability"] == "local preview"
     assert json.load(open("docs/experiments/move-ranking/final-audit.json"))["release_eligible"] is False
@@ -148,3 +148,20 @@ def test_scope_amendment_preserves_interrupted_study_without_claiming_full_resul
     write_json(out / "release-scope.json", scope)
     with pytest.raises(ValueError, match="does not match"):
         build(root, out)
+
+def test_catalog_groups_and_checkpoint_provenance(tmp_path):
+    rows = publish(tmp_path)
+    catalog = json.loads((tmp_path / 'studies.json').read_text())
+    assert len(catalog['groups']) == 4
+    assert len(catalog['approaches']) == 3
+    assert all(row['group'] in {g['id'] for g in catalog['groups']} for row in rows)
+    failed = next(row for row in rows if row['id'] == 'stockfish-move-policy-1m-20261124')
+    assert 'collapsed' in failed['takeaway'] and failed['availability'] == 'research only'
+    for approach in catalog['approaches'][1:]:
+        study = next(row for row in rows if row['id'] == approach['study_id'])
+        assert study['checkpoint_ids'][approach['id']] == approach['checkpoint_id']
+    for relative, checksum in catalog['assets'].items():
+        assert digest(tmp_path / relative) == checksum
+    from chessengine.elite_policy import NumpyElitePolicy
+    policy = NumpyElitePolicy('artifacts/models/elite-policy.npz')
+    assert policy.metadata['seed'] == 42

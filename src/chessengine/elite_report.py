@@ -139,7 +139,7 @@ bound on validation top-one accuracy minus the uniform-legal baseline. It does n
         availability='experimental playable' if playable else 'awaiting validation',
         question='Can a small CNN learn useful move preferences from elite human games?',
         takeaway=status + ' Human-move agreement is separate from playing strength.',
-        report='/research/elite-policy/index.html',
+        report='/research/elite-policy/index.html', group='moves',
         checkpoint_ids={'elite-policy': installed['sha256']} if playable else {}))
     index['released_models'] = {r['id']: r['sha256'] for r in manifest['models']}
     index.setdefault('assets', {})['elite-policy/index.html'] = digest(public / 'index.html')

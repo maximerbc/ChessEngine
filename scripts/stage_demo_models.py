@@ -19,6 +19,9 @@ def stage(config, source_root, elite_root, output=Path('.')):
     roots = {'original': Path(source_root), 'elite': Path(elite_root)}
     output = Path(output)
     destination = output / 'artifacts/models'
+    active_manifest = destination / 'manifest.json'
+    if active_manifest.exists() and read_json(active_manifest).get('release_version') == 7:
+        raise ValueError('Historical catalogue staging requires a separate research output; preserve manifest v7')
     # Build and validate the complete collection before replacing any active file.
     with tempfile.TemporaryDirectory() as temporary:
         staged = Path(temporary)

@@ -17,11 +17,9 @@
 # Re-exclude the contents: allowing the parent directory also allows its files.
 artifacts/models/*
 !artifacts/models/manifest.json
-!artifacts/models/supervised.npz
 !artifacts/models/supervised-1m.npz
 !artifacts/models/elite-policy.npz
 !artifacts/models/elite-policy-gate.json
-!artifacts/models/evolutionary.npz
 !web/
 !web/package.json
 !web/package-lock.json
@@ -35,21 +33,3 @@ artifacts/models/*
 !web/public/models/**
 !web/public/research/
 !web/public/research/**
-
-!artifacts/models/supervised-large.npz
-!artifacts/models/supervised-10k.npz
-!artifacts/models/supervised-40k.npz
-!artifacts/models/supervised-diagnostic.npz
-!artifacts/models/supervised-weaker-decay.npz
-!artifacts/models/supervised-stronger-decay.npz
-!artifacts/models/supervised-dropout-01.npz
-!artifacts/models/supervised-dropout-02.npz
-!artifacts/models/supervised-180k.npz
-!artifacts/models/supervised-smaller-lr.npz
-!artifacts/models/supervised-adaptive-lr.npz
-!artifacts/models/supervised-relative.npz
-!artifacts/models/supervised-relative-material.npz
-!artifacts/models/supervised-combined.npz
-!artifacts/models/supervised-averaged.npz
-!artifacts/models/stockfish-policy.npz
-!artifacts/models/stockfish-policy-gate.json

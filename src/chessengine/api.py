@@ -18,7 +18,8 @@ from .puct_serving import ValueSearch, STRATEGY
 from .elite_policy import NumpyElitePolicy, STRATEGY as ELITE_STRATEGY, validate_release
 from .gpu.release import validate_entry
 from .gpu.protocol import MODEL_IDS, LEGACY_SHA
-from .demo_models import load_catalogue
+from .demo_models import load_catalogue, MODEL_IDS as CATALOGUE_IDS
+from .release_lineup import load_three_approaches
 
 
 class PositionRequest(BaseModel):
@@ -55,9 +56,13 @@ def create_app(manifest_path=None, comparison_settings=None):
     if require_models and not manifest_path.is_file():
         raise ValueError("Production model manifest is missing")
     default_model = "handcrafted"
+    manifest = {}
     if manifest_path.exists():
         manifest = read_json(manifest_path)
-        if manifest.get('release_version') == 6:
+        if manifest.get('release_version') == 7:
+            models.update(load_three_approaches(manifest, manifest_path.parent))
+            default_model = manifest['default']
+        elif manifest.get('release_version') == 6:
             models.update(load_catalogue(manifest, manifest_path.parent))
             default_model = manifest['default']
         else:
@@ -157,7 +162,7 @@ def create_app(manifest_path=None, comparison_settings=None):
             default_model = manifest.get("default", default_model)
             if default_model not in models:
                 raise ValueError("Default model is missing")
-    if require_models and 'supervised' not in models:
+    if require_models and not ({'supervised-1m'} if manifest.get('release_version') == 7 else {'supervised'}).issubset(models):
         raise ValueError('Production requires supervised model')
     for model in models.values():
         policy = model.get('strategy') == ELITE_STRATEGY
@@ -190,6 +195,9 @@ def create_app(manifest_path=None, comparison_settings=None):
         }
 
     def request_board(request: PositionRequest):
+        if (manifest.get('release_version') == 7
+                and request.model_id in (CATALOGUE_IDS | {'evolutionary', 'evolutionary-gpu', 'move-guided'}) - models.keys()):
+            raise HTTPException(410, 'This opponent is retired from live play. See /research')
         if request.model_id == 'rl':
             raise HTTPException(410, 'Self-play is retired from live play. See /research?study=self-play-archive')
         if request.model_id not in models:

@@ -1,20 +1,17 @@
 import { test, expect } from "@playwright/test";
-import { readFileSync } from "node:fs";
-const release = JSON.parse(
-  readFileSync("../artifacts/models/manifest.json", "utf8"),
-);
 
 test.describe("production containers", () => {
   test.skip(!process.env.PLAYWRIGHT_BASE_URL, "Requires production containers");
 
-  for (const id of [
-    "handcrafted",
-    ...release.models.map((row: { id: string }) => row.id),
-  ]) {
+  for (const [id, name] of [
+    ["handcrafted", /^Classical Handcrafted/],
+    ["supervised-1m", /^Augmented Supervised A neural/],
+    ["elite-policy", /^Direct-Move CNN Predicts/],
+  ] as const) {
     test(`real ${id}: gameplay, comparison and export`, async ({
       page,
     }, testInfo) => {
-      await page.goto(`/?model=${id}`);
+      await page.goto("/");
       await expect(
         page.getByText("Engine online", { exact: true }),
       ).toBeVisible();
@@ -24,12 +21,12 @@ test.describe("production containers", () => {
       const available = new Set(
         (await catalog.json()).models.map((row: { id: string }) => row.id),
       );
-      const card = page.locator(".model-option[aria-pressed=true]");
+      const card = page.getByRole("button", { name });
       if (!available.has(id)) {
         await expect(card).toBeDisabled();
         return;
       }
-      await expect(card).toBeEnabled();
+      await card.click();
       await page
         .getByRole("button", { name: "e2 white pawn", exact: true })
         .click();
@@ -52,7 +49,7 @@ test.describe("production containers", () => {
       await expect(
         comparison.getByRole("row", { name: /Position evaluation/ }),
       ).toBeVisible();
-      if (["elite-policy", "stockfish-policy"].includes(id)) {
+      if (id === "elite-policy") {
         await expect(comparison).toContainText(
           "Not provided by this move predictor",
         );
@@ -110,6 +107,10 @@ test.describe("production containers", () => {
       page.getByText("The live engine is unavailable"),
     ).toBeVisible();
     await page.getByRole("button", { name: "Research", exact: true }).click();
+    await page
+      .locator(".research-family > summary")
+      .filter({ hasText: "Self-play" })
+      .click();
     await page
       .getByText("Original study: charts and saved games", { exact: true })
       .click();

@@ -7,7 +7,6 @@ test("real current-position comparison preserves play for each released evaluato
     !process.env.RUN_LIVE_TESTS,
     "Requires the local Python server and Stockfish 19.",
   );
-  test.setTimeout(180000);
   await page.goto("/");
   const installed = await (await page.request.get("/api/models")).json();
   for (const model of installed.models) {
@@ -22,7 +21,7 @@ test("real current-position comparison preserves play for each released evaluato
         exact: true,
       }),
     ).toBeEnabled();
-    const response = page.waitForResponse("**/api/evaluate-comparison");
+    const response = page.waitForResponse("**/evaluate-comparison");
     await comparison
       .getByRole("button", { name: "Compare with Stockfish", exact: true })
       .click();
@@ -33,9 +32,16 @@ test("real current-position comparison preserves play for each released evaluato
     await expect(
       comparison.getByRole("row", { name: /Position evaluation/ }),
     ).toBeVisible();
-    await expect(
-      comparison.getByRole("row", { name: /After search/ }),
-    ).toBeVisible();
+    if (model.strategy === "direct-policy-v1") {
+      expect(data.search).toBeNull();
+      expect(data.position_value).toBeNull();
+      expect(data.policy.root_rankings.length).toBeGreaterThan(0);
+      await expect(comparison).toContainText("No search");
+    } else {
+      await expect(
+        comparison.getByRole("row", { name: /After search/ }),
+      ).toBeVisible();
+    }
     await expect(page.getByText("0 plies", { exact: true })).toBeVisible();
     await comparison
       .getByText("Search details and model version", { exact: true })
@@ -53,7 +59,7 @@ test("real current-position comparison preserves play for each released evaluato
     name: "Stockfish comparison",
     exact: true,
   });
-  const response = page.waitForResponse("**/api/evaluate-comparison");
+  const response = page.waitForResponse("**/evaluate-comparison");
   await comparison
     .getByRole("button", { name: "Compare with Stockfish", exact: true })
     .click();
@@ -78,7 +84,11 @@ test("live backend and released study render together", async ({
   );
   await page.goto("/");
   await expect(page.getByText("Engine online", { exact: true })).toBeVisible();
-  await expect(page.locator(".model-option[aria-pressed=true]")).toContainText("Supervised");
+  await expect(
+    page.getByRole("button", {
+      name: /^Augmented Supervised A neural/,
+    }),
+  ).toBeVisible();
   await page
     .getByRole("button", { name: "e2 white pawn", exact: true })
     .click();
@@ -96,6 +106,10 @@ test("live backend and released study render together", async ({
     quality: 85,
   });
   await page.getByRole("button", { name: "Research", exact: true }).click();
+  await page
+    .locator(".research-family > summary")
+    .filter({ hasText: "Self-play" })
+    .click();
   await page
     .getByText("Original study: charts and saved games", { exact: true })
     .click();

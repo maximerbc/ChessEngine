@@ -1,0 +1,6 @@
+{
+  "stage": "interrupted or failed; saved state retained",
+  "elapsed_seconds": 435.26268416596577,
+  "paid_cost_cad": 0,
+  "error": "KeyboardInterrupt()"
+}

@@ -326,3 +326,18 @@ and manifest; reproducible staging cannot change trained arrays. Only aggregate
 checkpoint-matched evidence enters the public research catalogue. New weights
 remain in the private API image, with no new public downloads. The user authorized
 this feature branch push and PR creation; merging and deployment remain separate.
+
+
+## 2026-11-24 — Three playable approaches, manifest v6
+
+The approved lineup is Classical, Augmented Supervised and Direct-Move CNN. The augmented seed-42 value evaluator becomes the default; it retains the shared alpha-beta search. The later human-game CNN uses its existing direct-policy NumPy implementation and fixed seed-42 validation selection (epoch 8). Its completed export gate is required. This explicitly supersedes the older requirement to retain the 80k supervised default and the production alpha-beta-only restriction.
+
+Manifest v6 requires both neural artifacts and exact approved checkpoint identities. Earlier declarations are retained in `artifacts/research/release-v5.json` and `public-release-v5.json`; historical checkpoints are preserved. Playable availability is distinct from qualification or demonstrated playing strength. The augmented three-seed mean validation MSE (0.21476) is agreement on its own validation dataset, not a comparison of playing strength across studies.
+
+Research presents the three active methods first, then four collapsed experiment families. Original charts/replay live within their original-study archive entry. Study links expand the containing family. Earlier CNN collapse/export failures, negative self-play results, failed ordering gates and interrupted evolutionary runs remain discoverable. A snapshot of the augmented-baseline evolutionary interruption is published independently of the original study; no run is restarted.
+
+## 2026-11-25 — Integrate main without reusing its manifest version
+
+Main introduced a broader v6 supervised catalogue while the three-approach release was being prepared. The three-approach release now uses v7, retaining its exact checkpoint identities, augmented default and direct-human-CNN gate. Main’s v6 declaration is archived in `artifacts/research/catalogue-release-v6.json`; its loader, provenance, private artifacts, training safeguards and numerical checks remain supported by explicit historical fixtures. The approved three-opponent product supersedes the catalogue’s public selection.
+
+Earlier supervised-variant reports remain in the position-evaluation archive. The old Stockfish study permalink aliases its comprehensive dated entry, preserving both report URLs without duplicate cards. No studies are rerun or promoted by this merge.

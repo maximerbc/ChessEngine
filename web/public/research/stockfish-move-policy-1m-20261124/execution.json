@@ -1,0 +1,131 @@
+{
+  "study": "stockfish-direct-move-cnn-1m-20261123",
+  "training_source_commit": "7b43f0478d89c15562d28f48cdd235538430e752",
+  "counts": {
+    "train": 800000,
+    "validation": 100000,
+    "test": 100000
+  },
+  "shards": 2599,
+  "positions_sha256": "2f7fa07f7872b2f7fac673ecb67612d8b999bfd7a771dcd8af5083fedef180ab",
+  "dataset_sha256": "fded3f9feb048406dff8f2471b96b0df8d15b32b958474ce43002c2ef24e65dc",
+  "source_and_input_archive_sha256": "4b267f180652ddff92fad4e332e598fdda4cb4b8860df00ff1bcf2d809df6faf",
+  "results_archive_sha256": "555a0581793b893c56350567e24f9ca055187f17009053390882ce88a005f850",
+  "reuse": {
+    "original_counts": {
+      "train": 800000,
+      "validation": 100000,
+      "test": 100000
+    },
+    "inherited_counts": {
+      "train": 799553,
+      "validation": 99832,
+      "test": 99802
+    },
+    "refill_counts": {
+      "train": 447,
+      "validation": 168,
+      "test": 198
+    },
+    "canonical_cross_split_keys": 69,
+    "original_unchanged": true
+  },
+  "quarantined_games": 142,
+  "local_execution": {
+    "started_unix": 1795486579.0843751,
+    "stages": [
+      {
+        "stage": "prepare",
+        "seconds": 164.0045928955078,
+        "returncode": 0
+      },
+      {
+        "stage": "label",
+        "seconds": 8773.386379003525,
+        "returncode": 0
+      },
+      {
+        "stage": "encode",
+        "seconds": 853.5948457717896,
+        "returncode": 0
+      }
+    ],
+    "paid_cost_cad": 0,
+    "completed_unix": 1795496370.077404
+  },
+  "cloud_preflight": {
+    "verified_unix": 1795496771.6608722,
+    "source_commit": "7b43f0478d89c15562d28f48cdd235538430e752",
+    "dataset_sha256": "fded3f9feb048406dff8f2471b96b0df8d15b32b958474ce43002c2ef24e65dc",
+    "counts": {
+      "train": 800000,
+      "validation": 100000,
+      "test": 100000
+    },
+    "shards_verified": 2599,
+    "torch": "2.8.0+cu128",
+    "cuda": "12.8",
+    "numpy": "2.2.6",
+    "chess": "1.11.2",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "vram_bytes": 25252724736,
+    "bf16_supported": true,
+    "guard": {
+      "status": "armed",
+      "pod_id": "vx2ej25ygoim98",
+      "deadline_unix": 1795512668.0
+    },
+    "training_deadline_unix": 1795512068.0,
+    "gradient_benchmark": false,
+    "encoded_storage": "ephemeral SSD, durable source archive and checkpoints on network volume"
+  },
+  "cloud_job": {
+    "started_unix": 1795496780.329976,
+    "status": "complete",
+    "deadline_unix": 1795512068.0,
+    "pod_id": "vx2ej25ygoim98",
+    "separate_pilot": false,
+    "returncode": 0,
+    "completed_unix": 1795497471.4931927
+  },
+  "cleanup": {
+    "observed_clock": {
+      "current_time": "2026-11-24 05:30:17 UTC"
+    },
+    "before": {
+      "pod": {
+        "id": "vx2ej25ygoim98",
+        "status": "EXITED",
+        "cost": 0.89,
+        "createdAt": "2026-11-24T05:01:13.159Z"
+      },
+      "volume": {
+        "dataCenter": "EU-RO-1",
+        "id": "0yxvu4xpjj",
+        "name": "chess-policy-1m-20261124",
+        "size": 10,
+        "tags": [],
+        "type": "STANDARD"
+      }
+    },
+    "pod_deleted": true,
+    "volume_deleted": true,
+    "stop_method": "Independent container guard after verified byte-backup marker; no control-plane stop call",
+    "functional_export_status": "Seeds 42 and 44 verified; seed 43 failed and retained",
+    "unrelated_resources_changed": false
+  },
+  "byte_backup_verification": {
+    "verified_unix": 1795497710.938924,
+    "position_hash_verified": true,
+    "teacher_manifest_verified": true,
+    "teacher_chunks_verified": 1000,
+    "labels": 1000000,
+    "source_archive_verified": true,
+    "cloud_run_files_verified": true
+  },
+  "artifact_location_relative_to_original_checkout": "artifact-339abdfba7cf5d0c",
+  "training_complete": true,
+  "all_exports_qualified": false,
+  "production_changed": false,
+  "retrained_after_test": false
+}

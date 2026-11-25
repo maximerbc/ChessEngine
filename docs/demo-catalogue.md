@@ -1,4 +1,6 @@
-# Playable supervised catalogue
+# Historical supervised catalogue (v6)
+
+The active release uses manifest v7 with Classical, Augmented Supervised (default), and Direct-Move CNN. This document preserves the earlier catalogue and its reproducible staging workflow. Its checkpoints and numerical checks remain available for research; the broad catalogue is not the current public lineup. Staging must use a separate output directory and refuses to overwrite the v7 release.
 
 Manifest v6 lists nineteen supervised exports; Classical is built in. The
 searchable grouped chooser uses `/models`, including descriptions, grouping,
@@ -16,7 +18,8 @@ Reproduce staging from the private original repository and completed elite workt
 ```sh
 PYTHONPATH=src .venv/bin/python scripts/stage_demo_models.py \
   --source-root /path/to/original/ChessEngine \
-  --elite-root /path/to/completed/elite-worktree
+  --elite-root /path/to/completed/elite-worktree \
+  --output /path/to/separate-research-export
 PYTHONPATH=src .venv/bin/python -m chessengine.research_catalog
 ```
 

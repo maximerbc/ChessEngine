@@ -1,8 +1,10 @@
-# GPU learning studies and preserved demo
+# ChessEngine: three playable approaches
 
-The augmented supervised study completed GPU training on a one-million-position dataset (800k training / 100k validation / 100k test). Classical, the unchanged 80k Supervised default and experimental Augmented Supervised are playable with CPU alpha-beta. A completed development comparison supports the augmented search change but does not establish qualification or the exact bounded demo strength. The separately planned GPU evolutionary study remains untrained; historical evidence is preserved. See `docs/gpu-operations.md` for measured results and limits.
+The Demo offers **Classical**, **Augmented Supervised** (default), and **Direct-Move CNN**, in that order. Classical and the augmented seed-42 value evaluator share CPU alpha-beta search. The later seed-42 CNN (selected epoch 8) predicts a preferred legal move learned from elite human games, directly without search.
 
-Read [study design](docs/gpu-study.md), [staged operations](docs/gpu-operations.md), [locked training environment](training/README.md) and [preservation inventory](docs/preservation/legacy-20261121.json). Augmented-supervised training is complete; the evolutionary compute budget/provider remain unset pending a measured forecast and user decision. Agents may push private review branches and open PRs; merging, deployment and paid provisioning remain separate decisions.
+The augmented evaluator trained on 800,000 positions. Its three-seed mean validation MSE is 0.21476 on its own validation dataset; this does not establish superior playing strength. The CNN retains its completed validation/export gate. Manifest v7 pins both approved checkpoint identities; previous release declarations and private checkpoints are preserved.
+
+Research begins with the three methods and their evidence, then groups earlier work into position evaluation, move prediction/search guidance, self-play, and evolutionary learning. Negative results, failed gates, study permalinks, protocols and recorded games remain available. No new training or model selection is part of this release. Source stays private; the user handles remote pushes. No deployment or paid activation is included.
 
 ## Historical evolutionary study and demo
 
@@ -17,7 +19,7 @@ teacher-free, randomly initialized 324-parameter evaluator optimized by CMA-ES.
 Run `.venv/bin/python -m chessengine evolutionary --stage all`; the runner reports
 measured forecasts and stops without full training if pilot gates fail. Paid
 compute, automatic pushes and deployment are not authorized. Older release and
-four-model workflow descriptions below are historical; the v3 active manifest is
+four-model workflow descriptions below are historical; the v7 active manifest is
 the authority for playable models.
 
 # ChessEngine Lab

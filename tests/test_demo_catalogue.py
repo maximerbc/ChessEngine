@@ -22,7 +22,7 @@ from chessengine.ranking import move_features
 
 
 DIRECTORY = Path('artifacts/models')
-MANIFEST = json.loads((DIRECTORY / 'manifest.json').read_text())
+MANIFEST = json.loads(Path('artifacts/research/catalogue-release-v6.json').read_text())
 
 
 @pytest.fixture(scope='module')
@@ -31,8 +31,11 @@ def catalogue():
 
 
 @pytest.fixture(scope='module')
-def client():
-    with TestClient(create_app()) as session:
+def client(tmp_path_factory):
+    directory = tmp_path_factory.mktemp('historical-catalogue') / 'models'
+    shutil.copytree(DIRECTORY, directory)
+    (directory / 'manifest.json').write_text(json.dumps(MANIFEST))
+    with TestClient(create_app(directory / 'manifest.json')) as session:
         yield session
 
 
