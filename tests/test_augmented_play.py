@@ -43,8 +43,8 @@ def test_real_preview_identity_and_production_move(monkeypatch):
         assert compared.status_code == 200
         search = compared.json()['search']
         assert search['strategy'] == 'alpha-beta' and search['simulations'] is None
-        assert search['limits'] == {'nodes':10000, 'time_ms':1500}
-        assert 0 < search['nodes'] <= 10000
+        assert search['limits'] == {'nodes':30000, 'time_ms':3000}
+        assert 0 < search['nodes'] <= 30000
 
 
 def test_access_exception_does_not_fabricate_or_disable_qualification():

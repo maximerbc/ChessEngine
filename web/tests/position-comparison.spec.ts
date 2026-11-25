@@ -24,7 +24,7 @@ function comparison(body: any) {
     depth: 3,
     nodes: 900,
     elapsed_ms: 100,
-    limits: { nodes: 10000, time_ms: 1500 },
+    limits: { nodes: 30000, time_ms: 3000 },
   };
   return {
     ...body,
@@ -136,7 +136,7 @@ for (const [id, name] of [
     await section
       .getByText("Search details and model version", { exact: true })
       .click();
-    await expect(section).toContainText("10,000 nodes / 1.5s");
+    await expect(section).toContainText("30,000 nodes / 3.0s");
     await expect(section).toContainText(identities[id]);
     await section
       .getByRole("button", { name: "Refresh comparison", exact: true })

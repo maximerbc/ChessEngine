@@ -98,7 +98,7 @@ async function mockPolicy(page: any, available = true) {
           depth: 5,
           nodes: 10000,
           elapsed_ms: 30,
-          limits: { nodes: 10000, time_ms: 1500 },
+          limits: { nodes: 30000, time_ms: 3000 },
           binary_sha256: "f".repeat(64),
           error: null,
         },

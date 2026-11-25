@@ -33,6 +33,7 @@ import {
 } from "./ReleasedApproaches";
 
 const API = import.meta.env.VITE_API_URL || "/api";
+const SEARCH_LIMITS = { nodes: 30000, time_ms: 3000 } as const;
 type Model = {
   id: string;
   name: string;
@@ -534,8 +535,7 @@ export default function App() {
         initial_fen: initialFen,
         moves: history,
         model_id: model,
-        nodes: 10000,
-        time_ms: 1500,
+        ...SEARCH_LIMITS,
       });
       if (
         page
@@ -655,8 +655,7 @@ export default function App() {
         initial_fen: initialFen,
         moves: history,
         model_id: model,
-        nodes: 10000,
-        time_ms: 1500,
+        ...SEARCH_LIMITS,
       });
       if (token !== generation.current) return;
       if (

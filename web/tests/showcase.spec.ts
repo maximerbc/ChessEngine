@@ -108,6 +108,8 @@ test("local preview retains manual analysis with matching identities (mocked)", 
   expect(requests).toHaveLength(1);
   expect(requests[0].moves).toEqual(["e2e4", "e7e5"]);
   expect(requests[0].model_id).toBe("handcrafted");
+  expect(requests[0].nodes).toBe(30000);
+  expect(requests[0].time_ms).toBe(3000);
   await expect(
     page.getByRole("button", { name: "A quiet opening", exact: true }),
   ).toBeVisible();

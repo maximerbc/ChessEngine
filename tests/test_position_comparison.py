@@ -197,17 +197,40 @@ def test_comparison_keeps_shared_worker_until_disconnected_work_finishes(tmp_pat
     asyncio.run(run())
 
 
+def test_live_comparison_budget(fake_stockfish, monkeypatch):
+    live = ComparisonSettings.model_validate(read_json("configs/comparison.json"))
+    seen = []
+
+    def probe(self, board):
+        seen.append((self.limit, self.time_ms, self.qdepth))
+        return SearchResult("e2e4", 0, 1, 1, 1, ["e2e4"])
+
+    monkeypatch.setattr(Search, "run", probe)
+    result = model_assessments(chess.Board(), lambda _: 0, live)
+    reference = stockfish_assessment(chess.Board(), live)
+    assert seen == [(30000, 3000, 4)]
+    assert result["search"]["limits"] == {"nodes": 30000, "time_ms": 3000}
+    assert reference["limits"]["nodes"] == 30000
+    assert reference["limits"]["time_ms"] == 3000
+    assert fake_stockfish.limit.nodes == 30000
+    assert fake_stockfish.limit.time == 3
+    for key, value in [("model_nodes", 30001), ("stockfish_nodes", 30001),
+                       ("model_time_ms", 3001), ("stockfish_time_ms", 3001)]:
+        with pytest.raises(ValueError):
+            ComparisonSettings.model_validate({**live.model_dump(), key: value})
+
+
 def test_real_local_stockfish_comparison():
     binary = Path(os.getenv("STOCKFISH_PATH", "tools/stockfish/stockfish-macos-universal"))
     if not binary.is_file():
         pytest.skip("Real Stockfish integration requires a local Stockfish 19 binary")
     with TestClient(create_app()) as client:
-        response = client.post("/evaluate-comparison", json={"model_id": "supervised", "moves": ["e2e4"]})
+        response = client.post("/evaluate-comparison", json={"model_id": "supervised-1m", "moves": ["e2e4"]})
         assert response.status_code == 200
         result = response.json()
         assert result["stockfish"]["status"] == "ok", result
         assert result["stockfish"]["version"] == "Stockfish 19"
         assert result["stockfish"]["binary_sha256"] == digest(binary)
         assert -1 <= result["stockfish"]["value"] <= 1
-        assert result["stockfish"]["nodes"] <= 11000  # UCI nodes can overshoot by a search batch.
-        assert result["search"]["nodes"] <= 10000
+        assert result["stockfish"]["nodes"] <= 31000  # UCI nodes can overshoot by a search batch.
+        assert result["search"]["nodes"] <= 30000

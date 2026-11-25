@@ -58,6 +58,8 @@ async function mock(page: any) {
   );
   await page.route("**/api/analyze", async (route: any) => {
     const b = route.request().postDataJSON();
+    expect(b.nodes).toBe(30000);
+    expect(b.time_ms).toBe(3000);
     await route.fulfill({
       json: {
         best_move:

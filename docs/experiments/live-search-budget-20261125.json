@@ -1,0 +1,603 @@
+{
+  "evidence": "local-latency-smoke-check-not-strength-evidence",
+  "base_commit": "2f23029ff711f395cd3b716eddf5c8a1f57820c8",
+  "started_utc": "2026-11-25T06:05:23.486159+00:00",
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "python": "3.10.6",
+  "numpy": "2.2.6",
+  "blas_threads": 1,
+  "qdepth": 4,
+  "repetitions": 2,
+  "budgets": [
+    {
+      "nodes": 10000,
+      "time_ms": 1500
+    },
+    {
+      "nodes": 30000,
+      "time_ms": 3000
+    }
+  ],
+  "positions": [
+    {
+      "name": "starting-position",
+      "initial_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "moves": []
+    },
+    {
+      "name": "ruy-lopez-middlegame",
+      "initial_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "moves": [
+        "e2e4",
+        "e7e5",
+        "g1f3",
+        "b8c6",
+        "f1b5",
+        "a7a6",
+        "b5a4",
+        "g8f6",
+        "e1g1",
+        "f8e7",
+        "f1e1",
+        "b7b5",
+        "a4b3",
+        "d7d6",
+        "c2c3",
+        "e8g8",
+        "h2h3"
+      ]
+    },
+    {
+      "name": "illustrative-pawn-ending",
+      "initial_fen": "8/5pk1/6p1/3p4/3P4/5KP1/5P2/8 w - - 0 40",
+      "moves": []
+    }
+  ],
+  "checkpoint_sha256": "1d1b3fa0d436d19be062c4ae782af29f455455d3e7a4038279aa45225d2dbbc2",
+  "caveats": [
+    "Three illustrative positions, not a representative match sample.",
+    "Local wall-clock measurements vary with hardware and background load.",
+    "No hosted latency, concurrency load test, strength or Elo measured."
+  ],
+  "results": [
+    {
+      "model_id": "handcrafted",
+      "position": "starting-position",
+      "repetition": 0,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "h2h4",
+      "value": 5.921189464667501e-16,
+      "depth": 4,
+      "nodes": 4769,
+      "elapsed_ms": 1500.1714170211926,
+      "pv": [
+        "h2h4",
+        "h7h5",
+        "f2f4",
+        "f7f5"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "starting-position",
+      "repetition": 0,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "h2h4",
+      "value": 5.921189464667501e-16,
+      "depth": 4,
+      "nodes": 9589,
+      "elapsed_ms": 3000.0749999890104,
+      "pv": [
+        "h2h4",
+        "h7h5",
+        "f2f4",
+        "f7f5"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "starting-position",
+      "repetition": 1,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "h2h4",
+      "value": 5.921189464667501e-16,
+      "depth": 4,
+      "nodes": 9984,
+      "elapsed_ms": 3000.203166040592,
+      "pv": [
+        "h2h4",
+        "h7h5",
+        "f2f4",
+        "f7f5"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "starting-position",
+      "repetition": 1,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "h2h4",
+      "value": 5.921189464667501e-16,
+      "depth": 4,
+      "nodes": 4955,
+      "elapsed_ms": 1500.0749999890104,
+      "pv": [
+        "h2h4",
+        "h7h5",
+        "f2f4",
+        "f7f5"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 0,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "h7h5",
+      "value": 0.029991003238819505,
+      "depth": 2,
+      "nodes": 4540,
+      "elapsed_ms": 1500.2219580346718,
+      "pv": [
+        "h7h5",
+        "g2g4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 0,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "h7h5",
+      "value": 0.04081065382184074,
+      "depth": 3,
+      "nodes": 10302,
+      "elapsed_ms": 3000.1591669861227,
+      "pv": [
+        "h7h5",
+        "a2a4",
+        "c8e6",
+        "b3e6",
+        "f7e6"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 1,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "h7h5",
+      "value": 0.04081065382184074,
+      "depth": 3,
+      "nodes": 10538,
+      "elapsed_ms": 3000.0850000651553,
+      "pv": [
+        "h7h5",
+        "a2a4",
+        "c8e6",
+        "b3e6",
+        "f7e6"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 1,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "h7h5",
+      "value": 0.029991003238819505,
+      "depth": 2,
+      "nodes": 5075,
+      "elapsed_ms": 1500.0492499675602,
+      "pv": [
+        "h7h5",
+        "g2g4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "illustrative-pawn-ending",
+      "repetition": 0,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "f3g4",
+      "value": 0.0,
+      "depth": 6,
+      "nodes": 10000,
+      "elapsed_ms": 1419.313875027001,
+      "pv": [
+        "f3g4",
+        "f7f5",
+        "g4g5",
+        "g7h7",
+        "f2f4",
+        "h7g7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "illustrative-pawn-ending",
+      "repetition": 0,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "f3g4",
+      "value": 0.0,
+      "depth": 6,
+      "nodes": 20670,
+      "elapsed_ms": 3000.1075830077752,
+      "pv": [
+        "f3g4",
+        "f7f5",
+        "g4g5",
+        "g7h7",
+        "f2f4",
+        "h7g7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "illustrative-pawn-ending",
+      "repetition": 1,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "f3g4",
+      "value": 0.0,
+      "depth": 6,
+      "nodes": 18390,
+      "elapsed_ms": 3000.125417020172,
+      "pv": [
+        "f3g4",
+        "f7f5",
+        "g4g5",
+        "g7h7",
+        "f2f4",
+        "h7g7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "handcrafted",
+      "position": "illustrative-pawn-ending",
+      "repetition": 1,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "f3g4",
+      "value": 0.0,
+      "depth": 6,
+      "nodes": 10000,
+      "elapsed_ms": 1448.0112080927938,
+      "pv": [
+        "f3g4",
+        "f7f5",
+        "g4g5",
+        "g7h7",
+        "f2f4",
+        "h7g7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "starting-position",
+      "repetition": 0,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "e2e3",
+      "value": 0.18748514354228973,
+      "depth": 3,
+      "nodes": 3848,
+      "elapsed_ms": 1500.3657090710476,
+      "pv": [
+        "e2e3",
+        "e7e5",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "starting-position",
+      "repetition": 0,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "e2e3",
+      "value": 0.18748514354228973,
+      "depth": 3,
+      "nodes": 5480,
+      "elapsed_ms": 3000.2057910896838,
+      "pv": [
+        "e2e3",
+        "e7e5",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "starting-position",
+      "repetition": 1,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "e2e3",
+      "value": 0.18748514354228973,
+      "depth": 3,
+      "nodes": 6790,
+      "elapsed_ms": 3000.159249990247,
+      "pv": [
+        "e2e3",
+        "e7e5",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "starting-position",
+      "repetition": 1,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "e2e3",
+      "value": 0.18748514354228973,
+      "depth": 3,
+      "nodes": 3266,
+      "elapsed_ms": 1500.239957938902,
+      "pv": [
+        "e2e3",
+        "e7e5",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 0,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "c8e6",
+      "value": -0.1338607370853424,
+      "depth": 2,
+      "nodes": 3802,
+      "elapsed_ms": 1500.061959028244,
+      "pv": [
+        "c8e6",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 0,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "d6d5",
+      "value": -0.14962369203567505,
+      "depth": 3,
+      "nodes": 7865,
+      "elapsed_ms": 3005.2189170382917,
+      "pv": [
+        "d6d5",
+        "e4d5",
+        "f6d5"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 1,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "c8e6",
+      "value": -0.1338607370853424,
+      "depth": 2,
+      "nodes": 5329,
+      "elapsed_ms": 3000.179333030246,
+      "pv": [
+        "c8e6",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "ruy-lopez-middlegame",
+      "repetition": 1,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "c8e6",
+      "value": -0.1338607370853424,
+      "depth": 2,
+      "nodes": 2521,
+      "elapsed_ms": 1500.299916951917,
+      "pv": [
+        "c8e6",
+        "d2d4"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "illustrative-pawn-ending",
+      "repetition": 0,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "f3e3",
+      "value": 0.26803386211395264,
+      "depth": 6,
+      "nodes": 5593,
+      "elapsed_ms": 1500.0564589863643,
+      "pv": [
+        "f3e3",
+        "g7f6",
+        "e3f4",
+        "f6e6",
+        "f4g5",
+        "e6d7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "illustrative-pawn-ending",
+      "repetition": 0,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "f3e3",
+      "value": 0.26803386211395264,
+      "depth": 6,
+      "nodes": 13530,
+      "elapsed_ms": 3003.0006249435246,
+      "pv": [
+        "f3e3",
+        "g7f6",
+        "e3f4",
+        "f6e6",
+        "f4g5",
+        "e6d7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "illustrative-pawn-ending",
+      "repetition": 1,
+      "budget": {
+        "nodes": 30000,
+        "time_ms": 3000
+      },
+      "move": "f3e3",
+      "value": 0.26803386211395264,
+      "depth": 6,
+      "nodes": 15217,
+      "elapsed_ms": 3000.228875083849,
+      "pv": [
+        "f3e3",
+        "g7f6",
+        "e3f4",
+        "f6e6",
+        "f4g5",
+        "e6d7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    },
+    {
+      "model_id": "supervised-1m",
+      "position": "illustrative-pawn-ending",
+      "repetition": 1,
+      "budget": {
+        "nodes": 10000,
+        "time_ms": 1500
+      },
+      "move": "f3e3",
+      "value": 0.26803386211395264,
+      "depth": 6,
+      "nodes": 7012,
+      "elapsed_ms": 1500.2225000644103,
+      "pv": [
+        "f3e3",
+        "g7f6",
+        "e3f4",
+        "f6e6",
+        "f4g5",
+        "e6d7"
+      ],
+      "terminal": null,
+      "root_rankings": []
+    }
+  ],
+  "elapsed_seconds": 53.97809108393267,
+  "finished_utc": "2026-11-25T06:06:17.491031+00:00",
+  "search_sources_sha256": {
+    "src/chessengine/engine.py": "c2602a16550500aad8246530b3a2fac1a23c6b2a69ddc3538316012921a3c929",
+    "src/chessengine/model.py": "32a1bb882f9de32c5f6ad1f8eb17cbcd6284af34cbe1ab5d19628dcfb35ff0ec",
+    "src/chessengine/features.py": "f3c8ceb23edfc9f90ea98adcadc6cb1de04aeaf43617a1bc270259536769456e"
+  }
+}
